@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cadastro - TarsierTech</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;padding:20px;background:#f6f8fa}
+    .card{max-width:480px;margin:20px auto;background:#fff;padding:18px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+    label{display:block;margin:10px 0 6px}
+    input{width:100%;padding:10px;border:1px solid #ddd;border-radius:6px}
+    button{margin-top:12px;padding:10px 14px;border:none;border-radius:6px;background:#0b74de;color:#fff;font-weight:600}
+    .msg{margin-top:12px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Entrar na lista</h2>
+    <p>Preencha nome e WhatsApp:</p>
+    <label for="nome">Nome</label>
+    <input id="nome" placeholder="Seu nome" />
+
+    <label for="wh">WhatsApp</label>
+    <input id="wh" placeholder="DD 9XXXXXXXX" />
+
+    <button id="btnSalvar">Cadastrar</button>
+
+    <div id="msg" class="msg"></div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-database-compat.js"></script>
+
+  <script src="firebase-config.js"></script>
+  <script src="script.js"></script>
+
+  <script>
+    // Inicializa app (script.js espera que firebaseConfig exista)
+    firebase.initializeApp(firebaseConfig);
+  </script>
+</body>
+</html>
