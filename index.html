@@ -74,6 +74,97 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
   <script>
+    // ✅ Configuração correta do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCvXGUdvZkqtSMMn8VmTOXLA9PXqR85gSk",
+      authDomain: "vagner-34d5b.firebaseapp.com",
+      databaseURL: "https://vagner-34d5b-default-rtdb.firebaseio.com",
+      projectId: "vagner-34d5b",
+      storageBucket: "vagner-34d5b.firebasestorage.app",
+      messagingSenderId: "711539772164",
+      appId: "1:711539772164:web:e7736325e6ed365c0bde51"
+    };
+
+    // Inicializar Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const form = document.getElementById("cadastroForm");
+    const tabela = document.getElementById("tabelaCadastros");
+
+    // Enviar dados para o banco
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const nome = document.getElementById("nome").value;
+      const email = document.getElementById("email").value;
+      const telefone = document.getElementById("telefone").value;
+
+      if (nome && email && telefone) {
+        const novoCadastro = db.ref("cadastros").push();
+        novoCadastro.set({ nome, email, telefone });
+
+        alert("✅ Cadastro enviado com sucesso!");
+        form.reset();
+      }
+    });
+
+    // Mostrar cadastros em tempo real
+    db.ref("cadastros").on("value", (snapshot) => {
+      tabela.innerHTML = "";
+      snapshot.forEach((childSnapshot) => {
+        const dados = childSnapshot.val();
+        const linha = `
+          <tr>
+            <td>${dados.nome}</td>
+            <td>${dados.email}</td>
+            <td>${dados.telefone}</td>
+          </tr>`;
+        tabela.innerHTML += linha;
+      });
+    });
+  </script>
+</body>
+</html>      background: white;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h2>Cadastro Firebase</h2>
+
+  <form id="cadastroForm">
+    <input type="text" id="nome" placeholder="Nome completo" required />
+    <input type="email" id="email" placeholder="E-mail" required />
+    <input type="text" id="telefone" placeholder="Telefone" required />
+    <button type="submit">Enviar Cadastro</button>
+  </form>
+
+  <h3>📋 Lista de Cadastros</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>E-mail</th>
+        <th>Telefone</th>
+      </tr>
+    </thead>
+    <tbody id="tabelaCadastros"></tbody>
+  </table>
+
+  <!-- Firebase SDKs (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <script>
     // ✅ Configuração do seu Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCvXGUdvZkqtSMMn8VmTOXLA9PXqR85gSk",
