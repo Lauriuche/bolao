@@ -4,25 +4,89 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cadastro Firebase</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+      text-align: center;
+    }
+    form {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      display: inline-block;
+      text-align: left;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #mensagem {
+      color: green;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: white;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+  </style>
 </head>
 <body>
   <h2>Ficha de Cadastro</h2>
 
   <form id="cadastroForm">
-    <input type="text" id="nome" placeholder="Nome" required /><br><br>
-    <input type="tel" id="whatsapp" placeholder="WhatsApp" required /><br><br>
+    <input type="text" id="nome" placeholder="Nome" required /><br>
+    <input type="tel" id="whatsapp" placeholder="WhatsApp" required /><br>
     <button type="submit">Enviar Cadastro</button>
   </form>
 
   <p id="mensagem"></p>
 
-  <!-- Importa o Firebase diretamente da CDN -->
-  <script type="module">
-    // Importando os módulos Firebase
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-    import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-database.js";
+  <button id="verLista">📋 Ver Lista de Cadastros</button>
 
-    // Configuração do seu projeto Firebase
+  <table id="tabelaCadastros" style="display:none;">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Telefone</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="listaCadastros"></tbody>
+  </table>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+    import { getDatabase, ref, push, set, get, child } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-database.js";
+
+    // Configuração Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCvXGUdvZkqtSMMn8VmTOXLA9PXqR85gSk",
       authDomain: "vagner-34d5b.firebaseapp.com",
@@ -33,14 +97,18 @@
       appId: "1:711539772164:web:e7736325e6ed365c0bde51"
     };
 
-    // Inicializa o Firebase
+    // Inicialização Firebase
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // Manipula o formulário
+    // Formulário de cadastro
     const form = document.getElementById('cadastroForm');
     const mensagem = document.getElementById('mensagem');
+    const verLista = document.getElementById('verLista');
+    const tabela = document.getElementById('tabelaCadastros');
+    const corpoTabela = document.getElementById('listaCadastros');
 
+    // Envio do formulário
     form.addEventListener('submit', (e) => {
       e.preventDefault();
 
@@ -52,7 +120,6 @@
         return;
       }
 
-      // Envia os dados para o Firebase
       const referencia = ref(db, 'cadastros');
       const novoCadastro = push(referencia);
 
@@ -69,6 +136,34 @@
       .catch((error) => {
         mensagem.textContent = "❌ Erro: " + error.message;
       });
+    });
+
+    // Botão Ver Lista
+    verLista.addEventListener('click', async () => {
+      const dbRef = ref(db);
+      try {
+        const snapshot = await get(child(dbRef, 'cadastros'));
+        if (snapshot.exists()) {
+          const dados = snapshot.val();
+          corpoTabela.innerHTML = ""; // limpa a tabela
+          Object.values(dados).forEach(item => {
+            const row = `
+              <tr>
+                <td>${item.nome}</td>
+                <td>${item.whatsapp.replace(/^(\d{2})\d+(\d{1})$/, '$1*******$2')}</td>
+                <td>${item.status}</td>
+              </tr>
+            `;
+            corpoTabela.innerHTML += row;
+          });
+          tabela.style.display = "table";
+        } else {
+          corpoTabela.innerHTML = "<tr><td colspan='3'>Nenhum cadastro encontrado.</td></tr>";
+          tabela.style.display = "table";
+        }
+      } catch (error) {
+        alert("Erro ao buscar cadastros: " + error.message);
+      }
     });
   </script>
 </body>
