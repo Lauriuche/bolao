@@ -1,106 +1,126 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cadastro Firebase</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f2f5f9;
-      color: #222;
-      text-align: center;
+      background: #f2f2f2;
       padding: 20px;
     }
-    h1 { color: #007bff; }
+    h2 { text-align: center; }
     form {
-      background: #fff;
+      background: white;
       padding: 20px;
-      border-radius: 12px;
-      max-width: 400px;
-      margin: 20px auto;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
     }
-    input {
-      width: 90%;
+    input, button {
+      width: 100%;
       padding: 10px;
-      margin: 8px 0;
-      border-radius: 8px;
+      margin: 6px 0;
+      border-radius: 5px;
       border: 1px solid #ccc;
     }
     button {
-      background: #007bff;
+      background-color: #4CAF50;
       color: white;
+      font-weight: bold;
       border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
-      cursor: pointer;
     }
-    button:hover { background: #0056b3; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
   </style>
 </head>
 <body>
-  <h1>Cadastro de Participantes</h1>
+  <h2>Cadastro Firebase</h2>
+
   <form id="cadastroForm">
-    <input type="text" id="nome" placeholder="Seu nome completo" required><br>
-    <input type="tel" id="whatsapp" placeholder="WhatsApp com DDD" required><br>
-    <button type="submit">Cadastrar</button>
+    <input type="text" id="nome" placeholder="Nome completo" required />
+    <input type="email" id="email" placeholder="E-mail" required />
+    <input type="text" id="telefone" placeholder="Telefone" required />
+    <button type="submit">Enviar Cadastro</button>
   </form>
 
-  <h2>Lista de Participantes</h2>
-  <div id="lista"></div>
+  <h3>📋 Lista de Cadastros</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>E-mail</th>
+        <th>Telefone</th>
+      </tr>
+    </thead>
+    <tbody id="tabelaCadastros"></tbody>
+  </table>
 
-  <!-- Importar Firebase -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  <!-- Firebase SDKs (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-    // 🔧 CONFIG DO SEU FIREBASE
-const firebaseConfig = {
-  apiKey: "AIzaSyCvXGUdvZkqtSMMn8VmTOXLA9PXqR85gSk",
-  authDomain: "vagner-34d5b.firebaseapp.com",
-  databaseURL: "https://vagner-34d5b.firebaseio.com",
-  projectId: "vagner-34d5b",
-  storageBucket: "vagner-34d5b.firebasestorage.app",
-  messagingSenderId: "711539772164",
-  appId: "1:711539772164:web:e7736325e6ed365c0bde51"
-};
+  <script>
+    // ✅ Configuração do seu Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCvXGUdvZkqtSMMn8VmTOXLA9PXqR85gSk",
+      authDomain: "vagner-34d5b.firebaseapp.com",
+      databaseURL: "https://vagner-34d5b.firebaseio.com",
+      projectId: "vagner-34d5b",
+      storageBucket: "vagner-34d5b.firebasestorage.app",
+      messagingSenderId: "711539772164",
+      appId: "1:711539772164:web:e7736325e6ed365c0bde51"
+    };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+    // Inicializar o Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const cadastroRef = ref(db, "participantes");
+    const form = document.getElementById("cadastroForm");
+    const tabela = document.getElementById("tabelaCadastros");
 
-    // 🟢 Enviar cadastro
-    document.getElementById("cadastroForm").addEventListener("submit", (e) => {
+    // Enviar dados para o banco
+    form.addEventListener("submit", (e) => {
       e.preventDefault();
+
       const nome = document.getElementById("nome").value;
-      const whatsapp = document.getElementById("whatsapp").value;
+      const email = document.getElementById("email").value;
+      const telefone = document.getElementById("telefone").value;
 
-      push(cadastroRef, {
-        nome,
-        whatsapp,
-        status: "aguardando pagamento",
-        data_limite: "2025-12-10"
-      });
+      if (nome && email && telefone) {
+        const novoCadastro = db.ref("cadastros").push();
+        novoCadastro.set({ nome, email, telefone });
 
-      alert("Cadastro enviado com sucesso!");
-      e.target.reset();
+        alert("✅ Cadastro enviado com sucesso!");
+        form.reset();
+      }
     });
 
-    // 👀 Listar cadastros
-    const lista = document.getElementById("lista");
-    onValue(cadastroRef, (snapshot) => {
-      lista.innerHTML = "";
-      snapshot.forEach((child) => {
-        const dados = child.val();
-        const telefoneOculto = dados.whatsapp.replace(/(\d{2})(\d+)(\d{2})/, "$1*****$3");
-
-        const li = document.createElement("li");
-        li.textContent = `${dados.nome} - ${telefoneOculto} - ${dados.status}`;
-        lista.appendChild(li);
+    // Mostrar cadastros em tempo real
+    db.ref("cadastros").on("value", (snapshot) => {
+      tabela.innerHTML = "";
+      snapshot.forEach((childSnapshot) => {
+        const dados = childSnapshot.val();
+        const linha = `
+          <tr>
+            <td>${dados.nome}</td>
+            <td>${dados.email}</td>
+            <td>${dados.telefone}</td>
+          </tr>`;
+        tabela.innerHTML += linha;
       });
     });
   </script>
