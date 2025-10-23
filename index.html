@@ -4,123 +4,70 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cadastro Firebase</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f2f2f2;
-      padding: 20px;
-    }
-    h2 { text-align: center; }
-    form {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-      margin-bottom: 30px;
-    }
-    input, button {
-      width: 100%;
-      padding: 10px;
-      margin: 6px 0;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    button {
-      background-color: #4CAF50;
-      color: white;
-      font-weight: bold;
-      border: none;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 10px;
-      text-align: left;
-    }
-    th {
-      background-color: #4CAF50;
-      color: white;
-    }
-  </style>
 </head>
 <body>
-  <h2>Cadastro Firebase</h2>
+  <h2>Ficha de Cadastro</h2>
 
   <form id="cadastroForm">
-    <input type="text" id="nome" placeholder="Nome completo" required />
-    <input type="email" id="email" placeholder="E-mail" required />
-    <input type="text" id="telefone" placeholder="Telefone" required />
+    <input type="text" id="nome" placeholder="Nome" required /><br><br>
+    <input type="tel" id="whatsapp" placeholder="WhatsApp" required /><br><br>
     <button type="submit">Enviar Cadastro</button>
   </form>
 
-  <h3>📋 Lista de Cadastros</h3>
-  <table>
-    <thead>
-      <tr>
-        <th>Nome</th>
-        <th>E-mail</th>
-        <th>Telefone</th>
-      </tr>
-    </thead>
-    <tbody id="tabelaCadastros"></tbody>
-  </table>
+  <p id="mensagem"></p>
 
-  <!-- Firebase SDKs (compat) -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <!-- Importa o Firebase diretamente da CDN -->
+  <script type="module">
+    // Importando os módulos Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+    import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-database.js";
 
-  <script>
-    // ✅ Configuração correta do Firebase
+    // Configuração do seu projeto Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCvXGUdvZkqtSMMn8VmTOXLA9PXqR85gSk",
       authDomain: "vagner-34d5b.firebaseapp.com",
-      databaseURL: "https://vagner-34d5b-default-rtdb.firebaseio.com",
+      databaseURL: "https://vagner-34d5b.firebaseio.com/",
       projectId: "vagner-34d5b",
       storageBucket: "vagner-34d5b.firebasestorage.app",
       messagingSenderId: "711539772164",
       appId: "1:711539772164:web:e7736325e6ed365c0bde51"
     };
 
-    // Inicializar Firebase
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    // Inicializa o Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-    const form = document.getElementById("cadastroForm");
-    const tabela = document.getElementById("tabelaCadastros");
+    // Manipula o formulário
+    const form = document.getElementById('cadastroForm');
+    const mensagem = document.getElementById('mensagem');
 
-    // Enviar dados para o banco
-    form.addEventListener("submit", (e) => {
+    form.addEventListener('submit', (e) => {
       e.preventDefault();
 
-      const nome = document.getElementById("nome").value;
-      const email = document.getElementById("email").value;
-      const telefone = document.getElementById("telefone").value;
+      const nome = document.getElementById('nome').value.trim();
+      const whatsapp = document.getElementById('whatsapp').value.trim();
 
-      if (nome && email && telefone) {
-        const novoCadastro = db.ref("cadastros").push();
-        novoCadastro.set({ nome, email, telefone });
-
-        alert("✅ Cadastro enviado com sucesso!");
-        form.reset();
+      if (!nome || !whatsapp) {
+        mensagem.textContent = "Preencha todos os campos!";
+        return;
       }
-    });
 
-    // Mostrar cadastros em tempo real
-    db.ref("cadastros").on("value", (snapshot) => {
-      tabela.innerHTML = "";
-      snapshot.forEach((childSnapshot) => {
-        const dados = childSnapshot.val();
-        const linha = `
-          <tr>
-            <td>${dados.nome}</td>
-            <td>${dados.email}</td>
-            <td>${dados.telefone}</td>
-          </tr>`;
-        tabela.innerHTML += linha;
+      // Envia os dados para o Firebase
+      const referencia = ref(db, 'cadastros');
+      const novoCadastro = push(referencia);
+
+      set(novoCadastro, {
+        nome: nome,
+        whatsapp: whatsapp,
+        status: "Aguardando pagamento",
+        prazo: "10/12/2025"
+      })
+      .then(() => {
+        mensagem.textContent = "✅ Cadastro enviado com sucesso!";
+        form.reset();
+      })
+      .catch((error) => {
+        mensagem.textContent = "❌ Erro: " + error.message;
       });
     });
   </script>
