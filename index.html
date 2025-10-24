@@ -1,170 +1,300 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cadastro Firebase</title>
-  <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Participantes do Bolão</title>
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #f2f2f2;
-      padding: 20px;
-      text-align: center;
+        margin: 0;
+        background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: #333;
     }
-    form {
-      background: white;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-      display: inline-block;
-      text-align: left;
+
+    .popup {
+        background: #fff;
+        width: 95%;
+        max-width: 440px;
+        border-radius: 20px;
+        padding: 25px 22px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+        text-align: center;
+        animation: aparecer 0.6s ease;
     }
-    input, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      font-size: 16px;
+
+    @keyframes aparecer {
+        from { opacity: 0; transform: scale(0.9); }
+        to { opacity: 1; transform: scale(1); }
     }
+
+    h1 {
+        font-size: 24px;
+        color: #0048b4;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    h2 {
+        font-size: 15px;
+        font-weight: normal;
+        color: #444;
+        margin-bottom: 18px;
+        line-height: 1.4;
+    }
+
+    input {
+        width: 90%;
+        padding: 10px;
+        margin: 6px 0;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        font-size: 14px;
+        text-align: center;
+        transition: all 0.2s;
+    }
+
+    input:focus {
+        border-color: #0052d4;
+        box-shadow: 0 0 4px rgba(0,82,212,0.4);
+        outline: none;
+    }
+
     button {
-      background-color: #007bff;
-      color: white;
-      cursor: pointer;
+        width: 92%;
+        padding: 12px;
+        margin-top: 10px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(90deg, #0052D4, #4364F7);
+        color: white;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s, background 0.3s;
     }
+
     button:hover {
-      background-color: #0056b3;
+        transform: scale(1.03);
+        background: linear-gradient(90deg, #0048b4, #365de9);
     }
-    #mensagem {
-      color: green;
-      font-weight: bold;
-      margin-top: 10px;
+
+    .mensagem {
+        margin-top: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.3s;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-      background: white;
+
+    .lista-container {
+        margin-top: 15px;
+        border-top: 1px solid #eee;
+        padding-top: 10px;
     }
-    th, td {
-      padding: 10px;
-      border: 1px solid #ddd;
+
+    .search-box {
+        position: relative;
+        width: 90%;
+        margin: 0 auto 10px auto;
     }
-    th {
-      background-color: #007bff;
-      color: white;
+
+    .search-box input {
+        width: 100%;
+        padding: 8px 30px 8px 10px;
+        font-size: 13px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
     }
-  </style>
+
+    .search-box svg {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 16px;
+        height: 16px;
+        color: #555;
+    }
+
+    .lista {
+        text-align: left;
+        font-size: 12px;
+        max-height: 240px;
+        overflow-y: auto;
+        color: #222;
+        padding: 0 5px;
+    }
+
+    .lista div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 0;
+        border-bottom: 1px dashed #eee;
+        white-space: nowrap;
+    }
+
+    .status {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .pago {
+        color: green;
+    }
+
+    .nao-pago {
+        color: red;
+    }
+
+    small {
+        font-size: 12px;
+        color: #555;
+    }
+
+    @media (max-width: 400px) {
+        h2 { font-size: 14px; }
+        input, button { font-size: 13px; }
+        .lista { font-size: 11px; }
+    }
+</style>
 </head>
 <body>
-  <h2>Ficha de Cadastro</h2>
+<div class="popup">
+    <h1>Participantes do Bolão</h1>
+    <h2>Bolão Mega da Virada 2025! 💰<br>
+    Valor: R$ 85,00<br>
+    Pagamento Limite: Até 10 de dezembro.<br>
+    <small>Aviso: Quem estiver na lista e não pagar até o dia 10/12, perde a vaga.<br>
+    Cotas entregues até 26/12.<br>
+    Preencha os dados corretamente!</small></h2>
 
-  <form id="cadastroForm">
-    <input type="text" id="nome" placeholder="Nome" required /><br>
-    <input type="tel" id="whatsapp" placeholder="WhatsApp" required /><br>
-    <button type="submit">Enviar Cadastro</button>
-  </form>
+    <input type="text" id="nome" placeholder="Digite seu nome completo">
+    <input type="tel" id="telefone" placeholder="Digite seu telefone (com DDD)">
+    <button id="cadastrar">Cadastrar</button>
+    <button id="verLista" style="background:linear-gradient(90deg,#6c757d,#adb5bd);margin-top:5px;">Ver Lista</button>
 
-  <p id="mensagem"></p>
+    <div class="mensagem" id="mensagem"></div>
 
-  <button id="verLista">📋 Ver Lista de Cadastros</button>
+    <div class="lista-container" id="listaContainer" style="display:none;">
+        <div class="search-box">
+            <input type="text" id="buscar" placeholder="🔍 Buscar participante...">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+        <div class="lista" id="lista"></div>
+    </div>
+</div>
 
-  <table id="tabelaCadastros" style="display:none;">
-    <thead>
-      <tr>
-        <th>Nome</th>
-        <th>Telefone</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody id="listaCadastros"></tbody>
-  </table>
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getDatabase, ref, push, get } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-  <!-- Firebase -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-    import { getDatabase, ref, push, set, get, child } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-database.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyCvXGUdvZkqtSMMn8VmTOXLA9PXqR85gSk",
+  authDomain: "vagner-34d5b.firebaseapp.com",
+  databaseURL: "https://vagner-34d5b.firebaseio.com",
+  projectId: "vagner-34d5b",
+  storageBucket: "vagner-34d5b.firebasestorage.app",
+  messagingSenderId: "711539772164",
+  appId: "1:711539772164:web:e7736325e6ed365c0bde51"
+};
 
-    // Configuração Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyCvXGUdvZkqtSMMn8VmTOXLA9PXqR85gSk",
-      authDomain: "vagner-34d5b.firebaseapp.com",
-      databaseURL: "https://vagner-34d5b.firebaseio.com/",
-      projectId: "vagner-34d5b",
-      storageBucket: "vagner-34d5b.firebasestorage.app",
-      messagingSenderId: "711539772164",
-      appId: "1:711539772164:web:e7736325e6ed365c0bde51"
-    };
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const dbRef = ref(db, "participantes");
 
-    // Inicialização Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+document.getElementById("cadastrar").addEventListener("click", async () => {
+  const nome = document.getElementById("nome").value.trim();
+  const telefone = document.getElementById("telefone").value.trim();
+  const mensagem = document.getElementById("mensagem");
 
-    // Formulário de cadastro
-    const form = document.getElementById('cadastroForm');
-    const mensagem = document.getElementById('mensagem');
-    const verLista = document.getElementById('verLista');
-    const tabela = document.getElementById('tabelaCadastros');
-    const corpoTabela = document.getElementById('listaCadastros');
+  if (!nome || !telefone) {
+    mensagem.textContent = "⚠️ Preencha todos os campos!";
+    mensagem.style.color = "red";
+    return;
+  }
 
-    // Envio do formulário
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
+  const snapshot = await get(dbRef);
+  const participantes = snapshot.exists() ? Object.values(snapshot.val()) : [];
 
-      const nome = document.getElementById('nome').value.trim();
-      const whatsapp = document.getElementById('whatsapp').value.trim();
+  if (participantes.length >= 80) {
+    mensagem.textContent = "❌ Limite de 80 participantes atingido!";
+    mensagem.style.color = "red";
+    return;
+  }
 
-      if (!nome || !whatsapp) {
-        mensagem.textContent = "Preencha todos os campos!";
-        return;
-      }
+  const duplicado = participantes.some(p =>
+    p.nome.toLowerCase() === nome.toLowerCase() &&
+    p.telefone.replace(/\D/g, '') === telefone.replace(/\D/g, '')
+  );
 
-      const referencia = ref(db, 'cadastros');
-      const novoCadastro = push(referencia);
+  if (duplicado) {
+    mensagem.textContent = "⚠️ Esse cadastro já está na lista!";
+    mensagem.style.color = "red";
+    return;
+  }
 
-      set(novoCadastro, {
-        nome: nome,
-        whatsapp: whatsapp,
-        status: "Aguardando pagamento",
-        prazo: "10/12/2025"
-      })
-      .then(() => {
-        mensagem.textContent = "✅ Cadastro enviado com sucesso!";
-        form.reset();
-      })
-      .catch((error) => {
-        mensagem.textContent = "❌ Erro: " + error.message;
-      });
-    });
+  const novoCadastro = {
+    numero: participantes.length + 1,
+    nome,
+    telefone,
+    status: "Não pago"
+  };
 
-    // Botão Ver Lista
-    verLista.addEventListener('click', async () => {
-      const dbRef = ref(db);
-      try {
-        const snapshot = await get(child(dbRef, 'cadastros'));
-        if (snapshot.exists()) {
-          const dados = snapshot.val();
-          corpoTabela.innerHTML = ""; // limpa a tabela
-          Object.values(dados).forEach(item => {
-            const row = `
-              <tr>
-                <td>${item.nome}</td>
-                <td>${item.whatsapp.replace(/^(\d{2})\d+(\d{1})$/, '$1*******$2')}</td>
-                <td>${item.status}</td>
-              </tr>
-            `;
-            corpoTabela.innerHTML += row;
-          });
-          tabela.style.display = "table";
-        } else {
-          corpoTabela.innerHTML = "<tr><td colspan='3'>Nenhum cadastro encontrado.</td></tr>";
-          tabela.style.display = "table";
-        }
-      } catch (error) {
-        alert("Erro ao buscar cadastros: " + error.message);
-      }
-    });
-  </script>
+  await push(dbRef, novoCadastro);
+  mensagem.textContent = "✅ Cadastro realizado com sucesso!";
+  mensagem.style.color = "green";
+  document.getElementById("nome").value = "";
+  document.getElementById("telefone").value = "";
+});
+
+document.getElementById("verLista").addEventListener("click", async () => {
+  const listaContainer = document.getElementById("listaContainer");
+  const listaDiv = document.getElementById("lista");
+  const buscarInput = document.getElementById("buscar");
+
+  listaContainer.style.display = "block";
+  listaDiv.innerHTML = "Carregando lista...";
+
+  const snapshot = await get(dbRef);
+  if (!snapshot.exists()) {
+    listaDiv.textContent = "Nenhum participante cadastrado.";
+    return;
+  }
+
+  const participantes = Object.values(snapshot.val());
+  participantes.sort((a, b) => a.numero - b.numero);
+  renderLista(participantes);
+
+  buscarInput.addEventListener("input", () => {
+    const termo = buscarInput.value.toLowerCase();
+    const filtrados = participantes.filter(p => p.nome.toLowerCase().includes(termo));
+    renderLista(filtrados);
+  });
+});
+
+function renderLista(participantes) {
+  const listaDiv = document.getElementById("lista");
+  listaDiv.innerHTML = "";
+
+  participantes.forEach(p => {
+    const linha = document.createElement("div");
+    const statusClass = p.status.toLowerCase() === "pago" ? "pago" : "nao-pago";
+    linha.innerHTML = `<span>${String(p.numero).padStart(2, "0")}° - ${p.nome}</span>
+                       <span class="status ${statusClass}">${p.status}</span>`;
+    listaDiv.appendChild(linha);
+  });
+}
+</script>
 </body>
 </html>
