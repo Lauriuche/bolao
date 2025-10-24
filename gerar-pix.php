@@ -23,7 +23,7 @@ $payload = [
 ];
 
 // URL de criação de Pix (exemplo Abacate Pay)
-$url = "https://api.abacatepay.com/v1/pixQrCode/check?id=pix_char_FL6xjJZNHQssty1jGJ4wPE55"; // substitua pela URL real
+$url = "https://abacatepay.com/pay/bill_ErhauNjThN4cJLPNshFZDgtP"; // substitua pela URL real
 
 $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
