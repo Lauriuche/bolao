@@ -5,134 +5,595 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Participantes do Bolão</title>
 <style>
+    body {
+        box-sizing: border-box;
+    }
     * { box-sizing: border-box; font-family: "Poppins", sans-serif; }
     body { 
         margin: 0; 
-        background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC); 
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); 
         display: flex; 
         justify-content: center; 
         align-items: center; 
-        height: 100vh; 
-        color: #333; 
+        min-height: 100%; 
+        color: #fff;
+        padding: 20px;
+    }
+    html {
+        height: 100%;
     }
     .popup { 
-        background: #fff; 
+        background: #ffffff;
+        backdrop-filter: blur(15px);
         width: 95%; 
-        max-width: 440px; 
-        border-radius: 20px; 
-        padding: 25px 22px; 
-        box-shadow: 0 8px 25px rgba(0,0,0,0.25); 
+        max-width: 480px; 
+        border-radius: 25px; 
+        padding: 30px 25px; 
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 2px rgba(255,255,255,0.1); 
         text-align: center; 
-        animation: aparecer 0.6s ease; 
+        animation: aparecer 0.6s ease;
+        border: 2px solid rgba(255, 255, 255, 0.2);
     }
     @keyframes aparecer { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-    h1 { font-size: 24px; color: #0048b4; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-    h2 { font-size: 15px; font-weight: normal; color: #444; margin-bottom: 18px; line-height: 1.4; }
-    input { width: 90%; padding: 10px; margin: 6px 0; border: 1px solid #ccc; border-radius: 10px; font-size: 14px; text-align: center; transition: all 0.2s; }
-    input:focus { border-color: #0052d4; box-shadow: 0 0 4px rgba(0,82,212,0.4); outline: none; }
-    button { width: 92%; padding: 12px; margin-top: 10px; border: none; border-radius: 10px; background: linear-gradient(90deg, #0052D4, #4364F7); color: white; font-size: 15px; font-weight: 600; cursor: pointer; transition: transform 0.2s, background 0.3s; }
-    button:hover { transform: scale(1.03); background: linear-gradient(90deg, #0048b4, #365de9); }
-    .mensagem { margin-top: 10px; font-size: 14px; font-weight: 600; transition: all 0.3s; }
+    h1 { 
+        font-size: 28px; 
+        color: #333;
+        text-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+        margin-bottom: 8px; 
+        text-transform: uppercase; 
+        letter-spacing: 1.5px; 
+        font-weight: 700;
+    }
+    h2 { font-size: 15px; font-weight: normal; color: #333; margin-bottom: 20px; line-height: 1.5; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
+    h3 { font-size: 15px; font-weight: normal; color: #333; margin-bottom: 20px; line-height: 1.5; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
+    input { 
+        width: 90%; 
+        padding: 14px 16px; 
+        margin: 8px 0; 
+        border: 2px solid #000; 
+        border-radius: 15px; 
+        font-size: 15px; 
+        text-align: center; 
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(5px);
+        color: #333;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    input:focus { 
+        border-color: #000; 
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); 
+        outline: none; 
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 1);
+    }
+    button { 
+        width: 92%; 
+        padding: 16px; 
+        margin-top: 12px; 
+        border: none; 
+        border-radius: 15px; 
+        background: linear-gradient(135deg, #ffd700, #ffb347); 
+        color: #333; 
+        font-size: 16px; 
+        font-weight: 700; 
+        cursor: pointer; 
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+    button:hover { 
+        transform: translateY(-3px) scale(1.02); 
+        box-shadow: 0 12px 25px rgba(255, 215, 0, 0.6);
+        background: linear-gradient(135deg, #ffed4e, #ffc947); 
+    }
+    .mensagem { margin-top: 15px; font-size: 15px; font-weight: 600; transition: all 0.3s; padding: 10px; border-radius: 10px; }
 
     /* === MODAL === */
     .overlay {
         position: fixed;
         top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(0, 0, 0, 0.6);
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(8px);
         display: none;
         justify-content: center;
         align-items: center;
         z-index: 1000;
     }
     .modal {
-        background: #fff;
-        border-radius: 15px;
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        backdrop-filter: blur(15px);
+        border-radius: 20px;
         width: 90%;
-        max-width: 450px;
-        padding: 20px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-        animation: aparecer 0.3s ease;
+        max-width: 480px;
+        padding: 25px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 2px rgba(255,255,255,0.1);
+        animation: aparecer 0.4s ease;
         text-align: center;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
     }
     .modal h3 {
         margin-top: 0;
-        font-size: 20px;
-        color: #0048b4;
-        margin-bottom: 10px;
+        font-size: 22px;
+        color: #ffd700;
+        text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
+        margin-bottom: 15px;
+        font-weight: 600;
     }
     .close-btn {
-        background: #dc3545;
+        background: linear-gradient(135deg, #ff6b6b, #ee5a52);
         border: none;
         color: white;
-        padding: 6px 12px;
+        padding: 10px 20px;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 15px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+    }
+    .close-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+    }
+    .search-box { position: relative; width: 100%; margin-bottom: 15px; }
+    .search-box input { 
+        width: 100%; 
+        padding: 12px 40px 12px 15px; 
+        font-size: 14px; 
+        border-radius: 12px; 
+        border: 2px solid rgba(102, 126, 234, 0.2);
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(5px);
+    }
+    .search-box svg { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: #667eea; }
+    .lista { 
+        text-align: left; 
+        font-size: 13px; 
+        max-height: 280px; 
+        overflow-y: auto; 
+        color: #fff; 
+        padding: 0 8px;
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 12px;
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .lista div { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        padding: 6px 8px; 
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+        white-space: nowrap;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+    .lista div:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        transform: translateX(2px);
+    }
+    
+    /* Seleção múltipla */
+    .checkbox-container {
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
+    }
+    
+    .checkbox-container input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        margin: 0;
+        cursor: pointer;
+        accent-color: #ffd700;
+    }
+    
+    .lista div.selected {
+        background: rgba(255, 215, 0, 0.2) !important;
+        border: 2px solid rgba(255, 215, 0, 0.5) !important;
+        border-radius: 8px !important;
+    }
+    
+    .selection-actions {
+        display: none;
+        gap: 8px;
+        margin-bottom: 15px;
+        justify-content: center;
+        padding: 10px;
+        background: rgba(255, 215, 0, 0.1);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 215, 0, 0.3);
+    }
+    
+    .selection-actions button {
+        flex: 1;
+        padding: 10px 8px;
+        border: none;
         border-radius: 8px;
         font-weight: 600;
         cursor: pointer;
-        margin-top: 8px;
+        font-size: 12px;
+        transition: all 0.2s ease;
     }
-    .search-box { position: relative; width: 100%; margin-bottom: 10px; }
-    .search-box input { width: 100%; padding: 8px 30px 8px 10px; font-size: 13px; border-radius: 8px; border: 1px solid #ccc; }
-    .search-box svg { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: #555; }
-    .lista { text-align: left; font-size: 12px; max-height: 240px; overflow-y: auto; color: #222; padding: 0 5px; }
-    .lista div { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px dashed #eee; white-space: nowrap; }
-    .status { font-weight: bold; text-transform: uppercase; }
-    .pago { color: green; }
-    .nao-pago { color: red; }
+    
+    .selection-actions .status-btn {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+        box-shadow: 0 2px 6px rgba(52, 152, 219, 0.3);
+    }
+    
+    .selection-actions .delete-btn {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: white;
+        box-shadow: 0 2px 6px rgba(231, 76, 60, 0.3);
+    }
+    
+    .selection-counter {
+        color: #ffd700;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 13px;
+    }
+    .status { font-weight: bold; text-transform: uppercase; font-size: 11px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+    .pago { color: #00ff88; }
+    .nao-pago { color: #ff6b6b; }
     .status-btn {
-        padding: 3px 8px;
-        border-radius: 5px;
+        padding: 4px 10px;
+        border-radius: 8px;
         border: none;
-        font-size: 11px;
+        font-size: 10px;
         font-weight: bold;
         cursor: pointer;
-        margin-left: 5px;
+        margin-left: 8px;
+        transition: all 0.2s ease;
     }
     .status-btn.pago { 
-        background: #d4edda; 
-        color: #155724; 
-        border: 1px solid #c3e6cb; 
+        background: linear-gradient(135deg, #00b894, #00cec9); 
+        color: white; 
+        box-shadow: 0 2px 8px rgba(0, 184, 148, 0.3);
     }
     .status-btn.nao-pago { 
-        background: #f8d7da; 
-        color: #721c24; 
-        border: 1px solid #f5c6cb; 
+        background: linear-gradient(135deg, #e17055, #fdcb6e); 
+        color: white; 
+        box-shadow: 0 2px 8px rgba(225, 112, 85, 0.3);
+    }
+    .status-btn:hover {
+        transform: translateY(-1px);
+    }
+
+    /* Filtros */
+    .filter-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    .filter-btn.active {
+        background: linear-gradient(135deg, #667eea, #764ba2) !important;
+        color: white !important;
+        box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3) !important;
+        border: none !important;
     }
 
     /* Progresso */
     .progress-container {
-        margin: 15px 0;
+        margin: 20px 0;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        backdrop-filter: blur(5px);
+        border: 2px solid rgba(255, 255, 255, 0.2);
     }
     .progress-bar {
         width: 100%;
-        height: 12px;
-        background: #e0e0e0;
-        border-radius: 10px;
+        height: 16px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 12px;
         overflow: hidden;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
     .progress-fill {
         height: 100%;
-        background: linear-gradient(90deg, #00B894, #00CEC9);
+        background: linear-gradient(90deg, #ffd700, #ffb347, #ff6b6b);
         width: 0%;
-        transition: width 0.5s ease;
+        transition: width 0.8s ease;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(255, 215, 0, 0.6);
+        position: relative;
+    }
+    .progress-fill::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        animation: shimmer 2s infinite;
+    }
+    @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
     }
     .progress-text {
-        font-size: 12px;
-        margin-top: 5px;
-        color: #555;
+        font-size: 13px;
+        margin-top: 8px;
+        color: #333;
+        font-weight: 600;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
     }
 
-    @media (max-width: 400px) { h2 { font-size: 14px; } input, button { font-size: 13px; } .lista { font-size: 11px; } }
+    /* Popup Informativo */
+    .info-overlay {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        animation: fadeIn 0.5s ease;
+    }
+    
+    .info-modal {
+        background: #ffffff;
+        border: none;
+        border-radius: 5px;
+        width: 90%;
+        max-width: 500px;
+        max-height: 80vh;
+        padding: 25px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.1);
+        animation: slideIn 0.6s ease;
+        position: relative;
+        overflow-y: auto;
+        transform: rotate(-1deg);
+    }
+    
+    .info-modal::before {
+        content: '';
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 20px;
+        background: rgba(255, 193, 7, 0.8);
+        border-radius: 2px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .info-content {
+        font-family: 'Arial', sans-serif;
+        color: #333;
+        line-height: 1.6;
+        font-size: 14px;
+        padding: 0;
+    }
+    
+    .info-title {
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        color: #d32f2f;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-bottom: 2px solid #d32f2f;
+        padding-bottom: 10px;
+    }
+    
+    .info-section {
+        margin-bottom: 15px;
+    }
+    
+    .info-section h4 {
+        color: #1976d2;
+        font-weight: bold;
+        margin: 10px 0 5px 0;
+        font-size: 15px;
+    }
+    
+    .info-highlight {
+        background: rgba(255, 87, 34, 0.2);
+        padding: 2px 4px;
+        border-radius: 3px;
+        font-weight: bold;
+        color: #d84315;
+    }
+    
+    .info-close-btn {
+        background: linear-gradient(135deg, #4caf50, #66bb6a);
+        border: none;
+        color: #fff;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        margin: 20px auto 0;
+        display: block;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+    }
+    
+    .info-close-btn:hover {
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 6px 16px rgba(76, 175, 80, 0.6);
+        background: linear-gradient(135deg, #66bb6a, #81c784);
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    @keyframes slideIn {
+        from { opacity: 0; transform: scale(0.8) translateY(-50px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* Teclado Virtual */
+    .virtual-keyboard {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        border-radius: 15px;
+        padding: 15px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 0 2px rgba(255,255,255,0.1);
+        z-index: 3000;
+        display: none;
+        border: 2px solid rgba(255, 215, 0, 0.3);
+        backdrop-filter: blur(15px);
+        animation: popIn 0.3s ease;
+        width: 220px;
+        height: 280px;
+        box-sizing: border-box;
+    }
+    
+    @keyframes popIn {
+        from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+        to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+    
+    .keyboard-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        width: 100%;
+    }
+    
+    .key-btn {
+        width: 55px;
+        height: 40px;
+        background: linear-gradient(135deg, #ffd700, #ffb347);
+        border: none;
+        border-radius: 8px;
+        color: #333;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 3px 8px rgba(255, 215, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        flex: 1;
+        margin: 0 2px;
+    }
+    
+    .key-btn:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 5px 12px rgba(255, 215, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.4);
+        background: linear-gradient(135deg, #ffed4e, #ffc947);
+    }
+    
+    .key-btn:active {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 6px rgba(255, 215, 0, 0.5);
+    }
+    
+    .key-btn.close {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        box-shadow: 0 3px 8px rgba(231, 76, 60, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+        width: 100%;
+        margin: 12px 0 0 0;
+        font-size: 13px;
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        height: 32px;
+        flex: none;
+    }
+    
+    .key-btn.close:hover {
+        background: linear-gradient(135deg, #ec7063, #e74c3c);
+        box-shadow: 0 5px 12px rgba(231, 76, 60, 0.6), inset 0 1px 0 rgba(255,255,255,0.3);
+        transform: translateY(-1px);
+    }
+    
+    .keyboard-header {
+        text-align: center;
+        color: #ffd700;
+        font-size: 13px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    }
+    
+    .password-display {
+        background: rgba(0, 0, 0, 0.6);
+        border: 2px solid rgba(255, 215, 0, 0.4);
+        border-radius: 8px;
+        padding: 8px;
+        margin-bottom: 12px;
+        text-align: center;
+        color: #ffd700;
+        font-size: 20px;
+        font-weight: bold;
+        letter-spacing: 10px;
+        min-height: 25px;
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: inset 0 2px 6px rgba(0,0,0,0.3), 0 2px 8px rgba(255,215,0,0.2);
+    }
+
+    @media (max-width: 400px) { 
+        h2, h3 { font-size: 14px; } 
+        input, button { font-size: 14px; } 
+        .lista { font-size: 12px; }
+        .popup { padding: 20px 18px; }
+        .info-content { font-size: 12px; }
+        .info-title { font-size: 16px; }
+        
+        .virtual-keyboard {
+            width: 190px;
+            height: 250px;
+            padding: 12px;
+        }
+        
+        .key-btn {
+            width: 50px;
+            height: 35px;
+            font-size: 14px;
+            margin: 0 1px;
+        }
+        
+        .keyboard-row {
+            margin-bottom: 6px;
+        }
+        
+        .password-display {
+            font-size: 18px;
+            letter-spacing: 8px;
+            padding: 6px;
+            min-height: 22px;
+        }
+        
+        .key-btn.close {
+            height: 28px;
+            font-size: 11px;
+        }
+    }
 </style>
 </head>
 <body>
 <div class="popup">
-    <h1>Participantes do Bolão</h1>
-    <h3>Bolão Mega da Virada 2025! 💰<br>
-    Valor: R$ 85,00<br>
-    Pagamento Limite: Até 10 de dezembro.<br>
-    <small>Aviso: Quem estiver na lista e não pagar até o dia 10/12, perde a vaga.<br>
-    Cotas entregues até 26/12.<br><br>
-    Preencha os dados corretamente!</small></h3>
+    <h1 id="tituloBolao">🎯 Bolão Vai que dá certo</h1>
+    <h3 id="subtituloBolao">🎰 Mega da Virada 2025! 💰<br><br>
+    ✍️ Preencha os dados corretamente!<br>
+    <small>📋 Essas informações serão usadas para entrega das cotas.</small></h3>
+
+    <button id="verRegras" style="background:linear-gradient(135deg,#95a5a6,#bdc3c7);margin:10px 0 5px 0;font-size:11px;padding:6px 12px;width:auto;display:inline-block;opacity:0.7;">📋 Ver Regras</button>
 
     <div class="progress-container">
         <div class="progress-bar">
@@ -141,10 +602,12 @@
         <div class="progress-text" id="progressText">0/80 participantes</div>
     </div>
 
-    <input type="text" id="nome" placeholder="Digite seu nome completo">
-    <input type="tel" id="telefone" placeholder="Digite seu telefone (com DDD)">
-    <button id="cadastrar">Cadastrar</button>
-    <button id="verLista" style="background:linear-gradient(90deg,#6c757d,#adb5bd);margin-top:5px;">📋 Ver Lista</button>
+    <input type="text" id="nome" placeholder="✏️ Nome completo">
+    <input type="tel" id="telefone" placeholder="📱 WhatsApp">
+    
+    <button id="verLista" style="background:linear-gradient(135deg,#6c757d,#adb5bd);margin-top:8px;width:30%;float:left;">Lista</button>
+    <button id="cadastrar" style="width:65%;float:right;margin-left:5%;">🚀 Participar</button>
+    <div style="clear:both;"></div>
 
     <div class="mensagem" id="mensagem"></div>
 </div>
@@ -152,30 +615,188 @@
 <!-- Modal flutuante -->
 <div class="overlay" id="overlay">
     <div class="modal">
-        <h3>Lista de Participantes</h3>
+        <h3>📋 Lista de Participantes</h3>
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFillLista"></div>
+            </div>
+            <div class="progress-text">Progresso de Pagamento</div>
+            <div class="progress-text" id="progressTextLista">0/80 cadastrados • 0 pagos</div>
+        </div>
+        
         <div class="search-box">
             <input type="text" id="buscar" placeholder="🔍 Buscar participante...">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </div>
+        
+        <div class="filter-buttons" style="display: flex; gap: 8px; margin-bottom: 15px; justify-content: center;">
+            <button id="filtroTodos" class="filter-btn active" style="flex: 1; padding: 8px 12px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; background: linear-gradient(135deg, #667eea, #764ba2); color: white; box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);">👥 Todos</button>
+            <button id="filtroPagos" class="filter-btn" style="flex: 1; padding: 8px 12px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; background: rgba(255, 255, 255, 0.2); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3);">✅ Pagos</button>
+            <button id="filtroNaoPagos" class="filter-btn" style="flex: 1; padding: 8px 12px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; background: rgba(255, 255, 255, 0.2); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3);">❌ Não Pagos</button>
+        </div>
+        
+
+        
+        <div class="selection-counter" id="selectionCounter" style="display: none;"></div>
+        <div class="selection-actions" id="selectionActions">
+            <button class="status-btn" id="alterarStatusSelecionados">🔄 Alterar Status</button>
+            <button class="notify-btn" id="notificarSelecionados" style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white; box-shadow: 0 2px 6px rgba(243, 156, 18, 0.3);">📱 Notificar Selecionados</button>
+            <button class="delete-btn" id="excluirSelecionados">🗑️ Excluir Selecionados</button>
+        </div>
+        
         <div class="lista" id="lista"></div>
-        <button class="close-btn" id="fecharLista">Fechar</button>
+        <button class="close-btn" id="fecharLista">❌ Fechar</button>
     </div>
 </div>
 
-<!-- Senha Modal -->
-<div class="overlay" id="senhaOverlay">
+<!-- Modal de Ações -->
+<div class="overlay" id="acoesOverlay" style="display: none;">
     <div class="modal">
-        <h3>Autenticação Administrativa</h3>
-        <input type="password" id="senhaInput" placeholder="Digite a senha de acesso">
-        <button id="verificarSenha">Acessar</button>
-        <button class="close-btn" id="fecharSenha">Cancelar</button>
+        <h3>⚙️ Ações do Participante</h3>
+        <p id="participanteInfo" style="color: #ffd700; font-weight: bold; margin-bottom: 20px;"></p>
+        <div style="display: flex; gap: 8px; justify-content: center; margin: 15px 0;">
+            <button id="alterarStatus" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; flex: 1; padding: 12px 8px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 13px;">🔄 Status</button>
+            <button id="notificarParticipante" style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white; flex: 1; padding: 12px 8px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 13px;">📱 Notificar</button>
+            <button id="excluirParticipante" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; flex: 1; padding: 12px 8px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 13px;">🗑️ Excluir</button>
+        </div>
+        <button class="close-btn" id="fecharAcoes">❌ Cancelar</button>
     </div>
+</div>
+
+
+
+<!-- Popup Informativo -->
+<div class="info-overlay" id="infoOverlay">
+    <div class="info-modal">
+        <div class="info-content">
+            <div class="info-title">⚠️ INFORMATIVO: BOLÃO MEGA DA VIRADA ⚠️</div>
+            
+            <div class="info-section">
+                Estamos organizando nosso bolão, com um total de <span class="info-highlight" id="limiteInfo">80 participantes</span>.<br>
+                <strong>Custo por Participante:</strong> <span class="info-highlight" id="valorInfo">R$ 85,00</span>
+            </div>
+            
+            <div class="info-section">
+                <h4>Regras de Participação e Prazos:</h4>
+                
+                <strong>Prioridade:</strong><br>
+                Será dada prioridade de participação aos <span class="info-highlight">COLABORADORES da loja</span>.<br>
+                Caso as 80 vagas não sejam preenchidas, abriremos a participação para pessoas de fora.
+            </div>
+            
+            <div class="info-section">
+                <h4>Datas Limite:</h4>
+                <span class="info-highlight" id="dataInteresseInfo">30 de Novembro</span>: Data final para manifestar interesse (confirmar que quer participar).<br>
+                <span class="info-highlight" id="dataPagamentoInfo">10 de Dezembro</span>: Data final para o pagamento da cota.
+            </div>
+            
+            <div class="info-section">
+                <h4>Atenção ao Pagamento:</h4>
+                O participante que não realizar o pagamento até o dia <span class="info-highlight" id="dataPagamentoInfo2">10 de Dezembro</span> será automaticamente excluído do bolão, e a vaga será repassada.
+            </div>
+            
+            <div class="info-section">
+                <h4>Observações Importantes:</h4>
+                <strong>Prazos:</strong> As datas foram definidas para que todos tenham tempo suficiente para pagar (contando com o 13º salário).<br><br>
+                <strong>Agilidade:</strong> Quanto antes arrecadarmos o valor, melhor. Deixar para a última hora significa enfrentar lotéricas lotadas.<br><br>
+                <strong>Jogos:</strong> A quantidade final de bilhetes e jogos será definida ao término da arrecadação, pois dependerá do valor total arrecadado (se todas as 80 cotas forem preenchidas).
+            </div>
+        </div>
+        
+        <button class="info-close-btn" id="fecharInfo">📋 Entendi, vamos começar!</button>
+    </div>
+</div>
+
+<!-- Teclado Virtual -->
+<div class="virtual-keyboard" id="virtualKeyboard">
+    <div class="keyboard-header">🔐 Digite a Senha</div>
+    <div class="password-display" id="passwordDisplay"></div>
+    
+    <div class="keyboard-row">
+        <button class="key-btn" data-key="1">1</button>
+        <button class="key-btn" data-key="2">2</button>
+        <button class="key-btn" data-key="3">3</button>
+    </div>
+    
+    <div class="keyboard-row">
+        <button class="key-btn" data-key="4">4</button>
+        <button class="key-btn" data-key="5">5</button>
+        <button class="key-btn" data-key="6">6</button>
+    </div>
+    
+    <div class="keyboard-row">
+        <button class="key-btn" data-key="7">7</button>
+        <button class="key-btn" data-key="8">8</button>
+        <button class="key-btn" data-key="9">9</button>
+    </div>
+    
+    <div class="keyboard-row">
+        <button class="key-btn" data-key="*">*</button>
+        <button class="key-btn" data-key="0">0</button>
+        <button class="key-btn" data-key="#">#</button>
+    </div>
+    
+    <button class="key-btn close" data-key="cancel">❌ Fechar</button>
 </div>
 
 <!-- Firebase -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getDatabase, ref, push, get, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { getDatabase, ref, push, get, update, remove } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+// ========================================
+// 🔧 CONFIGURAÇÕES DO SISTEMA - ALTERE AQUI
+// ========================================
+const CONFIG = {
+  // Configurações Gerais
+  LIMITE_PARTICIPANTES: 80,
+  VALOR_PARTICIPACAO: "R$ 85,00",
+  SENHA_ADMIN: "6261",
+  
+  // Datas Importantes
+  DATA_LIMITE_INTERESSE: "30 de Novembro",
+  DATA_LIMITE_PAGAMENTO: "10 de Dezembro",
+  
+  // Informações de Pagamento
+  CHAVE_PIX: "(99) 99102-6112",
+  
+  // Textos do Sistema
+  TITULO_BOLAO: "🎯 Bolão Vai que dá certo",
+  SUBTITULO: "🎰 Mega da Virada 2025! 💰",
+  
+  // Mensagem de Notificação WhatsApp
+  MENSAGEM_NOTIFICACAO: (nome, valor, prazo, chavePix) => {
+    // Função para obter saudação baseada no horário
+    const obterSaudacao = () => {
+      const agora = new Date();
+      const hora = agora.getHours();
+      
+      if (hora >= 5 && hora < 12) {
+        return "bom dia";
+      } else if (hora >= 12 && hora < 18) {
+        return "boa tarde";
+      } else {
+        return "boa noite";
+      }
+    };
+    
+    const saudacao = obterSaudacao();
+    
+    return `*Notificação* 🎯
+
+Olá, ${saudacao} ${nome}! 
+
+Estamos aguardando o pagamento da sua participação no *Bolão Mega da Virada 2025* no valor de *${valor}*.
+
+📅 *Prazo final:* ${prazo}
+💳 *Chave Pix:* ${chavePix}
+
+Por favor, realize o pagamento até o dia 10 para garantir sua vaga no bolão.
+
+Obrigado! 🍀`;
+  }
+};
+// ========================================
 
 const firebaseConfig = {
   apiKey: "AIzaSyCvXGUdvZkqtSMMn8VmTOXLA9PXqR85gSk",
@@ -191,13 +812,42 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const dbRef = ref(db, "participantes");
 
+// Aplicar configurações na interface
+function aplicarConfiguracoes() {
+  document.getElementById('tituloBolao').textContent = CONFIG.TITULO_BOLAO;
+  document.getElementById('subtituloBolao').innerHTML = `${CONFIG.SUBTITULO}<br><br>
+    ✍️ Preencha os dados corretamente!<br>
+    <small>📋 Essas informações serão usadas para entrega das cotas.</small>`;
+  
+  document.getElementById('limiteInfo').textContent = `${CONFIG.LIMITE_PARTICIPANTES} participantes`;
+  document.getElementById('valorInfo').textContent = CONFIG.VALOR_PARTICIPACAO;
+  document.getElementById('dataInteresseInfo').textContent = CONFIG.DATA_LIMITE_INTERESSE;
+  document.getElementById('dataPagamentoInfo').textContent = CONFIG.DATA_LIMITE_PAGAMENTO;
+  document.getElementById('dataPagamentoInfo2').textContent = CONFIG.DATA_LIMITE_PAGAMENTO;
+  
+  document.getElementById('progressText').textContent = `0/${CONFIG.LIMITE_PARTICIPANTES} participantes`;
+}
+
 // Atualizar progresso
 function atualizarProgresso() {
     get(dbRef).then((snapshot) => {
         const participantes = snapshot.exists() ? Object.values(snapshot.val()) : [];
-        const progresso = (participantes.length / 80) * 100;
+        const totalCadastrados = participantes.length;
+        const totalPagos = participantes.filter(p => p.status === "Pago").length;
+        const progresso = (totalCadastrados / CONFIG.LIMITE_PARTICIPANTES) * 100;
+        
+        // Atualizar barra principal
         document.getElementById('progressFill').style.width = progresso + '%';
-        document.getElementById('progressText').textContent = `${participantes.length}/80 participantes`;
+        document.getElementById('progressText').textContent = `${totalCadastrados}/${CONFIG.LIMITE_PARTICIPANTES} participantes`;
+        
+        // Atualizar barra da lista (se existir) - mostra pagos/cadastrados
+        const progressFillLista = document.getElementById('progressFillLista');
+        const progressTextLista = document.getElementById('progressTextLista');
+        if (progressFillLista && progressTextLista) {
+            const progressoPagos = totalCadastrados > 0 ? (totalPagos / totalCadastrados) * 100 : 0;
+            progressFillLista.style.width = progressoPagos + '%';
+            progressTextLista.textContent = `${totalPagos}/${totalCadastrados}`;
+        }
     });
 }
 
@@ -209,16 +859,54 @@ document.getElementById("cadastrar").addEventListener("click", async () => {
 
   if (!nome || !telefone) {
     mensagem.textContent = "⚠️ Preencha todos os campos!";
-    mensagem.style.color = "red";
+    mensagem.style.color = "#e17055";
+    mensagem.style.background = "rgba(225, 112, 85, 0.1)";
+    return;
+  }
+
+  // Validar nome completo (mínimo 2 palavras)
+  const palavrasNome = nome.split(' ').filter(palavra => palavra.length > 0);
+  if (palavrasNome.length < 2) {
+    mensagem.textContent = "⚠️ Digite o nome completo (nome e sobrenome)!";
+    mensagem.style.color = "#e17055";
+    mensagem.style.background = "rgba(225, 112, 85, 0.1)";
+    return;
+  }
+
+  // Validar telefone (DDD + 9º dígito)
+  const telefoneNumeros = telefone.replace(/\D/g, '');
+  
+  // Verificar se tem pelo menos 11 dígitos (DDD + 9 dígitos do número)
+  if (telefoneNumeros.length < 11) {
+    mensagem.textContent = "⚠️ Telefone deve conter DDD + número completo!";
+    mensagem.style.color = "#e17055";
+    mensagem.style.background = "rgba(225, 112, 85, 0.1)";
+    return;
+  }
+  
+  // Verificar se o terceiro dígito é 9 (nono dígito obrigatório)
+  if (telefoneNumeros.length === 11 && telefoneNumeros[2] !== '9') {
+    mensagem.textContent = "⚠️ Número deve conter o 9º dígito! Ex: (99) 99999-9999";
+    mensagem.style.color = "#e17055";
+    mensagem.style.background = "rgba(225, 112, 85, 0.1)";
+    return;
+  }
+  
+  // Se tem 10 dígitos, verificar se não está faltando o 9
+  if (telefoneNumeros.length === 10) {
+    mensagem.textContent = "⚠️ Número deve conter o 9º dígito! Ex: (99) 99999-9999";
+    mensagem.style.color = "#e17055";
+    mensagem.style.background = "rgba(225, 112, 85, 0.1)";
     return;
   }
 
   const snapshot = await get(dbRef);
   const participantes = snapshot.exists() ? Object.values(snapshot.val()) : [];
 
-  if (participantes.length >= 80) {
-    mensagem.textContent = "❌ Limite de 80 participantes atingido!";
-    mensagem.style.color = "red";
+  if (participantes.length >= CONFIG.LIMITE_PARTICIPANTES) {
+    mensagem.textContent = `❌ Limite de ${CONFIG.LIMITE_PARTICIPANTES} participantes atingido!`;
+    mensagem.style.color = "#e17055";
+    mensagem.style.background = "rgba(225, 112, 85, 0.1)";
     return;
   }
 
@@ -229,7 +917,8 @@ document.getElementById("cadastrar").addEventListener("click", async () => {
 
   if (duplicado) {
     mensagem.textContent = "⚠️ Esse cadastro já está na lista!";
-    mensagem.style.color = "red";
+    mensagem.style.color = "#e17055";
+    mensagem.style.background = "rgba(225, 112, 85, 0.1)";
     return;
   }
 
@@ -241,14 +930,28 @@ document.getElementById("cadastrar").addEventListener("click", async () => {
   };
 
   await push(dbRef, novoCadastro);
-  mensagem.textContent = "✅ Cadastro realizado com sucesso!";
-  mensagem.style.color = "green";
+  mensagem.innerHTML = `✅ Cadastro realizado com sucesso!<br>
+    <button id="entrarGrupo" style="background: linear-gradient(135deg, #25d366, #128c7e); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; font-size: 14px; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3); transition: all 0.3s ease;">📱 Entrar no Grupo WhatsApp</button>`;
+  mensagem.style.color = "#00b894";
+  mensagem.style.background = "rgba(0, 184, 148, 0.1)";
   document.getElementById("nome").value = "";
   document.getElementById("telefone").value = "";
+  
+  // Adicionar evento ao botão do grupo
+  document.getElementById("entrarGrupo").addEventListener("click", () => {
+    window.open("https://chat.whatsapp.com/Fdl9PzkiEBq9TnJHtlu2Rm?mode=wwt", "_blank", "noopener,noreferrer");
+  });
   
   // Atualizar progresso
   atualizarProgresso();
 });
+
+// Variáveis globais para filtros
+let participantesOriginais = [];
+let filtroAtivo = "todos";
+
+// Variáveis para seleção múltipla
+let participantesSelecionados = [];
 
 // VER LISTA
 document.getElementById("verLista").addEventListener("click", async () => {
@@ -264,14 +967,72 @@ document.getElementById("verLista").addEventListener("click", async () => {
     return;
   }
 
-  const participantes = Object.values(snapshot.val());
-  participantes.sort((a, b) => a.numero - b.numero);
-  renderLista(participantes);
+  participantesOriginais = Object.values(snapshot.val());
+  participantesOriginais.sort((a, b) => a.numero - b.numero);
+  
+  // Resetar filtros e seleções
+  filtroAtivo = "todos";
+  participantesSelecionados = [];
+  atualizarBotoesFiltro();
+  aplicarFiltros();
+  atualizarContadorSelecao();
+  
+  // Atualizar progresso da lista
+  atualizarProgresso();
 
-  buscarInput.addEventListener("input", () => {
-    const termo = buscarInput.value.toLowerCase();
-    const filtrados = participantes.filter(p => p.nome.toLowerCase().includes(termo));
-    renderLista(filtrados);
+  // Event listener para busca
+  buscarInput.addEventListener("input", aplicarFiltros);
+  
+  // Event listeners para filtros
+  document.getElementById("filtroTodos").addEventListener("click", () => {
+    filtroAtivo = "todos";
+    atualizarBotoesFiltro();
+    aplicarFiltros();
+  });
+  
+  document.getElementById("filtroPagos").addEventListener("click", () => {
+    filtroAtivo = "pagos";
+    atualizarBotoesFiltro();
+    aplicarFiltros();
+  });
+  
+  document.getElementById("filtroNaoPagos").addEventListener("click", () => {
+    filtroAtivo = "naoPagos";
+    atualizarBotoesFiltro();
+    aplicarFiltros();
+  });
+  
+  // Event listeners para seleção múltipla - remover listeners antigos primeiro
+  const alterarBtn = document.getElementById("alterarStatusSelecionados");
+  const notificarBtn = document.getElementById("notificarSelecionados");
+  const excluirBtn = document.getElementById("excluirSelecionados");
+  
+  // Clonar elementos para remover todos os event listeners
+  const novoAlterarBtn = alterarBtn.cloneNode(true);
+  const novoNotificarBtn = notificarBtn.cloneNode(true);
+  const novoExcluirBtn = excluirBtn.cloneNode(true);
+  
+  alterarBtn.parentNode.replaceChild(novoAlterarBtn, alterarBtn);
+  notificarBtn.parentNode.replaceChild(novoNotificarBtn, notificarBtn);
+  excluirBtn.parentNode.replaceChild(novoExcluirBtn, excluirBtn);
+  
+  // Adicionar novos event listeners
+  novoAlterarBtn.addEventListener("click", () => {
+    if (participantesSelecionados.length > 0) {
+      mostrarTecladoVirtual(verificarSenhaAcaoMultipla('status'));
+    }
+  });
+  
+  novoNotificarBtn.addEventListener("click", () => {
+    if (participantesSelecionados.length > 0) {
+      mostrarTecladoVirtual(verificarSenhaAcaoMultipla('notificar'));
+    }
+  });
+  
+  novoExcluirBtn.addEventListener("click", () => {
+    if (participantesSelecionados.length > 0) {
+      mostrarTecladoVirtual(verificarSenhaAcaoMultipla('excluir'));
+    }
   });
 });
 
@@ -280,106 +1041,564 @@ document.getElementById("fecharLista").addEventListener("click", () => {
   document.getElementById("overlay").style.display = "none";
 });
 
-// FECHAR SENHA MODAL
-document.getElementById("fecharSenha").addEventListener("click", () => {
-  document.getElementById("senhaOverlay").style.display = "none";
+// POPUP INFORMATIVO
+document.getElementById("fecharInfo").addEventListener("click", () => {
+  document.getElementById("infoOverlay").style.display = "none";
 });
 
-// VERIFICAR SENHA
-document.getElementById("verificarSenha").addEventListener("click", () => {
-  const senha = document.getElementById("senhaInput").value;
-  if (senha === "6261") {
-    document.getElementById("senhaOverlay").style.display = "none";
-    document.getElementById("senhaInput").value = "";
-    // Mostrar botões de status na lista
-    mostrarBotoesStatus();
-  } else {
-    alert("Senha incorreta!");
-    document.getElementById("senhaInput").value = "";
-  }
+// VER REGRAS
+document.getElementById("verRegras").addEventListener("click", () => {
+  document.getElementById("infoOverlay").style.display = "flex";
 });
 
-// Mostrar botões de status
-function mostrarBotoesStatus() {
-  const listaDiv = document.getElementById("lista");
-  const participantes = Array.from(listaDiv.querySelectorAll("div"));
+
+
+// Função para aplicar filtros
+function aplicarFiltros() {
+  const termo = document.getElementById("buscar").value.toLowerCase();
+  let participantesFiltrados = [...participantesOriginais];
   
-  participantes.forEach(div => {
-    const statusSpan = div.querySelector(".status");
-    if (statusSpan) {
-      const status = statusSpan.textContent;
-      const botao = document.createElement("button");
-      botao.className = `status-btn ${status.toLowerCase()}`;
-      botao.textContent = status;
-      botao.onclick = () => mudarStatus(statusSpan, botao);
-      statusSpan.parentNode.appendChild(botao);
-    }
-  });
+  // Aplicar filtro de status
+  switch(filtroAtivo) {
+    case "pagos":
+      participantesFiltrados = participantesFiltrados.filter(p => p.status === "Pago");
+      break;
+    case "naoPagos":
+      participantesFiltrados = participantesFiltrados.filter(p => p.status === "Não pago");
+      break;
+    // "todos" não precisa de filtro adicional
+  }
+  
+  // Aplicar filtro de busca
+  if (termo) {
+    participantesFiltrados = participantesFiltrados.filter(p => 
+      p.nome.toLowerCase().includes(termo)
+    );
+  }
+  
+  renderLista(participantesFiltrados);
 }
 
-// Mudar status
-async function mudarStatus(statusSpan, botao) {
-  // Verificar senha antes de mudar o status
-  document.getElementById("senhaOverlay").style.display = "flex";
+// Função para atualizar botões de filtro
+function atualizarBotoesFiltro() {
+  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
   
-  const senhaConfirmada = new Promise((resolve) => {
-    document.getElementById("verificarSenha").onclick = () => {
-      const senha = document.getElementById("senhaInput").value;
-      if (senha === "6261") {
-        document.getElementById("senhaOverlay").style.display = "none";
-        document.getElementById("senhaInput").value = "";
-        resolve(true);
-      } else {
-        alert("Senha incorreta!");
-        document.getElementById("senhaInput").value = "";
-        resolve(false);
-      }
-    };
-  });
-  
-  const confirmado = await senhaConfirmada;
-  if (!confirmado) return;
-  
-  // Obter o nome do participante
-  const participanteTexto = statusSpan.parentElement.textContent;
-  const nome = participanteTexto.split("° - ")[1].split(" - ")[0];
-  
-  // Atualizar status no Firebase
-  const snapshot = await get(dbRef);
-  const participantes = snapshot.exists() ? Object.values(snapshot.val()) : [];
-  
-  const participante = participantes.find(p => p.nome === nome);
-  if (participante) {
-    const novoStatus = statusSpan.textContent === "Pago" ? "Não pago" : "Pago";
-    const key = Object.keys(snapshot.val()).find(k => snapshot.val()[k].nome === nome);
-    
-    await update(ref(db, `participantes/${key}`), { status: novoStatus });
-    
-    // Atualizar interface
-    statusSpan.textContent = novoStatus;
-    statusSpan.className = `status ${novoStatus.toLowerCase()}`;
-    botao.textContent = novoStatus;
-    botao.className = `status-btn ${novoStatus.toLowerCase()}`;
-    
-    // Atualizar progresso
-    atualizarProgresso();
+  switch(filtroAtivo) {
+    case "todos":
+      document.getElementById("filtroTodos").classList.add('active');
+      break;
+    case "pagos":
+      document.getElementById("filtroPagos").classList.add('active');
+      break;
+    case "naoPagos":
+      document.getElementById("filtroNaoPagos").classList.add('active');
+      break;
   }
 }
 
 function renderLista(participantes) {
   const listaDiv = document.getElementById("lista");
   listaDiv.innerHTML = "";
+  
+  if (participantes.length === 0) {
+    listaDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #ccc;">Nenhum participante encontrado</div>';
+    return;
+  }
+  
   participantes.forEach(p => {
     const linha = document.createElement("div");
     const statusClass = p.status.toLowerCase() === "pago" ? "pago" : "nao-pago";
-    linha.innerHTML = `<span>${String(p.numero).padStart(2, "0")}° - ${p.nome}</span>
-                       <span class="status ${statusClass}">${p.status}</span>`;
+    
+    // Criar checkbox para seleção múltipla
+    const checkboxContainer = document.createElement("div");
+    checkboxContainer.className = "checkbox-container";
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.value = p.numero;
+    checkbox.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        participantesSelecionados.push(p);
+        linha.classList.add('selected');
+      } else {
+        participantesSelecionados = participantesSelecionados.filter(sel => sel.numero !== p.numero);
+        linha.classList.remove('selected');
+      }
+      atualizarContadorSelecao();
+    });
+    checkboxContainer.appendChild(checkbox);
+    
+    // Conteúdo da linha
+    const conteudo = document.createElement("span");
+    conteudo.innerHTML = `🎫 ${String(p.numero).padStart(2, "0")}° - ${p.nome.toUpperCase()}`;
+    conteudo.style.flex = "1";
+    conteudo.style.textAlign = "left";
+    
+    const status = document.createElement("span");
+    status.className = `status ${statusClass}`;
+    status.textContent = p.status;
+    
+    linha.appendChild(checkboxContainer);
+    linha.appendChild(conteudo);
+    linha.appendChild(status);
+    
+    // Evento de clique
+    linha.addEventListener('click', (e) => {
+      if (e.target.type !== 'checkbox') {
+        // Se não clicou no checkbox, verificar se há seleções ativas
+        if (participantesSelecionados.length > 0) {
+          // Se há seleções, marcar/desmarcar este item
+          checkbox.checked = !checkbox.checked;
+          checkbox.dispatchEvent(new Event('change'));
+        } else {
+          // Se não há seleções, abrir ações individuais
+          participanteSelecionado = p;
+          mostrarTecladoVirtual(verificarSenhaComTeclado);
+        }
+      }
+    });
+    
     listaDiv.appendChild(linha);
   });
+}
+
+// Variável global para controle de participante selecionado
+let participanteSelecionado = null;
+
+// Função para abrir menu de ações
+function abrirMenuAcoes(participante) {
+  participanteSelecionado = participante;
+  document.getElementById("participanteInfo").textContent = `${participante.numero}° - ${participante.nome.toUpperCase()}`;
+  document.getElementById("acoesOverlay").style.display = "flex";
+}
+
+// Fechar modal de ações
+document.getElementById("fecharAcoes").addEventListener("click", () => {
+  document.getElementById("acoesOverlay").style.display = "none";
+  participanteSelecionado = null;
+});
+
+// Alterar status
+document.getElementById("alterarStatus").addEventListener("click", async () => {
+  if (!participanteSelecionado) return;
+  
+  try {
+    // Buscar participante no Firebase
+    const snapshot = await get(dbRef);
+    if (!snapshot.exists()) return;
+    
+    const dados = snapshot.val();
+    const participanteKey = Object.keys(dados).find(key => 
+      dados[key].nome === participanteSelecionado.nome
+    );
+    
+    if (participanteKey) {
+      const novoStatus = participanteSelecionado.status === "Pago" ? "Não pago" : "Pago";
+      await update(ref(db, `participantes/${participanteKey}`), { 
+        status: novoStatus 
+      });
+      
+      mostrarConfirmacao(`✅ Status alterado: ${novoStatus}`, "success");
+      await recarregarLista();
+    }
+    
+  } catch (error) {
+    console.error('Erro ao atualizar status:', error);
+    mostrarConfirmacao("❌ Erro ao executar ação. Tente novamente.", "error");
+  }
+  
+  document.getElementById("acoesOverlay").style.display = "none";
+});
+
+// Notificar participante
+document.getElementById("notificarParticipante").addEventListener("click", () => {
+  if (!participanteSelecionado) return;
+  
+  // Verificar se o status é "Não pago"
+  if (participanteSelecionado.status !== "Não pago") {
+    mostrarConfirmacao("⚠️ Notificação disponível apenas para participantes com status 'Não pago'", "error");
+    document.getElementById("acoesOverlay").style.display = "none";
+    return;
+  }
+  
+  // Enviar notificação WhatsApp
+  enviarNotificacaoWhatsApp(participanteSelecionado);
+  document.getElementById("acoesOverlay").style.display = "none";
+});
+
+// Excluir participante
+document.getElementById("excluirParticipante").addEventListener("click", async () => {
+  if (!participanteSelecionado) return;
+  
+  try {
+    // Buscar participante no Firebase
+    const snapshot = await get(dbRef);
+    if (!snapshot.exists()) return;
+    
+    const dados = snapshot.val();
+    const participanteKey = Object.keys(dados).find(key => 
+      dados[key].nome === participanteSelecionado.nome
+    );
+    
+    if (participanteKey) {
+      const participanteRef = ref(db, `participantes/${participanteKey}`);
+      await remove(participanteRef);
+      
+      mostrarConfirmacao(`✅ Participante excluído com sucesso`, "delete");
+      await recarregarLista();
+    }
+    
+  } catch (error) {
+    console.error('Erro ao excluir participante:', error);
+    mostrarConfirmacao("❌ Erro ao executar ação. Tente novamente.", "error");
+  }
+  
+  document.getElementById("acoesOverlay").style.display = "none";
+});
+
+// Mostrar confirmação
+function mostrarConfirmacao(mensagem, tipo) {
+  const confirmacao = document.createElement('div');
+  confirmacao.textContent = mensagem;
+  
+  let cor = "rgba(0, 184, 148, 0.9)"; // success
+  if (tipo === "delete") cor = "rgba(231, 76, 60, 0.9)";
+  if (tipo === "error") cor = "rgba(225, 112, 85, 0.9)";
+  
+  confirmacao.style.cssText = `position: fixed; top: 20px; right: 20px; background: ${cor}; color: white; padding: 12px 20px; border-radius: 10px; z-index: 9999; font-weight: 600; box-shadow: 0 4px 15px rgba(0,0,0,0.2);`;
+  document.body.appendChild(confirmacao);
+  setTimeout(() => confirmacao.remove(), 3000);
+}
+
+// Recarregar lista
+async function recarregarLista() {
+  const novoSnapshot = await get(dbRef);
+  if (novoSnapshot.exists()) {
+    participantesOriginais = Object.values(novoSnapshot.val());
+    participantesOriginais.sort((a, b) => a.numero - b.numero);
+    
+    // Reordenar números sequencialmente
+    await reordenarNumeros(participantesOriginais);
+    
+    // Aplicar filtros atuais
+    aplicarFiltros();
+  } else {
+    document.getElementById("lista").innerHTML = "Nenhum participante cadastrado.";
+  }
+  atualizarProgresso();
+}
+
+// Função para reordenar números sequencialmente
+async function reordenarNumeros(participantes) {
+  const snapshot = await get(dbRef);
+  if (!snapshot.exists()) return;
+  
+  const dados = snapshot.val();
+  const updates = {};
+  
+  // Reordenar participantes por número atual
+  participantes.sort((a, b) => a.numero - b.numero);
+  
+  // Atualizar números sequencialmente
+  participantes.forEach((participante, index) => {
+    const novoNumero = index + 1;
+    if (participante.numero !== novoNumero) {
+      // Encontrar a chave do participante no Firebase
+      const participanteKey = Object.keys(dados).find(key => 
+        dados[key].nome === participante.nome && dados[key].telefone === participante.telefone
+      );
+      
+      if (participanteKey) {
+        updates[`participantes/${participanteKey}/numero`] = novoNumero;
+        participante.numero = novoNumero; // Atualizar localmente também
+      }
+    }
+  });
+  
+  // Aplicar todas as atualizações de uma vez
+  if (Object.keys(updates).length > 0) {
+    await update(ref(db), updates);
+  }
+}
+
+// === TECLADO VIRTUAL ===
+let senhaAtual = "";
+let callbackConfirmacao = null;
+
+// Mostrar teclado virtual
+function mostrarTecladoVirtual(callback) {
+  senhaAtual = "";
+  callbackConfirmacao = callback;
+  document.getElementById("passwordDisplay").textContent = "";
+  document.getElementById("virtualKeyboard").style.display = "block";
+  
+  // Esconder modal de senha se estiver aberto
+  document.getElementById("senhaOverlay").style.display = "none";
+}
+
+// Esconder teclado virtual
+function esconderTecladoVirtual() {
+  document.getElementById("virtualKeyboard").style.display = "none";
+  senhaAtual = "";
+  callbackConfirmacao = null;
+}
+
+// Eventos do teclado virtual
+document.addEventListener('DOMContentLoaded', () => {
+  const keyboard = document.getElementById("virtualKeyboard");
+  const passwordDisplay = document.getElementById("passwordDisplay");
+  
+  keyboard.addEventListener('click', (e) => {
+    if (!e.target.classList.contains('key-btn')) return;
+    
+    const key = e.target.getAttribute('data-key');
+    
+    switch(key) {
+      case 'cancel':
+        esconderTecladoVirtual();
+        // Limpar variáveis de ação se cancelar
+        participanteSelecionado = null;
+        break;
+        
+      default:
+        // Aceitar apenas números (0-9) e símbolos * #
+        if (/^[0-9*#]$/.test(key) && senhaAtual.length < 4) {
+          senhaAtual += key;
+          passwordDisplay.textContent = "●".repeat(senhaAtual.length);
+          
+          // Verificar automaticamente quando atingir 4 dígitos
+          if (senhaAtual.length === 4) {
+            setTimeout(() => {
+              if (callbackConfirmacao) {
+                callbackConfirmacao(senhaAtual);
+              }
+              esconderTecladoVirtual();
+            }, 300); // Pequeno delay para mostrar o último ponto
+          }
+        }
+        break;
+    }
+  });
+  
+  // Aplicar configurações quando a página carregar
+  aplicarConfiguracoes();
+});
+
+// Função para enviar notificação WhatsApp
+function enviarNotificacaoWhatsApp(participante) {
+  // Limpar o número de telefone (remover caracteres especiais)
+  const telefone = participante.telefone.replace(/\D/g, '');
+  
+  // Verificar se o número tem DDD (pelo menos 10 dígitos)
+  if (telefone.length < 10) {
+    mostrarConfirmacao("❌ Número de telefone inválido", "error");
+    return;
+  }
+  
+  // Adicionar código do país se necessário
+  const numeroCompleto = telefone.startsWith('55') ? telefone : '55' + telefone;
+  
+  // Usar a mensagem configurada
+  const mensagem = CONFIG.MENSAGEM_NOTIFICACAO(
+    participante.nome,
+    CONFIG.VALOR_PARTICIPACAO,
+    CONFIG.DATA_LIMITE_PAGAMENTO,
+    CONFIG.CHAVE_PIX
+  );
+  
+  // Codificar a mensagem para URL
+  const mensagemCodificada = encodeURIComponent(mensagem);
+  
+  // Criar URL do WhatsApp
+  const urlWhatsApp = `https://wa.me/${numeroCompleto}?text=${mensagemCodificada}`;
+  
+  // Abrir WhatsApp em nova aba
+  window.open(urlWhatsApp, '_blank', 'noopener,noreferrer');
+  
+  // Mostrar confirmação
+  mostrarConfirmacao(`📱 WhatsApp aberto para ${participante.nome}`, "success");
+}
+
+// Verificar senha e abrir menu de ações
+function verificarSenhaComTeclado(senhaDigitada) {
+  if (senhaDigitada === CONFIG.SENHA_ADMIN) {
+    // Senha correta - abrir menu de ações
+    document.getElementById("participanteInfo").textContent = `${participanteSelecionado.numero}° - ${participanteSelecionado.nome.toUpperCase()}`;
+    document.getElementById("acoesOverlay").style.display = "flex";
+  } else {
+    // Senha incorreta - mostrar erro
+    const confirmacao = document.createElement('div');
+    confirmacao.textContent = "❌ Senha incorreta!";
+    confirmacao.style.cssText = "position: fixed; top: 20px; right: 20px; background: rgba(231, 76, 60, 0.9); color: white; padding: 12px 20px; border-radius: 10px; z-index: 9999; font-weight: 600; box-shadow: 0 4px 15px rgba(0,0,0,0.2);";
+    document.body.appendChild(confirmacao);
+    setTimeout(() => confirmacao.remove(), 3000);
+  }
+}
+
+// Verificar senha para ações múltiplas
+function verificarSenhaAcaoMultipla(acao) {
+  return function(senhaDigitada) {
+    if (senhaDigitada === CONFIG.SENHA_ADMIN) {
+      if (acao === 'status') {
+        alterarStatusSelecionados();
+      } else if (acao === 'excluir') {
+        excluirSelecionados();
+      } else if (acao === 'notificar') {
+        notificarSelecionados();
+      }
+    } else {
+      const confirmacao = document.createElement('div');
+      confirmacao.textContent = "❌ Senha incorreta!";
+      confirmacao.style.cssText = "position: fixed; top: 20px; right: 20px; background: rgba(231, 76, 60, 0.9); color: white; padding: 12px 20px; border-radius: 10px; z-index: 9999; font-weight: 600; box-shadow: 0 4px 15px rgba(0,0,0,0.2);";
+      document.body.appendChild(confirmacao);
+      setTimeout(() => confirmacao.remove(), 3000);
+    }
+  };
+}
+
+// Limpar seleções
+function limparSelecoes() {
+  participantesSelecionados = [];
+  
+  // Limpar checkboxes e classes selected
+  document.querySelectorAll('.checkbox-container input[type="checkbox"]').forEach(checkbox => {
+    checkbox.checked = false;
+  });
+  
+  document.querySelectorAll('.lista div.selected').forEach(linha => {
+    linha.classList.remove('selected');
+  });
+  
+  atualizarContadorSelecao();
+}
+
+// Atualizar contador de seleção
+function atualizarContadorSelecao() {
+  const counter = document.getElementById("selectionCounter");
+  const actions = document.getElementById("selectionActions");
+  const count = participantesSelecionados.length;
+  
+  if (count === 0) {
+    counter.textContent = "Nenhum participante selecionado";
+    counter.style.display = "none";
+    actions.style.display = "none";
+  } else {
+    counter.style.display = "block";
+    actions.style.display = "flex";
+    if (count === 1) {
+      counter.textContent = "1 participante selecionado";
+    } else {
+      counter.textContent = `${count} participantes selecionados`;
+    }
+  }
+}
+
+// Alterar status dos selecionados
+async function alterarStatusSelecionados() {
+  if (participantesSelecionados.length === 0) return;
+  
+  try {
+    const snapshot = await get(dbRef);
+    if (!snapshot.exists()) return;
+    
+    const dados = snapshot.val();
+    const updates = {};
+    
+    // Determinar novo status (se todos são "Pago", muda para "Não pago", senão muda para "Pago")
+    const todosPagos = participantesSelecionados.every(p => p.status === "Pago");
+    const novoStatus = todosPagos ? "Não pago" : "Pago";
+    
+    participantesSelecionados.forEach(participante => {
+      const participanteKey = Object.keys(dados).find(key => 
+        dados[key].nome === participante.nome && dados[key].telefone === participante.telefone
+      );
+      
+      if (participanteKey) {
+        updates[`participantes/${participanteKey}/status`] = novoStatus;
+      }
+    });
+    
+    if (Object.keys(updates).length > 0) {
+      await update(ref(db), updates);
+      mostrarConfirmacao(`✅ Status alterado para "${novoStatus}" em ${participantesSelecionados.length} participante(s)`, "success");
+      await recarregarLista();
+      limparSelecoes();
+    }
+    
+  } catch (error) {
+    console.error('Erro ao atualizar status:', error);
+    mostrarConfirmacao("❌ Erro ao executar ação. Tente novamente.", "error");
+  }
+}
+
+// Notificar selecionados
+function notificarSelecionados() {
+  if (participantesSelecionados.length === 0) return;
+  
+  // Filtrar apenas participantes com status "Não pago"
+  const participantesNaoPagos = participantesSelecionados.filter(p => p.status === "Não pago");
+  
+  if (participantesNaoPagos.length === 0) {
+    mostrarConfirmacao("⚠️ Nenhum participante selecionado tem status 'Não pago'", "error");
+    return;
+  }
+  
+  let contador = 0;
+  const total = participantesNaoPagos.length;
+  
+  // Enviar notificações com intervalo para evitar spam
+  participantesNaoPagos.forEach((participante, index) => {
+    setTimeout(() => {
+      enviarNotificacaoWhatsApp(participante);
+      contador++;
+      
+      // Mostrar progresso
+      if (contador === 1) {
+        mostrarConfirmacao(`📱 Enviando notificações... (${contador}/${total})`, "success");
+      } else if (contador === total) {
+        mostrarConfirmacao(`✅ ${total} notificação(ões) enviada(s) com sucesso!`, "success");
+        limparSelecoes();
+      }
+    }, index * 1000); // Intervalo de 1 segundo entre cada notificação
+  });
+}
+
+// Excluir selecionados
+async function excluirSelecionados() {
+  if (participantesSelecionados.length === 0) return;
+  
+  try {
+    const snapshot = await get(dbRef);
+    if (!snapshot.exists()) return;
+    
+    const dados = snapshot.val();
+    const promises = [];
+    
+    participantesSelecionados.forEach(participante => {
+      const participanteKey = Object.keys(dados).find(key => 
+        dados[key].nome === participante.nome && dados[key].telefone === participante.telefone
+      );
+      
+      if (participanteKey) {
+        const participanteRef = ref(db, `participantes/${participanteKey}`);
+        promises.push(remove(participanteRef));
+      }
+    });
+    
+    if (promises.length > 0) {
+      await Promise.all(promises);
+      mostrarConfirmacao(`✅ ${participantesSelecionados.length} participante(s) excluído(s) com sucesso`, "delete");
+      await recarregarLista();
+      limparSelecoes();
+    }
+    
+  } catch (error) {
+    console.error('Erro ao excluir participantes:', error);
+    mostrarConfirmacao("❌ Erro ao executar ação. Tente novamente.", "error");
+  }
 }
 
 // Inicializar progresso
 atualizarProgresso();
 </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'993bfa52f1c37263',t:'MTc2MTMzNTE2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
