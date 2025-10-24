@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Participantes do Bolão</title>
+<title>Participantes do Bolão - Sistema Completo</title>
 <style>
     body {
         box-sizing: border-box;
@@ -18,7 +18,19 @@
         min-height: 100%; 
         color: #fff;
         padding: 20px;
+        transition: all 0.3s ease;
     }
+    
+    /* Modo Escuro */
+    body.dark-mode {
+        background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 50%, #2d2d2d 100%);
+    }
+    
+    body.light-mode {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);
+        color: #333;
+    }
+    
     html {
         height: 100%;
     }
@@ -33,7 +45,15 @@
         text-align: center; 
         animation: aparecer 0.6s ease;
         border: 2px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
     }
+    
+    .light-mode .popup {
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1), 0 0 0 2px rgba(0,0,0,0.05);
+        border: 2px solid rgba(0, 0, 0, 0.1);
+    }
+    
     @keyframes aparecer { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
     h1 { 
         font-size: 28px; 
@@ -99,20 +119,29 @@
         justify-content: center;
         align-items: center;
         z-index: 1000;
+        animation: fadeIn 0.3s ease;
     }
     .modal {
         background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
         backdrop-filter: blur(15px);
         border-radius: 20px;
         width: 90%;
-        max-width: 480px;
+        max-width: 600px;
+        max-height: 90vh;
         padding: 25px;
         box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 2px rgba(255,255,255,0.1);
-        animation: aparecer 0.4s ease;
+        animation: slideIn 0.4s ease;
         text-align: center;
         border: 2px solid rgba(255, 255, 255, 0.2);
         color: #fff;
+        overflow-y: auto;
     }
+    
+    @keyframes slideIn {
+        from { opacity: 0; transform: scale(0.8) translateY(-50px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    
     .modal h3 {
         margin-top: 0;
         font-size: 22px;
@@ -206,17 +235,20 @@
         background: rgba(255, 215, 0, 0.1);
         border-radius: 10px;
         border: 1px solid rgba(255, 215, 0, 0.3);
+        flex-wrap: wrap;
     }
     
     .selection-actions button {
         flex: 1;
+        min-width: 120px;
         padding: 10px 8px;
         border: none;
         border-radius: 8px;
         font-weight: 600;
         cursor: pointer;
-        font-size: 12px;
+        font-size: 11px;
         transition: all 0.2s ease;
+        margin: 2px;
     }
     
     .selection-actions .status-btn {
@@ -241,6 +273,7 @@
     .status { font-weight: bold; text-transform: uppercase; font-size: 11px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
     .pago { color: #00ff88; }
     .nao-pago { color: #ff6b6b; }
+    .comprovante-enviado { color: #f39c12; }
     .status-btn {
         padding: 4px 10px;
         border-radius: 8px;
@@ -260,6 +293,11 @@
         background: linear-gradient(135deg, #e17055, #fdcb6e); 
         color: white; 
         box-shadow: 0 2px 8px rgba(225, 112, 85, 0.3);
+    }
+    .status-btn.comprovante-enviado { 
+        background: linear-gradient(135deg, #f39c12, #e67e22); 
+        color: white; 
+        box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
     }
     .status-btn:hover {
         transform: translateY(-1px);
@@ -325,6 +363,89 @@
         color: #333;
         font-weight: 600;
         text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+
+    /* Dashboard */
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+    }
+    
+    .dashboard-card {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 20px;
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+    }
+    
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    
+    .dashboard-card h4 {
+        color: #ffd700;
+        margin: 0 0 15px 0;
+        font-size: 18px;
+        text-align: center;
+    }
+    
+    .stat-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .stat-item:last-child {
+        border-bottom: none;
+    }
+    
+    .stat-value {
+        font-weight: bold;
+        color: #00ff88;
+    }
+
+    /* QR Code */
+    .qr-container {
+        text-align: center;
+        padding: 20px;
+    }
+    
+    .qr-code {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        display: inline-block;
+        margin: 20px 0;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+
+    /* Upload de Comprovante */
+    .upload-area {
+        border: 2px dashed rgba(255, 215, 0, 0.5);
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+        margin: 20px 0;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .upload-area:hover {
+        border-color: #ffd700;
+        background: rgba(255, 215, 0, 0.1);
+    }
+    
+    .upload-area.dragover {
+        border-color: #ffd700;
+        background: rgba(255, 215, 0, 0.2);
+        transform: scale(1.02);
     }
 
     /* Popup Informativo */
@@ -431,11 +552,6 @@
     @keyframes fadeIn {
         from { opacity: 0; }
         to { opacity: 1; }
-    }
-    
-    @keyframes slideIn {
-        from { opacity: 0; transform: scale(0.8) translateY(-50px); }
-        to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
     /* Teclado Virtual */
@@ -547,6 +663,64 @@
         box-shadow: inset 0 2px 6px rgba(0,0,0,0.3), 0 2px 8px rgba(255,215,0,0.2);
     }
 
+    /* Botão de Tema */
+    .theme-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border: none;
+        color: white;
+        padding: 12px;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 9999;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+    }
+    
+    .theme-toggle:hover {
+        transform: scale(1.1) rotate(180deg);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    }
+
+    /* Notificações Toast */
+    .toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(0, 184, 148, 0.95);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        z-index: 9999;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        animation: slideInRight 0.3s ease;
+        max-width: 300px;
+        word-wrap: break-word;
+    }
+    
+    .toast.error {
+        background: rgba(231, 76, 60, 0.95);
+    }
+    
+    .toast.warning {
+        background: rgba(243, 156, 18, 0.95);
+    }
+    
+    @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* Responsividade */
     @media (max-width: 400px) { 
         h2, h3 { font-size: 14px; } 
         input, button { font-size: 14px; } 
@@ -583,17 +757,45 @@
             height: 28px;
             font-size: 11px;
         }
+        
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .selection-actions {
+            flex-direction: column;
+        }
+        
+        .selection-actions button {
+            min-width: auto;
+            margin: 2px 0;
+        }
+        
+        .theme-toggle {
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+        }
     }
 </style>
 </head>
 <body>
+<!-- Botão de Tema -->
+<button class="theme-toggle" id="themeToggle" title="Alternar tema">🌙</button>
+
 <div class="popup">
-    <h1 id="tituloBolao">🎯 Bolão Vai que dá certo</h1>
+    <h1 id="tituloBolao">🎯 Bolão Vai que dá certo <span style="font-size:12px;color:#666;font-weight:normal;">v3.0 Pro</span></h1>
     <h3 id="subtituloBolao">🎰 Mega da Virada 2025! 💰<br><br>
     ✍️ Preencha os dados corretamente!<br>
     <small>📋 Essas informações serão usadas para entrega das cotas.</small></h3>
 
-    <button id="verRegras" style="background:linear-gradient(135deg,#95a5a6,#bdc3c7);margin:10px 0 5px 0;font-size:11px;padding:6px 12px;width:auto;display:inline-block;opacity:0.7;">📋 Ver Regras</button>
+    <div style="display:flex;gap:8px;justify-content:center;margin:10px 0 5px 0;">
+        <button id="verRegras" style="background:linear-gradient(135deg,#95a5a6,#bdc3c7);font-size:11px;padding:6px 12px;opacity:0.7;flex:1;">📋 Ver Regras</button>
+        <button id="verDashboard" style="background:linear-gradient(135deg,#3498db,#2980b9);font-size:11px;padding:6px 12px;color:white;flex:1;">📊 Dashboard</button>
+        <button id="gerarQRCode" style="background:linear-gradient(135deg,#9b59b6,#8e44ad);font-size:11px;padding:6px 12px;color:white;flex:1;">📱 QR PIX</button>
+    </div>
 
     <div class="progress-container">
         <div class="progress-bar">
@@ -612,7 +814,7 @@
     <div class="mensagem" id="mensagem"></div>
 </div>
 
-<!-- Modal flutuante -->
+<!-- Modal Lista de Participantes -->
 <div class="overlay" id="overlay">
     <div class="modal">
         <h3>📋 Lista de Participantes</h3>
@@ -629,23 +831,153 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </div>
         
-        <div class="filter-buttons" style="display: flex; gap: 8px; margin-bottom: 15px; justify-content: center;">
-            <button id="filtroTodos" class="filter-btn active" style="flex: 1; padding: 8px 12px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; background: linear-gradient(135deg, #667eea, #764ba2); color: white; box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);">👥 Todos</button>
-            <button id="filtroPagos" class="filter-btn" style="flex: 1; padding: 8px 12px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; background: rgba(255, 255, 255, 0.2); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3);">✅ Pagos</button>
-            <button id="filtroNaoPagos" class="filter-btn" style="flex: 1; padding: 8px 12px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; background: rgba(255, 255, 255, 0.2); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3);">❌ Não Pagos</button>
+        <div class="filter-buttons" style="display: flex; gap: 8px; margin-bottom: 15px; justify-content: center; flex-wrap: wrap;">
+            <button id="filtroTodos" class="filter-btn active" style="flex: 1; min-width: 80px; padding: 8px 12px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; background: linear-gradient(135deg, #667eea, #764ba2); color: white; box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);">👥 Todos</button>
+            <button id="filtroPagos" class="filter-btn" style="flex: 1; min-width: 80px; padding: 8px 12px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; background: rgba(255, 255, 255, 0.2); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3);">✅ Pagos</button>
+            <button id="filtroNaoPagos" class="filter-btn" style="flex: 1; min-width: 80px; padding: 8px 12px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; background: rgba(255, 255, 255, 0.2); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3);">❌ Não Pagos</button>
+            <button id="filtroComprovantes" class="filter-btn" style="flex: 1; min-width: 80px; padding: 8px 12px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; background: rgba(255, 255, 255, 0.2); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3);">📄 Comprovantes</button>
         </div>
         
+        <div style="display: flex; gap: 8px; margin-bottom: 15px; justify-content: center; flex-wrap: wrap;">
+            <button id="exportarExcel" style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; flex: 1; min-width: 100px;">📊 Exportar Excel</button>
+            <button id="backupDados" style="background: linear-gradient(135deg, #8e44ad, #9b59b6); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; flex: 1; min-width: 100px;">💾 Backup</button>
+            <button id="sorteioNumeros" style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; flex: 1; min-width: 100px;">🎲 Sortear</button>
+        </div>
 
-        
         <div class="selection-counter" id="selectionCounter" style="display: none;"></div>
         <div class="selection-actions" id="selectionActions">
             <button class="status-btn" id="alterarStatusSelecionados">🔄 Alterar Status</button>
-            <button class="notify-btn" id="notificarSelecionados" style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white; box-shadow: 0 2px 6px rgba(243, 156, 18, 0.3);">📱 Notificar Selecionados</button>
-            <button class="delete-btn" id="excluirSelecionados">🗑️ Excluir Selecionados</button>
+            <button class="notify-btn" id="notificarSelecionados" style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white; box-shadow: 0 2px 6px rgba(243, 156, 18, 0.3);">📱 Notificar</button>
+            <button class="upload-btn" id="uploadComprovanteSelecionados" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white; box-shadow: 0 2px 6px rgba(155, 89, 182, 0.3);">📄 Comprovante</button>
+            <button class="delete-btn" id="excluirSelecionados">🗑️ Excluir</button>
         </div>
         
         <div class="lista" id="lista"></div>
         <button class="close-btn" id="fecharLista">❌ Fechar</button>
+    </div>
+</div>
+
+<!-- Modal Dashboard -->
+<div class="overlay" id="dashboardOverlay">
+    <div class="modal">
+        <h3>📊 Dashboard Administrativo</h3>
+        
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <h4>💰 Financeiro</h4>
+                <div class="stat-item">
+                    <span>Total Arrecadado:</span>
+                    <span class="stat-value" id="totalArrecadado">R$ 0,00</span>
+                </div>
+                <div class="stat-item">
+                    <span>Meta Total:</span>
+                    <span class="stat-value" id="metaTotal">R$ 6.800,00</span>
+                </div>
+                <div class="stat-item">
+                    <span>Pendente:</span>
+                    <span class="stat-value" id="valorPendente">R$ 6.800,00</span>
+                </div>
+                <div class="stat-item">
+                    <span>% Arrecadado:</span>
+                    <span class="stat-value" id="percentualArrecadado">0%</span>
+                </div>
+            </div>
+            
+            <div class="dashboard-card">
+                <h4>👥 Participantes</h4>
+                <div class="stat-item">
+                    <span>Total Cadastrados:</span>
+                    <span class="stat-value" id="totalCadastrados">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Pagos:</span>
+                    <span class="stat-value" id="totalPagos">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Pendentes:</span>
+                    <span class="stat-value" id="totalPendentes">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Vagas Restantes:</span>
+                    <span class="stat-value" id="vagasRestantes">80</span>
+                </div>
+            </div>
+            
+            <div class="dashboard-card">
+                <h4>📈 Estatísticas</h4>
+                <div class="stat-item">
+                    <span>Taxa de Conversão:</span>
+                    <span class="stat-value" id="taxaConversao">0%</span>
+                </div>
+                <div class="stat-item">
+                    <span>Média por Dia:</span>
+                    <span class="stat-value" id="mediaPorDia">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Último Cadastro:</span>
+                    <span class="stat-value" id="ultimoCadastro">-</span>
+                </div>
+                <div class="stat-item">
+                    <span>Comprovantes:</span>
+                    <span class="stat-value" id="totalComprovantes">0</span>
+                </div>
+            </div>
+            
+            <div class="dashboard-card">
+                <h4>⚡ Ações Rápidas</h4>
+                <button id="notificarTodosPendentes" style="width: 100%; margin: 5px 0; padding: 10px; background: linear-gradient(135deg, #f39c12, #e67e22); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">📱 Notificar Todos Pendentes</button>
+                <button id="gerarRelatorioCompleto" style="width: 100%; margin: 5px 0; padding: 10px; background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">📊 Relatório Completo</button>
+                <button id="limparHistorico" style="width: 100%; margin: 5px 0; padding: 10px; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">🗑️ Limpar Histórico</button>
+            </div>
+        </div>
+        
+        <button class="close-btn" id="fecharDashboard">❌ Fechar</button>
+    </div>
+</div>
+
+<!-- Modal QR Code -->
+<div class="overlay" id="qrOverlay">
+    <div class="modal">
+        <h3>📱 QR Code PIX</h3>
+        <div class="qr-container">
+            <p style="color: #ffd700; font-weight: bold;">Escaneie o código para pagar:</p>
+            <div class="qr-code" id="qrCodeContainer">
+                <!-- QR Code será gerado aqui -->
+            </div>
+            <div style="background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; margin: 20px 0;">
+                <p><strong>💳 Chave PIX:</strong> <span id="chavePix">(99) 99102-6112</span></p>
+                <p><strong>💰 Valor:</strong> <span id="valorPix">R$ 85,00</span></p>
+                <p><strong>📝 Descrição:</strong> Bolão Mega da Virada 2025</p>
+            </div>
+            <button id="copiarChavePix" style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; padding: 12px 20px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin: 10px;">📋 Copiar Chave PIX</button>
+            <button id="compartilharQR" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 12px 20px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin: 10px;">📤 Compartilhar</button>
+        </div>
+        <button class="close-btn" id="fecharQR">❌ Fechar</button>
+    </div>
+</div>
+
+<!-- Modal Upload Comprovante -->
+<div class="overlay" id="uploadOverlay">
+    <div class="modal">
+        <h3>📄 Upload de Comprovante</h3>
+        <p id="uploadParticipanteInfo" style="color: #ffd700; font-weight: bold; margin-bottom: 20px;"></p>
+        
+        <div class="upload-area" id="uploadArea">
+            <div style="font-size: 48px; margin-bottom: 15px;">📁</div>
+            <p style="margin: 10px 0; font-weight: bold;">Arraste o comprovante aqui ou clique para selecionar</p>
+            <p style="margin: 5px 0; font-size: 12px; opacity: 0.7;">Formatos aceitos: JPG, PNG, PDF (máx. 5MB)</p>
+            <input type="file" id="fileInput" accept="image/*,.pdf" style="display: none;">
+        </div>
+        
+        <div id="previewArea" style="display: none; margin: 20px 0;">
+            <h4 style="color: #ffd700;">Preview:</h4>
+            <div id="previewContent"></div>
+        </div>
+        
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button id="confirmarUpload" style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; padding: 12px 20px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; flex: 1;" disabled>✅ Confirmar Upload</button>
+            <button class="close-btn" id="fecharUpload" style="flex: 1;">❌ Cancelar</button>
+        </div>
     </div>
 </div>
 
@@ -654,16 +986,15 @@
     <div class="modal">
         <h3>⚙️ Ações do Participante</h3>
         <p id="participanteInfo" style="color: #ffd700; font-weight: bold; margin-bottom: 20px;"></p>
-        <div style="display: flex; gap: 8px; justify-content: center; margin: 15px 0;">
-            <button id="alterarStatus" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; flex: 1; padding: 12px 8px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 13px;">🔄 Status</button>
-            <button id="notificarParticipante" style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white; flex: 1; padding: 12px 8px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 13px;">📱 Notificar</button>
-            <button id="excluirParticipante" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; flex: 1; padding: 12px 8px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 13px;">🗑️ Excluir</button>
+        <div style="display: flex; gap: 8px; justify-content: center; margin: 15px 0; flex-wrap: wrap;">
+            <button id="alterarStatus" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; flex: 1; min-width: 100px; padding: 12px 8px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 13px; margin: 2px;">🔄 Status</button>
+            <button id="notificarParticipante" style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white; flex: 1; min-width: 100px; padding: 12px 8px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 13px; margin: 2px;">📱 Notificar</button>
+            <button id="uploadComprovanteIndividual" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white; flex: 1; min-width: 100px; padding: 12px 8px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 13px; margin: 2px;">📄 Comprovante</button>
+            <button id="excluirParticipante" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; flex: 1; min-width: 100px; padding: 12px 8px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 13px; margin: 2px;">🗑️ Excluir</button>
         </div>
         <button class="close-btn" id="fecharAcoes">❌ Cancelar</button>
     </div>
 </div>
-
-
 
 <!-- Popup Informativo -->
 <div class="info-overlay" id="infoOverlay">
@@ -751,6 +1082,7 @@ const CONFIG = {
   // Configurações Gerais
   LIMITE_PARTICIPANTES: 80,
   VALOR_PARTICIPACAO: "R$ 85,00",
+  VALOR_NUMERICO: 85.00,
   SENHA_ADMIN: "6261",
   
   // Datas Importantes
@@ -766,7 +1098,6 @@ const CONFIG = {
   
   // Mensagem de Notificação WhatsApp
   MENSAGEM_NOTIFICACAO: (nome, valor, prazo, chavePix) => {
-    // Função para obter saudação baseada no horário
     const obterSaudacao = () => {
       const agora = new Date();
       const hora = agora.getHours();
@@ -812,9 +1143,54 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const dbRef = ref(db, "participantes");
 
+// Variáveis globais
+let participantesOriginais = [];
+let filtroAtivo = "todos";
+let participantesSelecionados = [];
+let participanteSelecionado = null;
+let senhaAtual = "";
+let callbackConfirmacao = null;
+
+// Sistema de Temas
+function initTheme() {
+  const savedTheme = localStorage.getItem('bolao-theme') || 'dark';
+  document.body.className = savedTheme + '-mode';
+  updateThemeIcon(savedTheme);
+}
+
+function toggleTheme() {
+  const currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  
+  document.body.className = newTheme + '-mode';
+  localStorage.setItem('bolao-theme', newTheme);
+  updateThemeIcon(newTheme);
+  
+  showToast(`Tema ${newTheme === 'dark' ? 'escuro' : 'claro'} ativado!`, 'success');
+}
+
+function updateThemeIcon(theme) {
+  const themeToggle = document.getElementById('themeToggle');
+  themeToggle.textContent = theme === 'dark' ? '🌙' : '☀️';
+}
+
+// Sistema de Notificações Toast
+function showToast(message, type = 'success') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  
+  document.body.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.style.animation = 'slideInRight 0.3s ease reverse';
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
 // Aplicar configurações na interface
 function aplicarConfiguracoes() {
-  document.getElementById('tituloBolao').textContent = CONFIG.TITULO_BOLAO;
+  document.getElementById('tituloBolao').innerHTML = `${CONFIG.TITULO_BOLAO} <span style="font-size:12px;color:#666;font-weight:normal;">v3.0 Pro</span>`;
   document.getElementById('subtituloBolao').innerHTML = `${CONFIG.SUBTITULO}<br><br>
     ✍️ Preencha os dados corretamente!<br>
     <small>📋 Essas informações serão usadas para entrega das cotas.</small>`;
@@ -826,6 +1202,9 @@ function aplicarConfiguracoes() {
   document.getElementById('dataPagamentoInfo2').textContent = CONFIG.DATA_LIMITE_PAGAMENTO;
   
   document.getElementById('progressText').textContent = `0/${CONFIG.LIMITE_PARTICIPANTES} participantes`;
+  document.getElementById('chavePix').textContent = CONFIG.CHAVE_PIX;
+  document.getElementById('valorPix').textContent = CONFIG.VALOR_PARTICIPACAO;
+  document.getElementById('metaTotal').textContent = `R$ ${(CONFIG.LIMITE_PARTICIPANTES * CONFIG.VALOR_NUMERICO).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
 }
 
 // Atualizar progresso
@@ -834,21 +1213,69 @@ function atualizarProgresso() {
         const participantes = snapshot.exists() ? Object.values(snapshot.val()) : [];
         const totalCadastrados = participantes.length;
         const totalPagos = participantes.filter(p => p.status === "Pago").length;
+        const totalComprovantes = participantes.filter(p => p.status === "Comprovante Enviado").length;
         const progresso = (totalCadastrados / CONFIG.LIMITE_PARTICIPANTES) * 100;
         
         // Atualizar barra principal
         document.getElementById('progressFill').style.width = progresso + '%';
         document.getElementById('progressText').textContent = `${totalCadastrados}/${CONFIG.LIMITE_PARTICIPANTES} participantes`;
         
-        // Atualizar barra da lista (se existir) - mostra pagos/cadastrados
+        // Atualizar barra da lista (se existir)
         const progressFillLista = document.getElementById('progressFillLista');
         const progressTextLista = document.getElementById('progressTextLista');
         if (progressFillLista && progressTextLista) {
             const progressoPagos = totalCadastrados > 0 ? (totalPagos / totalCadastrados) * 100 : 0;
             progressFillLista.style.width = progressoPagos + '%';
-            progressTextLista.textContent = `${totalPagos}/${totalCadastrados}`;
+            progressTextLista.textContent = `${totalPagos}/${totalCadastrados} pagos • ${totalComprovantes} comprovantes`;
         }
+        
+        // Atualizar dashboard se estiver aberto
+        atualizarDashboard(participantes);
     });
+}
+
+// Atualizar Dashboard
+function atualizarDashboard(participantes) {
+  const totalCadastrados = participantes.length;
+  const totalPagos = participantes.filter(p => p.status === "Pago").length;
+  const totalComprovantes = participantes.filter(p => p.status === "Comprovante Enviado").length;
+  const totalPendentes = participantes.filter(p => p.status === "Não pago").length;
+  
+  const valorArrecadado = totalPagos * CONFIG.VALOR_NUMERICO;
+  const metaTotal = CONFIG.LIMITE_PARTICIPANTES * CONFIG.VALOR_NUMERICO;
+  const valorPendente = metaTotal - valorArrecadado;
+  const percentualArrecadado = metaTotal > 0 ? (valorArrecadado / metaTotal * 100).toFixed(1) : 0;
+  
+  const taxaConversao = totalCadastrados > 0 ? (totalPagos / totalCadastrados * 100).toFixed(1) : 0;
+  const vagasRestantes = CONFIG.LIMITE_PARTICIPANTES - totalCadastrados;
+  
+  // Calcular média por dia (assumindo que começou há 7 dias)
+  const diasDecorridos = 7; // Você pode calcular dinamicamente
+  const mediaPorDia = (totalCadastrados / diasDecorridos).toFixed(1);
+  
+  // Último cadastro
+  const ultimoCadastro = participantes.length > 0 ? 
+    new Date().toLocaleDateString('pt-BR') : '-';
+  
+  // Atualizar elementos do dashboard
+  const elementos = {
+    'totalArrecadado': `R$ ${valorArrecadado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`,
+    'valorPendente': `R$ ${valorPendente.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`,
+    'percentualArrecadado': `${percentualArrecadado}%`,
+    'totalCadastrados': totalCadastrados,
+    'totalPagos': totalPagos,
+    'totalPendentes': totalPendentes,
+    'vagasRestantes': vagasRestantes,
+    'taxaConversao': `${taxaConversao}%`,
+    'mediaPorDia': mediaPorDia,
+    'ultimoCadastro': ultimoCadastro,
+    'totalComprovantes': totalComprovantes
+  };
+  
+  Object.entries(elementos).forEach(([id, valor]) => {
+    const elemento = document.getElementById(id);
+    if (elemento) elemento.textContent = valor;
+  });
 }
 
 // CADASTRAR
@@ -858,45 +1285,32 @@ document.getElementById("cadastrar").addEventListener("click", async () => {
   const mensagem = document.getElementById("mensagem");
 
   if (!nome || !telefone) {
-    mensagem.textContent = "⚠️ Preencha todos os campos!";
-    mensagem.style.color = "#e17055";
-    mensagem.style.background = "rgba(225, 112, 85, 0.1)";
+    showToast("⚠️ Preencha todos os campos!", "error");
     return;
   }
 
   // Validar nome completo (mínimo 2 palavras)
   const palavrasNome = nome.split(' ').filter(palavra => palavra.length > 0);
   if (palavrasNome.length < 2) {
-    mensagem.textContent = "⚠️ Digite o nome completo (nome e sobrenome)!";
-    mensagem.style.color = "#e17055";
-    mensagem.style.background = "rgba(225, 112, 85, 0.1)";
+    showToast("⚠️ Digite o nome completo (nome e sobrenome)!", "error");
     return;
   }
 
   // Validar telefone (DDD + 9º dígito)
   const telefoneNumeros = telefone.replace(/\D/g, '');
   
-  // Verificar se tem pelo menos 11 dígitos (DDD + 9 dígitos do número)
   if (telefoneNumeros.length < 11) {
-    mensagem.textContent = "⚠️ Telefone deve conter DDD + número completo!";
-    mensagem.style.color = "#e17055";
-    mensagem.style.background = "rgba(225, 112, 85, 0.1)";
+    showToast("⚠️ Telefone deve conter DDD + número completo!", "error");
     return;
   }
   
-  // Verificar se o terceiro dígito é 9 (nono dígito obrigatório)
   if (telefoneNumeros.length === 11 && telefoneNumeros[2] !== '9') {
-    mensagem.textContent = "⚠️ Número deve conter o 9º dígito! Ex: (99) 99999-9999";
-    mensagem.style.color = "#e17055";
-    mensagem.style.background = "rgba(225, 112, 85, 0.1)";
+    showToast("⚠️ Número deve conter o 9º dígito! Ex: (99) 99999-9999", "error");
     return;
   }
   
-  // Se tem 10 dígitos, verificar se não está faltando o 9
   if (telefoneNumeros.length === 10) {
-    mensagem.textContent = "⚠️ Número deve conter o 9º dígito! Ex: (99) 99999-9999";
-    mensagem.style.color = "#e17055";
-    mensagem.style.background = "rgba(225, 112, 85, 0.1)";
+    showToast("⚠️ Número deve conter o 9º dígito! Ex: (99) 99999-9999", "error");
     return;
   }
 
@@ -904,9 +1318,7 @@ document.getElementById("cadastrar").addEventListener("click", async () => {
   const participantes = snapshot.exists() ? Object.values(snapshot.val()) : [];
 
   if (participantes.length >= CONFIG.LIMITE_PARTICIPANTES) {
-    mensagem.textContent = `❌ Limite de ${CONFIG.LIMITE_PARTICIPANTES} participantes atingido!`;
-    mensagem.style.color = "#e17055";
-    mensagem.style.background = "rgba(225, 112, 85, 0.1)";
+    showToast(`❌ Limite de ${CONFIG.LIMITE_PARTICIPANTES} participantes atingido!`, "error");
     return;
   }
 
@@ -916,9 +1328,7 @@ document.getElementById("cadastrar").addEventListener("click", async () => {
   );
 
   if (duplicado) {
-    mensagem.textContent = "⚠️ Esse cadastro já está na lista!";
-    mensagem.style.color = "#e17055";
-    mensagem.style.background = "rgba(225, 112, 85, 0.1)";
+    showToast("⚠️ Esse cadastro já está na lista!", "warning");
     return;
   }
 
@@ -926,14 +1336,18 @@ document.getElementById("cadastrar").addEventListener("click", async () => {
     numero: participantes.length + 1,
     nome,
     telefone,
-    status: "Não pago"
+    status: "Não pago",
+    dataCadastro: new Date().toISOString(),
+    comprovante: null
   };
 
   await push(dbRef, novoCadastro);
+  
   mensagem.innerHTML = `✅ Cadastro realizado com sucesso!<br>
     <button id="entrarGrupo" style="background: linear-gradient(135deg, #25d366, #128c7e); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; font-size: 14px; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3); transition: all 0.3s ease;">📱 Entrar no Grupo WhatsApp</button>`;
   mensagem.style.color = "#00b894";
   mensagem.style.background = "rgba(0, 184, 148, 0.1)";
+  
   document.getElementById("nome").value = "";
   document.getElementById("telefone").value = "";
   
@@ -942,16 +1356,9 @@ document.getElementById("cadastrar").addEventListener("click", async () => {
     window.open("https://chat.whatsapp.com/Fdl9PzkiEBq9TnJHtlu2Rm?mode=wwt", "_blank", "noopener,noreferrer");
   });
   
-  // Atualizar progresso
+  showToast("✅ Participante cadastrado com sucesso!", "success");
   atualizarProgresso();
 });
-
-// Variáveis globais para filtros
-let participantesOriginais = [];
-let filtroAtivo = "todos";
-
-// Variáveis para seleção múltipla
-let participantesSelecionados = [];
 
 // VER LISTA
 document.getElementById("verLista").addEventListener("click", async () => {
@@ -970,20 +1377,16 @@ document.getElementById("verLista").addEventListener("click", async () => {
   participantesOriginais = Object.values(snapshot.val());
   participantesOriginais.sort((a, b) => a.numero - b.numero);
   
-  // Resetar filtros e seleções
   filtroAtivo = "todos";
   participantesSelecionados = [];
   atualizarBotoesFiltro();
   aplicarFiltros();
   atualizarContadorSelecao();
-  
-  // Atualizar progresso da lista
   atualizarProgresso();
 
-  // Event listener para busca
+  // Event listeners
   buscarInput.addEventListener("input", aplicarFiltros);
   
-  // Event listeners para filtros
   document.getElementById("filtroTodos").addEventListener("click", () => {
     filtroAtivo = "todos";
     atualizarBotoesFiltro();
@@ -1002,56 +1405,38 @@ document.getElementById("verLista").addEventListener("click", async () => {
     aplicarFiltros();
   });
   
-  // Event listeners para seleção múltipla - remover listeners antigos primeiro
-  const alterarBtn = document.getElementById("alterarStatusSelecionados");
-  const notificarBtn = document.getElementById("notificarSelecionados");
-  const excluirBtn = document.getElementById("excluirSelecionados");
-  
-  // Clonar elementos para remover todos os event listeners
-  const novoAlterarBtn = alterarBtn.cloneNode(true);
-  const novoNotificarBtn = notificarBtn.cloneNode(true);
-  const novoExcluirBtn = excluirBtn.cloneNode(true);
-  
-  alterarBtn.parentNode.replaceChild(novoAlterarBtn, alterarBtn);
-  notificarBtn.parentNode.replaceChild(novoNotificarBtn, notificarBtn);
-  excluirBtn.parentNode.replaceChild(novoExcluirBtn, excluirBtn);
-  
-  // Adicionar novos event listeners
-  novoAlterarBtn.addEventListener("click", () => {
-    if (participantesSelecionados.length > 0) {
-      mostrarTecladoVirtual(verificarSenhaAcaoMultipla('status'));
-    }
+  document.getElementById("filtroComprovantes").addEventListener("click", () => {
+    filtroAtivo = "comprovantes";
+    atualizarBotoesFiltro();
+    aplicarFiltros();
   });
   
-  novoNotificarBtn.addEventListener("click", () => {
-    if (participantesSelecionados.length > 0) {
-      mostrarTecladoVirtual(verificarSenhaAcaoMultipla('notificar'));
-    }
-  });
+  // Event listeners para ações em lote
+  setupBatchActions();
+});
+
+// Setup das ações em lote
+function setupBatchActions() {
+  const botoes = [
+    'alterarStatusSelecionados',
+    'notificarSelecionados', 
+    'uploadComprovanteSelecionados',
+    'excluirSelecionados'
+  ];
   
-  novoExcluirBtn.addEventListener("click", () => {
-    if (participantesSelecionados.length > 0) {
-      mostrarTecladoVirtual(verificarSenhaAcaoMultipla('excluir'));
-    }
+  botoes.forEach(id => {
+    const btn = document.getElementById(id);
+    const newBtn = btn.cloneNode(true);
+    btn.parentNode.replaceChild(newBtn, btn);
+    
+    newBtn.addEventListener("click", () => {
+      if (participantesSelecionados.length > 0) {
+        const acao = id.replace('Selecionados', '').replace('alterar', '').replace('Status', 'status').replace('notificar', 'notificar').replace('uploadComprovante', 'upload').replace('excluir', 'excluir');
+        mostrarTecladoVirtual(verificarSenhaAcaoMultipla(acao));
+      }
+    });
   });
-});
-
-// FECHAR MODAL
-document.getElementById("fecharLista").addEventListener("click", () => {
-  document.getElementById("overlay").style.display = "none";
-});
-
-// POPUP INFORMATIVO
-document.getElementById("fecharInfo").addEventListener("click", () => {
-  document.getElementById("infoOverlay").style.display = "none";
-});
-
-// VER REGRAS
-document.getElementById("verRegras").addEventListener("click", () => {
-  document.getElementById("infoOverlay").style.display = "flex";
-});
-
-
+}
 
 // Função para aplicar filtros
 function aplicarFiltros() {
@@ -1066,7 +1451,9 @@ function aplicarFiltros() {
     case "naoPagos":
       participantesFiltrados = participantesFiltrados.filter(p => p.status === "Não pago");
       break;
-    // "todos" não precisa de filtro adicional
+    case "comprovantes":
+      participantesFiltrados = participantesFiltrados.filter(p => p.status === "Comprovante Enviado");
+      break;
   }
   
   // Aplicar filtro de busca
@@ -1083,16 +1470,15 @@ function aplicarFiltros() {
 function atualizarBotoesFiltro() {
   document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
   
-  switch(filtroAtivo) {
-    case "todos":
-      document.getElementById("filtroTodos").classList.add('active');
-      break;
-    case "pagos":
-      document.getElementById("filtroPagos").classList.add('active');
-      break;
-    case "naoPagos":
-      document.getElementById("filtroNaoPagos").classList.add('active');
-      break;
+  const filtros = {
+    "todos": "filtroTodos",
+    "pagos": "filtroPagos", 
+    "naoPagos": "filtroNaoPagos",
+    "comprovantes": "filtroComprovantes"
+  };
+  
+  if (filtros[filtroAtivo]) {
+    document.getElementById(filtros[filtroAtivo]).classList.add('active');
   }
 }
 
@@ -1107,7 +1493,10 @@ function renderLista(participantes) {
   
   participantes.forEach(p => {
     const linha = document.createElement("div");
-    const statusClass = p.status.toLowerCase() === "pago" ? "pago" : "nao-pago";
+    let statusClass = "nao-pago";
+    
+    if (p.status === "Pago") statusClass = "pago";
+    else if (p.status === "Comprovante Enviado") statusClass = "comprovante-enviado";
     
     // Criar checkbox para seleção múltipla
     const checkboxContainer = document.createElement("div");
@@ -1144,13 +1533,10 @@ function renderLista(participantes) {
     // Evento de clique
     linha.addEventListener('click', (e) => {
       if (e.target.type !== 'checkbox') {
-        // Se não clicou no checkbox, verificar se há seleções ativas
         if (participantesSelecionados.length > 0) {
-          // Se há seleções, marcar/desmarcar este item
           checkbox.checked = !checkbox.checked;
           checkbox.dispatchEvent(new Event('change'));
         } else {
-          // Se não há seleções, abrir ações individuais
           participanteSelecionado = p;
           mostrarTecladoVirtual(verificarSenhaComTeclado);
         }
@@ -1161,316 +1547,6 @@ function renderLista(participantes) {
   });
 }
 
-// Variável global para controle de participante selecionado
-let participanteSelecionado = null;
-
-// Função para abrir menu de ações
-function abrirMenuAcoes(participante) {
-  participanteSelecionado = participante;
-  document.getElementById("participanteInfo").textContent = `${participante.numero}° - ${participante.nome.toUpperCase()}`;
-  document.getElementById("acoesOverlay").style.display = "flex";
-}
-
-// Fechar modal de ações
-document.getElementById("fecharAcoes").addEventListener("click", () => {
-  document.getElementById("acoesOverlay").style.display = "none";
-  participanteSelecionado = null;
-});
-
-// Alterar status
-document.getElementById("alterarStatus").addEventListener("click", async () => {
-  if (!participanteSelecionado) return;
-  
-  try {
-    // Buscar participante no Firebase
-    const snapshot = await get(dbRef);
-    if (!snapshot.exists()) return;
-    
-    const dados = snapshot.val();
-    const participanteKey = Object.keys(dados).find(key => 
-      dados[key].nome === participanteSelecionado.nome
-    );
-    
-    if (participanteKey) {
-      const novoStatus = participanteSelecionado.status === "Pago" ? "Não pago" : "Pago";
-      await update(ref(db, `participantes/${participanteKey}`), { 
-        status: novoStatus 
-      });
-      
-      mostrarConfirmacao(`✅ Status alterado: ${novoStatus}`, "success");
-      await recarregarLista();
-    }
-    
-  } catch (error) {
-    console.error('Erro ao atualizar status:', error);
-    mostrarConfirmacao("❌ Erro ao executar ação. Tente novamente.", "error");
-  }
-  
-  document.getElementById("acoesOverlay").style.display = "none";
-});
-
-// Notificar participante
-document.getElementById("notificarParticipante").addEventListener("click", () => {
-  if (!participanteSelecionado) return;
-  
-  // Verificar se o status é "Não pago"
-  if (participanteSelecionado.status !== "Não pago") {
-    mostrarConfirmacao("⚠️ Notificação disponível apenas para participantes com status 'Não pago'", "error");
-    document.getElementById("acoesOverlay").style.display = "none";
-    return;
-  }
-  
-  // Enviar notificação WhatsApp
-  enviarNotificacaoWhatsApp(participanteSelecionado);
-  document.getElementById("acoesOverlay").style.display = "none";
-});
-
-// Excluir participante
-document.getElementById("excluirParticipante").addEventListener("click", async () => {
-  if (!participanteSelecionado) return;
-  
-  try {
-    // Buscar participante no Firebase
-    const snapshot = await get(dbRef);
-    if (!snapshot.exists()) return;
-    
-    const dados = snapshot.val();
-    const participanteKey = Object.keys(dados).find(key => 
-      dados[key].nome === participanteSelecionado.nome
-    );
-    
-    if (participanteKey) {
-      const participanteRef = ref(db, `participantes/${participanteKey}`);
-      await remove(participanteRef);
-      
-      mostrarConfirmacao(`✅ Participante excluído com sucesso`, "delete");
-      await recarregarLista();
-    }
-    
-  } catch (error) {
-    console.error('Erro ao excluir participante:', error);
-    mostrarConfirmacao("❌ Erro ao executar ação. Tente novamente.", "error");
-  }
-  
-  document.getElementById("acoesOverlay").style.display = "none";
-});
-
-// Mostrar confirmação
-function mostrarConfirmacao(mensagem, tipo) {
-  const confirmacao = document.createElement('div');
-  confirmacao.textContent = mensagem;
-  
-  let cor = "rgba(0, 184, 148, 0.9)"; // success
-  if (tipo === "delete") cor = "rgba(231, 76, 60, 0.9)";
-  if (tipo === "error") cor = "rgba(225, 112, 85, 0.9)";
-  
-  confirmacao.style.cssText = `position: fixed; top: 20px; right: 20px; background: ${cor}; color: white; padding: 12px 20px; border-radius: 10px; z-index: 9999; font-weight: 600; box-shadow: 0 4px 15px rgba(0,0,0,0.2);`;
-  document.body.appendChild(confirmacao);
-  setTimeout(() => confirmacao.remove(), 3000);
-}
-
-// Recarregar lista
-async function recarregarLista() {
-  const novoSnapshot = await get(dbRef);
-  if (novoSnapshot.exists()) {
-    participantesOriginais = Object.values(novoSnapshot.val());
-    participantesOriginais.sort((a, b) => a.numero - b.numero);
-    
-    // Reordenar números sequencialmente
-    await reordenarNumeros(participantesOriginais);
-    
-    // Aplicar filtros atuais
-    aplicarFiltros();
-  } else {
-    document.getElementById("lista").innerHTML = "Nenhum participante cadastrado.";
-  }
-  atualizarProgresso();
-}
-
-// Função para reordenar números sequencialmente
-async function reordenarNumeros(participantes) {
-  const snapshot = await get(dbRef);
-  if (!snapshot.exists()) return;
-  
-  const dados = snapshot.val();
-  const updates = {};
-  
-  // Reordenar participantes por número atual
-  participantes.sort((a, b) => a.numero - b.numero);
-  
-  // Atualizar números sequencialmente
-  participantes.forEach((participante, index) => {
-    const novoNumero = index + 1;
-    if (participante.numero !== novoNumero) {
-      // Encontrar a chave do participante no Firebase
-      const participanteKey = Object.keys(dados).find(key => 
-        dados[key].nome === participante.nome && dados[key].telefone === participante.telefone
-      );
-      
-      if (participanteKey) {
-        updates[`participantes/${participanteKey}/numero`] = novoNumero;
-        participante.numero = novoNumero; // Atualizar localmente também
-      }
-    }
-  });
-  
-  // Aplicar todas as atualizações de uma vez
-  if (Object.keys(updates).length > 0) {
-    await update(ref(db), updates);
-  }
-}
-
-// === TECLADO VIRTUAL ===
-let senhaAtual = "";
-let callbackConfirmacao = null;
-
-// Mostrar teclado virtual
-function mostrarTecladoVirtual(callback) {
-  senhaAtual = "";
-  callbackConfirmacao = callback;
-  document.getElementById("passwordDisplay").textContent = "";
-  document.getElementById("virtualKeyboard").style.display = "block";
-  
-  // Esconder modal de senha se estiver aberto
-  document.getElementById("senhaOverlay").style.display = "none";
-}
-
-// Esconder teclado virtual
-function esconderTecladoVirtual() {
-  document.getElementById("virtualKeyboard").style.display = "none";
-  senhaAtual = "";
-  callbackConfirmacao = null;
-}
-
-// Eventos do teclado virtual
-document.addEventListener('DOMContentLoaded', () => {
-  const keyboard = document.getElementById("virtualKeyboard");
-  const passwordDisplay = document.getElementById("passwordDisplay");
-  
-  keyboard.addEventListener('click', (e) => {
-    if (!e.target.classList.contains('key-btn')) return;
-    
-    const key = e.target.getAttribute('data-key');
-    
-    switch(key) {
-      case 'cancel':
-        esconderTecladoVirtual();
-        // Limpar variáveis de ação se cancelar
-        participanteSelecionado = null;
-        break;
-        
-      default:
-        // Aceitar apenas números (0-9) e símbolos * #
-        if (/^[0-9*#]$/.test(key) && senhaAtual.length < 4) {
-          senhaAtual += key;
-          passwordDisplay.textContent = "●".repeat(senhaAtual.length);
-          
-          // Verificar automaticamente quando atingir 4 dígitos
-          if (senhaAtual.length === 4) {
-            setTimeout(() => {
-              if (callbackConfirmacao) {
-                callbackConfirmacao(senhaAtual);
-              }
-              esconderTecladoVirtual();
-            }, 300); // Pequeno delay para mostrar o último ponto
-          }
-        }
-        break;
-    }
-  });
-  
-  // Aplicar configurações quando a página carregar
-  aplicarConfiguracoes();
-});
-
-// Função para enviar notificação WhatsApp
-function enviarNotificacaoWhatsApp(participante) {
-  // Limpar o número de telefone (remover caracteres especiais)
-  const telefone = participante.telefone.replace(/\D/g, '');
-  
-  // Verificar se o número tem DDD (pelo menos 10 dígitos)
-  if (telefone.length < 10) {
-    mostrarConfirmacao("❌ Número de telefone inválido", "error");
-    return;
-  }
-  
-  // Adicionar código do país se necessário
-  const numeroCompleto = telefone.startsWith('55') ? telefone : '55' + telefone;
-  
-  // Usar a mensagem configurada
-  const mensagem = CONFIG.MENSAGEM_NOTIFICACAO(
-    participante.nome,
-    CONFIG.VALOR_PARTICIPACAO,
-    CONFIG.DATA_LIMITE_PAGAMENTO,
-    CONFIG.CHAVE_PIX
-  );
-  
-  // Codificar a mensagem para URL
-  const mensagemCodificada = encodeURIComponent(mensagem);
-  
-  // Criar URL do WhatsApp
-  const urlWhatsApp = `https://wa.me/${numeroCompleto}?text=${mensagemCodificada}`;
-  
-  // Abrir WhatsApp em nova aba
-  window.open(urlWhatsApp, '_blank', 'noopener,noreferrer');
-  
-  // Mostrar confirmação
-  mostrarConfirmacao(`📱 WhatsApp aberto para ${participante.nome}`, "success");
-}
-
-// Verificar senha e abrir menu de ações
-function verificarSenhaComTeclado(senhaDigitada) {
-  if (senhaDigitada === CONFIG.SENHA_ADMIN) {
-    // Senha correta - abrir menu de ações
-    document.getElementById("participanteInfo").textContent = `${participanteSelecionado.numero}° - ${participanteSelecionado.nome.toUpperCase()}`;
-    document.getElementById("acoesOverlay").style.display = "flex";
-  } else {
-    // Senha incorreta - mostrar erro
-    const confirmacao = document.createElement('div');
-    confirmacao.textContent = "❌ Senha incorreta!";
-    confirmacao.style.cssText = "position: fixed; top: 20px; right: 20px; background: rgba(231, 76, 60, 0.9); color: white; padding: 12px 20px; border-radius: 10px; z-index: 9999; font-weight: 600; box-shadow: 0 4px 15px rgba(0,0,0,0.2);";
-    document.body.appendChild(confirmacao);
-    setTimeout(() => confirmacao.remove(), 3000);
-  }
-}
-
-// Verificar senha para ações múltiplas
-function verificarSenhaAcaoMultipla(acao) {
-  return function(senhaDigitada) {
-    if (senhaDigitada === CONFIG.SENHA_ADMIN) {
-      if (acao === 'status') {
-        alterarStatusSelecionados();
-      } else if (acao === 'excluir') {
-        excluirSelecionados();
-      } else if (acao === 'notificar') {
-        notificarSelecionados();
-      }
-    } else {
-      const confirmacao = document.createElement('div');
-      confirmacao.textContent = "❌ Senha incorreta!";
-      confirmacao.style.cssText = "position: fixed; top: 20px; right: 20px; background: rgba(231, 76, 60, 0.9); color: white; padding: 12px 20px; border-radius: 10px; z-index: 9999; font-weight: 600; box-shadow: 0 4px 15px rgba(0,0,0,0.2);";
-      document.body.appendChild(confirmacao);
-      setTimeout(() => confirmacao.remove(), 3000);
-    }
-  };
-}
-
-// Limpar seleções
-function limparSelecoes() {
-  participantesSelecionados = [];
-  
-  // Limpar checkboxes e classes selected
-  document.querySelectorAll('.checkbox-container input[type="checkbox"]').forEach(checkbox => {
-    checkbox.checked = false;
-  });
-  
-  document.querySelectorAll('.lista div.selected').forEach(linha => {
-    linha.classList.remove('selected');
-  });
-  
-  atualizarContadorSelecao();
-}
-
 // Atualizar contador de seleção
 function atualizarContadorSelecao() {
   const counter = document.getElementById("selectionCounter");
@@ -1478,18 +1554,61 @@ function atualizarContadorSelecao() {
   const count = participantesSelecionados.length;
   
   if (count === 0) {
-    counter.textContent = "Nenhum participante selecionado";
     counter.style.display = "none";
     actions.style.display = "none";
   } else {
     counter.style.display = "block";
     actions.style.display = "flex";
-    if (count === 1) {
-      counter.textContent = "1 participante selecionado";
-    } else {
-      counter.textContent = `${count} participantes selecionados`;
-    }
+    counter.textContent = count === 1 ? "1 participante selecionado" : `${count} participantes selecionados`;
   }
+}
+
+// === TECLADO VIRTUAL ===
+function mostrarTecladoVirtual(callback) {
+  senhaAtual = "";
+  callbackConfirmacao = callback;
+  document.getElementById("passwordDisplay").textContent = "";
+  document.getElementById("virtualKeyboard").style.display = "block";
+}
+
+function esconderTecladoVirtual() {
+  document.getElementById("virtualKeyboard").style.display = "none";
+  senhaAtual = "";
+  callbackConfirmacao = null;
+}
+
+// Verificar senha e abrir menu de ações
+function verificarSenhaComTeclado(senhaDigitada) {
+  if (senhaDigitada === CONFIG.SENHA_ADMIN) {
+    document.getElementById("participanteInfo").textContent = `${participanteSelecionado.numero}° - ${participanteSelecionado.nome.toUpperCase()}`;
+    document.getElementById("acoesOverlay").style.display = "flex";
+  } else {
+    showToast("❌ Senha incorreta!", "error");
+  }
+}
+
+// Verificar senha para ações múltiplas
+function verificarSenhaAcaoMultipla(acao) {
+  return function(senhaDigitada) {
+    if (senhaDigitada === CONFIG.SENHA_ADMIN) {
+      switch(acao) {
+        case 'status':
+          alterarStatusSelecionados();
+          break;
+        case 'excluir':
+          excluirSelecionados();
+          break;
+        case 'notificar':
+          notificarSelecionados();
+          break;
+        case 'upload':
+          uploadComprovanteMultiplo();
+          break;
+      }
+    } else {
+      showToast("❌ Senha incorreta!", "error");
+    }
+  };
 }
 
 // Alterar status dos selecionados
@@ -1503,30 +1622,41 @@ async function alterarStatusSelecionados() {
     const dados = snapshot.val();
     const updates = {};
     
-    // Determinar novo status (se todos são "Pago", muda para "Não pago", senão muda para "Pago")
-    const todosPagos = participantesSelecionados.every(p => p.status === "Pago");
-    const novoStatus = todosPagos ? "Não pago" : "Pago";
-    
+    // Ciclo de status: Não pago -> Comprovante Enviado -> Pago -> Não pago
     participantesSelecionados.forEach(participante => {
       const participanteKey = Object.keys(dados).find(key => 
         dados[key].nome === participante.nome && dados[key].telefone === participante.telefone
       );
       
       if (participanteKey) {
+        let novoStatus;
+        switch(participante.status) {
+          case "Não pago":
+            novoStatus = "Comprovante Enviado";
+            break;
+          case "Comprovante Enviado":
+            novoStatus = "Pago";
+            break;
+          case "Pago":
+            novoStatus = "Não pago";
+            break;
+          default:
+            novoStatus = "Não pago";
+        }
         updates[`participantes/${participanteKey}/status`] = novoStatus;
       }
     });
     
     if (Object.keys(updates).length > 0) {
       await update(ref(db), updates);
-      mostrarConfirmacao(`✅ Status alterado para "${novoStatus}" em ${participantesSelecionados.length} participante(s)`, "success");
+      showToast(`✅ Status alterado em ${participantesSelecionados.length} participante(s)`, "success");
       await recarregarLista();
       limparSelecoes();
     }
     
   } catch (error) {
     console.error('Erro ao atualizar status:', error);
-    mostrarConfirmacao("❌ Erro ao executar ação. Tente novamente.", "error");
+    showToast("❌ Erro ao executar ação. Tente novamente.", "error");
   }
 }
 
@@ -1534,31 +1664,26 @@ async function alterarStatusSelecionados() {
 function notificarSelecionados() {
   if (participantesSelecionados.length === 0) return;
   
-  // Filtrar apenas participantes com status "Não pago"
   const participantesNaoPagos = participantesSelecionados.filter(p => p.status === "Não pago");
   
   if (participantesNaoPagos.length === 0) {
-    mostrarConfirmacao("⚠️ Nenhum participante selecionado tem status 'Não pago'", "error");
+    showToast("⚠️ Nenhum participante selecionado tem status 'Não pago'", "warning");
     return;
   }
   
   let contador = 0;
   const total = participantesNaoPagos.length;
   
-  // Enviar notificações com intervalo para evitar spam
   participantesNaoPagos.forEach((participante, index) => {
     setTimeout(() => {
       enviarNotificacaoWhatsApp(participante);
       contador++;
       
-      // Mostrar progresso
-      if (contador === 1) {
-        mostrarConfirmacao(`📱 Enviando notificações... (${contador}/${total})`, "success");
-      } else if (contador === total) {
-        mostrarConfirmacao(`✅ ${total} notificação(ões) enviada(s) com sucesso!`, "success");
+      if (contador === total) {
+        showToast(`✅ ${total} notificação(ões) enviada(s) com sucesso!`, "success");
         limparSelecoes();
       }
-    }, index * 1000); // Intervalo de 1 segundo entre cada notificação
+    }, index * 1000);
   });
 }
 
@@ -1586,19 +1711,600 @@ async function excluirSelecionados() {
     
     if (promises.length > 0) {
       await Promise.all(promises);
-      mostrarConfirmacao(`✅ ${participantesSelecionados.length} participante(s) excluído(s) com sucesso`, "delete");
+      showToast(`✅ ${participantesSelecionados.length} participante(s) excluído(s) com sucesso`, "success");
       await recarregarLista();
       limparSelecoes();
     }
     
   } catch (error) {
     console.error('Erro ao excluir participantes:', error);
-    mostrarConfirmacao("❌ Erro ao executar ação. Tente novamente.", "error");
+    showToast("❌ Erro ao executar ação. Tente novamente.", "error");
   }
 }
 
-// Inicializar progresso
-atualizarProgresso();
+// Upload de comprovante múltiplo
+function uploadComprovanteMultiplo() {
+  if (participantesSelecionados.length === 0) return;
+  
+  // Para múltiplos participantes, apenas alterar status para "Comprovante Enviado"
+  alterarStatusParaComprovante();
+}
+
+async function alterarStatusParaComprovante() {
+  try {
+    const snapshot = await get(dbRef);
+    if (!snapshot.exists()) return;
+    
+    const dados = snapshot.val();
+    const updates = {};
+    
+    participantesSelecionados.forEach(participante => {
+      const participanteKey = Object.keys(dados).find(key => 
+        dados[key].nome === participante.nome && dados[key].telefone === participante.telefone
+      );
+      
+      if (participanteKey) {
+        updates[`participantes/${participanteKey}/status`] = "Comprovante Enviado";
+      }
+    });
+    
+    if (Object.keys(updates).length > 0) {
+      await update(ref(db), updates);
+      showToast(`✅ Status alterado para "Comprovante Enviado" em ${participantesSelecionados.length} participante(s)`, "success");
+      await recarregarLista();
+      limparSelecoes();
+    }
+    
+  } catch (error) {
+    console.error('Erro ao atualizar status:', error);
+    showToast("❌ Erro ao executar ação. Tente novamente.", "error");
+  }
+}
+
+// Limpar seleções
+function limparSelecoes() {
+  participantesSelecionados = [];
+  
+  document.querySelectorAll('.checkbox-container input[type="checkbox"]').forEach(checkbox => {
+    checkbox.checked = false;
+  });
+  
+  document.querySelectorAll('.lista div.selected').forEach(linha => {
+    linha.classList.remove('selected');
+  });
+  
+  atualizarContadorSelecao();
+}
+
+// Recarregar lista
+async function recarregarLista() {
+  const novoSnapshot = await get(dbRef);
+  if (novoSnapshot.exists()) {
+    participantesOriginais = Object.values(novoSnapshot.val());
+    participantesOriginais.sort((a, b) => a.numero - b.numero);
+    
+    await reordenarNumeros(participantesOriginais);
+    aplicarFiltros();
+  } else {
+    document.getElementById("lista").innerHTML = "Nenhum participante cadastrado.";
+  }
+  atualizarProgresso();
+}
+
+// Função para reordenar números sequencialmente
+async function reordenarNumeros(participantes) {
+  const snapshot = await get(dbRef);
+  if (!snapshot.exists()) return;
+  
+  const dados = snapshot.val();
+  const updates = {};
+  
+  participantes.sort((a, b) => a.numero - b.numero);
+  
+  participantes.forEach((participante, index) => {
+    const novoNumero = index + 1;
+    if (participante.numero !== novoNumero) {
+      const participanteKey = Object.keys(dados).find(key => 
+        dados[key].nome === participante.nome && dados[key].telefone === participante.telefone
+      );
+      
+      if (participanteKey) {
+        updates[`participantes/${participanteKey}/numero`] = novoNumero;
+        participante.numero = novoNumero;
+      }
+    }
+  });
+  
+  if (Object.keys(updates).length > 0) {
+    await update(ref(db), updates);
+  }
+}
+
+// Função para enviar notificação WhatsApp
+function enviarNotificacaoWhatsApp(participante) {
+  const telefone = participante.telefone.replace(/\D/g, '');
+  
+  if (telefone.length < 10) {
+    showToast("❌ Número de telefone inválido", "error");
+    return;
+  }
+  
+  const numeroCompleto = telefone.startsWith('55') ? telefone : '55' + telefone;
+  
+  const mensagem = CONFIG.MENSAGEM_NOTIFICACAO(
+    participante.nome,
+    CONFIG.VALOR_PARTICIPACAO,
+    CONFIG.DATA_LIMITE_PAGAMENTO,
+    CONFIG.CHAVE_PIX
+  );
+  
+  const mensagemCodificada = encodeURIComponent(mensagem);
+  const urlWhatsApp = `https://wa.me/${numeroCompleto}?text=${mensagemCodificada}`;
+  
+  window.open(urlWhatsApp, '_blank', 'noopener,noreferrer');
+  showToast(`📱 WhatsApp aberto para ${participante.nome}`, "success");
+}
+
+// === AÇÕES INDIVIDUAIS ===
+
+// Fechar modal de ações
+document.getElementById("fecharAcoes").addEventListener("click", () => {
+  document.getElementById("acoesOverlay").style.display = "none";
+  participanteSelecionado = null;
+});
+
+// Alterar status individual
+document.getElementById("alterarStatus").addEventListener("click", async () => {
+  if (!participanteSelecionado) return;
+  
+  try {
+    const snapshot = await get(dbRef);
+    if (!snapshot.exists()) return;
+    
+    const dados = snapshot.val();
+    const participanteKey = Object.keys(dados).find(key => 
+      dados[key].nome === participanteSelecionado.nome
+    );
+    
+    if (participanteKey) {
+      let novoStatus;
+      switch(participanteSelecionado.status) {
+        case "Não pago":
+          novoStatus = "Comprovante Enviado";
+          break;
+        case "Comprovante Enviado":
+          novoStatus = "Pago";
+          break;
+        case "Pago":
+          novoStatus = "Não pago";
+          break;
+        default:
+          novoStatus = "Não pago";
+      }
+      
+      await update(ref(db, `participantes/${participanteKey}`), { 
+        status: novoStatus 
+      });
+      
+      showToast(`✅ Status alterado: ${novoStatus}`, "success");
+      await recarregarLista();
+    }
+    
+  } catch (error) {
+    console.error('Erro ao atualizar status:', error);
+    showToast("❌ Erro ao executar ação. Tente novamente.", "error");
+  }
+  
+  document.getElementById("acoesOverlay").style.display = "none";
+});
+
+// Notificar participante individual
+document.getElementById("notificarParticipante").addEventListener("click", () => {
+  if (!participanteSelecionado) return;
+  
+  if (participanteSelecionado.status !== "Não pago") {
+    showToast("⚠️ Notificação disponível apenas para participantes com status 'Não pago'", "warning");
+    document.getElementById("acoesOverlay").style.display = "none";
+    return;
+  }
+  
+  enviarNotificacaoWhatsApp(participanteSelecionado);
+  document.getElementById("acoesOverlay").style.display = "none";
+});
+
+// Upload comprovante individual
+document.getElementById("uploadComprovanteIndividual").addEventListener("click", () => {
+  if (!participanteSelecionado) return;
+  
+  document.getElementById("uploadParticipanteInfo").textContent = `${participanteSelecionado.numero}° - ${participanteSelecionado.nome.toUpperCase()}`;
+  document.getElementById("uploadOverlay").style.display = "flex";
+  document.getElementById("acoesOverlay").style.display = "none";
+});
+
+// Excluir participante individual
+document.getElementById("excluirParticipante").addEventListener("click", async () => {
+  if (!participanteSelecionado) return;
+  
+  try {
+    const snapshot = await get(dbRef);
+    if (!snapshot.exists()) return;
+    
+    const dados = snapshot.val();
+    const participanteKey = Object.keys(dados).find(key => 
+      dados[key].nome === participanteSelecionado.nome
+    );
+    
+    if (participanteKey) {
+      const participanteRef = ref(db, `participantes/${participanteKey}`);
+      await remove(participanteRef);
+      
+      showToast(`✅ Participante excluído com sucesso`, "success");
+      await recarregarLista();
+    }
+    
+  } catch (error) {
+    console.error('Erro ao excluir participante:', error);
+    showToast("❌ Erro ao executar ação. Tente novamente.", "error");
+  }
+  
+  document.getElementById("acoesOverlay").style.display = "none";
+});
+
+// === DASHBOARD ===
+document.getElementById("verDashboard").addEventListener("click", () => {
+  document.getElementById("dashboardOverlay").style.display = "flex";
+  atualizarProgresso(); // Isso também atualiza o dashboard
+});
+
+document.getElementById("fecharDashboard").addEventListener("click", () => {
+  document.getElementById("dashboardOverlay").style.display = "none";
+});
+
+// Ações rápidas do dashboard
+document.getElementById("notificarTodosPendentes").addEventListener("click", async () => {
+  const snapshot = await get(dbRef);
+  if (!snapshot.exists()) return;
+  
+  const participantes = Object.values(snapshot.val());
+  const pendentes = participantes.filter(p => p.status === "Não pago");
+  
+  if (pendentes.length === 0) {
+    showToast("⚠️ Nenhum participante pendente encontrado", "warning");
+    return;
+  }
+  
+  pendentes.forEach((participante, index) => {
+    setTimeout(() => {
+      enviarNotificacaoWhatsApp(participante);
+    }, index * 1000);
+  });
+  
+  showToast(`📱 Enviando ${pendentes.length} notificações...`, "success");
+});
+
+document.getElementById("gerarRelatorioCompleto").addEventListener("click", () => {
+  exportarExcel();
+});
+
+document.getElementById("limparHistorico").addEventListener("click", () => {
+  mostrarTecladoVirtual((senha) => {
+    if (senha === CONFIG.SENHA_ADMIN) {
+      localStorage.clear();
+      showToast("✅ Histórico limpo com sucesso!", "success");
+    } else {
+      showToast("❌ Senha incorreta!", "error");
+    }
+  });
+});
+
+// === QR CODE ===
+document.getElementById("gerarQRCode").addEventListener("click", () => {
+  document.getElementById("qrOverlay").style.display = "flex";
+  gerarQRCode();
+});
+
+document.getElementById("fecharQR").addEventListener("click", () => {
+  document.getElementById("qrOverlay").style.display = "none";
+});
+
+function gerarQRCode() {
+  const chavePix = CONFIG.CHAVE_PIX;
+  const valor = CONFIG.VALOR_NUMERICO;
+  const descricao = "Bolão Mega da Virada 2025";
+  
+  // Gerar código PIX (formato simplificado)
+  const pixCode = `00020126580014BR.GOV.BCB.PIX0136${chavePix}0208${descricao}5204000053039865802BR5925BOLAO MEGA DA VIRADA6009SAO PAULO62070503***6304`;
+  
+  // Usar uma biblioteca de QR Code (aqui simulamos)
+  const qrContainer = document.getElementById("qrCodeContainer");
+  qrContainer.innerHTML = `
+    <div style="width: 200px; height: 200px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; border-radius: 10px;">
+      <div style="text-align: center; color: #333;">
+        <div style="font-size: 48px; margin-bottom: 10px;">📱</div>
+        <div style="font-size: 14px; font-weight: bold;">QR Code PIX</div>
+        <div style="font-size: 12px;">R$ ${valor.toFixed(2)}</div>
+      </div>
+    </div>
+  `;
+}
+
+document.getElementById("copiarChavePix").addEventListener("click", () => {
+  navigator.clipboard.writeText(CONFIG.CHAVE_PIX).then(() => {
+    showToast("📋 Chave PIX copiada!", "success");
+  });
+});
+
+document.getElementById("compartilharQR").addEventListener("click", () => {
+  const texto = `🎯 *Bolão Mega da Virada 2025*\n\n💰 Valor: ${CONFIG.VALOR_PARTICIPACAO}\n💳 Chave PIX: ${CONFIG.CHAVE_PIX}\n\n📱 Participe do nosso bolão!`;
+  const url = `https://wa.me/?text=${encodeURIComponent(texto)}`;
+  window.open(url, '_blank', 'noopener,noreferrer');
+});
+
+// === UPLOAD DE COMPROVANTE ===
+document.getElementById("fecharUpload").addEventListener("click", () => {
+  document.getElementById("uploadOverlay").style.display = "none";
+  document.getElementById("previewArea").style.display = "none";
+  document.getElementById("previewContent").innerHTML = "";
+  document.getElementById("confirmarUpload").disabled = true;
+});
+
+// Configurar área de upload
+const uploadArea = document.getElementById("uploadArea");
+const fileInput = document.getElementById("fileInput");
+
+uploadArea.addEventListener("click", () => fileInput.click());
+
+uploadArea.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  uploadArea.classList.add("dragover");
+});
+
+uploadArea.addEventListener("dragleave", () => {
+  uploadArea.classList.remove("dragover");
+});
+
+uploadArea.addEventListener("drop", (e) => {
+  e.preventDefault();
+  uploadArea.classList.remove("dragover");
+  const files = e.dataTransfer.files;
+  if (files.length > 0) {
+    processarArquivo(files[0]);
+  }
+});
+
+fileInput.addEventListener("change", (e) => {
+  if (e.target.files.length > 0) {
+    processarArquivo(e.target.files[0]);
+  }
+});
+
+function processarArquivo(arquivo) {
+  // Validar tipo de arquivo
+  const tiposPermitidos = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
+  if (!tiposPermitidos.includes(arquivo.type)) {
+    showToast("❌ Tipo de arquivo não permitido!", "error");
+    return;
+  }
+  
+  // Validar tamanho (5MB)
+  if (arquivo.size > 5 * 1024 * 1024) {
+    showToast("❌ Arquivo muito grande! Máximo 5MB.", "error");
+    return;
+  }
+  
+  // Mostrar preview
+  const previewArea = document.getElementById("previewArea");
+  const previewContent = document.getElementById("previewContent");
+  
+  if (arquivo.type.startsWith('image/')) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      previewContent.innerHTML = `<img src="${e.target.result}" style="max-width: 100%; max-height: 200px; border-radius: 10px;">`;
+      previewArea.style.display = "block";
+      document.getElementById("confirmarUpload").disabled = false;
+    };
+    reader.readAsDataURL(arquivo);
+  } else if (arquivo.type === 'application/pdf') {
+    previewContent.innerHTML = `
+      <div style="text-align: center; padding: 20px; background: #f0f0f0; border-radius: 10px; color: #333;">
+        <div style="font-size: 48px; margin-bottom: 10px;">📄</div>
+        <div style="font-weight: bold;">${arquivo.name}</div>
+        <div style="font-size: 12px; opacity: 0.7;">${(arquivo.size / 1024 / 1024).toFixed(2)} MB</div>
+      </div>
+    `;
+    previewArea.style.display = "block";
+    document.getElementById("confirmarUpload").disabled = false;
+  }
+}
+
+document.getElementById("confirmarUpload").addEventListener("click", async () => {
+  if (!participanteSelecionado) return;
+  
+  try {
+    // Simular upload (em produção, você enviaria para um servidor)
+    const snapshot = await get(dbRef);
+    if (!snapshot.exists()) return;
+    
+    const dados = snapshot.val();
+    const participanteKey = Object.keys(dados).find(key => 
+      dados[key].nome === participanteSelecionado.nome
+    );
+    
+    if (participanteKey) {
+      await update(ref(db, `participantes/${participanteKey}`), { 
+        status: "Comprovante Enviado",
+        comprovante: {
+          dataUpload: new Date().toISOString(),
+          nomeArquivo: fileInput.files[0]?.name || "comprovante.jpg"
+        }
+      });
+      
+      showToast("✅ Comprovante enviado com sucesso!", "success");
+      await recarregarLista();
+      document.getElementById("uploadOverlay").style.display = "none";
+    }
+    
+  } catch (error) {
+    console.error('Erro ao fazer upload:', error);
+    showToast("❌ Erro ao enviar comprovante. Tente novamente.", "error");
+  }
+});
+
+// === EXPORTAÇÃO E RELATÓRIOS ===
+document.getElementById("exportarExcel").addEventListener("click", () => {
+  exportarExcel();
+});
+
+document.getElementById("backupDados").addEventListener("click", () => {
+  backupDados();
+});
+
+document.getElementById("sorteioNumeros").addEventListener("click", () => {
+  mostrarTecladoVirtual((senha) => {
+    if (senha === CONFIG.SENHA_ADMIN) {
+      realizarSorteio();
+    } else {
+      showToast("❌ Senha incorreta!", "error");
+    }
+  });
+});
+
+function exportarExcel() {
+  if (participantesOriginais.length === 0) {
+    showToast("⚠️ Nenhum dado para exportar!", "warning");
+    return;
+  }
+  
+  // Criar dados para exportação
+  const dados = participantesOriginais.map(p => ({
+    'Número': p.numero,
+    'Nome': p.nome,
+    'Telefone': p.telefone,
+    'Status': p.status,
+    'Data Cadastro': p.dataCadastro ? new Date(p.dataCadastro).toLocaleDateString('pt-BR') : '-',
+    'Comprovante': p.comprovante ? 'Sim' : 'Não'
+  }));
+  
+  // Converter para CSV
+  const csv = [
+    Object.keys(dados[0]).join(','),
+    ...dados.map(row => Object.values(row).join(','))
+  ].join('\n');
+  
+  // Download
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `bolao_mega_virada_${new Date().toISOString().split('T')[0]}.csv`;
+  link.click();
+  
+  showToast("📊 Relatório exportado com sucesso!", "success");
+}
+
+function backupDados() {
+  if (participantesOriginais.length === 0) {
+    showToast("⚠️ Nenhum dado para backup!", "warning");
+    return;
+  }
+  
+  const backup = {
+    data: new Date().toISOString(),
+    versao: "3.0 Pro",
+    participantes: participantesOriginais,
+    configuracoes: CONFIG
+  };
+  
+  const json = JSON.stringify(backup, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `backup_bolao_${new Date().toISOString().split('T')[0]}.json`;
+  link.click();
+  
+  showToast("💾 Backup criado com sucesso!", "success");
+}
+
+function realizarSorteio() {
+  if (participantesOriginais.length === 0) {
+    showToast("⚠️ Nenhum participante para sortear!", "warning");
+    return;
+  }
+  
+  // Sortear um participante aleatório
+  const sorteado = participantesOriginais[Math.floor(Math.random() * participantesOriginais.length)];
+  
+  showToast(`🎲 Sorteado: ${sorteado.numero}° - ${sorteado.nome}!`, "success");
+  
+  // Destacar na lista se estiver aberta
+  setTimeout(() => {
+    const elementos = document.querySelectorAll('.lista div');
+    elementos.forEach(el => {
+      if (el.textContent.includes(sorteado.nome)) {
+        el.style.background = 'rgba(255, 215, 0, 0.3)';
+        el.style.border = '2px solid #ffd700';
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  }, 1000);
+}
+
+// === EVENT LISTENERS GERAIS ===
+
+// Fechar modais
+document.getElementById("fecharLista").addEventListener("click", () => {
+  document.getElementById("overlay").style.display = "none";
+});
+
+document.getElementById("fecharInfo").addEventListener("click", () => {
+  document.getElementById("infoOverlay").style.display = "none";
+});
+
+document.getElementById("verRegras").addEventListener("click", () => {
+  document.getElementById("infoOverlay").style.display = "flex";
+});
+
+// Tema
+document.getElementById("themeToggle").addEventListener("click", toggleTheme);
+
+// Teclado virtual
+document.addEventListener('DOMContentLoaded', () => {
+  const keyboard = document.getElementById("virtualKeyboard");
+  const passwordDisplay = document.getElementById("passwordDisplay");
+  
+  keyboard.addEventListener('click', (e) => {
+    if (!e.target.classList.contains('key-btn')) return;
+    
+    const key = e.target.getAttribute('data-key');
+    
+    switch(key) {
+      case 'cancel':
+        esconderTecladoVirtual();
+        participanteSelecionado = null;
+        break;
+        
+      default:
+        if (/^[0-9*#]$/.test(key) && senhaAtual.length < 4) {
+          senhaAtual += key;
+          passwordDisplay.textContent = "●".repeat(senhaAtual.length);
+          
+          if (senhaAtual.length === 4) {
+            setTimeout(() => {
+              if (callbackConfirmacao) {
+                callbackConfirmacao(senhaAtual);
+              }
+              esconderTecladoVirtual();
+            }, 300);
+          }
+        }
+        break;
+    }
+  });
+  
+  // Inicializar
+  initTheme();
+  aplicarConfiguracoes();
+  atualizarProgresso();
+});
 </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'993bfa52f1c37263',t:'MTc2MTMzNTE2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'993c8b18f1fb7263',t:'MTc2MTM0MTA5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
