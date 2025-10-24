@@ -6,8 +6,25 @@
 <title>Participantes do Bolão</title>
 <style>
     * { box-sizing: border-box; font-family: "Poppins", sans-serif; }
-    body { margin: 0; background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC); display: flex; justify-content: center; align-items: center; height: 100vh; color: #333; }
-    .popup { background: #fff; width: 95%; max-width: 440px; border-radius: 20px; padding: 25px 22px; box-shadow: 0 8px 25px rgba(0,0,0,0.25); text-align: center; animation: aparecer 0.6s ease; }
+    body { 
+        margin: 0; 
+        background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC); 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        height: 100vh; 
+        color: #333; 
+    }
+    .popup { 
+        background: #fff; 
+        width: 95%; 
+        max-width: 440px; 
+        border-radius: 20px; 
+        padding: 25px 22px; 
+        box-shadow: 0 8px 25px rgba(0,0,0,0.25); 
+        text-align: center; 
+        animation: aparecer 0.6s ease; 
+    }
     @keyframes aparecer { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
     h1 { font-size: 24px; color: #0048b4; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
     h2 { font-size: 15px; font-weight: normal; color: #444; margin-bottom: 18px; line-height: 1.4; }
@@ -16,8 +33,44 @@
     button { width: 92%; padding: 12px; margin-top: 10px; border: none; border-radius: 10px; background: linear-gradient(90deg, #0052D4, #4364F7); color: white; font-size: 15px; font-weight: 600; cursor: pointer; transition: transform 0.2s, background 0.3s; }
     button:hover { transform: scale(1.03); background: linear-gradient(90deg, #0048b4, #365de9); }
     .mensagem { margin-top: 10px; font-size: 14px; font-weight: 600; transition: all 0.3s; }
-    .lista-container { margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px; }
-    .search-box { position: relative; width: 90%; margin: 0 auto 10px auto; }
+
+    /* === MODAL === */
+    .overlay {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+    .modal {
+        background: #fff;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 450px;
+        padding: 20px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+        animation: aparecer 0.3s ease;
+        text-align: center;
+    }
+    .modal h3 {
+        margin-top: 0;
+        font-size: 20px;
+        color: #0048b4;
+        margin-bottom: 10px;
+    }
+    .close-btn {
+        background: #dc3545;
+        border: none;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 8px;
+    }
+    .search-box { position: relative; width: 100%; margin-bottom: 10px; }
     .search-box input { width: 100%; padding: 8px 30px 8px 10px; font-size: 13px; border-radius: 8px; border: 1px solid #ccc; }
     .search-box svg { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: #555; }
     .lista { text-align: left; font-size: 12px; max-height: 240px; overflow-y: auto; color: #222; padding: 0 5px; }
@@ -25,7 +78,7 @@
     .status { font-weight: bold; text-transform: uppercase; }
     .pago { color: green; }
     .nao-pago { color: red; }
-    small { font-size: 12px; color: #555; }
+
     @media (max-width: 400px) { h2 { font-size: 14px; } input, button { font-size: 13px; } .lista { font-size: 11px; } }
 </style>
 </head>
@@ -33,7 +86,7 @@
 <div class="popup">
     <h1>Participantes do Bolão</h1>
     <h2>Bolão Mega da Virada 2025! 💰<br>
-    Valor: R$ 1,00<br>
+    Valor: R$ 85,00<br>
     Pagamento Limite: Até 10 de dezembro.<br>
     <small>Aviso: Quem estiver na lista e não pagar até o dia 10/12, perde a vaga.<br>
     Cotas entregues até 26/12.<br>
@@ -42,17 +95,22 @@
     <input type="text" id="nome" placeholder="Digite seu nome completo">
     <input type="tel" id="telefone" placeholder="Digite seu telefone (com DDD)">
     <button id="cadastrar">Cadastrar</button>
-    <button id="pagarPix" style="background: linear-gradient(90deg,#00B894,#00CEC9); margin-top:5px;">💰 Pagar com Pix</button>
-    <button id="verLista" style="background:linear-gradient(90deg,#6c757d,#adb5bd);margin-top:5px;">Ver Lista</button>
+    <button hidden="pagarPix" style="background: linear-gradient(90deg,#00B894,#00CEC9); margin-top:5px;">💰 Pagar com Pix</button> 
+    <button id="verLista" style="background:linear-gradient(90deg,#6c757d,#adb5bd);margin-top:5px;">📋 Ver Lista</button>
 
     <div class="mensagem" id="mensagem"></div>
+</div>
 
-    <div class="lista-container" id="listaContainer" style="display:none;">
+<!-- Modal flutuante -->
+<div class="overlay" id="overlay">
+    <div class="modal">
+        <h3>Lista de Participantes</h3>
         <div class="search-box">
             <input type="text" id="buscar" placeholder="🔍 Buscar participante...">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </div>
         <div class="lista" id="lista"></div>
+        <button class="close-btn" id="fecharLista">Fechar</button>
     </div>
 </div>
 
@@ -75,7 +133,6 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const dbRef = ref(db, "participantes");
 
-// BOTÃO PIX
 document.getElementById("pagarPix").addEventListener("click", async () => {
     const nome = document.getElementById("nome").value.trim();
     const telefone = document.getElementById("telefone").value.trim();
@@ -87,12 +144,11 @@ document.getElementById("pagarPix").addEventListener("click", async () => {
         return;
     }
 
-    // Aqui vamos chamar a API do Abacate Pay para criar a cobrança Pix
     try {
         const response = await fetch('gerar-pix.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nome, telefone, valor: 85.00 }) // valor do bolão
+            body: JSON.stringify({ nome, telefone, valor: 85.00 })
         });
 
         const data = await response.json();
@@ -109,7 +165,8 @@ document.getElementById("pagarPix").addEventListener("click", async () => {
         mensagem.style.color = "red";
     }
 });
-//  CADASTRAR
+
+// CADASTRAR
 document.getElementById("cadastrar").addEventListener("click", async () => {
   const nome = document.getElementById("nome").value.trim();
   const telefone = document.getElementById("telefone").value.trim();
@@ -154,13 +211,13 @@ document.getElementById("cadastrar").addEventListener("click", async () => {
   document.getElementById("nome").value = "";
   document.getElementById("telefone").value = "";
 });
-// BOTÃO VER LISTA
+
+// VER LISTA
 document.getElementById("verLista").addEventListener("click", async () => {
-  const listaContainer = document.getElementById("listaContainer");
+  document.getElementById("overlay").style.display = "flex";
   const listaDiv = document.getElementById("lista");
   const buscarInput = document.getElementById("buscar");
 
-  listaContainer.style.display = "block";
   listaDiv.innerHTML = "Carregando lista...";
 
   const snapshot = await get(dbRef);
@@ -180,10 +237,14 @@ document.getElementById("verLista").addEventListener("click", async () => {
   });
 });
 
+// FECHAR MODAL
+document.getElementById("fecharLista").addEventListener("click", () => {
+  document.getElementById("overlay").style.display = "none";
+});
+
 function renderLista(participantes) {
   const listaDiv = document.getElementById("lista");
   listaDiv.innerHTML = "";
-
   participantes.forEach(p => {
     const linha = document.createElement("div");
     const statusClass = p.status.toLowerCase() === "pago" ? "pago" : "nao-pago";
