@@ -728,6 +728,7 @@
       </div>
 
       <button class="vote-button" id="votar">🗳️ Confirmar Voto</button>
+      <button class="vote-button" id="entrarLista" style="display: none; background: linear-gradient(135deg, #28a745 0%, #20c997 100%); margin-top: 15px;">📝 ENTRAR NA LISTA DO BOLÃO</button>
       <div class="msg" id="mensagem"></div>
 
       <div class="expandable-section">
@@ -851,4 +852,397 @@
                   <span class="rule-value">R$ 168,00</span>
                 </div>
                 <div class="rule-item">
+                  <span class="rule-label">Jogos por Bilhete:</span>
+                  <span class="rule-value">Máximo 10</span>
+                </div>
+              </div>
+
+              <div class="rules-note">
+                <p><strong>📌 Observações Importantes:</strong></p>
+                <ul>
+                  <li>Todas as regras são baseadas nas normas oficiais da Caixa Econômica Federal</li>
+                  <li>O valor total arrecadado deve ser suficiente para comprar pelo menos 1 jogo</li>
+                  <li>Cada bilhete pode conter no máximo 10 jogos</li>
+                  <li>O número de participantes deve respeitar os limites mínimo e máximo</li>
+                  <li>O valor da cota deve atender ao valor mínimo estabelecido</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+<script>
+  const TEST_MODE = false;
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCvXGUdvZkqtSMMn8VmTOXLA9PXqR85gSk",
+    authDomain: "vagner-34d5b.firebaseapp.com",
+    databaseURL: "https://vagner-34d5b.firebaseio.com",
+    projectId: "vagner-34d5b",
+    storageBucket: "vagner-34d5b.firebasestorage.app",
+    messagingSenderId: "711539772164",
+    appId: "1:711539772164:web:e7736325e6ed365c0bde51"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  const msg = document.getElementById("mensagem");
+  const modeBadge = document.getElementById("modeBadge");
+  modeBadge.textContent = TEST_MODE ? "Modo: TESTE (votos múltiplos permitidos)" : "Modo: PRODUÇÃO (bloqueio por IP ativado)";
+  if(TEST_MODE) modeBadge.classList.add('warning');
+
+  // REGRAS OFICIAIS DO BOLÃO (Baseadas na tabela da Caixa)
+  const regrasBolao = {
+    6:  { nome: "Jogos de 6 números", custoAposta: 6.00,    minCotaValor: 7.00,   minCotas: 2, maxCotas: 8,   minBolaoValor: 18.00,    maxJogosBilhete: 10 },
+    7:  { nome: "Jogos de 7 números", custoAposta: 42.00,   minCotaValor: 8.00,   minCotas: 2, maxCotas: 50,  minBolaoValor: 42.00,    maxJogosBilhete: 10 },
+    8:  { nome: "Jogos de 8 números", custoAposta: 168.00,  minCotaValor: 8.00,   minCotas: 2, maxCotas: 100, minBolaoValor: 168.00,   maxJogosBilhete: 10 }
+  };
+
+  // Função para formatar como moeda BRL
+  function formatCurrency(value) {
+    return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+
+  // Função para calcular cenários
+  function calcularCenarios() {
+    const numCotas = parseInt(document.getElementById('numCotas').value);
+    const valorCota = parseFloat(document.getElementById('valorCota').value);
+    
+    const resultadoArea = document.getElementById('resultadoArea');
+    const totalArrecadadoDiv = document.getElementById('totalArrecadadoInfo');
+    const cenariosResultadoDiv = document.getElementById('cenariosResultado');
+
+    // Resetar áreas de resultado
+    resultadoArea.style.display = 'none';
+    totalArrecadadoDiv.innerHTML = '';
+    cenariosResultadoDiv.innerHTML = '';
+
+    // Validar campos básicos
+    if (isNaN(numCotas) || isNaN(valorCota) || numCotas <= 0 || valorCota <= 0) {
+      return;
+    }
+
+    // Calcular Total Arrecadado
+    const totalArrecadado = numCotas * valorCota;
+    
+    // Exibir total arrecadado
+    resultadoArea.style.display = 'block';
+    totalArrecadadoDiv.innerHTML = `Total Arrecadado: ${formatCurrency(totalArrecadado)}`;
+
+    // Iterar e calcular cada cenário (6, 7 e 8 números)
+    for (const numJogo of [6, 7, 8]) {
+      const regra = regrasBolao[numJogo];
+      let htmlCenario = `<div class="scenario-box">`;
+      htmlCenario += `<h2>${regra.nome}</h2>`;
+
+      // Validar regras da Caixa para este cenário
+      let mensagensValidacao = [];
+      let isValid = true;
+      
+      if (numCotas < regra.minCotas || numCotas > regra.maxCotas) {
+        mensagensValidacao.push(`Número de cotas (${numCotas}) está fora do limite (Mín: ${regra.minCotas}, Máx: ${regra.maxCotas}).`);
+        isValid = false;
+      }
+      
+      if (valorCota < regra.minCotaValor) {
+        mensagensValidacao.push(`Valor da cota (${formatCurrency(valorCota)}) é menor que o mínimo de ${formatCurrency(regra.minCotaValor)}.`);
+        isValid = false;
+      }
+
+      if (totalArrecadado < regra.minBolaoValor) {
+        mensagensValidacao.push(`Total (${formatCurrency(totalArrecadado)}) é menor que o mínimo do bolão de ${formatCurrency(regra.minBolaoValor)}.`);
+        isValid = false;
+      }
+
+      // Calcular Jogos e Bilhetes se o valor for suficiente
+      const totalJogos = Math.floor(totalArrecadado / regra.custoAposta);
+      const totalBilhetes = Math.ceil(totalJogos / regra.maxJogosBilhete);
+
+      if (totalJogos === 0) {
+        mensagensValidacao.push(`Total (${formatCurrency(totalArrecadado)}) não compra nem 1 jogo (custo: ${formatCurrency(regra.custoAposta)}).`);
+        isValid = false;
+        
+        // Adiciona resultados zerados se não for possível
+        htmlCenario += `<p>Quantidade de Jogos: <span>0</span></p>`;
+        htmlCenario += `<p>Quantidade de Bilhetes: <span>0</span></p>`;
+      } else {
+        // Adiciona resultados calculados
+        htmlCenario += `<p>Quantidade de Jogos: <span>${totalJogos}</span></p>`;
+        htmlCenario += `<p>Quantidade de Bilhetes*: <span>${totalBilhetes}</span></p>`;
+        htmlCenario += `<p class="small-note">*Máx. de ${regra.maxJogosBilhete} jogos por bilhete.</p>`;
+      }
+
+      // Adicionar caixa de validação (sucesso ou erro)
+      if (isValid) {
+        htmlCenario += `<div class="scenario-validation success">Este cenário ATENDE às regras da Caixa.</div>`;
+      } else {
+        htmlCenario += `<div class="scenario-validation error">${mensagensValidacao.join('<br>')}</div>`;
+      }
+
+      htmlCenario += `</div>`; // Fecha scenario-box
+      cenariosResultadoDiv.innerHTML += htmlCenario;
+    }
+  }
+
+  // Seleção única por grupo com efeitos visuais
+  const grupoUnico = (nome) => {
+    const checkboxes = document.querySelectorAll(`input[name="${nome}"]`);
+    checkboxes.forEach(chk => {
+      chk.addEventListener("change", () => {
+        // Remove seleção visual de todas as opções
+        checkboxes.forEach(o => {
+          o.closest('.option').classList.remove('selected');
+          if(o !== chk) o.checked = false;
+        });
+        
+        // Adiciona seleção visual na opção atual
+        if(chk.checked) {
+          chk.closest('.option').classList.add('selected');
+        }
+      });
+    });
+  };
+  grupoUnico("valor");
+  grupoUnico("participantes");
+
+  async function getIP() {
+    try { const res = await fetch("https://api.ipify.org?format=json"); return (await res.json()).ip; } 
+    catch { return "desconhecido"; }
+  }
+
+  // Função para mostrar o botão da lista
+  function mostrarBotaoLista() {
+    const botaoLista = document.getElementById("entrarLista");
+    botaoLista.style.display = "block";
+  }
+
+  // Event listener para o botão da lista
+  document.getElementById("entrarLista").addEventListener("click", () => {
+    window.location.href = './cadastro.html';
+  });
+
+  document.getElementById("votar").addEventListener("click", async ()=>{
+    const valorSel = document.querySelector('input[name="valor"]:checked');
+    const partSel = document.querySelector('input[name="participantes"]:checked');
+    
+    // Limpa classes de mensagem anteriores
+    msg.className = 'msg';
+    
+    if(!valorSel || !partSel){ 
+      msg.textContent="⚠️ Selecione uma opção em cada categoria para votar.";
+      msg.classList.add('warning');
+      return; 
+    }
+
+    // Mostra loading
+    msg.textContent="🔄 Registrando seu voto...";
+    msg.classList.add('warning');
+
+    if(TEST_MODE){
+      await new Promise(resolve => setTimeout(resolve, 800)); // Simula delay
+      db.ref("votos").push({valor: valorSel.value, participantes: partSel.value, ip:"TEST_MODE", data:new Date().toLocaleString()});
+      msg.textContent="✅ Voto registrado com sucesso! (Modo Teste)";
+      msg.classList.remove('warning');
+      msg.classList.add('success');
+      
+      // Remove seleções visuais
+      document.querySelectorAll('.option.selected').forEach(opt => opt.classList.remove('selected'));
+      valorSel.checked=false; 
+      partSel.checked=false;
+      
+      // Mostra o botão da lista
+      mostrarBotaoLista();
+      return;
+    }
+
+    const ip = await getIP();
+    try{
+      const snapshot = await db.ref("votos").orderByChild("ip").equalTo(ip).get();
+      if(snapshot.exists()){ 
+        msg.textContent="❌ Você já votou nesta enquete. Apenas um voto por pessoa é permitido.";
+        msg.classList.remove('warning');
+        msg.classList.add('error');
+        
+        // Mostra o botão da lista mesmo para quem já votou
+        mostrarBotaoLista();
+        return; 
+      }
+      
+      await db.ref("votos").push({valor: valorSel.value, participantes: partSel.value, ip:ip, data:new Date().toLocaleString()});
+      msg.textContent="✅ Seu voto foi registrado com sucesso! Obrigado pela participação.";
+      msg.classList.remove('warning');
+      msg.classList.add('success');
+      
+      // Remove seleções visuais
+      document.querySelectorAll('.option.selected').forEach(opt => opt.classList.remove('selected'));
+      valorSel.checked=false; 
+      partSel.checked=false;
+      
+      // Mostra o botão da lista
+      mostrarBotaoLista();
+    } catch(err){ 
+      msg.textContent="❌ Erro ao registrar voto: " + err.message;
+      msg.classList.remove('warning');
+      msg.classList.add('error');
+    }
+  });
+
+  // Função para expandir/contrair seções
+  function toggleSection(sectionId) {
+    const content = document.getElementById(sectionId + '-content');
+    const icon = document.getElementById(sectionId + '-icon');
+    
+    if (content.classList.contains('expanded')) {
+      content.classList.remove('expanded');
+      icon.classList.remove('rotated');
+    } else {
+      content.classList.add('expanded');
+      icon.classList.add('rotated');
+    }
+  }
+
+  // Botão da calculadora
+  document.getElementById('calcularBtn').addEventListener('click', calcularCenarios);
+
+  // Verificar se o usuário já votou ao carregar a página
+  async function verificarVotoExistente() {
+    if(TEST_MODE) {
+      // No modo teste, sempre mostra o botão
+      mostrarBotaoLista();
+      return;
+    }
+    
+    const ip = await getIP();
+    try {
+      const snapshot = await db.ref("votos").orderByChild("ip").equalTo(ip).get();
+      if(snapshot.exists()) {
+        // Se já votou, mostra o botão da lista
+        mostrarBotaoLista();
+      }
+    } catch(err) {
+      console.log("Erro ao verificar voto existente:", err);
+    }
+  }
+
+  // Resultados com porcentagem e animações
+  function atualizarResultados(){
+    db.ref("votos").on("value",(snapshot)=>{
+      const votos = snapshot.val() || {};
+      const contValores = {}, contParticipantes = {};
+      const totalVotos = Object.keys(votos).length;
+
+      Object.values(votos).forEach(v=>{
+        contValores[v.valor]=(contValores[v.valor]||0)+1;
+        contParticipantes[v.participantes]=(contParticipantes[v.participantes]||0)+1;
+      });
+
+      const resVal=document.getElementById("res-valores");
+      const resPart=document.getElementById("res-participantes");
+
+      const valoresOrdenados = Object.entries(contValores).filter(([v,q])=>q>0).sort((a,b)=>b[1]-a[1]);
+      const partOrdenados = Object.entries(contParticipantes).filter(([v,q])=>q>0).sort((a,b)=>b[1]-a[1]);
+
+      const criarResultado = (valor, qtd, tipo) => {
+        const perc = totalVotos ? ((qtd/totalVotos)*100).toFixed(1) : 0;
+        const label = tipo === 'valor' ? `R$ ${valor},00` : `${valor} pessoas`;
+        const votoText = qtd === 1 ? 'voto' : 'votos';
+        
+        return `
+          <div class='resultado-item'>
+            <div class='result-header'>
+              <span class='result-label'>${label}</span>
+              <span class='result-votes'>${qtd} ${votoText}</span>
+            </div>
+            <div class='barra'>
+              <div class='fill' style='width:${perc}%'>
+                <span class='percentage'>${perc}%</span>
+              </div>
+            </div>
+          </div>
+        `;
+      };
+
+      // Atualiza resultados de valores
+      if(valoresOrdenados.length > 0) {
+        resVal.innerHTML = `
+          <h4>💰 Valor da Cota</h4>
+          ${valoresOrdenados.slice(0, 3).map(([val,qtd]) => criarResultado(val, qtd, 'valor')).join('')}
+        `;
+      } else {
+        resVal.innerHTML = `
+          <h4>💰 Valor da Cota</h4>
+          <div class='resultado-item' style='text-align: center; opacity: 0.7;'>
+            Aguardando votos...
+          </div>
+        `;
+      }
+
+      // Atualiza resultados de participantes
+      if(partOrdenados.length > 0) {
+        resPart.innerHTML = `
+          <h4>👥 Participantes</h4>
+          ${partOrdenados.slice(0, 3).map(([val,qtd]) => criarResultado(val, qtd, 'participantes')).join('')}
+        `;
+      } else {
+        resPart.innerHTML = `
+          <h4>👥 Participantes</h4>
+          <div class='resultado-item' style='text-align: center; opacity: 0.7;'>
+            Aguardando votos...
+          </div>
+        `;
+      }
+
+      // Atualiza o resumo e preenche a calculadora automaticamente
+      const resumoEl = document.getElementById("resumo");
+      if(totalVotos > 0) {
+        const valorMaisVotado = valoresOrdenados.length > 0 ? valoresOrdenados[0] : null;
+        const partMaisVotado = partOrdenados.length > 0 ? partOrdenados[0] : null;
+        
+        if(valorMaisVotado && partMaisVotado) {
+          const [valorTop, votosValor] = valorMaisVotado;
+          const [partTop, votosPart] = partMaisVotado;
+          
+          resumoEl.innerHTML = `
+            <p>🏆 Até o momento foi escolhido: <span class="highlight">${partTop} participantes</span> com valor de <span class="highlight">R$ ${valorTop},00</span></p>
+            <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 8px;">Total de ${totalVotos} ${totalVotos === 1 ? 'voto' : 'votos'} registrado${totalVotos === 1 ? '' : 's'}</p>
+          `;
+
+          // Preenche automaticamente a calculadora com os resultados da enquete
+          document.getElementById('numCotas').value = partTop;
+          document.getElementById('valorCota').value = valorTop;
+          
+          // Calcula automaticamente os cenários
+          calcularCenarios();
+        }
+      } else {
+        resumoEl.innerHTML = `<p>Aguardando votos para mostrar o resumo...</p>`;
+      }
+
+      // Anima as barras após um pequeno delay
+      setTimeout(() => {
+        document.querySelectorAll('.fill').forEach(fill => {
+          const width = fill.style.width;
+          fill.style.width = '0%';
+          setTimeout(() => {
+            fill.style.width = width;
+          }, 100);
+        });
+      }, 100);
+    });
+  }
   
+  // Inicializar verificações
+  verificarVotoExistente();
+  atualizarResultados();
+</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9944012c738a7263',t:'MTc2MTQxOTMyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
