@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Inicial</title>
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #fff;
+        }
+
+        h1 {
+            margin-bottom: 40px;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn {
+            background: #fff;
+            color: #0052D4;
+            border: none;
+            padding: 15px 40px;
+            margin: 10px;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            background: #0052D4;
+            color: #fff;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <h1>Bem-vindo</h1>
+    <button class="btn" onclick="window.location.href='cadastro.html'">Cadastro</button>
+    <button class="btn" onclick="window.location.href='enquete.html'">Enquete</button>
+</body>
+</html>
