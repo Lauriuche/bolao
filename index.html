@@ -5,182 +5,138 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bolão dos Amigos</title>
 <style>
-    * {
-        box-sizing: border-box;
-        font-family: "Poppins", sans-serif;
-    }
+    * { box-sizing: border-box; font-family: "Poppins", sans-serif; }
 
     body {
         margin: 0;
         height: 100vh;
-        background: radial-gradient(circle at top, #0a0a0a 60%, #000);
-        color: #00aaff;
+        background: #000;
         display: flex;
         justify-content: center;
         align-items: center;
-        overflow: hidden;
     }
 
-    /* Fundo animado */
-    body::before {
-        content: "";
-        position: absolute;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(circle, rgba(0,170,255,0.1) 1%, transparent 10%);
-        animation: pulse 6s infinite;
-        z-index: 0;
-    }
-
-    @keyframes pulse {
-        0% { transform: scale(1); opacity: 0.7; }
-        50% { transform: scale(1.2); opacity: 0.4; }
-        100% { transform: scale(1); opacity: 0.7; }
-    }
-
-    /* POPUP PRINCIPAL */
-    .popup {
+    .overlay {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.9);
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
         display: flex;
         justify-content: center;
         align-items: center;
-        visibility: hidden;
-        opacity: 0;
-        transition: all 0.4s ease;
-        z-index: 10;
+        z-index: 1000;
     }
 
-    .popup.ativo {
-        visibility: visible;
-        opacity: 1;
-    }
-
-    .popup-conteudo {
-        background: #111;
-        border: 1px solid #00aaff;
-        border-radius: 15px;
-        padding: 40px 50px;
+    .popup {
+        background: #0b0b0b;
+        border-radius: 12px;
+        padding: 30px;
+        width: 90%;
+        max-width: 380px;
+        box-shadow: 0 0 25px rgba(0, 153, 255, 0.6);
         text-align: center;
-        box-shadow: 0 0 30px rgba(0,170,255,0.5);
-        animation: aparecer 0.5s ease forwards;
         color: #fff;
-        max-width: 400px;
     }
 
-    @keyframes aparecer {
-        from { transform: scale(0.8); opacity: 0; }
-        to { transform: scale(1); opacity: 1; }
-    }
-
-    h1 {
-        font-size: 28px;
-        color: #00aaff;
+    h2 {
+        color: #0099ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-weight: 600;
         margin-bottom: 20px;
     }
 
     p {
-        color: #ccc;
+        font-size: 15px;
         margin-bottom: 25px;
-        font-size: 16px;
     }
 
-    /* Botões em linha */
-    .botoes {
+    .buttons {
         display: flex;
         justify-content: center;
         gap: 15px;
         flex-wrap: wrap;
     }
 
-    .btn {
-        background: #00aaff;
-        color: #fff;
+    button {
+        background: #0099ff;
+        color: white;
         border: none;
-        padding: 14px 30px;
-        border-radius: 8px;
-        font-size: 17px;
+        border-radius: 6px;
+        padding: 10px 20px;
+        font-size: 15px;
         cursor: pointer;
-        transition: 0.3s;
-        font-weight: 600;
-        box-shadow: 0 0 15px rgba(0,170,255,0.3);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
     }
 
-    .btn:hover {
-        background: #0088cc;
+    button:hover {
+        background: #00b7ff;
         transform: scale(1.05);
-        box-shadow: 0 0 25px rgba(0,170,255,0.5);
     }
 
-    .btn-fechar {
-        background: none;
-        color: #888;
+    .fechar {
+        margin-top: 15px;
         font-size: 14px;
-        border: none;
-        margin-top: 20px;
+        color: #777;
         cursor: pointer;
     }
 
-    .btn-fechar:hover {
-        color: #00aaff;
+    .popup-secundario {
+        display: none;
+        background: #0b0b0b;
+        border-radius: 12px;
+        padding: 25px;
+        width: 90%;
+        max-width: 360px;
+        box-shadow: 0 0 20px rgba(0, 153, 255, 0.6);
+        text-align: center;
+        color: #fff;
+    }
+
+    .popup-secundario button {
+        margin-top: 20px;
     }
 </style>
 </head>
 <body>
 
-<!-- POPUP PRINCIPAL -->
-<div class="popup ativo" id="popupPrincipal">
-    <div class="popup-conteudo">
-        <h1>🎯 Bolão dos Amigos</h1>
+<div class="overlay" id="overlay">
+    <div class="popup" id="popupPrincipal">
+        <h2>🎯 Bolão dos Amigos</h2>
         <p>Escolha uma das opções abaixo:</p>
-
-        <div class="botoes">
-            <button class="btn" id="btnCadastro">📋 Cadastro</button>
-            <button class="btn" onclick="window.location.href='enquete.html'">📊 Enquete</button>
+        <div class="buttons">
+            <button id="btnCadastro">📋 Cadastro</button>
+            <button onclick="window.location.href='enquete.html'">📊 Enquete</button>
         </div>
-
-        <button class="btn-fechar" onclick="fecharPopup()">Fechar</button>
+        <div class="fechar" onclick="document.getElementById('overlay').style.display='none'">Fechar</div>
     </div>
-</div>
 
-<!-- POPUP DE AVISO -->
-<div class="popup" id="popupAviso">
-    <div class="popup-conteudo">
-        <h1>🚧 DISPONÍVEL EM BREVE</h1>
-        <p>AGUARDE LIBERAÇÃO PARA A LISTA DE PARTICIPANTES.<br><br>
-        VOTE NA ENQUETE PARA SABER OS VALORES E QUEM JÁ ESTÁ PARTICIPANDO!</p>
-        <button class="btn" onclick="window.location.href='enquete.html'">📊 Ir para Enquete</button>
-        <br>
-        <button class="btn-fechar" id="fecharAviso">Fechar</button>
+    <div class="popup-secundario" id="popupCadastro">
+        <h2>⚠️ Disponível em breve!</h2>
+        <p>O cadastro será liberado em breve.<br>
+        Vote na <b>enquete</b> para saber os valores e participantes.</p>
+        <button onclick="window.location.href='enquete.html'">📊 Ir para Enquete</button><br>
+        <div class="fechar" onclick="voltar()">Voltar</div>
     </div>
 </div>
 
 <script>
-    const popupPrincipal = document.getElementById('popupPrincipal');
-    const popupAviso = document.getElementById('popupAviso');
-    const btnCadastro = document.getElementById('btnCadastro');
-    const fecharAviso = document.getElementById('fecharAviso');
+    const btnCadastro = document.getElementById("btnCadastro");
+    const popupPrincipal = document.getElementById("popupPrincipal");
+    const popupCadastro = document.getElementById("popupCadastro");
 
-    // 🔧 Configuração do botão Cadastro (mude aqui futuramente)
-    const cadastroLiberado = false; // <== Mude para TRUE quando quiser liberar
-    const linkCadastro = 'cadastro.html'; // <== Caminho do arquivo de cadastro
+    btnCadastro.onclick = () => {
+        popupPrincipal.style.display = "none";
+        popupCadastro.style.display = "block";
+    };
 
-    btnCadastro.addEventListener('click', () => {
-        if (cadastroLiberado) {
-            window.location.href = linkCadastro;
-        } else {
-            popupAviso.classList.add('ativo');
-        }
-    });
-
-    fecharAviso.addEventListener('click', () => popupAviso.classList.remove('ativo'));
-
-    function fecharPopup() {
-        popupPrincipal.classList.remove('ativo');
+    function voltar() {
+        popupCadastro.style.display = "none";
+        popupPrincipal.style.display = "block";
     }
 </script>
 
