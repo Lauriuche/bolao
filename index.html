@@ -1,50 +1,188 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Inicial</title>
-    <style>
-        body {
-            font-family: "Poppins", sans-serif;
-            background: linear-gradient(135deg, #0052D4, #4364F7, #6FB1FC);
-            height: 100vh;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            color: #fff;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bolão dos Amigos</title>
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+    }
 
-        h1 {
-            margin-bottom: 40px;
-            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
-        }
+    body {
+        margin: 0;
+        height: 100vh;
+        background: radial-gradient(circle at top, #0a0a0a 60%, #000);
+        color: #00aaff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
 
-        .btn {
-            background: #fff;
-            color: #0052D4;
-            border: none;
-            padding: 15px 40px;
-            margin: 10px;
-            border-radius: 10px;
-            font-size: 18px;
-            cursor: pointer;
-            transition: 0.3s;
-            font-weight: 600;
-        }
+    /* Fundo animado */
+    body::before {
+        content: "";
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0,170,255,0.1) 1%, transparent 10%);
+        animation: pulse 6s infinite;
+        z-index: 0;
+    }
 
-        .btn:hover {
-            background: #0052D4;
-            color: #fff;
-            transform: scale(1.05);
-        }
-    </style>
+    @keyframes pulse {
+        0% { transform: scale(1); opacity: 0.7; }
+        50% { transform: scale(1.2); opacity: 0.4; }
+        100% { transform: scale(1); opacity: 0.7; }
+    }
+
+    /* POPUP PRINCIPAL */
+    .popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.9);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        visibility: hidden;
+        opacity: 0;
+        transition: all 0.4s ease;
+        z-index: 10;
+    }
+
+    .popup.ativo {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .popup-conteudo {
+        background: #111;
+        border: 1px solid #00aaff;
+        border-radius: 15px;
+        padding: 40px 50px;
+        text-align: center;
+        box-shadow: 0 0 30px rgba(0,170,255,0.5);
+        animation: aparecer 0.5s ease forwards;
+        color: #fff;
+        max-width: 400px;
+    }
+
+    @keyframes aparecer {
+        from { transform: scale(0.8); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    h1 {
+        font-size: 28px;
+        color: #00aaff;
+        margin-bottom: 20px;
+    }
+
+    p {
+        color: #ccc;
+        margin-bottom: 25px;
+        font-size: 16px;
+    }
+
+    /* Botões em linha */
+    .botoes {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        background: #00aaff;
+        color: #fff;
+        border: none;
+        padding: 14px 30px;
+        border-radius: 8px;
+        font-size: 17px;
+        cursor: pointer;
+        transition: 0.3s;
+        font-weight: 600;
+        box-shadow: 0 0 15px rgba(0,170,255,0.3);
+    }
+
+    .btn:hover {
+        background: #0088cc;
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(0,170,255,0.5);
+    }
+
+    .btn-fechar {
+        background: none;
+        color: #888;
+        font-size: 14px;
+        border: none;
+        margin-top: 20px;
+        cursor: pointer;
+    }
+
+    .btn-fechar:hover {
+        color: #00aaff;
+    }
+</style>
 </head>
 <body>
-    <h1>Bem-vindo</h1>
-    <button class="btn" onclick="window.location.href='cadastro.html'">Cadastro</button>
-    <button class="btn" onclick="window.location.href='enquete.html'">Enquete</button>
+
+<!-- POPUP PRINCIPAL -->
+<div class="popup ativo" id="popupPrincipal">
+    <div class="popup-conteudo">
+        <h1>🎯 Bolão dos Amigos</h1>
+        <p>Escolha uma das opções abaixo:</p>
+
+        <div class="botoes">
+            <button class="btn" id="btnCadastro">📋 Cadastro</button>
+            <button class="btn" onclick="window.location.href='enquete.html'">📊 Enquete</button>
+        </div>
+
+        <button class="btn-fechar" onclick="fecharPopup()">Fechar</button>
+    </div>
+</div>
+
+<!-- POPUP DE AVISO -->
+<div class="popup" id="popupAviso">
+    <div class="popup-conteudo">
+        <h1>🚧 DISPONÍVEL EM BREVE</h1>
+        <p>AGUARDE LIBERAÇÃO PARA A LISTA DE PARTICIPANTES.<br><br>
+        VOTE NA ENQUETE PARA SABER OS VALORES E QUEM JÁ ESTÁ PARTICIPANDO!</p>
+        <button class="btn" onclick="window.location.href='enquete.html'">📊 Ir para Enquete</button>
+        <br>
+        <button class="btn-fechar" id="fecharAviso">Fechar</button>
+    </div>
+</div>
+
+<script>
+    const popupPrincipal = document.getElementById('popupPrincipal');
+    const popupAviso = document.getElementById('popupAviso');
+    const btnCadastro = document.getElementById('btnCadastro');
+    const fecharAviso = document.getElementById('fecharAviso');
+
+    // 🔧 Configuração do botão Cadastro (mude aqui futuramente)
+    const cadastroLiberado = false; // <== Mude para TRUE quando quiser liberar
+    const linkCadastro = 'cadastro.html'; // <== Caminho do arquivo de cadastro
+
+    btnCadastro.addEventListener('click', () => {
+        if (cadastroLiberado) {
+            window.location.href = linkCadastro;
+        } else {
+            popupAviso.classList.add('ativo');
+        }
+    });
+
+    fecharAviso.addEventListener('click', () => popupAviso.classList.remove('ativo'));
+
+    function fecharPopup() {
+        popupPrincipal.classList.remove('ativo');
+    }
+</script>
+
 </body>
 </html>
