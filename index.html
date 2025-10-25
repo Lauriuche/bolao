@@ -3,798 +3,309 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Participantes do Bolão - Sistema Completo</title>
+<title>Bolão Mega da Virada 2025</title>
 <style>
     body {
         box-sizing: border-box;
-    }
-    * { box-sizing: border-box; font-family: "Poppins", sans-serif; }
-    body { 
-        margin: 0; 
-        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); 
-        display: flex; 
-        justify-content: center; 
-        align-items: center; 
-        min-height: 100%; 
+        margin: 0;
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100%;
         color: #fff;
         padding: 20px;
-        transition: all 0.3s ease;
-    }
-    
-    /* Modo Escuro */
-    body.dark-mode {
-        background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 50%, #2d2d2d 100%);
-    }
-    
-    body.light-mode {
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);
-        color: #333;
     }
     
     html {
         height: 100%;
     }
-    .popup { 
-        background: #ffffff;
-        backdrop-filter: blur(15px);
-        width: 95%; 
-        max-width: 480px; 
-        border-radius: 25px; 
-        padding: 30px 25px; 
-        box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 2px rgba(255,255,255,0.1); 
-        text-align: center; 
-        animation: aparecer 0.6s ease;
-        border: 2px solid rgba(255, 255, 255, 0.2);
-        transition: all 0.3s ease;
-    }
     
-    .light-mode .popup {
+    .container {
         background: rgba(255, 255, 255, 0.95);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.1), 0 0 0 2px rgba(0,0,0,0.05);
-        border: 2px solid rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(20px);
+        width: 95%;
+        max-width: 480px;
+        border-radius: 25px;
+        padding: 30px 25px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        text-align: center;
+        color: #333;
+        position: relative;
     }
     
-    @keyframes aparecer { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-    h1 { 
-        font-size: 28px; 
+
+    
+    h1 {
+        font-size: 28px;
         color: #333;
-        text-shadow: 2px 2px 6px rgba(0,0,0,0.1);
-        margin-bottom: 8px; 
-        text-transform: uppercase; 
-        letter-spacing: 1.5px; 
+        margin-bottom: 8px;
         font-weight: 700;
     }
-    h2 { font-size: 15px; font-weight: normal; color: #333; margin-bottom: 20px; line-height: 1.5; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
-    h3 { font-size: 15px; font-weight: normal; color: #333; margin-bottom: 20px; line-height: 1.5; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
-    input { 
-        width: 90%; 
-        padding: 14px 16px; 
-        margin: 8px 0; 
-        border: 2px solid #000; 
-        border-radius: 15px; 
-        font-size: 15px; 
-        text-align: center; 
-        transition: all 0.3s ease;
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(5px);
+    
+    .info {
+        font-size: 15px;
         color: #333;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        margin-bottom: 20px;
+        line-height: 1.5;
     }
-    input:focus { 
-        border-color: #000; 
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); 
-        outline: none; 
-        transform: translateY(-2px);
+    
+    .progress-container {
+        margin: 20px 0;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .progress-bar {
+        width: 100%;
+        height: 20px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #ffd700, #ffb347, #00b894);
+        width: 0%;
+        transition: width 1s ease;
+        border-radius: 12px;
+    }
+    
+    .progress-text {
+        font-size: 14px;
+        margin-top: 10px;
+        color: #333;
+        font-weight: 600;
+    }
+    
+    input {
+        width: 90%;
+        padding: 14px 16px;
+        margin: 8px 0;
+        border: 2px solid transparent;
+        border-radius: 15px;
+        font-size: 15px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.9);
+        color: #333;
+    }
+    
+    input:focus {
+        border-color: #ffd700;
+        outline: none;
         background: rgba(255, 255, 255, 1);
     }
-    button { 
-        width: 92%; 
-        padding: 16px; 
-        margin-top: 12px; 
-        border: none; 
-        border-radius: 15px; 
-        background: linear-gradient(135deg, #ffd700, #ffb347); 
-        color: #333; 
-        font-size: 16px; 
-        font-weight: 700; 
-        cursor: pointer; 
+    
+    button {
+        width: 92%;
+        padding: 16px;
+        margin-top: 12px;
+        border: none;
+        border-radius: 15px;
+        background: linear-gradient(135deg, #ffd700, #ffb347);
+        color: #333;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
         transition: all 0.3s ease;
-        box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
     }
-    button:hover { 
-        transform: translateY(-3px) scale(1.02); 
-        box-shadow: 0 12px 25px rgba(255, 215, 0, 0.6);
-        background: linear-gradient(135deg, #ffed4e, #ffc947); 
+    
+    button:hover {
+        transform: translateY(-2px);
+        background: linear-gradient(135deg, #ffed4e, #ffc947);
     }
-    .mensagem { margin-top: 15px; font-size: 15px; font-weight: 600; transition: all 0.3s; padding: 10px; border-radius: 10px; }
-
-    /* === MODAL === */
-    .overlay {
+    
+    .btn-grid {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 10px;
+        margin-top: 8px;
+    }
+    
+    .btn-secondary {
+        background: linear-gradient(135deg, #6c757d, #adb5bd);
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        background: linear-gradient(135deg, #5a6268, #95a5a6);
+    }
+    
+    .message {
+        margin-top: 15px;
+        font-size: 15px;
+        font-weight: 600;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    
+    .success {
+        color: #00b894;
+        background: rgba(0, 184, 148, 0.1);
+        border: 1px solid rgba(0, 184, 148, 0.3);
+    }
+    
+    .error {
+        color: #e74c3c;
+        background: rgba(231, 76, 60, 0.1);
+        border: 1px solid rgba(231, 76, 60, 0.3);
+    }
+    
+    .warning {
+        color: #f39c12;
+        background: rgba(243, 156, 18, 0.1);
+        border: 1px solid rgba(243, 156, 18, 0.3);
+    }
+    
+    /* Modal */
+    .modal-overlay {
         position: fixed;
         top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(0, 0, 0, 0.7);
-        backdrop-filter: blur(8px);
+        background: rgba(0, 0, 0, 0.8);
         display: none;
         justify-content: center;
         align-items: center;
         z-index: 1000;
-        animation: fadeIn 0.3s ease;
     }
+    
     .modal {
-        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-        backdrop-filter: blur(15px);
+        background: linear-gradient(135deg, rgba(44, 62, 80, 0.95) 0%, rgba(52, 73, 94, 0.95) 100%);
         border-radius: 20px;
         width: 90%;
         max-width: 600px;
-        max-height: 90vh;
+        max-height: 80vh;
         padding: 25px;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 2px rgba(255,255,255,0.1);
-        animation: slideIn 0.4s ease;
-        text-align: center;
-        border: 2px solid rgba(255, 255, 255, 0.2);
         color: #fff;
         overflow-y: auto;
-    }
-    
-    @keyframes slideIn {
-        from { opacity: 0; transform: scale(0.8) translateY(-50px); }
-        to { opacity: 1; transform: scale(1) translateY(0); }
     }
     
     .modal h3 {
         margin-top: 0;
-        font-size: 22px;
+        font-size: 24px;
         color: #ffd700;
-        text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
-        margin-bottom: 15px;
-        font-weight: 600;
+        margin-bottom: 20px;
     }
+    
     .close-btn {
-        background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-        border: none;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 12px;
-        font-weight: 600;
-        cursor: pointer;
-        margin-top: 15px;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
-    }
-    .close-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
-    }
-    .search-box { position: relative; width: 100%; margin-bottom: 15px; }
-    .search-box input { 
-        width: 100%; 
-        padding: 12px 40px 12px 15px; 
-        font-size: 14px; 
-        border-radius: 12px; 
-        border: 2px solid rgba(102, 126, 234, 0.2);
-        background: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(5px);
-    }
-    .search-box svg { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: #667eea; }
-    .lista { 
-        text-align: left; 
-        font-size: 13px; 
-        max-height: 280px; 
-        overflow-y: auto; 
-        color: #fff; 
-        padding: 0 8px;
-        background: rgba(0, 0, 0, 0.6);
-        border-radius: 12px;
-        backdrop-filter: blur(5px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    .lista div { 
-        display: flex; 
-        justify-content: space-between; 
-        align-items: center; 
-        padding: 6px 8px; 
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
-        white-space: nowrap;
-        transition: all 0.2s ease;
-        cursor: pointer;
-    }
-    .lista div:hover {
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 8px;
-        transform: translateX(2px);
-    }
-    
-    /* Seleção múltipla */
-    .checkbox-container {
-        display: flex;
-        align-items: center;
-        margin-right: 10px;
-    }
-    
-    .checkbox-container input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
-        margin: 0;
-        cursor: pointer;
-        accent-color: #ffd700;
-    }
-    
-    .lista div.selected {
-        background: rgba(255, 215, 0, 0.2) !important;
-        border: 2px solid rgba(255, 215, 0, 0.5) !important;
-        border-radius: 8px !important;
-    }
-    
-    .selection-actions {
-        display: none;
-        gap: 8px;
-        margin-bottom: 15px;
-        justify-content: center;
-        padding: 10px;
-        background: rgba(255, 215, 0, 0.1);
-        border-radius: 10px;
-        border: 1px solid rgba(255, 215, 0, 0.3);
-        flex-wrap: wrap;
-    }
-    
-    .selection-actions button {
-        flex: 1;
-        min-width: 120px;
-        padding: 10px 8px;
-        border: none;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        font-size: 11px;
-        transition: all 0.2s ease;
-        margin: 2px;
-    }
-    
-    .selection-actions .status-btn {
-        background: linear-gradient(135deg, #3498db, #2980b9);
-        color: white;
-        box-shadow: 0 2px 6px rgba(52, 152, 219, 0.3);
-    }
-    
-    .selection-actions .delete-btn {
         background: linear-gradient(135deg, #e74c3c, #c0392b);
         color: white;
-        box-shadow: 0 2px 6px rgba(231, 76, 60, 0.3);
-    }
-    
-    .selection-counter {
-        color: #ffd700;
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 10px;
-        font-size: 13px;
-    }
-    .status { font-weight: bold; text-transform: uppercase; font-size: 11px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
-    .pago { color: #00ff88; }
-    .nao-pago { color: #ff6b6b; }
-    .comprovante-enviado { color: #f39c12; }
-    .status-btn {
-        padding: 4px 10px;
-        border-radius: 8px;
+        padding: 12px 24px;
         border: none;
-        font-size: 10px;
-        font-weight: bold;
+        border-radius: 12px;
+        font-weight: 600;
         cursor: pointer;
-        margin-left: 8px;
-        transition: all 0.2s ease;
-    }
-    .status-btn.pago { 
-        background: linear-gradient(135deg, #00b894, #00cec9); 
-        color: white; 
-        box-shadow: 0 2px 8px rgba(0, 184, 148, 0.3);
-    }
-    .status-btn.nao-pago { 
-        background: linear-gradient(135deg, #e17055, #fdcb6e); 
-        color: white; 
-        box-shadow: 0 2px 8px rgba(225, 112, 85, 0.3);
-    }
-    .status-btn.comprovante-enviado { 
-        background: linear-gradient(135deg, #f39c12, #e67e22); 
-        color: white; 
-        box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
-    }
-    .status-btn:hover {
-        transform: translateY(-1px);
-    }
-
-    /* Filtros */
-    .filter-btn:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        margin-top: 20px;
+        width: auto;
     }
     
-    .filter-btn.active {
-        background: linear-gradient(135deg, #667eea, #764ba2) !important;
-        color: white !important;
-        box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3) !important;
-        border: none !important;
-    }
-
-    /* Progresso */
-    .progress-container {
-        margin: 20px 0;
-        padding: 15px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 15px;
-        backdrop-filter: blur(5px);
-        border: 2px solid rgba(255, 255, 255, 0.2);
-    }
-    .progress-bar {
-        width: 100%;
-        height: 16px;
+    .lista {
+        text-align: left;
+        font-size: 13px;
+        max-height: 400px;
+        overflow-y: auto;
+        color: #fff;
+        padding: 10px;
         background: rgba(0, 0, 0, 0.3);
         border-radius: 12px;
-        overflow: hidden;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    .progress-fill {
-        height: 100%;
-        background: linear-gradient(90deg, #ffd700, #ffb347, #ff6b6b);
-        width: 0%;
-        transition: width 0.8s ease;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(255, 215, 0, 0.6);
-        position: relative;
-    }
-    .progress-fill::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-        animation: shimmer 2s infinite;
-    }
-    @keyframes shimmer {
-        0% { transform: translateX(-100%); }
-        100% { transform: translateX(100%); }
-    }
-    .progress-text {
-        font-size: 13px;
-        margin-top: 8px;
-        color: #333;
-        font-weight: 600;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-    }
-
-    /* Dashboard */
-    .dashboard-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-        margin: 20px 0;
+        margin: 15px 0;
     }
     
-    .dashboard-card {
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 15px;
-        padding: 20px;
-        backdrop-filter: blur(10px);
-        border: 2px solid rgba(255, 255, 255, 0.2);
-        transition: all 0.3s ease;
-    }
-    
-    .dashboard-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-    
-    .dashboard-card h4 {
-        color: #ffd700;
-        margin: 0 0 15px 0;
-        font-size: 18px;
-        text-align: center;
-    }
-    
-    .stat-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 8px 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .stat-item:last-child {
-        border-bottom: none;
-    }
-    
-    .stat-value {
-        font-weight: bold;
-        color: #00ff88;
-    }
-
-    /* QR Code */
-    .qr-container {
-        text-align: center;
-        padding: 20px;
-    }
-    
-    .qr-code {
-        background: white;
-        padding: 20px;
-        border-radius: 15px;
-        display: inline-block;
-        margin: 20px 0;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-    }
-
-    /* Upload de Comprovante */
-    .upload-area {
-        border: 2px dashed rgba(255, 215, 0, 0.5);
-        border-radius: 15px;
-        padding: 30px;
-        text-align: center;
-        margin: 20px 0;
-        transition: all 0.3s ease;
-        cursor: pointer;
-    }
-    
-    .upload-area:hover {
-        border-color: #ffd700;
-        background: rgba(255, 215, 0, 0.1);
-    }
-    
-    .upload-area.dragover {
-        border-color: #ffd700;
-        background: rgba(255, 215, 0, 0.2);
-        transform: scale(1.02);
-    }
-
-    /* Popup Informativo */
-    .info-overlay {
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(0, 0, 0, 0.8);
-        backdrop-filter: blur(10px);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 2000;
-        animation: fadeIn 0.5s ease;
-    }
-    
-    .info-modal {
-        background: #ffffff;
-        border: none;
-        border-radius: 5px;
-        width: 90%;
-        max-width: 500px;
-        max-height: 80vh;
-        padding: 25px;
-        box-shadow: 0 8px 16px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.1);
-        animation: slideIn 0.6s ease;
-        position: relative;
-        overflow-y: auto;
-        transform: rotate(-1deg);
-    }
-    
-    .info-modal::before {
-        content: '';
-        position: absolute;
-        top: -10px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 40px;
-        height: 20px;
-        background: rgba(255, 193, 7, 0.8);
-        border-radius: 2px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-    
-    .info-content {
-        font-family: 'Arial', sans-serif;
-        color: #333;
-        line-height: 1.6;
-        font-size: 14px;
-        padding: 0;
-    }
-    
-    .info-title {
-        text-align: center;
-        font-size: 18px;
-        font-weight: bold;
-        color: #d32f2f;
-        margin-bottom: 20px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        border-bottom: 2px solid #d32f2f;
-        padding-bottom: 10px;
-    }
-    
-    .info-section {
-        margin-bottom: 15px;
-    }
-    
-    .info-section h4 {
-        color: #1976d2;
-        font-weight: bold;
-        margin: 10px 0 5px 0;
-        font-size: 15px;
-    }
-    
-    .info-highlight {
-        background: rgba(255, 87, 34, 0.2);
-        padding: 2px 4px;
-        border-radius: 3px;
-        font-weight: bold;
-        color: #d84315;
-    }
-    
-    .info-close-btn {
-        background: linear-gradient(135deg, #4caf50, #66bb6a);
-        border: none;
-        color: #fff;
-        padding: 12px 25px;
-        border-radius: 8px;
-        font-weight: bold;
-        cursor: pointer;
-        margin: 20px auto 0;
-        display: block;
-        font-size: 16px;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
-    }
-    
-    .info-close-btn:hover {
-        transform: translateY(-2px) scale(1.05);
-        box-shadow: 0 6px 16px rgba(76, 175, 80, 0.6);
-        background: linear-gradient(135deg, #66bb6a, #81c784);
-    }
-    
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    /* Teclado Virtual */
-    .virtual-keyboard {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-        border-radius: 15px;
-        padding: 15px;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 0 2px rgba(255,255,255,0.1);
-        z-index: 3000;
-        display: none;
-        border: 2px solid rgba(255, 215, 0, 0.3);
-        backdrop-filter: blur(15px);
-        animation: popIn 0.3s ease;
-        width: 220px;
-        height: 280px;
-        box-sizing: border-box;
-    }
-    
-    @keyframes popIn {
-        from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
-        to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-    }
-    
-    .keyboard-row {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 8px;
-        width: 100%;
-    }
-    
-    .key-btn {
-        width: 55px;
-        height: 40px;
-        background: linear-gradient(135deg, #ffd700, #ffb347);
-        border: none;
-        border-radius: 8px;
-        color: #333;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        box-shadow: 0 3px 8px rgba(255, 215, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.3);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        flex: 1;
-        margin: 0 2px;
-    }
-    
-    .key-btn:hover {
-        transform: translateY(-2px) scale(1.02);
-        box-shadow: 0 5px 12px rgba(255, 215, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.4);
-        background: linear-gradient(135deg, #ffed4e, #ffc947);
-    }
-    
-    .key-btn:active {
-        transform: translateY(-1px);
-        box-shadow: 0 2px 6px rgba(255, 215, 0, 0.5);
-    }
-    
-    .key-btn.close {
-        background: linear-gradient(135deg, #e74c3c, #c0392b);
-        box-shadow: 0 3px 8px rgba(231, 76, 60, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
-        width: 100%;
-        margin: 12px 0 0 0;
-        font-size: 13px;
-        color: white;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        height: 32px;
-        flex: none;
-    }
-    
-    .key-btn.close:hover {
-        background: linear-gradient(135deg, #ec7063, #e74c3c);
-        box-shadow: 0 5px 12px rgba(231, 76, 60, 0.6), inset 0 1px 0 rgba(255,255,255,0.3);
-        transform: translateY(-1px);
-    }
-    
-    .keyboard-header {
-        text-align: center;
-        color: #ffd700;
-        font-size: 13px;
-        font-weight: bold;
-        margin-bottom: 10px;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-    }
-    
-    .password-display {
-        background: rgba(0, 0, 0, 0.6);
-        border: 2px solid rgba(255, 215, 0, 0.4);
-        border-radius: 8px;
-        padding: 8px;
-        margin-bottom: 12px;
-        text-align: center;
-        color: #ffd700;
-        font-size: 20px;
-        font-weight: bold;
-        letter-spacing: 10px;
-        min-height: 25px;
-        backdrop-filter: blur(10px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: inset 0 2px 6px rgba(0,0,0,0.3), 0 2px 8px rgba(255,215,0,0.2);
-    }
-
-    /* Botão de Tema */
-    .theme-toggle {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        border: none;
-        color: white;
+    .participante {
         padding: 12px;
-        border-radius: 50%;
-        cursor: pointer;
-        z-index: 9999;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        width: 50px;
-        height: 50px;
+        margin: 5px 0;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
         display: flex;
+        justify-content: space-between;
         align-items: center;
-        justify-content: center;
-        font-size: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        gap: 10px;
     }
     
-    .theme-toggle:hover {
-        transform: scale(1.1) rotate(180deg);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    .participante:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateX(5px);
     }
+    
+    .status {
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 11px;
+        padding: 4px 8px;
+        border-radius: 6px;
+    }
+    
+    .pago {
+        color: #fff;
+        background: linear-gradient(135deg, #00b894, #00cec9);
+    }
+    
+    .nao-pago {
+        color: #fff;
+        background: linear-gradient(135deg, #e74c3c, #ff6b6b);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .nao-pago:hover {
+        background: linear-gradient(135deg, #c0392b, #e74c3c);
+        transform: scale(1.05);
+    }
+    
 
-    /* Notificações Toast */
-    .toast {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: rgba(0, 184, 148, 0.95);
-        color: white;
-        padding: 15px 20px;
-        border-radius: 10px;
-        z-index: 9999;
-        font-weight: 600;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        animation: slideInRight 0.3s ease;
-        max-width: 300px;
-        word-wrap: break-word;
+    
+    /* Animações para mensagem sobre modal */
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
     }
     
-    .toast.error {
-        background: rgba(231, 76, 60, 0.95);
+    @keyframes slideUp {
+        from {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-20px);
+        }
     }
     
-    .toast.warning {
-        background: rgba(243, 156, 18, 0.95);
-    }
-    
-    @keyframes slideInRight {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-    }
-
-    /* Responsividade */
-    @media (max-width: 400px) { 
-        h2, h3 { font-size: 14px; } 
-        input, button { font-size: 14px; } 
-        .lista { font-size: 12px; }
-        .popup { padding: 20px 18px; }
-        .info-content { font-size: 12px; }
-        .info-title { font-size: 16px; }
-        
-        .virtual-keyboard {
-            width: 190px;
-            height: 250px;
-            padding: 12px;
+    @media (max-width: 768px) {
+        .container {
+            padding: 20px 18px;
+            width: 98%;
         }
         
-        .key-btn {
-            width: 50px;
-            height: 35px;
-            font-size: 14px;
-            margin: 0 1px;
-        }
-        
-        .keyboard-row {
-            margin-bottom: 6px;
-        }
-        
-        .password-display {
-            font-size: 18px;
-            letter-spacing: 8px;
-            padding: 6px;
-            min-height: 22px;
-        }
-        
-        .key-btn.close {
-            height: 28px;
-            font-size: 11px;
-        }
-        
-        .dashboard-grid {
-            grid-template-columns: 1fr;
-        }
-        
-        .selection-actions {
-            flex-direction: column;
-        }
-        
-        .selection-actions button {
-            min-width: auto;
-            margin: 2px 0;
-        }
-        
-        .theme-toggle {
-            top: 10px;
-            right: 10px;
-            width: 40px;
-            height: 40px;
-            font-size: 16px;
+        .modal {
+            width: 95%;
+            padding: 20px;
         }
     }
 </style>
 </head>
 <body>
-<!-- Botão de Tema -->
-<button class="theme-toggle" id="themeToggle" title="Alternar tema">🌙</button>
 
-<div class="popup">
-    <h1 id="tituloBolao">🎯 Bolão Vai que dá certo <span style="font-size:12px;color:#666;font-weight:normal;">v3.0 Pro</span></h1>
-    <h3 id="subtituloBolao">🎰 Mega da Virada 2025! 💰<br><br>
-    ✍️ Preencha os dados corretamente!<br>
-    <small>📋 Essas informações serão usadas para entrega das cotas.</small></h3>
+<div class="container">
 
-    <div style="display:flex;gap:8px;justify-content:center;margin:10px 0 5px 0;">
-        <button id="verRegras" style="background:linear-gradient(135deg,#95a5a6,#bdc3c7);font-size:11px;padding:6px 12px;opacity:0.7;flex:1;">📋 Ver Regras</button>
-        <button id="verDashboard" style="background:linear-gradient(135deg,#3498db,#2980b9);font-size:11px;padding:6px 12px;color:white;flex:1;">📊 Dashboard</button>
-        <button id="gerarQRCode" style="background:linear-gradient(135deg,#9b59b6,#8e44ad);font-size:11px;padding:6px 12px;color:white;flex:1;">📱 QR PIX</button>
+    
+    <h1 id="tituloBolao">🎯 Bolão Mega da Virada 2025</h1>
+    
+    <div class="info" id="infoGeral">
+        🎰 <strong>80 participantes</strong> • 💰 <strong>R$ 85,00 por pessoa</strong><br>
+        📅 <strong>Pagamento:</strong> até 10 de Dezembro<br>
+        <small>📋 Preencha os dados para garantir sua vaga!</small>
     </div>
 
     <div class="progress-container">
@@ -802,333 +313,158 @@
             <div class="progress-fill" id="progressFill"></div>
         </div>
         <div class="progress-text" id="progressText">0/80 participantes</div>
+        <div style="font-size: 11px; margin-top: 5px; opacity: 0.7;" id="progressSubtext">
+            Arrecadado: R$ 0,00
+        </div>
     </div>
 
-    <input type="text" id="nome" placeholder="✏️ Nome completo">
-    <input type="tel" id="telefone" placeholder="📱 WhatsApp">
-    
-    <button id="verLista" style="background:linear-gradient(135deg,#6c757d,#adb5bd);margin-top:8px;width:30%;float:left;">Lista</button>
-    <button id="cadastrar" style="width:65%;float:right;margin-left:5%;">🚀 Participar</button>
-    <div style="clear:both;"></div>
+    <div style="display: flex; justify-content: center; margin: 15px 0 10px 0;">
+        <button id="verRegras" style="background: linear-gradient(135deg, #95a5a6, #bdc3c7); font-size: 14px; padding: 12px 24px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">📋 Regras</button>
+    </div>
 
-    <div class="mensagem" id="mensagem"></div>
+    <!-- Modal Regras -->
+    <div id="modalRegras" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 2000; justify-content: center; align-items: center;">
+        <div style="background: linear-gradient(135deg, #2c3e50, #34495e); padding: 25px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; color: #fff;">
+            <h3 style="color: #ffd700; margin: 0 0 20px 0; font-size: 18px; text-align: center;">⚠️ INFORMATIVO: BOLÃO MEGA DA VIRADA ⚠️</h3>
+            
+            <div style="text-align: left; line-height: 1.6; font-size: 14px;">
+                <!-- Conteúdo será preenchido via JavaScript -->
+            </div>
+            
+            <button id="fecharRegras" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 20px; width: 100%;">❌ Fechar</button>
+        </div>
+    </div>
+
+    <!-- Modal Boas-vindas (aparece ao abrir o site) -->
+    <div id="modalBoasVindas" style="display: flex; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 3000; justify-content: center; align-items: center;">
+        <div style="background: linear-gradient(135deg, #2c3e50, #34495e); padding: 25px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; color: #fff;">
+            <h3 style="color: #ffd700; margin: 0 0 20px 0; font-size: 18px; text-align: center;">⚠️ INFORMATIVO: BOLÃO MEGA DA VIRADA ⚠️</h3>
+            
+            <div style="text-align: left; line-height: 1.6; font-size: 14px;">
+                <!-- Conteúdo será preenchido via JavaScript -->
+            </div>
+            
+            <button id="fecharBoasVindas" style="background: linear-gradient(135deg, #00b894, #00cec9); color: white; padding: 15px 30px; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 16px; width: 100%; transition: all 0.3s ease; margin-top: 20px;">🚀 Começar Agora!</button>
+        </div>
+    </div>
+
+    <!-- Modal Confirmação de Cadastro -->
+    <div id="modalConfirmacao" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 4000; justify-content: center; align-items: center;">
+        <div style="background: linear-gradient(135deg, #00b894, #00cec9); padding: 25px; border-radius: 15px; max-width: 450px; width: 90%; color: #fff; text-align: center;">
+            <div style="font-size: 48px; margin-bottom: 15px;">🎉</div>
+            <h3 style="color: #fff; margin: 0 0 15px 0; font-size: 20px;">Cadastro Realizado!</h3>
+            
+            <div style="background: rgba(0, 0, 0, 0.2); padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: left;">
+                <div style="margin-bottom: 10px;"><strong>👤 Nome:</strong> <span id="confirmNome"></span></div>
+                <div><strong>📱 WhatsApp:</strong> <span id="confirmTelefone"></span></div>
+            </div>
+            
+            <div style="background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: left; font-size: 14px;">
+                <h4 style="color: #fff; margin: 0 0 10px 0; font-size: 16px;">💳 Para efetuar o pagamento:</h4>
+                <div style="margin-bottom: 8px;"><strong>PIX:</strong> <span id="confirmPix"></span></div>
+                <div style="margin-bottom: 8px;"><strong>Valor:</strong> R$ <span id="confirmValor"></span></div>
+                <div><strong>Prazo:</strong> até <span id="confirmPrazo"></span></div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                <button id="btnWhatsAppPagamento" style="background: linear-gradient(135deg, #25d366, #128c7e); color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px;">📱 WhatsApp</button>
+                <button id="btnCopiarPix" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px;">📱 QR Code PIX</button>
+            </div>
+            
+            <button id="fecharConfirmacao" style="background: linear-gradient(135deg, #34495e, #2c3e50); color: white; padding: 12px 24px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%;">✅ Entendi</button>
+        </div>
+    </div>
+
+    <input type="text" id="nome" placeholder="✏️ Nome completo" required>
+    <input type="tel" id="telefone" placeholder="📱 WhatsApp (com DDD)" required>
+    
+    <div class="btn-grid">
+        <button id="verLista" class="btn-secondary">📋 Lista</button>
+        <button id="cadastrar">🚀 Participar</button>
+    </div>
+
+    <div class="message" id="mensagem"></div>
 </div>
 
-<!-- Modal Lista de Participantes -->
-<div class="overlay" id="overlay">
+<!-- Modal Lista -->
+<div class="modal-overlay" id="overlay">
     <div class="modal">
         <h3>📋 Lista de Participantes</h3>
+        
         <div class="progress-container">
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFillLista"></div>
             </div>
-            <div class="progress-text">Progresso de Pagamento</div>
-            <div class="progress-text" id="progressTextLista">0/80 cadastrados • 0 pagos</div>
+            <div class="progress-text" id="progressTextLista" style="color: #fff; font-weight: bold;">0/80 cadastrados • 0 pagos</div>
         </div>
         
-        <div class="search-box">
-            <input type="text" id="buscar" placeholder="🔍 Buscar participante...">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <div style="margin-bottom: 15px;">
+            <input type="text" id="buscar" placeholder="🔍 Buscar participante..." style="width: 100%; padding: 12px; border: 2px solid rgba(52, 152, 219, 0.2); border-radius: 12px; background: rgba(255, 255, 255, 0.9); color: #333; margin-bottom: 10px; box-sizing: border-box;">
+            
+            <div style="display: flex; gap: 8px; justify-content: flex-start;">
+                <button id="filtroBtn" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 12px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">🔍</button>
+                
+                <button id="acaoBtn" style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white; padding: 12px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">⚙️</button>
+            </div>
         </div>
         
-        <div class="filter-buttons" style="display: flex; gap: 8px; margin-bottom: 15px; justify-content: center; flex-wrap: wrap;">
-            <button id="filtroTodos" class="filter-btn active" style="flex: 1; min-width: 80px; padding: 8px 12px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; background: linear-gradient(135deg, #667eea, #764ba2); color: white; box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);">👥 Todos</button>
-            <button id="filtroPagos" class="filter-btn" style="flex: 1; min-width: 80px; padding: 8px 12px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; background: rgba(255, 255, 255, 0.2); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3);">✅ Pagos</button>
-            <button id="filtroNaoPagos" class="filter-btn" style="flex: 1; min-width: 80px; padding: 8px 12px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; background: rgba(255, 255, 255, 0.2); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3);">❌ Não Pagos</button>
-            <button id="filtroComprovantes" class="filter-btn" style="flex: 1; min-width: 80px; padding: 8px 12px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; background: rgba(255, 255, 255, 0.2); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3);">📄 Comprovantes</button>
+        <!-- Menu Filtros (oculto inicialmente) -->
+        <div id="menuFiltros" style="display: none; background: rgba(0, 0, 0, 0.5); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+            <h4 style="color: #ffd700; margin: 0 0 10px 0; font-size: 14px;">🔍 Filtros:</h4>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button id="filtroTodos" class="filter-btn" style="background: linear-gradient(135deg, #6c757d, #adb5bd); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 70px;">👥 Todos</button>
+                <button id="filtroPagos" class="filter-btn" style="background: linear-gradient(135deg, #00b894, #00cec9); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 70px;">✅ Pagos</button>
+                <button id="filtroNaoPagos" class="filter-btn" style="background: linear-gradient(135deg, #e74c3c, #ff6b6b); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 70px;">❌ Pendentes</button>
+            </div>
         </div>
         
-        <div style="display: flex; gap: 8px; margin-bottom: 15px; justify-content: center; flex-wrap: wrap;">
-            <button id="exportarExcel" style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; flex: 1; min-width: 100px;">📊 Exportar Excel</button>
-            <button id="backupDados" style="background: linear-gradient(135deg, #8e44ad, #9b59b6); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; flex: 1; min-width: 100px;">💾 Backup</button>
-            <button id="sorteioNumeros" style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; flex: 1; min-width: 100px;">🎲 Sortear</button>
+        <!-- Menu Ações (oculto inicialmente) -->
+        <div id="menuAcoes" style="display: none; background: rgba(0, 0, 0, 0.5); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+            <h4 style="color: #ffd700; margin: 0 0 10px 0; font-size: 14px;">⚙️ Ações:</h4>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button id="alterarStatus" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 80px;">🔄 Status</button>
+                <button id="notificar" style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 80px;">📱 Notificar</button>
+                <button id="excluir" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 80px;">🗑️ Excluir</button>
+            </div>
         </div>
 
-        <div class="selection-counter" id="selectionCounter" style="display: none;"></div>
-        <div class="selection-actions" id="selectionActions">
-            <button class="status-btn" id="alterarStatusSelecionados">🔄 Alterar Status</button>
-            <button class="notify-btn" id="notificarSelecionados" style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white; box-shadow: 0 2px 6px rgba(243, 156, 18, 0.3);">📱 Notificar</button>
-            <button class="upload-btn" id="uploadComprovanteSelecionados" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white; box-shadow: 0 2px 6px rgba(155, 89, 182, 0.3);">📄 Comprovante</button>
-            <button class="delete-btn" id="excluirSelecionados">🗑️ Excluir</button>
+        <!-- Modal Senha ADM -->
+        <div id="modalSenha" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 2000; justify-content: center; align-items: center;">
+            <div style="background: linear-gradient(135deg, #2c3e50, #34495e); padding: 25px; border-radius: 15px; text-align: center; max-width: 300px; width: 90%;">
+                <h4 style="color: #ffd700; margin: 0 0 15px 0; font-size: 16px;">🔐 Senha de Administrador</h4>
+                
+                <div id="senhaDisplay" style="background: rgba(0, 0, 0, 0.3); padding: 12px; border-radius: 8px; margin-bottom: 15px; font-size: 18px; letter-spacing: 8px; min-height: 24px; color: #fff;"></div>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px;">
+                    <button class="num-btn" data-num="1" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">1</button>
+                    <button class="num-btn" data-num="2" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">2</button>
+                    <button class="num-btn" data-num="3" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">3</button>
+                    <button class="num-btn" data-num="4" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">4</button>
+                    <button class="num-btn" data-num="5" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">5</button>
+                    <button class="num-btn" data-num="6" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">6</button>
+                    <button class="num-btn" data-num="7" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">7</button>
+                    <button class="num-btn" data-num="8" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">8</button>
+                    <button class="num-btn" data-num="9" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">9</button>
+                    <button id="limparSenha" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;">🗑️</button>
+                    <button class="num-btn" data-num="0" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">0</button>
+                    <div style="background: rgba(0, 0, 0, 0.2); padding: 15px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #aaa;">Auto</div>
+                </div>
+                
+                <button id="cancelarSenha" style="background: linear-gradient(135deg, #6c757d, #adb5bd); color: white; padding: 10px 20px; border: none; border-radius: 8px; font-size: 12px; cursor: pointer; width: 100%;">❌ Cancelar</button>
+            </div>
         </div>
         
         <div class="lista" id="lista"></div>
+        
         <button class="close-btn" id="fecharLista">❌ Fechar</button>
     </div>
 </div>
 
-<!-- Modal Dashboard -->
-<div class="overlay" id="dashboardOverlay">
-    <div class="modal">
-        <h3>📊 Dashboard Administrativo</h3>
-        
-        <div class="dashboard-grid">
-            <div class="dashboard-card">
-                <h4>💰 Financeiro</h4>
-                <div class="stat-item">
-                    <span>Total Arrecadado:</span>
-                    <span class="stat-value" id="totalArrecadado">R$ 0,00</span>
-                </div>
-                <div class="stat-item">
-                    <span>Meta Total:</span>
-                    <span class="stat-value" id="metaTotal">R$ 6.800,00</span>
-                </div>
-                <div class="stat-item">
-                    <span>Pendente:</span>
-                    <span class="stat-value" id="valorPendente">R$ 6.800,00</span>
-                </div>
-                <div class="stat-item">
-                    <span>% Arrecadado:</span>
-                    <span class="stat-value" id="percentualArrecadado">0%</span>
-                </div>
-            </div>
-            
-            <div class="dashboard-card">
-                <h4>👥 Participantes</h4>
-                <div class="stat-item">
-                    <span>Total Cadastrados:</span>
-                    <span class="stat-value" id="totalCadastrados">0</span>
-                </div>
-                <div class="stat-item">
-                    <span>Pagos:</span>
-                    <span class="stat-value" id="totalPagos">0</span>
-                </div>
-                <div class="stat-item">
-                    <span>Pendentes:</span>
-                    <span class="stat-value" id="totalPendentes">0</span>
-                </div>
-                <div class="stat-item">
-                    <span>Vagas Restantes:</span>
-                    <span class="stat-value" id="vagasRestantes">80</span>
-                </div>
-            </div>
-            
-            <div class="dashboard-card">
-                <h4>📈 Estatísticas</h4>
-                <div class="stat-item">
-                    <span>Taxa de Conversão:</span>
-                    <span class="stat-value" id="taxaConversao">0%</span>
-                </div>
-                <div class="stat-item">
-                    <span>Média por Dia:</span>
-                    <span class="stat-value" id="mediaPorDia">0</span>
-                </div>
-                <div class="stat-item">
-                    <span>Último Cadastro:</span>
-                    <span class="stat-value" id="ultimoCadastro">-</span>
-                </div>
-                <div class="stat-item">
-                    <span>Comprovantes:</span>
-                    <span class="stat-value" id="totalComprovantes">0</span>
-                </div>
-            </div>
-            
-            <div class="dashboard-card">
-                <h4>⚡ Ações Rápidas</h4>
-                <button id="notificarTodosPendentes" style="width: 100%; margin: 5px 0; padding: 10px; background: linear-gradient(135deg, #f39c12, #e67e22); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">📱 Notificar Todos Pendentes</button>
-                <button id="gerarRelatorioCompleto" style="width: 100%; margin: 5px 0; padding: 10px; background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">📊 Relatório Completo</button>
-                <button id="limparHistorico" style="width: 100%; margin: 5px 0; padding: 10px; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">🗑️ Limpar Histórico</button>
-            </div>
-        </div>
-        
-        <button class="close-btn" id="fecharDashboard">❌ Fechar</button>
-    </div>
-</div>
-
-<!-- Modal QR Code -->
-<div class="overlay" id="qrOverlay">
-    <div class="modal">
-        <h3>📱 QR Code PIX</h3>
-        <div class="qr-container">
-            <p style="color: #ffd700; font-weight: bold;">Escaneie o código para pagar:</p>
-            <div class="qr-code" id="qrCodeContainer">
-                <!-- QR Code será gerado aqui -->
-            </div>
-            <div style="background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; margin: 20px 0;">
-                <p><strong>💳 Chave PIX:</strong> <span id="chavePix">(99) 99102-6112</span></p>
-                <p><strong>💰 Valor:</strong> <span id="valorPix">R$ 85,00</span></p>
-                <p><strong>📝 Descrição:</strong> Bolão Mega da Virada 2025</p>
-            </div>
-            <button id="copiarChavePix" style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; padding: 12px 20px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin: 10px;">📋 Copiar Chave PIX</button>
-            <button id="compartilharQR" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 12px 20px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin: 10px;">📤 Compartilhar</button>
-        </div>
-        <button class="close-btn" id="fecharQR">❌ Fechar</button>
-    </div>
-</div>
-
-<!-- Modal Upload Comprovante -->
-<div class="overlay" id="uploadOverlay">
-    <div class="modal">
-        <h3>📄 Upload de Comprovante</h3>
-        <p id="uploadParticipanteInfo" style="color: #ffd700; font-weight: bold; margin-bottom: 20px;"></p>
-        
-        <div class="upload-area" id="uploadArea">
-            <div style="font-size: 48px; margin-bottom: 15px;">📁</div>
-            <p style="margin: 10px 0; font-weight: bold;">Arraste o comprovante aqui ou clique para selecionar</p>
-            <p style="margin: 5px 0; font-size: 12px; opacity: 0.7;">Formatos aceitos: JPG, PNG, PDF (máx. 5MB)</p>
-            <input type="file" id="fileInput" accept="image/*,.pdf" style="display: none;">
-        </div>
-        
-        <div id="previewArea" style="display: none; margin: 20px 0;">
-            <h4 style="color: #ffd700;">Preview:</h4>
-            <div id="previewContent"></div>
-        </div>
-        
-        <div style="display: flex; gap: 10px; margin-top: 20px;">
-            <button id="confirmarUpload" style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; padding: 12px 20px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; flex: 1;" disabled>✅ Confirmar Upload</button>
-            <button class="close-btn" id="fecharUpload" style="flex: 1;">❌ Cancelar</button>
-        </div>
-    </div>
-</div>
-
-<!-- Modal de Ações -->
-<div class="overlay" id="acoesOverlay" style="display: none;">
-    <div class="modal">
-        <h3>⚙️ Ações do Participante</h3>
-        <p id="participanteInfo" style="color: #ffd700; font-weight: bold; margin-bottom: 20px;"></p>
-        <div style="display: flex; gap: 8px; justify-content: center; margin: 15px 0; flex-wrap: wrap;">
-            <button id="alterarStatus" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; flex: 1; min-width: 100px; padding: 12px 8px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 13px; margin: 2px;">🔄 Status</button>
-            <button id="notificarParticipante" style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white; flex: 1; min-width: 100px; padding: 12px 8px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 13px; margin: 2px;">📱 Notificar</button>
-            <button id="uploadComprovanteIndividual" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white; flex: 1; min-width: 100px; padding: 12px 8px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 13px; margin: 2px;">📄 Comprovante</button>
-            <button id="excluirParticipante" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; flex: 1; min-width: 100px; padding: 12px 8px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 13px; margin: 2px;">🗑️ Excluir</button>
-        </div>
-        <button class="close-btn" id="fecharAcoes">❌ Cancelar</button>
-    </div>
-</div>
-
-<!-- Popup Informativo -->
-<div class="info-overlay" id="infoOverlay">
-    <div class="info-modal">
-        <div class="info-content">
-            <div class="info-title">⚠️ INFORMATIVO: BOLÃO MEGA DA VIRADA ⚠️</div>
-            
-            <div class="info-section">
-                Estamos organizando nosso bolão, com um total de <span class="info-highlight" id="limiteInfo">80 participantes</span>.<br>
-                <strong>Custo por Participante:</strong> <span class="info-highlight" id="valorInfo">R$ 85,00</span>
-            </div>
-            
-            <div class="info-section">
-                <h4>Regras de Participação e Prazos:</h4>
-                
-                <strong>Prioridade:</strong><br>
-                Será dada prioridade de participação aos <span class="info-highlight">COLABORADORES da loja</span>.<br>
-                Caso as 80 vagas não sejam preenchidas, abriremos a participação para pessoas de fora.
-            </div>
-            
-            <div class="info-section">
-                <h4>Datas Limite:</h4>
-                <span class="info-highlight" id="dataInteresseInfo">30 de Novembro</span>: Data final para manifestar interesse (confirmar que quer participar).<br>
-                <span class="info-highlight" id="dataPagamentoInfo">10 de Dezembro</span>: Data final para o pagamento da cota.
-            </div>
-            
-            <div class="info-section">
-                <h4>Atenção ao Pagamento:</h4>
-                O participante que não realizar o pagamento até o dia <span class="info-highlight" id="dataPagamentoInfo2">10 de Dezembro</span> será automaticamente excluído do bolão, e a vaga será repassada.
-            </div>
-            
-            <div class="info-section">
-                <h4>Observações Importantes:</h4>
-                <strong>Prazos:</strong> As datas foram definidas para que todos tenham tempo suficiente para pagar (contando com o 13º salário).<br><br>
-                <strong>Agilidade:</strong> Quanto antes arrecadarmos o valor, melhor. Deixar para a última hora significa enfrentar lotéricas lotadas.<br><br>
-                <strong>Jogos:</strong> A quantidade final de bilhetes e jogos será definida ao término da arrecadação, pois dependerá do valor total arrecadado (se todas as 80 cotas forem preenchidas).
-            </div>
-        </div>
-        
-        <button class="info-close-btn" id="fecharInfo">📋 Entendi, vamos começar!</button>
-    </div>
-</div>
-
-<!-- Teclado Virtual -->
-<div class="virtual-keyboard" id="virtualKeyboard">
-    <div class="keyboard-header">🔐 Digite a Senha</div>
-    <div class="password-display" id="passwordDisplay"></div>
-    
-    <div class="keyboard-row">
-        <button class="key-btn" data-key="1">1</button>
-        <button class="key-btn" data-key="2">2</button>
-        <button class="key-btn" data-key="3">3</button>
-    </div>
-    
-    <div class="keyboard-row">
-        <button class="key-btn" data-key="4">4</button>
-        <button class="key-btn" data-key="5">5</button>
-        <button class="key-btn" data-key="6">6</button>
-    </div>
-    
-    <div class="keyboard-row">
-        <button class="key-btn" data-key="7">7</button>
-        <button class="key-btn" data-key="8">8</button>
-        <button class="key-btn" data-key="9">9</button>
-    </div>
-    
-    <div class="keyboard-row">
-        <button class="key-btn" data-key="*">*</button>
-        <button class="key-btn" data-key="0">0</button>
-        <button class="key-btn" data-key="#">#</button>
-    </div>
-    
-    <button class="key-btn close" data-key="cancel">❌ Fechar</button>
-</div>
-
-<!-- Firebase -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getDatabase, ref, push, get, update, remove } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-// ========================================
-// 🔧 CONFIGURAÇÕES DO SISTEMA - ALTERE AQUI
-// ========================================
-const CONFIG = {
-  // Configurações Gerais
-  LIMITE_PARTICIPANTES: 80,
-  VALOR_PARTICIPACAO: "R$ 85,00",
-  VALOR_NUMERICO: 85.00,
-  SENHA_ADMIN: "6261",
-  
-  // Datas Importantes
-  DATA_LIMITE_INTERESSE: "30 de Novembro",
-  DATA_LIMITE_PAGAMENTO: "10 de Dezembro",
-  
-  // Informações de Pagamento
-  CHAVE_PIX: "(99) 99102-6112",
-  
-  // Textos do Sistema
-  TITULO_BOLAO: "🎯 Bolão Vai que dá certo",
-  SUBTITULO: "🎰 Mega da Virada 2025! 💰",
-  
-  // Mensagem de Notificação WhatsApp
-  MENSAGEM_NOTIFICACAO: (nome, valor, prazo, chavePix) => {
-    const obterSaudacao = () => {
-      const agora = new Date();
-      const hora = agora.getHours();
-      
-      if (hora >= 5 && hora < 12) {
-        return "bom dia";
-      } else if (hora >= 12 && hora < 18) {
-        return "boa tarde";
-      } else {
-        return "boa noite";
-      }
-    };
-    
-    const saudacao = obterSaudacao();
-    
-    return `*Notificação* 🎯
-
-Olá, ${saudacao} ${nome}! 
-
-Estamos aguardando o pagamento da sua participação no *Bolão Mega da Virada 2025* no valor de *${valor}*.
-
-📅 *Prazo final:* ${prazo}
-💳 *Chave Pix:* ${chavePix}
-
-Por favor, realize o pagamento até o dia 10 para garantir sua vaga no bolão.
-
-Obrigado! 🍀`;
-  }
-};
-// ========================================
-
+// Configuração Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyCvXGUdvZkqtSMMn8VmTOXLA9PXqR85gSk",
   authDomain: "vagner-34d5b.firebaseapp.com",
@@ -1144,1167 +480,864 @@ const db = getDatabase(app);
 const dbRef = ref(db, "participantes");
 
 // Variáveis globais
-let participantesOriginais = [];
-let filtroAtivo = "todos";
-let participantesSelecionados = [];
+let participantes = [];
 let participanteSelecionado = null;
-let senhaAtual = "";
-let callbackConfirmacao = null;
+let participantesSelecionados = [];
+let senhaDigitada = '';
+let acaoPendente = null;
 
-// Sistema de Temas
-function initTheme() {
-  const savedTheme = localStorage.getItem('bolao-theme') || 'dark';
-  document.body.className = savedTheme + '-mode';
-  updateThemeIcon(savedTheme);
-}
+// ========================================
+// 🔧 CONFIGURAÇÕES DO BOLÃO
+// ========================================
+// Altere apenas os valores abaixo conforme necessário
 
-function toggleTheme() {
-  const currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
-  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+const CONFIG = {
+  // Participantes
+  LIMITE_PARTICIPANTES: 0,
+  VALOR_PARTICIPACAO: 0.00,
   
-  document.body.className = newTheme + '-mode';
-  localStorage.setItem('bolao-theme', newTheme);
-  updateThemeIcon(newTheme);
+  // Datas (formato: DD de Mês)
+  DATA_LIMITE_INTERESSE: "30 de Novembro",
+  DATA_LIMITE_PAGAMENTO: "10 de Dezembro",
   
-  showToast(`Tema ${newTheme === 'dark' ? 'escuro' : 'claro'} ativado!`, 'success');
-}
-
-function updateThemeIcon(theme) {
-  const themeToggle = document.getElementById('themeToggle');
-  themeToggle.textContent = theme === 'dark' ? '🌙' : '☀️';
-}
-
-// Sistema de Notificações Toast
-function showToast(message, type = 'success') {
-  const toast = document.createElement('div');
-  toast.className = `toast ${type}`;
-  toast.textContent = message;
+  // Contato
+  PIX_PAGAMENTO: "(99) 99102-6112",
+  PIX_QR_CODE: "00020126580014br.gov.bcb.pix0136041.005802BR5922Vagner Sousa Lauriuche6009Sao Paulo62290525REC68FC9AEE693ADC43",
   
-  document.body.appendChild(toast);
+  // Textos principais
+  TITULO_BOLAO: "Bolão Mega da Virada 2025",
+  ANO_SORTEIO: "2025",
+  
+  // Segurança
+  SENHA_ADM: '6261'
+};
+
+// ========================================
+// Constantes derivadas (NÃO ALTERAR)
+// ========================================
+const LIMITE_PARTICIPANTES = CONFIG.LIMITE_PARTICIPANTES;
+const VALOR_PARTICIPACAO = CONFIG.VALOR_PARTICIPACAO;
+const SENHA_ADM = CONFIG.SENHA_ADM;
+
+// Função para mostrar mensagens
+function mostrarMensagem(texto, tipo) {
+  const mensagem = document.getElementById('mensagem');
+  mensagem.textContent = texto;
+  mensagem.className = `message ${tipo}`;
   
   setTimeout(() => {
-    toast.style.animation = 'slideInRight 0.3s ease reverse';
-    setTimeout(() => toast.remove(), 300);
+    mensagem.textContent = '';
+    mensagem.className = 'message';
+  }, 4000);
+}
+
+// Função para mostrar mensagem sobre modal
+function mostrarMensagemSobreModal(texto, tipo) {
+  // Remover mensagem anterior se existir
+  const mensagemExistente = document.getElementById('mensagemSobreModal');
+  if (mensagemExistente) {
+    mensagemExistente.remove();
+  }
+  
+  // Criar nova mensagem
+  const mensagem = document.createElement('div');
+  mensagem.id = 'mensagemSobreModal';
+  mensagem.textContent = texto;
+  mensagem.style.cssText = `
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    padding: 15px 25px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 15px;
+    text-align: center;
+    max-width: 90%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: slideDown 0.3s ease;
+  `;
+  
+  // Aplicar cores baseado no tipo
+  if (tipo === 'success') {
+    mensagem.style.color = '#fff';
+    mensagem.style.background = 'linear-gradient(135deg, #00b894, #00cec9)';
+    mensagem.style.border = '2px solid rgba(0, 184, 148, 0.5)';
+  } else if (tipo === 'error') {
+    mensagem.style.color = '#fff';
+    mensagem.style.background = 'linear-gradient(135deg, #e74c3c, #ff6b6b)';
+    mensagem.style.border = '2px solid rgba(231, 76, 60, 0.5)';
+  } else if (tipo === 'warning') {
+    mensagem.style.color = '#fff';
+    mensagem.style.background = 'linear-gradient(135deg, #f39c12, #e67e22)';
+    mensagem.style.border = '2px solid rgba(243, 156, 18, 0.5)';
+  }
+  
+  document.body.appendChild(mensagem);
+  
+  // Remover após 3 segundos
+  setTimeout(() => {
+    if (mensagem && mensagem.parentNode) {
+      mensagem.style.animation = 'slideUp 0.3s ease';
+      setTimeout(() => {
+        mensagem.remove();
+      }, 300);
+    }
   }, 3000);
 }
 
-// Aplicar configurações na interface
-function aplicarConfiguracoes() {
-  document.getElementById('tituloBolao').innerHTML = `${CONFIG.TITULO_BOLAO} <span style="font-size:12px;color:#666;font-weight:normal;">v3.0 Pro</span>`;
-  document.getElementById('subtituloBolao').innerHTML = `${CONFIG.SUBTITULO}<br><br>
-    ✍️ Preencha os dados corretamente!<br>
-    <small>📋 Essas informações serão usadas para entrega das cotas.</small>`;
+// Função para mostrar popup de confirmação
+function mostrarPopupConfirmacao(participante) {
+  document.getElementById('confirmNome').textContent = participante.nome;
+  document.getElementById('confirmTelefone').textContent = participante.telefone;
+  document.getElementById('confirmPix').textContent = CONFIG.PIX_PAGAMENTO;
+  document.getElementById('confirmValor').textContent = CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',');
+  document.getElementById('confirmPrazo').textContent = CONFIG.DATA_LIMITE_PAGAMENTO;
   
-  document.getElementById('limiteInfo').textContent = `${CONFIG.LIMITE_PARTICIPANTES} participantes`;
-  document.getElementById('valorInfo').textContent = CONFIG.VALOR_PARTICIPACAO;
-  document.getElementById('dataInteresseInfo').textContent = CONFIG.DATA_LIMITE_INTERESSE;
-  document.getElementById('dataPagamentoInfo').textContent = CONFIG.DATA_LIMITE_PAGAMENTO;
-  document.getElementById('dataPagamentoInfo2').textContent = CONFIG.DATA_LIMITE_PAGAMENTO;
+  document.getElementById('modalConfirmacao').style.display = 'flex';
+}
+
+// Função para mostrar popup de pagamento (para participantes não pagos)
+function mostrarPopupPagamento(participante) {
+  document.getElementById('confirmNome').textContent = participante.nome;
+  document.getElementById('confirmTelefone').textContent = participante.telefone;
+  document.getElementById('confirmPix').textContent = CONFIG.PIX_PAGAMENTO;
+  document.getElementById('confirmValor').textContent = CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',');
+  document.getElementById('confirmPrazo').textContent = CONFIG.DATA_LIMITE_PAGAMENTO;
   
-  document.getElementById('progressText').textContent = `0/${CONFIG.LIMITE_PARTICIPANTES} participantes`;
-  document.getElementById('chavePix').textContent = CONFIG.CHAVE_PIX;
-  document.getElementById('valorPix').textContent = CONFIG.VALOR_PARTICIPACAO;
-  document.getElementById('metaTotal').textContent = `R$ ${(CONFIG.LIMITE_PARTICIPANTES * CONFIG.VALOR_NUMERICO).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+  // Alterar título para indicar que é para pagamento
+  const modal = document.getElementById('modalConfirmacao');
+  const titulo = modal.querySelector('h3');
+  titulo.textContent = 'Informações de Pagamento';
+  
+  modal.style.display = 'flex';
+}
+
+// Função para mostrar popup de pagamento sobre a lista
+function mostrarPopupPagamentoSobreLista(participante) {
+  // Remover popup anterior se existir
+  const popupExistente = document.getElementById('popupPagamentoLista');
+  if (popupExistente) {
+    popupExistente.remove();
+  }
+  
+  // Criar popup
+  const popup = document.createElement('div');
+  popup.id = 'popupPagamentoLista';
+  popup.style.cssText = `
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #00b894, #00cec9);
+    padding: 25px;
+    border-radius: 15px;
+    max-width: 400px;
+    width: 90%;
+    color: #fff;
+    text-align: center;
+    z-index: 6000;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  `;
+  
+  popup.innerHTML = `
+    <div style="font-size: 32px; margin-bottom: 15px;">💳</div>
+    <h3 style="color: #fff; margin: 0 0 15px 0; font-size: 18px;">Informações de Pagamento</h3>
+    
+    <div style="background: rgba(0, 0, 0, 0.2); padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: left;">
+      <div style="margin-bottom: 10px;"><strong>👤 Nome:</strong> ${participante.nome}</div>
+      <div><strong>📱 WhatsApp:</strong> ${participante.telefone}</div>
+    </div>
+    
+    <div style="background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: left; font-size: 14px;">
+      <h4 style="color: #fff; margin: 0 0 10px 0; font-size: 16px;">💳 Para efetuar o pagamento:</h4>
+      <div style="margin-bottom: 8px;"><strong>PIX:</strong> ${CONFIG.PIX_PAGAMENTO}</div>
+      <div style="margin-bottom: 8px;"><strong>Valor:</strong> R$ ${CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',')}</div>
+      <div><strong>Prazo:</strong> até ${CONFIG.DATA_LIMITE_PAGAMENTO}</div>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+      <button id="btnWhatsAppPopup" style="background: linear-gradient(135deg, #25d366, #128c7e); color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px;">📱 WhatsApp</button>
+      <button id="btnCopiarPixPopup" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px;">📱 QR Code PIX</button>
+    </div>
+    
+    <button id="fecharPopupPagamento" style="background: linear-gradient(135deg, #34495e, #2c3e50); color: white; padding: 12px 24px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%;">✅ Fechar</button>
+  `;
+  
+  document.body.appendChild(popup);
+  
+  // Event listeners do popup
+  document.getElementById('btnWhatsAppPopup').addEventListener('click', () => {
+    const mensagem = `🎯 *${CONFIG.TITULO_BOLAO}*
+
+Olá! Gostaria de efetuar o pagamento da minha participação no bolão.
+
+👤 *Nome:* ${participante.nome}
+📱 *WhatsApp:* ${participante.telefone}
+💰 *Valor:* R$ ${CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',')}
+📅 *Prazo:* até ${CONFIG.DATA_LIMITE_PAGAMENTO}
+💳 *PIX:* ${CONFIG.PIX_PAGAMENTO}
+
+Vou fazer o PIX agora e enviar o comprovante! 🍀`;
+    
+    const telefoneOrganizador = CONFIG.PIX_PAGAMENTO.replace(/\D/g, '');
+    const telefoneComCodigo = telefoneOrganizador.startsWith('55') ? telefoneOrganizador : '55' + telefoneOrganizador;
+    const whatsappUrl = `https://wa.me/${telefoneComCodigo}?text=${encodeURIComponent(mensagem)}`;
+    
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+  });
+  
+  document.getElementById('btnCopiarPixPopup').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(CONFIG.PIX_QR_CODE);
+      mostrarMensagemSobreModal('📱 QR Code PIX copiado! Cole no seu app do banco.', 'success');
+    } catch (err) {
+      const textArea = document.createElement('textarea');
+      textArea.value = CONFIG.PIX_QR_CODE;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      mostrarMensagemSobreModal('📱 QR Code PIX copiado! Cole no seu app do banco.', 'success');
+    }
+  });
+  
+  document.getElementById('fecharPopupPagamento').addEventListener('click', () => {
+    popup.remove();
+  });
+  
+  // Fechar clicando fora
+  popup.addEventListener('click', (e) => {
+    if (e.target === popup) {
+      popup.remove();
+    }
+  });
+}
+
+// Funções do teclado virtual
+function mostrarTecladoSenha(acao) {
+  acaoPendente = acao;
+  senhaDigitada = '';
+  document.getElementById('senhaDisplay').textContent = '';
+  document.getElementById('modalSenha').style.display = 'flex';
+}
+
+function adicionarDigito(digito) {
+  if (senhaDigitada.length < 4) {
+    senhaDigitada += digito;
+    document.getElementById('senhaDisplay').textContent = '*'.repeat(senhaDigitada.length);
+    
+    // Se completou 4 dígitos, verificar automaticamente
+    if (senhaDigitada.length === 4) {
+      setTimeout(() => {
+        verificarSenha();
+      }, 200); // Pequeno delay para mostrar o último *
+    }
+  }
+}
+
+function limparSenha() {
+  senhaDigitada = '';
+  document.getElementById('senhaDisplay').textContent = '';
+}
+
+function verificarSenha() {
+  if (senhaDigitada === SENHA_ADM) {
+    document.getElementById('modalSenha').style.display = 'none';
+    executarAcao(acaoPendente);
+  } else {
+    mostrarMensagem('❌ Senha incorreta!', 'error');
+    limparSenha();
+  }
+}
+
+function cancelarSenha() {
+  document.getElementById('modalSenha').style.display = 'none';
+  senhaDigitada = '';
+  acaoPendente = null;
 }
 
 // Atualizar progresso
 function atualizarProgresso() {
-    get(dbRef).then((snapshot) => {
-        const participantes = snapshot.exists() ? Object.values(snapshot.val()) : [];
-        const totalCadastrados = participantes.length;
-        const totalPagos = participantes.filter(p => p.status === "Pago").length;
-        const totalComprovantes = participantes.filter(p => p.status === "Comprovante Enviado").length;
-        const progresso = (totalCadastrados / CONFIG.LIMITE_PARTICIPANTES) * 100;
-        
-        // Atualizar barra principal
-        document.getElementById('progressFill').style.width = progresso + '%';
-        document.getElementById('progressText').textContent = `${totalCadastrados}/${CONFIG.LIMITE_PARTICIPANTES} participantes`;
-        
-        // Atualizar barra da lista (se existir)
-        const progressFillLista = document.getElementById('progressFillLista');
-        const progressTextLista = document.getElementById('progressTextLista');
-        if (progressFillLista && progressTextLista) {
-            const progressoPagos = totalCadastrados > 0 ? (totalPagos / totalCadastrados) * 100 : 0;
-            progressFillLista.style.width = progressoPagos + '%';
-            progressTextLista.textContent = `${totalPagos}/${totalCadastrados} pagos • ${totalComprovantes} comprovantes`;
-        }
-        
-        // Atualizar dashboard se estiver aberto
-        atualizarDashboard(participantes);
-    });
-}
-
-// Atualizar Dashboard
-function atualizarDashboard(participantes) {
-  const totalCadastrados = participantes.length;
-  const totalPagos = participantes.filter(p => p.status === "Pago").length;
-  const totalComprovantes = participantes.filter(p => p.status === "Comprovante Enviado").length;
-  const totalPendentes = participantes.filter(p => p.status === "Não pago").length;
-  
-  const valorArrecadado = totalPagos * CONFIG.VALOR_NUMERICO;
-  const metaTotal = CONFIG.LIMITE_PARTICIPANTES * CONFIG.VALOR_NUMERICO;
-  const valorPendente = metaTotal - valorArrecadado;
-  const percentualArrecadado = metaTotal > 0 ? (valorArrecadado / metaTotal * 100).toFixed(1) : 0;
-  
-  const taxaConversao = totalCadastrados > 0 ? (totalPagos / totalCadastrados * 100).toFixed(1) : 0;
-  const vagasRestantes = CONFIG.LIMITE_PARTICIPANTES - totalCadastrados;
-  
-  // Calcular média por dia (assumindo que começou há 7 dias)
-  const diasDecorridos = 7; // Você pode calcular dinamicamente
-  const mediaPorDia = (totalCadastrados / diasDecorridos).toFixed(1);
-  
-  // Último cadastro
-  const ultimoCadastro = participantes.length > 0 ? 
-    new Date().toLocaleDateString('pt-BR') : '-';
-  
-  // Atualizar elementos do dashboard
-  const elementos = {
-    'totalArrecadado': `R$ ${valorArrecadado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`,
-    'valorPendente': `R$ ${valorPendente.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`,
-    'percentualArrecadado': `${percentualArrecadado}%`,
-    'totalCadastrados': totalCadastrados,
-    'totalPagos': totalPagos,
-    'totalPendentes': totalPendentes,
-    'vagasRestantes': vagasRestantes,
-    'taxaConversao': `${taxaConversao}%`,
-    'mediaPorDia': mediaPorDia,
-    'ultimoCadastro': ultimoCadastro,
-    'totalComprovantes': totalComprovantes
-  };
-  
-  Object.entries(elementos).forEach(([id, valor]) => {
-    const elemento = document.getElementById(id);
-    if (elemento) elemento.textContent = valor;
+  get(dbRef).then((snapshot) => {
+    participantes = snapshot.exists() ? Object.entries(snapshot.val()).map(([key, value]) => ({...value, key})) : [];
+    
+    const totalCadastrados = participantes.length;
+    const totalPagos = participantes.filter(p => p.status === "Pago").length;
+    const progresso = (totalCadastrados / LIMITE_PARTICIPANTES) * 100;
+    const valorArrecadado = totalPagos * VALOR_PARTICIPACAO;
+    
+    // Atualizar barra principal
+    document.getElementById('progressFill').style.width = progresso + '%';
+    document.getElementById('progressText').textContent = `${totalCadastrados}/${LIMITE_PARTICIPANTES} participantes`;
+    document.getElementById('progressSubtext').textContent = `Arrecadado: R$ ${valorArrecadado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    
+    // Atualizar barra da lista se estiver aberta
+    const progressFillLista = document.getElementById('progressFillLista');
+    const progressTextLista = document.getElementById('progressTextLista');
+    if (progressFillLista && progressTextLista) {
+      const progressoPagos = totalCadastrados > 0 ? (totalPagos / totalCadastrados) * 100 : 0;
+      progressFillLista.style.width = progressoPagos + '%';
+      progressTextLista.textContent = `${totalCadastrados}/${LIMITE_PARTICIPANTES} cadastrados • ${totalPagos} pagos`;
+    }
   });
 }
 
-// CADASTRAR
+// Cadastrar participante
 document.getElementById("cadastrar").addEventListener("click", async () => {
   const nome = document.getElementById("nome").value.trim();
   const telefone = document.getElementById("telefone").value.trim();
-  const mensagem = document.getElementById("mensagem");
 
   if (!nome || !telefone) {
-    showToast("⚠️ Preencha todos os campos!", "error");
+    mostrarMensagem("⚠️ Preencha todos os campos!", "error");
     return;
   }
 
-  // Validar nome completo (mínimo 2 palavras)
-  const palavrasNome = nome.split(' ').filter(palavra => palavra.length > 0);
-  if (palavrasNome.length < 2) {
-    showToast("⚠️ Digite o nome completo (nome e sobrenome)!", "error");
+  // Validar nome completo
+  if (nome.split(' ').length < 2) {
+    mostrarMensagem("⚠️ Digite o nome completo!", "error");
     return;
   }
 
-  // Validar telefone (DDD + 9º dígito)
-  const telefoneNumeros = telefone.replace(/\D/g, '');
-  
-  if (telefoneNumeros.length < 11) {
-    showToast("⚠️ Telefone deve conter DDD + número completo!", "error");
-    return;
-  }
-  
-  if (telefoneNumeros.length === 11 && telefoneNumeros[2] !== '9') {
-    showToast("⚠️ Número deve conter o 9º dígito! Ex: (99) 99999-9999", "error");
-    return;
-  }
-  
-  if (telefoneNumeros.length === 10) {
-    showToast("⚠️ Número deve conter o 9º dígito! Ex: (99) 99999-9999", "error");
+  // Validar telefone
+  if (telefone.replace(/\D/g, '').length < 11) {
+    mostrarMensagem("⚠️ Telefone deve conter DDD + número!", "error");
     return;
   }
 
-  const snapshot = await get(dbRef);
-  const participantes = snapshot.exists() ? Object.values(snapshot.val()) : [];
+  try {
+    const snapshot = await get(dbRef);
+    const participantesAtuais = snapshot.exists() ? Object.values(snapshot.val()) : [];
 
-  if (participantes.length >= CONFIG.LIMITE_PARTICIPANTES) {
-    showToast(`❌ Limite de ${CONFIG.LIMITE_PARTICIPANTES} participantes atingido!`, "error");
-    return;
-  }
+    if (participantesAtuais.length >= LIMITE_PARTICIPANTES) {
+      mostrarMensagem(`❌ Limite de ${LIMITE_PARTICIPANTES} participantes atingido!`, "error");
+      return;
+    }
 
-  const duplicado = participantes.some(p =>
-    p.nome.toLowerCase() === nome.toLowerCase() &&
-    p.telefone.replace(/\D/g, '') === telefone.replace(/\D/g, '')
-  );
-
-  if (duplicado) {
-    showToast("⚠️ Esse cadastro já está na lista!", "warning");
-    return;
-  }
-
-  const novoCadastro = {
-    numero: participantes.length + 1,
-    nome,
-    telefone,
-    status: "Não pago",
-    dataCadastro: new Date().toISOString(),
-    comprovante: null
-  };
-
-  await push(dbRef, novoCadastro);
-  
-  mensagem.innerHTML = `✅ Cadastro realizado com sucesso!<br>
-    <button id="entrarGrupo" style="background: linear-gradient(135deg, #25d366, #128c7e); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; font-size: 14px; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3); transition: all 0.3s ease;">📱 Entrar no Grupo WhatsApp</button>`;
-  mensagem.style.color = "#00b894";
-  mensagem.style.background = "rgba(0, 184, 148, 0.1)";
-  
-  document.getElementById("nome").value = "";
-  document.getElementById("telefone").value = "";
-  
-  // Adicionar evento ao botão do grupo
-  document.getElementById("entrarGrupo").addEventListener("click", () => {
-    window.open("https://chat.whatsapp.com/Fdl9PzkiEBq9TnJHtlu2Rm?mode=wwt", "_blank", "noopener,noreferrer");
-  });
-  
-  showToast("✅ Participante cadastrado com sucesso!", "success");
-  atualizarProgresso();
-});
-
-// VER LISTA
-document.getElementById("verLista").addEventListener("click", async () => {
-  document.getElementById("overlay").style.display = "flex";
-  const listaDiv = document.getElementById("lista");
-  const buscarInput = document.getElementById("buscar");
-
-  listaDiv.innerHTML = "Carregando lista...";
-
-  const snapshot = await get(dbRef);
-  if (!snapshot.exists()) {
-    listaDiv.textContent = "Nenhum participante cadastrado.";
-    return;
-  }
-
-  participantesOriginais = Object.values(snapshot.val());
-  participantesOriginais.sort((a, b) => a.numero - b.numero);
-  
-  filtroAtivo = "todos";
-  participantesSelecionados = [];
-  atualizarBotoesFiltro();
-  aplicarFiltros();
-  atualizarContadorSelecao();
-  atualizarProgresso();
-
-  // Event listeners
-  buscarInput.addEventListener("input", aplicarFiltros);
-  
-  document.getElementById("filtroTodos").addEventListener("click", () => {
-    filtroAtivo = "todos";
-    atualizarBotoesFiltro();
-    aplicarFiltros();
-  });
-  
-  document.getElementById("filtroPagos").addEventListener("click", () => {
-    filtroAtivo = "pagos";
-    atualizarBotoesFiltro();
-    aplicarFiltros();
-  });
-  
-  document.getElementById("filtroNaoPagos").addEventListener("click", () => {
-    filtroAtivo = "naoPagos";
-    atualizarBotoesFiltro();
-    aplicarFiltros();
-  });
-  
-  document.getElementById("filtroComprovantes").addEventListener("click", () => {
-    filtroAtivo = "comprovantes";
-    atualizarBotoesFiltro();
-    aplicarFiltros();
-  });
-  
-  // Event listeners para ações em lote
-  setupBatchActions();
-});
-
-// Setup das ações em lote
-function setupBatchActions() {
-  const botoes = [
-    'alterarStatusSelecionados',
-    'notificarSelecionados', 
-    'uploadComprovanteSelecionados',
-    'excluirSelecionados'
-  ];
-  
-  botoes.forEach(id => {
-    const btn = document.getElementById(id);
-    const newBtn = btn.cloneNode(true);
-    btn.parentNode.replaceChild(newBtn, btn);
-    
-    newBtn.addEventListener("click", () => {
-      if (participantesSelecionados.length > 0) {
-        const acao = id.replace('Selecionados', '').replace('alterar', '').replace('Status', 'status').replace('notificar', 'notificar').replace('uploadComprovante', 'upload').replace('excluir', 'excluir');
-        mostrarTecladoVirtual(verificarSenhaAcaoMultipla(acao));
-      }
-    });
-  });
-}
-
-// Função para aplicar filtros
-function aplicarFiltros() {
-  const termo = document.getElementById("buscar").value.toLowerCase();
-  let participantesFiltrados = [...participantesOriginais];
-  
-  // Aplicar filtro de status
-  switch(filtroAtivo) {
-    case "pagos":
-      participantesFiltrados = participantesFiltrados.filter(p => p.status === "Pago");
-      break;
-    case "naoPagos":
-      participantesFiltrados = participantesFiltrados.filter(p => p.status === "Não pago");
-      break;
-    case "comprovantes":
-      participantesFiltrados = participantesFiltrados.filter(p => p.status === "Comprovante Enviado");
-      break;
-  }
-  
-  // Aplicar filtro de busca
-  if (termo) {
-    participantesFiltrados = participantesFiltrados.filter(p => 
-      p.nome.toLowerCase().includes(termo)
+    // Verificar duplicatas
+    const duplicado = participantesAtuais.some(p =>
+      p.nome.toLowerCase() === nome.toLowerCase() ||
+      p.telefone.replace(/\D/g, '') === telefone.replace(/\D/g, '')
     );
-  }
-  
-  renderLista(participantesFiltrados);
-}
 
-// Função para atualizar botões de filtro
-function atualizarBotoesFiltro() {
-  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-  
-  const filtros = {
-    "todos": "filtroTodos",
-    "pagos": "filtroPagos", 
-    "naoPagos": "filtroNaoPagos",
-    "comprovantes": "filtroComprovantes"
-  };
-  
-  if (filtros[filtroAtivo]) {
-    document.getElementById(filtros[filtroAtivo]).classList.add('active');
-  }
-}
+    if (duplicado) {
+      mostrarMensagem("⚠️ Esse cadastro já existe!", "warning");
+      return;
+    }
 
-function renderLista(participantes) {
-  const listaDiv = document.getElementById("lista");
-  listaDiv.innerHTML = "";
-  
+    const novoCadastro = {
+      numero: participantesAtuais.length + 1,
+      nome: nome.toUpperCase(),
+      telefone,
+      status: "Não pago",
+      dataCadastro: new Date().toISOString()
+    };
+
+    await push(dbRef, novoCadastro);
+    
+    document.getElementById("nome").value = "";
+    document.getElementById("telefone").value = "";
+    
+    // Mostrar popup de confirmação
+    mostrarPopupConfirmacao(novoCadastro);
+    
+    atualizarProgresso();
+    
+  } catch (error) {
+    console.error("Erro:", error);
+    mostrarMensagem("❌ Erro ao cadastrar. Tente novamente!", "error");
+  }
+});
+
+// Ver lista
+document.getElementById("verLista").addEventListener("click", async () => {
+  try {
+    await atualizarProgresso();
+    exibirLista();
+    document.getElementById("overlay").style.display = "flex";
+  } catch (error) {
+    console.error("Erro:", error);
+    mostrarMensagem("❌ Erro ao carregar lista!", "error");
+  }
+});
+
+// Exibir lista
+function exibirLista() {
+  const lista = document.getElementById("lista");
+  lista.innerHTML = "";
+
   if (participantes.length === 0) {
-    listaDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #ccc;">Nenhum participante encontrado</div>';
+    lista.innerHTML = '<div style="text-align: center; padding: 20px; opacity: 0.7;">Nenhum participante encontrado</div>';
     return;
   }
-  
-  participantes.forEach(p => {
-    const linha = document.createElement("div");
-    let statusClass = "nao-pago";
-    
-    if (p.status === "Pago") statusClass = "pago";
-    else if (p.status === "Comprovante Enviado") statusClass = "comprovante-enviado";
-    
-    // Criar checkbox para seleção múltipla
-    const checkboxContainer = document.createElement("div");
-    checkboxContainer.className = "checkbox-container";
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.value = p.numero;
-    checkbox.addEventListener('change', (e) => {
-      if (e.target.checked) {
-        participantesSelecionados.push(p);
-        linha.classList.add('selected');
-      } else {
-        participantesSelecionados = participantesSelecionados.filter(sel => sel.numero !== p.numero);
-        linha.classList.remove('selected');
-      }
-      atualizarContadorSelecao();
-    });
-    checkboxContainer.appendChild(checkbox);
-    
-    // Conteúdo da linha
-    const conteudo = document.createElement("span");
-    conteudo.innerHTML = `🎫 ${String(p.numero).padStart(2, "0")}° - ${p.nome.toUpperCase()}`;
-    conteudo.style.flex = "1";
-    conteudo.style.textAlign = "left";
-    
-    const status = document.createElement("span");
-    status.className = `status ${statusClass}`;
-    status.textContent = p.status;
-    
-    linha.appendChild(checkboxContainer);
-    linha.appendChild(conteudo);
-    linha.appendChild(status);
-    
-    // Evento de clique
-    linha.addEventListener('click', (e) => {
-      if (e.target.type !== 'checkbox') {
-        if (participantesSelecionados.length > 0) {
+
+  participantes
+    .sort((a, b) => a.numero - b.numero)
+    .forEach(participante => {
+      const div = document.createElement("div");
+      div.className = "participante";
+      div.innerHTML = `
+        <input type="checkbox" id="check-${participante.key}" style="margin: 0; cursor: pointer; width: 16px; height: 16px;">
+        <span style="flex: 1;">${participante.numero}. ${participante.nome}</span>
+        <span class="status ${participante.status.toLowerCase().replace(' ', '-')}">${participante.status}</span>
+      `;
+      
+      const checkbox = div.querySelector('input[type="checkbox"]');
+      
+      checkbox.addEventListener('change', (e) => {
+        e.stopPropagation();
+        if (checkbox.checked) {
+          participantesSelecionados.push(participante);
+          div.style.background = 'rgba(255, 215, 0, 0.3)';
+        } else {
+          participantesSelecionados = participantesSelecionados.filter(p => p.key !== participante.key);
+          div.style.background = 'rgba(255, 255, 255, 0.1)';
+        }
+      });
+      
+      div.addEventListener('click', (e) => {
+        if (e.target.type !== 'checkbox' && !e.target.classList.contains('status')) {
+          // Se já pagou, apenas selecionar
           checkbox.checked = !checkbox.checked;
           checkbox.dispatchEvent(new Event('change'));
-        } else {
-          participanteSelecionado = p;
-          mostrarTecladoVirtual(verificarSenhaComTeclado);
         }
+      });
+      
+      // Event listener específico para o status "Não pago"
+      const statusElement = div.querySelector('.status');
+      if (participante.status === "Não pago") {
+        statusElement.addEventListener('click', (e) => {
+          e.stopPropagation();
+          mostrarPopupPagamentoSobreLista(participante);
+        });
       }
+      
+      lista.appendChild(div);
     });
-    
-    listaDiv.appendChild(linha);
-  });
 }
 
-// Atualizar contador de seleção
-function atualizarContadorSelecao() {
-  const counter = document.getElementById("selectionCounter");
-  const actions = document.getElementById("selectionActions");
-  const count = participantesSelecionados.length;
-  
-  if (count === 0) {
-    counter.style.display = "none";
-    actions.style.display = "none";
-  } else {
-    counter.style.display = "block";
-    actions.style.display = "flex";
-    counter.textContent = count === 1 ? "1 participante selecionado" : `${count} participantes selecionados`;
-  }
-}
-
-// === TECLADO VIRTUAL ===
-function mostrarTecladoVirtual(callback) {
-  senhaAtual = "";
-  callbackConfirmacao = callback;
-  document.getElementById("passwordDisplay").textContent = "";
-  document.getElementById("virtualKeyboard").style.display = "block";
-}
-
-function esconderTecladoVirtual() {
-  document.getElementById("virtualKeyboard").style.display = "none";
-  senhaAtual = "";
-  callbackConfirmacao = null;
-}
-
-// Verificar senha e abrir menu de ações
-function verificarSenhaComTeclado(senhaDigitada) {
-  if (senhaDigitada === CONFIG.SENHA_ADMIN) {
-    document.getElementById("participanteInfo").textContent = `${participanteSelecionado.numero}° - ${participanteSelecionado.nome.toUpperCase()}`;
-    document.getElementById("acoesOverlay").style.display = "flex";
-  } else {
-    showToast("❌ Senha incorreta!", "error");
-  }
-}
-
-// Verificar senha para ações múltiplas
-function verificarSenhaAcaoMultipla(acao) {
-  return function(senhaDigitada) {
-    if (senhaDigitada === CONFIG.SENHA_ADMIN) {
-      switch(acao) {
-        case 'status':
-          alterarStatusSelecionados();
-          break;
-        case 'excluir':
-          excluirSelecionados();
-          break;
-        case 'notificar':
-          notificarSelecionados();
-          break;
-        case 'upload':
-          uploadComprovanteMultiplo();
-          break;
-      }
-    } else {
-      showToast("❌ Senha incorreta!", "error");
-    }
-  };
-}
-
-// Alterar status dos selecionados
-async function alterarStatusSelecionados() {
-  if (participantesSelecionados.length === 0) return;
-  
-  try {
-    const snapshot = await get(dbRef);
-    if (!snapshot.exists()) return;
-    
-    const dados = snapshot.val();
-    const updates = {};
-    
-    // Ciclo de status: Não pago -> Comprovante Enviado -> Pago -> Não pago
-    participantesSelecionados.forEach(participante => {
-      const participanteKey = Object.keys(dados).find(key => 
-        dados[key].nome === participante.nome && dados[key].telefone === participante.telefone
-      );
-      
-      if (participanteKey) {
-        let novoStatus;
-        switch(participante.status) {
-          case "Não pago":
-            novoStatus = "Comprovante Enviado";
-            break;
-          case "Comprovante Enviado":
-            novoStatus = "Pago";
-            break;
-          case "Pago":
-            novoStatus = "Não pago";
-            break;
-          default:
-            novoStatus = "Não pago";
-        }
-        updates[`participantes/${participanteKey}/status`] = novoStatus;
-      }
-    });
-    
-    if (Object.keys(updates).length > 0) {
-      await update(ref(db), updates);
-      showToast(`✅ Status alterado em ${participantesSelecionados.length} participante(s)`, "success");
-      await recarregarLista();
-      limparSelecoes();
-    }
-    
-  } catch (error) {
-    console.error('Erro ao atualizar status:', error);
-    showToast("❌ Erro ao executar ação. Tente novamente.", "error");
-  }
-}
-
-// Notificar selecionados
-function notificarSelecionados() {
-  if (participantesSelecionados.length === 0) return;
-  
-  const participantesNaoPagos = participantesSelecionados.filter(p => p.status === "Não pago");
-  
-  if (participantesNaoPagos.length === 0) {
-    showToast("⚠️ Nenhum participante selecionado tem status 'Não pago'", "warning");
-    return;
-  }
-  
-  let contador = 0;
-  const total = participantesNaoPagos.length;
-  
-  participantesNaoPagos.forEach((participante, index) => {
-    setTimeout(() => {
-      enviarNotificacaoWhatsApp(participante);
-      contador++;
-      
-      if (contador === total) {
-        showToast(`✅ ${total} notificação(ões) enviada(s) com sucesso!`, "success");
-        limparSelecoes();
-      }
-    }, index * 1000);
-  });
-}
-
-// Excluir selecionados
-async function excluirSelecionados() {
-  if (participantesSelecionados.length === 0) return;
-  
-  try {
-    const snapshot = await get(dbRef);
-    if (!snapshot.exists()) return;
-    
-    const dados = snapshot.val();
-    const promises = [];
-    
-    participantesSelecionados.forEach(participante => {
-      const participanteKey = Object.keys(dados).find(key => 
-        dados[key].nome === participante.nome && dados[key].telefone === participante.telefone
-      );
-      
-      if (participanteKey) {
-        const participanteRef = ref(db, `participantes/${participanteKey}`);
-        promises.push(remove(participanteRef));
-      }
-    });
-    
-    if (promises.length > 0) {
-      await Promise.all(promises);
-      showToast(`✅ ${participantesSelecionados.length} participante(s) excluído(s) com sucesso`, "success");
-      await recarregarLista();
-      limparSelecoes();
-    }
-    
-  } catch (error) {
-    console.error('Erro ao excluir participantes:', error);
-    showToast("❌ Erro ao executar ação. Tente novamente.", "error");
-  }
-}
-
-// Upload de comprovante múltiplo
-function uploadComprovanteMultiplo() {
-  if (participantesSelecionados.length === 0) return;
-  
-  // Para múltiplos participantes, apenas alterar status para "Comprovante Enviado"
-  alterarStatusParaComprovante();
-}
-
-async function alterarStatusParaComprovante() {
-  try {
-    const snapshot = await get(dbRef);
-    if (!snapshot.exists()) return;
-    
-    const dados = snapshot.val();
-    const updates = {};
-    
-    participantesSelecionados.forEach(participante => {
-      const participanteKey = Object.keys(dados).find(key => 
-        dados[key].nome === participante.nome && dados[key].telefone === participante.telefone
-      );
-      
-      if (participanteKey) {
-        updates[`participantes/${participanteKey}/status`] = "Comprovante Enviado";
-      }
-    });
-    
-    if (Object.keys(updates).length > 0) {
-      await update(ref(db), updates);
-      showToast(`✅ Status alterado para "Comprovante Enviado" em ${participantesSelecionados.length} participante(s)`, "success");
-      await recarregarLista();
-      limparSelecoes();
-    }
-    
-  } catch (error) {
-    console.error('Erro ao atualizar status:', error);
-    showToast("❌ Erro ao executar ação. Tente novamente.", "error");
-  }
-}
-
-// Limpar seleções
-function limparSelecoes() {
-  participantesSelecionados = [];
-  
-  document.querySelectorAll('.checkbox-container input[type="checkbox"]').forEach(checkbox => {
-    checkbox.checked = false;
-  });
-  
-  document.querySelectorAll('.lista div.selected').forEach(linha => {
-    linha.classList.remove('selected');
-  });
-  
-  atualizarContadorSelecao();
-}
-
-// Recarregar lista
-async function recarregarLista() {
-  const novoSnapshot = await get(dbRef);
-  if (novoSnapshot.exists()) {
-    participantesOriginais = Object.values(novoSnapshot.val());
-    participantesOriginais.sort((a, b) => a.numero - b.numero);
-    
-    await reordenarNumeros(participantesOriginais);
-    aplicarFiltros();
-  } else {
-    document.getElementById("lista").innerHTML = "Nenhum participante cadastrado.";
-  }
-  atualizarProgresso();
-}
-
-// Função para reordenar números sequencialmente
-async function reordenarNumeros(participantes) {
-  const snapshot = await get(dbRef);
-  if (!snapshot.exists()) return;
-  
-  const dados = snapshot.val();
-  const updates = {};
-  
-  participantes.sort((a, b) => a.numero - b.numero);
-  
-  participantes.forEach((participante, index) => {
-    const novoNumero = index + 1;
-    if (participante.numero !== novoNumero) {
-      const participanteKey = Object.keys(dados).find(key => 
-        dados[key].nome === participante.nome && dados[key].telefone === participante.telefone
-      );
-      
-      if (participanteKey) {
-        updates[`participantes/${participanteKey}/numero`] = novoNumero;
-        participante.numero = novoNumero;
-      }
-    }
-  });
-  
-  if (Object.keys(updates).length > 0) {
-    await update(ref(db), updates);
-  }
-}
-
-// Função para enviar notificação WhatsApp
-function enviarNotificacaoWhatsApp(participante) {
-  const telefone = participante.telefone.replace(/\D/g, '');
-  
-  if (telefone.length < 10) {
-    showToast("❌ Número de telefone inválido", "error");
-    return;
-  }
-  
-  const numeroCompleto = telefone.startsWith('55') ? telefone : '55' + telefone;
-  
-  const mensagem = CONFIG.MENSAGEM_NOTIFICACAO(
-    participante.nome,
-    CONFIG.VALOR_PARTICIPACAO,
-    CONFIG.DATA_LIMITE_PAGAMENTO,
-    CONFIG.CHAVE_PIX
+// Buscar
+document.getElementById("buscar").addEventListener("input", (e) => {
+  const termo = e.target.value.toLowerCase();
+  const participantesFiltrados = participantes.filter(p => 
+    p.nome.toLowerCase().includes(termo) || 
+    p.telefone.includes(termo) ||
+    p.numero.toString().includes(termo)
   );
   
-  const mensagemCodificada = encodeURIComponent(mensagem);
-  const urlWhatsApp = `https://wa.me/${numeroCompleto}?text=${mensagemCodificada}`;
+  exibirListaFiltrada(participantesFiltrados);
+});
+
+// Função para exibir lista filtrada
+function exibirListaFiltrada(participantesFiltrados) {
+  const lista = document.getElementById("lista");
+  lista.innerHTML = "";
   
-  window.open(urlWhatsApp, '_blank', 'noopener,noreferrer');
-  showToast(`📱 WhatsApp aberto para ${participante.nome}`, "success");
-}
-
-// === AÇÕES INDIVIDUAIS ===
-
-// Fechar modal de ações
-document.getElementById("fecharAcoes").addEventListener("click", () => {
-  document.getElementById("acoesOverlay").style.display = "none";
-  participanteSelecionado = null;
-});
-
-// Alterar status individual
-document.getElementById("alterarStatus").addEventListener("click", async () => {
-  if (!participanteSelecionado) return;
-  
-  try {
-    const snapshot = await get(dbRef);
-    if (!snapshot.exists()) return;
-    
-    const dados = snapshot.val();
-    const participanteKey = Object.keys(dados).find(key => 
-      dados[key].nome === participanteSelecionado.nome
-    );
-    
-    if (participanteKey) {
-      let novoStatus;
-      switch(participanteSelecionado.status) {
-        case "Não pago":
-          novoStatus = "Comprovante Enviado";
-          break;
-        case "Comprovante Enviado":
-          novoStatus = "Pago";
-          break;
-        case "Pago":
-          novoStatus = "Não pago";
-          break;
-        default:
-          novoStatus = "Não pago";
-      }
-      
-      await update(ref(db, `participantes/${participanteKey}`), { 
-        status: novoStatus 
-      });
-      
-      showToast(`✅ Status alterado: ${novoStatus}`, "success");
-      await recarregarLista();
-    }
-    
-  } catch (error) {
-    console.error('Erro ao atualizar status:', error);
-    showToast("❌ Erro ao executar ação. Tente novamente.", "error");
-  }
-  
-  document.getElementById("acoesOverlay").style.display = "none";
-});
-
-// Notificar participante individual
-document.getElementById("notificarParticipante").addEventListener("click", () => {
-  if (!participanteSelecionado) return;
-  
-  if (participanteSelecionado.status !== "Não pago") {
-    showToast("⚠️ Notificação disponível apenas para participantes com status 'Não pago'", "warning");
-    document.getElementById("acoesOverlay").style.display = "none";
-    return;
-  }
-  
-  enviarNotificacaoWhatsApp(participanteSelecionado);
-  document.getElementById("acoesOverlay").style.display = "none";
-});
-
-// Upload comprovante individual
-document.getElementById("uploadComprovanteIndividual").addEventListener("click", () => {
-  if (!participanteSelecionado) return;
-  
-  document.getElementById("uploadParticipanteInfo").textContent = `${participanteSelecionado.numero}° - ${participanteSelecionado.nome.toUpperCase()}`;
-  document.getElementById("uploadOverlay").style.display = "flex";
-  document.getElementById("acoesOverlay").style.display = "none";
-});
-
-// Excluir participante individual
-document.getElementById("excluirParticipante").addEventListener("click", async () => {
-  if (!participanteSelecionado) return;
-  
-  try {
-    const snapshot = await get(dbRef);
-    if (!snapshot.exists()) return;
-    
-    const dados = snapshot.val();
-    const participanteKey = Object.keys(dados).find(key => 
-      dados[key].nome === participanteSelecionado.nome
-    );
-    
-    if (participanteKey) {
-      const participanteRef = ref(db, `participantes/${participanteKey}`);
-      await remove(participanteRef);
-      
-      showToast(`✅ Participante excluído com sucesso`, "success");
-      await recarregarLista();
-    }
-    
-  } catch (error) {
-    console.error('Erro ao excluir participante:', error);
-    showToast("❌ Erro ao executar ação. Tente novamente.", "error");
-  }
-  
-  document.getElementById("acoesOverlay").style.display = "none";
-});
-
-// === DASHBOARD ===
-document.getElementById("verDashboard").addEventListener("click", () => {
-  document.getElementById("dashboardOverlay").style.display = "flex";
-  atualizarProgresso(); // Isso também atualiza o dashboard
-});
-
-document.getElementById("fecharDashboard").addEventListener("click", () => {
-  document.getElementById("dashboardOverlay").style.display = "none";
-});
-
-// Ações rápidas do dashboard
-document.getElementById("notificarTodosPendentes").addEventListener("click", async () => {
-  const snapshot = await get(dbRef);
-  if (!snapshot.exists()) return;
-  
-  const participantes = Object.values(snapshot.val());
-  const pendentes = participantes.filter(p => p.status === "Não pago");
-  
-  if (pendentes.length === 0) {
-    showToast("⚠️ Nenhum participante pendente encontrado", "warning");
-    return;
-  }
-  
-  pendentes.forEach((participante, index) => {
-    setTimeout(() => {
-      enviarNotificacaoWhatsApp(participante);
-    }, index * 1000);
-  });
-  
-  showToast(`📱 Enviando ${pendentes.length} notificações...`, "success");
-});
-
-document.getElementById("gerarRelatorioCompleto").addEventListener("click", () => {
-  exportarExcel();
-});
-
-document.getElementById("limparHistorico").addEventListener("click", () => {
-  mostrarTecladoVirtual((senha) => {
-    if (senha === CONFIG.SENHA_ADMIN) {
-      localStorage.clear();
-      showToast("✅ Histórico limpo com sucesso!", "success");
-    } else {
-      showToast("❌ Senha incorreta!", "error");
-    }
-  });
-});
-
-// === QR CODE ===
-document.getElementById("gerarQRCode").addEventListener("click", () => {
-  document.getElementById("qrOverlay").style.display = "flex";
-  gerarQRCode();
-});
-
-document.getElementById("fecharQR").addEventListener("click", () => {
-  document.getElementById("qrOverlay").style.display = "none";
-});
-
-function gerarQRCode() {
-  const chavePix = CONFIG.CHAVE_PIX;
-  const valor = CONFIG.VALOR_NUMERICO;
-  const descricao = "Bolão Mega da Virada 2025";
-  
-  // Gerar código PIX (formato simplificado)
-  const pixCode = `00020126580014BR.GOV.BCB.PIX0136${chavePix}0208${descricao}5204000053039865802BR5925BOLAO MEGA DA VIRADA6009SAO PAULO62070503***6304`;
-  
-  // Usar uma biblioteca de QR Code (aqui simulamos)
-  const qrContainer = document.getElementById("qrCodeContainer");
-  qrContainer.innerHTML = `
-    <div style="width: 200px; height: 200px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; border-radius: 10px;">
-      <div style="text-align: center; color: #333;">
-        <div style="font-size: 48px; margin-bottom: 10px;">📱</div>
-        <div style="font-size: 14px; font-weight: bold;">QR Code PIX</div>
-        <div style="font-size: 12px;">R$ ${valor.toFixed(2)}</div>
-      </div>
-    </div>
-  `;
-}
-
-document.getElementById("copiarChavePix").addEventListener("click", () => {
-  navigator.clipboard.writeText(CONFIG.CHAVE_PIX).then(() => {
-    showToast("📋 Chave PIX copiada!", "success");
-  });
-});
-
-document.getElementById("compartilharQR").addEventListener("click", () => {
-  const texto = `🎯 *Bolão Mega da Virada 2025*\n\n💰 Valor: ${CONFIG.VALOR_PARTICIPACAO}\n💳 Chave PIX: ${CONFIG.CHAVE_PIX}\n\n📱 Participe do nosso bolão!`;
-  const url = `https://wa.me/?text=${encodeURIComponent(texto)}`;
-  window.open(url, '_blank', 'noopener,noreferrer');
-});
-
-// === UPLOAD DE COMPROVANTE ===
-document.getElementById("fecharUpload").addEventListener("click", () => {
-  document.getElementById("uploadOverlay").style.display = "none";
-  document.getElementById("previewArea").style.display = "none";
-  document.getElementById("previewContent").innerHTML = "";
-  document.getElementById("confirmarUpload").disabled = true;
-});
-
-// Configurar área de upload
-const uploadArea = document.getElementById("uploadArea");
-const fileInput = document.getElementById("fileInput");
-
-uploadArea.addEventListener("click", () => fileInput.click());
-
-uploadArea.addEventListener("dragover", (e) => {
-  e.preventDefault();
-  uploadArea.classList.add("dragover");
-});
-
-uploadArea.addEventListener("dragleave", () => {
-  uploadArea.classList.remove("dragover");
-});
-
-uploadArea.addEventListener("drop", (e) => {
-  e.preventDefault();
-  uploadArea.classList.remove("dragover");
-  const files = e.dataTransfer.files;
-  if (files.length > 0) {
-    processarArquivo(files[0]);
-  }
-});
-
-fileInput.addEventListener("change", (e) => {
-  if (e.target.files.length > 0) {
-    processarArquivo(e.target.files[0]);
-  }
-});
-
-function processarArquivo(arquivo) {
-  // Validar tipo de arquivo
-  const tiposPermitidos = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
-  if (!tiposPermitidos.includes(arquivo.type)) {
-    showToast("❌ Tipo de arquivo não permitido!", "error");
-    return;
-  }
-  
-  // Validar tamanho (5MB)
-  if (arquivo.size > 5 * 1024 * 1024) {
-    showToast("❌ Arquivo muito grande! Máximo 5MB.", "error");
-    return;
-  }
-  
-  // Mostrar preview
-  const previewArea = document.getElementById("previewArea");
-  const previewContent = document.getElementById("previewContent");
-  
-  if (arquivo.type.startsWith('image/')) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      previewContent.innerHTML = `<img src="${e.target.result}" style="max-width: 100%; max-height: 200px; border-radius: 10px;">`;
-      previewArea.style.display = "block";
-      document.getElementById("confirmarUpload").disabled = false;
-    };
-    reader.readAsDataURL(arquivo);
-  } else if (arquivo.type === 'application/pdf') {
-    previewContent.innerHTML = `
-      <div style="text-align: center; padding: 20px; background: #f0f0f0; border-radius: 10px; color: #333;">
-        <div style="font-size: 48px; margin-bottom: 10px;">📄</div>
-        <div style="font-weight: bold;">${arquivo.name}</div>
-        <div style="font-size: 12px; opacity: 0.7;">${(arquivo.size / 1024 / 1024).toFixed(2)} MB</div>
-      </div>
+  participantesFiltrados.forEach(participante => {
+    const div = document.createElement("div");
+    div.className = "participante";
+    div.innerHTML = `
+      <input type="checkbox" id="check-${participante.key}" style="margin: 0; cursor: pointer; width: 16px; height: 16px;">
+      <span style="flex: 1;">${participante.numero}. ${participante.nome}</span>
+      <span class="status ${participante.status.toLowerCase().replace(' ', '-')}">${participante.status}</span>
     `;
-    previewArea.style.display = "block";
-    document.getElementById("confirmarUpload").disabled = false;
-  }
-}
-
-document.getElementById("confirmarUpload").addEventListener("click", async () => {
-  if (!participanteSelecionado) return;
-  
-  try {
-    // Simular upload (em produção, você enviaria para um servidor)
-    const snapshot = await get(dbRef);
-    if (!snapshot.exists()) return;
     
-    const dados = snapshot.val();
-    const participanteKey = Object.keys(dados).find(key => 
-      dados[key].nome === participanteSelecionado.nome
-    );
+    const checkbox = div.querySelector('input[type="checkbox"]');
     
-    if (participanteKey) {
-      await update(ref(db, `participantes/${participanteKey}`), { 
-        status: "Comprovante Enviado",
-        comprovante: {
-          dataUpload: new Date().toISOString(),
-          nomeArquivo: fileInput.files[0]?.name || "comprovante.jpg"
+    // Manter seleção se já estava selecionado
+    if (participantesSelecionados.some(p => p.key === participante.key)) {
+      checkbox.checked = true;
+      div.style.background = 'rgba(255, 215, 0, 0.3)';
+    }
+    
+    checkbox.addEventListener('change', (e) => {
+      e.stopPropagation();
+      if (checkbox.checked) {
+        if (!participantesSelecionados.some(p => p.key === participante.key)) {
+          participantesSelecionados.push(participante);
         }
-      });
-      
-      showToast("✅ Comprovante enviado com sucesso!", "success");
-      await recarregarLista();
-      document.getElementById("uploadOverlay").style.display = "none";
-    }
-    
-  } catch (error) {
-    console.error('Erro ao fazer upload:', error);
-    showToast("❌ Erro ao enviar comprovante. Tente novamente.", "error");
-  }
-});
-
-// === EXPORTAÇÃO E RELATÓRIOS ===
-document.getElementById("exportarExcel").addEventListener("click", () => {
-  exportarExcel();
-});
-
-document.getElementById("backupDados").addEventListener("click", () => {
-  backupDados();
-});
-
-document.getElementById("sorteioNumeros").addEventListener("click", () => {
-  mostrarTecladoVirtual((senha) => {
-    if (senha === CONFIG.SENHA_ADMIN) {
-      realizarSorteio();
-    } else {
-      showToast("❌ Senha incorreta!", "error");
-    }
-  });
-});
-
-function exportarExcel() {
-  if (participantesOriginais.length === 0) {
-    showToast("⚠️ Nenhum dado para exportar!", "warning");
-    return;
-  }
-  
-  // Criar dados para exportação
-  const dados = participantesOriginais.map(p => ({
-    'Número': p.numero,
-    'Nome': p.nome,
-    'Telefone': p.telefone,
-    'Status': p.status,
-    'Data Cadastro': p.dataCadastro ? new Date(p.dataCadastro).toLocaleDateString('pt-BR') : '-',
-    'Comprovante': p.comprovante ? 'Sim' : 'Não'
-  }));
-  
-  // Converter para CSV
-  const csv = [
-    Object.keys(dados[0]).join(','),
-    ...dados.map(row => Object.values(row).join(','))
-  ].join('\n');
-  
-  // Download
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = `bolao_mega_virada_${new Date().toISOString().split('T')[0]}.csv`;
-  link.click();
-  
-  showToast("📊 Relatório exportado com sucesso!", "success");
-}
-
-function backupDados() {
-  if (participantesOriginais.length === 0) {
-    showToast("⚠️ Nenhum dado para backup!", "warning");
-    return;
-  }
-  
-  const backup = {
-    data: new Date().toISOString(),
-    versao: "3.0 Pro",
-    participantes: participantesOriginais,
-    configuracoes: CONFIG
-  };
-  
-  const json = JSON.stringify(backup, null, 2);
-  const blob = new Blob([json], { type: 'application/json' });
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = `backup_bolao_${new Date().toISOString().split('T')[0]}.json`;
-  link.click();
-  
-  showToast("💾 Backup criado com sucesso!", "success");
-}
-
-function realizarSorteio() {
-  if (participantesOriginais.length === 0) {
-    showToast("⚠️ Nenhum participante para sortear!", "warning");
-    return;
-  }
-  
-  // Sortear um participante aleatório
-  const sorteado = participantesOriginais[Math.floor(Math.random() * participantesOriginais.length)];
-  
-  showToast(`🎲 Sorteado: ${sorteado.numero}° - ${sorteado.nome}!`, "success");
-  
-  // Destacar na lista se estiver aberta
-  setTimeout(() => {
-    const elementos = document.querySelectorAll('.lista div');
-    elementos.forEach(el => {
-      if (el.textContent.includes(sorteado.nome)) {
-        el.style.background = 'rgba(255, 215, 0, 0.3)';
-        el.style.border = '2px solid #ffd700';
-        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        div.style.background = 'rgba(255, 215, 0, 0.3)';
+      } else {
+        participantesSelecionados = participantesSelecionados.filter(p => p.key !== participante.key);
+        div.style.background = 'rgba(255, 255, 255, 0.1)';
       }
     });
-  }, 1000);
+    
+    div.addEventListener('click', (e) => {
+      if (e.target.type !== 'checkbox' && !e.target.classList.contains('status')) {
+        // Se já pagou, apenas selecionar
+        checkbox.checked = !checkbox.checked;
+        checkbox.dispatchEvent(new Event('change'));
+      }
+    });
+    
+    // Event listener específico para o status "Não pago"
+    const statusElement = div.querySelector('.status');
+    if (participante.status === "Não pago") {
+      statusElement.addEventListener('click', (e) => {
+        e.stopPropagation();
+        mostrarPopupPagamentoSobreLista(participante);
+      });
+    }
+    
+    lista.appendChild(div);
+  });
 }
 
-// === EVENT LISTENERS GERAIS ===
-
-// Fechar modais
-document.getElementById("fecharLista").addEventListener("click", () => {
-  document.getElementById("overlay").style.display = "none";
-});
-
-document.getElementById("fecharInfo").addEventListener("click", () => {
-  document.getElementById("infoOverlay").style.display = "none";
-});
-
-document.getElementById("verRegras").addEventListener("click", () => {
-  document.getElementById("infoOverlay").style.display = "flex";
-});
-
-// Tema
-document.getElementById("themeToggle").addEventListener("click", toggleTheme);
-
-// Teclado virtual
-document.addEventListener('DOMContentLoaded', () => {
-  const keyboard = document.getElementById("virtualKeyboard");
-  const passwordDisplay = document.getElementById("passwordDisplay");
+// Botão Filtros
+document.getElementById("filtroBtn").addEventListener("click", () => {
+  const menuFiltros = document.getElementById("menuFiltros");
+  const menuAcoes = document.getElementById("menuAcoes");
   
-  keyboard.addEventListener('click', (e) => {
-    if (!e.target.classList.contains('key-btn')) return;
-    
-    const key = e.target.getAttribute('data-key');
-    
-    switch(key) {
-      case 'cancel':
-        esconderTecladoVirtual();
-        participanteSelecionado = null;
-        break;
-        
-      default:
-        if (/^[0-9*#]$/.test(key) && senhaAtual.length < 4) {
-          senhaAtual += key;
-          passwordDisplay.textContent = "●".repeat(senhaAtual.length);
-          
-          if (senhaAtual.length === 4) {
-            setTimeout(() => {
-              if (callbackConfirmacao) {
-                callbackConfirmacao(senhaAtual);
-              }
-              esconderTecladoVirtual();
-            }, 300);
-          }
+  // Se o menu filtros está fechado, abrir e fechar o de ações
+  if (menuFiltros.style.display === "none" || menuFiltros.style.display === "") {
+    menuFiltros.style.display = "block";
+    menuAcoes.style.display = "none";
+  } else {
+    // Se está aberto, fechar
+    menuFiltros.style.display = "none";
+  }
+});
+
+// Botão Ações
+document.getElementById("acaoBtn").addEventListener("click", () => {
+  const menuFiltros = document.getElementById("menuFiltros");
+  const menuAcoes = document.getElementById("menuAcoes");
+  
+  // Se o menu ações está fechado, abrir e fechar o de filtros
+  if (menuAcoes.style.display === "none" || menuAcoes.style.display === "") {
+    menuAcoes.style.display = "block";
+    menuFiltros.style.display = "none";
+  } else {
+    // Se está aberto, fechar
+    menuAcoes.style.display = "none";
+  }
+});
+
+// Filtros
+document.getElementById("filtroTodos").addEventListener("click", () => {
+  exibirListaFiltrada(participantes);
+});
+
+document.getElementById("filtroPagos").addEventListener("click", () => {
+  const participantesPagos = participantes.filter(p => p.status === "Pago");
+  exibirListaFiltrada(participantesPagos);
+});
+
+document.getElementById("filtroNaoPagos").addEventListener("click", () => {
+  const participantesPendentes = participantes.filter(p => p.status === "Não pago");
+  exibirListaFiltrada(participantesPendentes);
+});
+
+// Função para executar ações após autenticação
+async function executarAcao(acao) {
+  if (participantesSelecionados.length === 0) {
+    mostrarMensagem("⚠️ Selecione pelo menos um participante!", "warning");
+    return;
+  }
+
+  try {
+    switch (acao) {
+      case 'alterarStatus':
+        const updates = {};
+        for (const participante of participantesSelecionados) {
+          const novoStatus = participante.status === "Pago" ? "Não pago" : "Pago";
+          updates[`participantes/${participante.key}/status`] = novoStatus;
         }
+        await update(ref(db), updates);
+        mostrarMensagem(`✅ Status alterado para ${participantesSelecionados.length} participante(s)!`, "success");
+        break;
+
+      case 'notificar':
+        participantesSelecionados.forEach((participante, index) => {
+          setTimeout(() => {
+            const mensagem = `🎯 *${CONFIG.TITULO_BOLAO}*
+
+Olá ${participante.nome.split(' ')[0]}!
+
+Sua vaga está reservada no nosso bolão!
+
+💰 *Valor:* R$ ${CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',')}
+📅 *Prazo:* até ${CONFIG.DATA_LIMITE_PAGAMENTO}
+💳 *PIX:* ${CONFIG.PIX_PAGAMENTO}
+
+⚠️ *IMPORTANTE:* Quem não pagar até ${CONFIG.DATA_LIMITE_PAGAMENTO.split(' ')[0]}/${CONFIG.DATA_LIMITE_PAGAMENTO.split(' ')[2]} será excluído automaticamente.
+
+Após o pagamento, envie o comprovante!
+
+*Garanta sua vaga!* 🍀`;
+            
+            const telefoneFormatado = participante.telefone.replace(/\D/g, '');
+            const telefoneComCodigo = telefoneFormatado.startsWith('55') ? telefoneFormatado : '55' + telefoneFormatado;
+            const whatsappUrl = `https://wa.me/${telefoneComCodigo}?text=${encodeURIComponent(mensagem)}`;
+            
+            window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+          }, index * 1000);
+        });
+        mostrarMensagem(`📱 WhatsApp aberto para ${participantesSelecionados.length} participante(s)!`, "success");
+        break;
+
+      case 'excluir':
+        const nomes = participantesSelecionados.map(p => p.nome.split(' ')[0]).join(', ');
+        if (!confirm(`Tem certeza que deseja excluir ${participantesSelecionados.length} participante(s)?\n\n${nomes}`)) {
+          return;
+        }
+        
+        const deleteUpdates = {};
+        for (const participante of participantesSelecionados) {
+          deleteUpdates[`participantes/${participante.key}`] = null;
+        }
+        await update(ref(db), deleteUpdates);
+        mostrarMensagem(`✅ ${participantesSelecionados.length} participante(s) excluído(s)!`, "success");
         break;
     }
-  });
-  
-  // Inicializar
-  initTheme();
-  aplicarConfiguracoes();
-  atualizarProgresso();
+
+    // Sincronização instantânea após qualquer ação
+    participantesSelecionados = [];
+    await atualizarProgresso();
+    exibirLista();
+    
+  } catch (error) {
+    console.error("Erro:", error);
+    mostrarMensagem("❌ Erro ao executar ação!", "error");
+  }
+}
+
+// Event listeners para ações com autenticação
+document.getElementById("alterarStatus").addEventListener("click", () => {
+  if (participantesSelecionados.length === 0) {
+    mostrarMensagem("⚠️ Selecione pelo menos um participante!", "warning");
+    return;
+  }
+  mostrarTecladoSenha('alterarStatus');
 });
+
+document.getElementById("notificar").addEventListener("click", () => {
+  if (participantesSelecionados.length === 0) {
+    mostrarMensagem("⚠️ Selecione pelo menos um participante!", "warning");
+    return;
+  }
+  mostrarTecladoSenha('notificar');
+});
+
+document.getElementById("excluir").addEventListener("click", () => {
+  if (participantesSelecionados.length === 0) {
+    mostrarMensagem("⚠️ Selecione pelo menos um participante!", "warning");
+    return;
+  }
+  mostrarTecladoSenha('excluir');
+});
+
+// Event listeners do teclado virtual
+document.querySelectorAll('.num-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    adicionarDigito(btn.dataset.num);
+  });
+});
+
+document.getElementById('limparSenha').addEventListener('click', limparSenha);
+document.getElementById('cancelarSenha').addEventListener('click', cancelarSenha);
+
+// Event listeners dos modais
+document.getElementById('verRegras').addEventListener('click', () => {
+  document.getElementById('modalRegras').style.display = 'flex';
+});
+
+document.getElementById('fecharRegras').addEventListener('click', () => {
+  document.getElementById('modalRegras').style.display = 'none';
+});
+
+document.getElementById('fecharBoasVindas').addEventListener('click', () => {
+  document.getElementById('modalBoasVindas').style.display = 'none';
+});
+
+// Fechar modais clicando fora
+document.getElementById('modalRegras').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('modalRegras')) {
+    document.getElementById('modalRegras').style.display = 'none';
+  }
+});
+
+document.getElementById('modalBoasVindas').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('modalBoasVindas')) {
+    document.getElementById('modalBoasVindas').style.display = 'none';
+  }
+});
+
+// Event listeners do modal de confirmação
+document.getElementById('fecharConfirmacao').addEventListener('click', () => {
+  document.getElementById('modalConfirmacao').style.display = 'none';
+  // Restaurar título original
+  const modal = document.getElementById('modalConfirmacao');
+  const titulo = modal.querySelector('h3');
+  titulo.textContent = 'Cadastro Realizado!';
+});
+
+document.getElementById('btnWhatsAppPagamento').addEventListener('click', () => {
+  const nome = document.getElementById('confirmNome').textContent;
+  const telefone = document.getElementById('confirmTelefone').textContent;
+  const valor = document.getElementById('confirmValor').textContent;
+  const prazo = document.getElementById('confirmPrazo').textContent;
+  const pix = document.getElementById('confirmPix').textContent;
+  
+  const mensagem = `🎯 *${CONFIG.TITULO_BOLAO}*
+
+Olá! Gostaria de efetuar o pagamento da minha participação no bolão.
+
+👤 *Nome:* ${nome}
+📱 *WhatsApp:* ${telefone}
+💰 *Valor:* R$ ${valor}
+📅 *Prazo:* até ${prazo}
+💳 *PIX:* ${pix}
+
+Vou fazer o PIX agora e enviar o comprovante! 🍀`;
+  
+  // Usar o PIX como número do WhatsApp (que é o organizador)
+  const telefoneOrganizador = CONFIG.PIX_PAGAMENTO.replace(/\D/g, '');
+  const telefoneComCodigo = telefoneOrganizador.startsWith('55') ? telefoneOrganizador : '55' + telefoneOrganizador;
+  const whatsappUrl = `https://wa.me/${telefoneComCodigo}?text=${encodeURIComponent(mensagem)}`;
+  
+  window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+});
+
+document.getElementById('btnCopiarPix').addEventListener('click', async () => {
+  const pixQrCode = CONFIG.PIX_QR_CODE;
+  
+  try {
+    await navigator.clipboard.writeText(pixQrCode);
+    mostrarMensagemSobreModal('📱 QR Code PIX copiado! Cole no seu app do banco.', 'success');
+  } catch (err) {
+    // Fallback para navegadores que não suportam clipboard API
+    const textArea = document.createElement('textarea');
+    textArea.value = pixQrCode;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    mostrarMensagemSobreModal('📱 QR Code PIX copiado! Cole no seu app do banco.', 'success');
+  }
+});
+
+// Fechar modal clicando fora
+document.getElementById('modalConfirmacao').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('modalConfirmacao')) {
+    document.getElementById('modalConfirmacao').style.display = 'none';
+    // Restaurar título original
+    const modal = document.getElementById('modalConfirmacao');
+    const titulo = modal.querySelector('h3');
+    titulo.textContent = 'Cadastro Realizado!';
+  }
+});
+
+
+
+// Fechar modal
+document.getElementById("fecharLista").addEventListener("click", () => {
+  document.getElementById("overlay").style.display = "none";
+  participanteSelecionado = null;
+  participantesSelecionados = [];
+});
+
+// Fechar modal clicando fora
+document.getElementById("overlay").addEventListener("click", (e) => {
+  if (e.target === document.getElementById("overlay")) {
+    document.getElementById("overlay").style.display = "none";
+    participanteSelecionado = null;
+    participantesSelecionados = [];
+  }
+});
+
+// Função para inicializar elementos com configurações
+function inicializarElementos() {
+  // Atualizar título da página
+  document.title = CONFIG.TITULO_BOLAO;
+  document.getElementById('tituloBolao').textContent = `🎯 ${CONFIG.TITULO_BOLAO}`;
+  
+  // Atualizar informações gerais
+  document.getElementById('infoGeral').innerHTML = `
+    🎰 <strong>${CONFIG.LIMITE_PARTICIPANTES} participantes</strong> • 💰 <strong>R$ ${CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',')}</strong><br>
+    📅 <strong>Pagamento:</strong> até ${CONFIG.DATA_LIMITE_PAGAMENTO}<br>
+    <small>📋 Preencha os dados para garantir sua vaga!</small>
+  `;
+  
+  // Atualizar modal de regras
+  const modalRegras = document.getElementById('modalRegras');
+  if (modalRegras) {
+    modalRegras.querySelector('h3').textContent = `⚠️ INFORMATIVO: BOLÃO MEGA DA VIRADA ${CONFIG.ANO_SORTEIO} ⚠️`;
+    
+    const conteudoRegras = modalRegras.querySelector('div[style*="text-align: left"]');
+    conteudoRegras.innerHTML = `
+      <p style="margin-bottom: 15px;">Estamos organizando nosso bolão, com um total de <strong style="color: #ffd700;">${CONFIG.LIMITE_PARTICIPANTES} participantes</strong>.</p>
+      
+      <p style="margin-bottom: 15px;"><strong style="color: #00b894;">Custo por Participante:</strong> R$ ${CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',')}</p>
+      
+      <h4 style="color: #ffd700; margin: 20px 0 10px 0; font-size: 16px;">📋 Regras de Participação e Prazos:</h4>
+      
+      <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+        <h5 style="color: #e74c3c; margin: 0 0 10px 0;">📅 Datas Limite:</h5>
+        <p style="margin: 0;"><strong>${CONFIG.DATA_LIMITE_INTERESSE}:</strong> Data final para manifestar interesse (confirmar que quer participar).<br>
+        <strong>${CONFIG.DATA_LIMITE_PAGAMENTO}:</strong> Data final para o pagamento da cota.</p>
+      </div>
+      
+      <div style="background: rgba(231, 76, 60, 0.2); padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #e74c3c;">
+        <h5 style="color: #e74c3c; margin: 0 0 10px 0;">⚠️ Atenção ao Pagamento:</h5>
+        <p style="margin: 0;">O participante que não realizar o pagamento até o dia <strong>${CONFIG.DATA_LIMITE_PAGAMENTO}</strong> será automaticamente excluído do bolão, e a vaga será repassada.</p>
+      </div>
+      
+      <h4 style="color: #ffd700; margin: 20px 0 10px 0; font-size: 16px;">💡 Observações Importantes:</h4>
+      
+      <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 10px;">
+        <p style="margin: 0 0 10px 0;"><strong style="color: #f39c12;">Prazos:</strong> As datas foram definidas para que todos tenham tempo suficiente para pagar (contando com o 13º salário).</p>
+        
+        <p style="margin: 0 0 10px 0;"><strong style="color: #f39c12;">Agilidade:</strong> Quanto antes arrecadarmos o valor, melhor. Deixar para a última hora significa enfrentar lotéricas lotadas.</p>
+        
+        <p style="margin: 0;"><strong style="color: #f39c12;">Jogos:</strong> A quantidade final de bilhetes e jogos será definida ao término da arrecadação, pois dependerá do valor total arrecadado (se todas as ${CONFIG.LIMITE_PARTICIPANTES} cotas forem preenchidas).</p>
+      </div>
+    `;
+  }
+  
+  // Atualizar modal de boas-vindas
+  const modalBoasVindas = document.getElementById('modalBoasVindas');
+  if (modalBoasVindas) {
+    modalBoasVindas.querySelector('h3').textContent = `⚠️ INFORMATIVO: BOLÃO MEGA DA VIRADA ${CONFIG.ANO_SORTEIO} ⚠️`;
+    
+    const conteudoBoasVindas = modalBoasVindas.querySelector('div[style*="text-align: left"]');
+    conteudoBoasVindas.innerHTML = `
+      <p style="margin-bottom: 15px;">Estamos organizando nosso bolão, com um total de <strong style="color: #ffd700;">${CONFIG.LIMITE_PARTICIPANTES} participantes</strong>.</p>
+      
+      <p style="margin-bottom: 15px;"><strong style="color: #00b894;">Custo por Participante:</strong> R$ ${CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',')}</p>
+      
+      <h4 style="color: #ffd700; margin: 20px 0 10px 0; font-size: 16px;">📋 Regras de Participação e Prazos:</h4>
+      
+      <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+        <h5 style="color: #e74c3c; margin: 0 0 10px 0;">📅 Datas Limite:</h5>
+        <p style="margin: 0;"><strong>${CONFIG.DATA_LIMITE_INTERESSE}:</strong> Data final para manifestar interesse (confirmar que quer participar).<br>
+        <strong>${CONFIG.DATA_LIMITE_PAGAMENTO}:</strong> Data final para o pagamento da cota.</p>
+      </div>
+      
+      <div style="background: rgba(231, 76, 60, 0.2); padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #e74c3c;">
+        <h5 style="color: #e74c3c; margin: 0 0 10px 0;">⚠️ Atenção ao Pagamento:</h5>
+        <p style="margin: 0;">O participante que não realizar o pagamento até o dia <strong>${CONFIG.DATA_LIMITE_PAGAMENTO}</strong> será automaticamente excluído do bolão, e a vaga será repassada.</p>
+      </div>
+      
+      <h4 style="color: #ffd700; margin: 20px 0 10px 0; font-size: 16px;">💡 Observações Importantes:</h4>
+      
+      <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 10px;">
+        <p style="margin: 0 0 10px 0;"><strong style="color: #f39c12;">Prazos:</strong> As datas foram definidas para que todos tenham tempo suficiente para pagar (contando com o 13º salário).</p>
+        
+        <p style="margin: 0 0 10px 0;"><strong style="color: #f39c12;">Agilidade:</strong> Quanto antes arrecadarmos o valor, melhor. Deixar para a última hora significa enfrentar lotéricas lotadas.</p>
+        
+        <p style="margin: 0;"><strong style="color: #f39c12;">Jogos:</strong> A quantidade final de bilhetes e jogos será definida ao término da arrecadação, pois dependerá do valor total arrecadado (se todas as ${CONFIG.LIMITE_PARTICIPANTES} cotas forem preenchidas).</p>
+      </div>
+    `;
+  }
+}
+
+// Inicializar
+inicializarElementos();
+atualizarProgresso();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'993c8b18f1fb7263',t:'MTc2MTM0MTA5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9940d84e04167263',t:'MTc2MTM4NjE5Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
