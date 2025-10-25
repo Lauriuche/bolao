@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bolão Mega da Virada 2025</title>
+<style>
+    body {
+        box-sizing: border-box;
+        margin: 0;
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100%;
+        color: #fff;
+        padding: 20px;
+    }
+    
+    html {
+        height: 100%;
+    }
+    
+    .container {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        width: 95%;
+        max-width: 480px;
+        border-radius: 25px;
+        padding: 30px 25px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        text-align: center;
+        color: #333;
+        position: relative;
+    }
+    
+
+    
+    h1 {
+        font-size: 28px;
+        color: #333;
+        margin-bottom: 8px;
+        font-weight: 700;
+    }
+    
+    .info {
+        font-size: 15px;
+        color: #333;
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+    
+    .progress-container {
+        margin: 20px 0;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .progress-bar {
+        width: 100%;
+        height: 20px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #ffd700, #ffb347, #00b894);
+        width: 0%;
+        transition: width 1s ease;
+        border-radius: 12px;
+    }
+    
+    .progress-text {
+        font-size: 14px;
+        margin-top: 10px;
+        color: #333;
+        font-weight: 600;
+    }
+    
+    input {
+        width: 90%;
+        padding: 14px 16px;
+        margin: 8px 0;
+        border: 2px solid transparent;
+        border-radius: 15px;
+        font-size: 15px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.9);
+        color: #333;
+    }
+    
+    input:focus {
+        border-color: #ffd700;
+        outline: none;
+        background: rgba(255, 255, 255, 1);
+    }
+    
+    button {
+        width: 92%;
+        padding: 16px;
+        margin-top: 12px;
+        border: none;
+        border-radius: 15px;
+        background: linear-gradient(135deg, #ffd700, #ffb347);
+        color: #333;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    button:hover {
+        transform: translateY(-2px);
+        background: linear-gradient(135deg, #ffed4e, #ffc947);
+    }
+    
+    .btn-grid {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 10px;
+        margin-top: 8px;
+    }
+    
+    .btn-secondary {
+        background: linear-gradient(135deg, #6c757d, #adb5bd);
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        background: linear-gradient(135deg, #5a6268, #95a5a6);
+    }
+    
+    .message {
+        margin-top: 15px;
+        font-size: 15px;
+        font-weight: 600;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    
+    .success {
+        color: #00b894;
+        background: rgba(0, 184, 148, 0.1);
+        border: 1px solid rgba(0, 184, 148, 0.3);
+    }
+    
+    .error {
+        color: #e74c3c;
+        background: rgba(231, 76, 60, 0.1);
+        border: 1px solid rgba(231, 76, 60, 0.3);
+    }
+    
+    .warning {
+        color: #f39c12;
+        background: rgba(243, 156, 18, 0.1);
+        border: 1px solid rgba(243, 156, 18, 0.3);
+    }
+    
+    /* Modal */
+    .modal-overlay {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+    
+    .modal {
+        background: linear-gradient(135deg, rgba(44, 62, 80, 0.95) 0%, rgba(52, 73, 94, 0.95) 100%);
+        border-radius: 20px;
+        width: 90%;
+        max-width: 600px;
+        max-height: 80vh;
+        padding: 25px;
+        color: #fff;
+        overflow-y: auto;
+    }
+    
+    .modal h3 {
+        margin-top: 0;
+        font-size: 24px;
+        color: #ffd700;
+        margin-bottom: 20px;
+    }
+    
+    .close-btn {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 20px;
+        width: auto;
+    }
+    
+    .lista {
+        text-align: left;
+        font-size: 13px;
+        max-height: 400px;
+        overflow-y: auto;
+        color: #fff;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 12px;
+        margin: 15px 0;
+    }
+    
+    .participante {
+        padding: 12px;
+        margin: 5px 0;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        gap: 10px;
+    }
+    
+    .participante:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateX(5px);
+    }
+    
+    .status {
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 11px;
+        padding: 4px 8px;
+        border-radius: 6px;
+    }
+    
+    .pago {
+        color: #fff;
+        background: linear-gradient(135deg, #00b894, #00cec9);
+    }
+    
+    .nao-pago {
+        color: #fff;
+        background: linear-gradient(135deg, #e74c3c, #ff6b6b);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .nao-pago:hover {
+        background: linear-gradient(135deg, #c0392b, #e74c3c);
+        transform: scale(1.05);
+    }
+    
+
+    
+    /* Animações para mensagem sobre modal */
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    }
+    
+    @keyframes slideUp {
+        from {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-20px);
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .container {
+            padding: 20px 18px;
+            width: 98%;
+        }
+        
+        .modal {
+            width: 95%;
+            padding: 20px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    
+    <h1 id="tituloBolao">🎯 Bolão Mega da Virada 2025</h1>
+    
+    <div class="info" id="infoGeral">
+        🎰 <strong>80 participantes</strong> • 💰 <strong>R$ 85,00 por pessoa</strong><br>
+        📅 <strong>Pagamento:</strong> até 10 de Dezembro<br>
+        <small>📋 Preencha os dados para garantir sua vaga!</small>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-text" id="progressText">0/80 participantes</div>
+        <div style="font-size: 11px; margin-top: 5px; opacity: 0.7;" id="progressSubtext">
+            Arrecadado: R$ 0,00
+        </div>
+    </div>
+
+    <div style="display: flex; justify-content: center; margin: 15px 0 10px 0;">
+        <button id="verRegras" style="background: linear-gradient(135deg, #95a5a6, #bdc3c7); font-size: 14px; padding: 12px 24px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">📋 Regras</button>
+    </div>
+
+    <!-- Modal Regras -->
+    <div id="modalRegras" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 2000; justify-content: center; align-items: center;">
+        <div style="background: linear-gradient(135deg, #2c3e50, #34495e); padding: 25px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; color: #fff;">
+            <h3 style="color: #ffd700; margin: 0 0 20px 0; font-size: 18px; text-align: center;">⚠️ INFORMATIVO: BOLÃO MEGA DA VIRADA ⚠️</h3>
+            
+            <div style="text-align: left; line-height: 1.6; font-size: 14px;">
+                <!-- Conteúdo será preenchido via JavaScript -->
+            </div>
+            
+            <button id="fecharRegras" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 20px; width: 100%;">❌ Fechar</button>
+        </div>
+    </div>
+
+    <!-- Modal Boas-vindas (aparece ao abrir o site) -->
+    <div id="modalBoasVindas" style="display: flex; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 3000; justify-content: center; align-items: center;">
+        <div style="background: linear-gradient(135deg, #2c3e50, #34495e); padding: 25px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; color: #fff;">
+            <h3 style="color: #ffd700; margin: 0 0 20px 0; font-size: 18px; text-align: center;">⚠️ INFORMATIVO: BOLÃO MEGA DA VIRADA ⚠️</h3>
+            
+            <div style="text-align: left; line-height: 1.6; font-size: 14px;">
+                <!-- Conteúdo será preenchido via JavaScript -->
+            </div>
+            
+            <button id="fecharBoasVindas" style="background: linear-gradient(135deg, #00b894, #00cec9); color: white; padding: 15px 30px; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 16px; width: 100%; transition: all 0.3s ease; margin-top: 20px;">ENTRAR PARA LISTA!</button>
+        </div>
+    </div>
+
+    <!-- Modal Confirmação de Cadastro -->
+    <div id="modalConfirmacao" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 4000; justify-content: center; align-items: center;">
+        <div style="background: linear-gradient(135deg, #00b894, #00cec9); padding: 25px; border-radius: 15px; max-width: 450px; width: 90%; color: #fff; text-align: center;">
+            <div style="font-size: 48px; margin-bottom: 15px;">🎉</div>
+            <h3 style="color: #fff; margin: 0 0 15px 0; font-size: 20px;">Cadastro Realizado!</h3>
+            
+            <div style="background: rgba(0, 0, 0, 0.2); padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: left;">
+                <div style="margin-bottom: 10px;"><strong>👤 Nome:</strong> <span id="confirmNome"></span></div>
+                <div><strong>📱 WhatsApp:</strong> <span id="confirmTelefone"></span></div>
+            </div>
+            
+            <div style="background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: left; font-size: 14px;">
+                <h4 style="color: #fff; margin: 0 0 10px 0; font-size: 16px;">💳 Para efetuar o pagamento:</h4>
+                <div style="margin-bottom: 8px;"><strong>PIX:</strong> <span id="confirmPix"></span></div>
+                <div style="margin-bottom: 8px;"><strong>Valor:</strong> R$ <span id="confirmValor"></span></div>
+                <div><strong>Prazo:</strong> até <span id="confirmPrazo"></span></div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+                <button id="btnWhatsAppPagamento" style="background: linear-gradient(135deg, #25d366, #128c7e); color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px;">📱 WhatsApp</button>
+                <button id="btnCopiarPix" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px;">📱 QR Code PIX</button>
+            </div>
+            
+            <button id="fecharConfirmacao" style="background: linear-gradient(135deg, #34495e, #2c3e50); color: white; padding: 12px 24px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%;">✅ Entendi</button>
+        </div>
+    </div>
+
+    <input type="text" id="nome" placeholder="✏️ Nome completo" required>
+    <input type="tel" id="telefone" placeholder="📱 WhatsApp (com DDD)" required>
+    
+    <div class="btn-grid">
+        <button id="verLista" class="btn-secondary">📋 Lista</button>
+        <button id="cadastrar">🚀 Participar</button>
+    </div>
+
+    <div class="message" id="mensagem"></div>
+</div>
+
+<!-- Modal Lista -->
+<div class="modal-overlay" id="overlay">
+    <div class="modal">
+        <h3>📋 Lista de Participantes</h3>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFillLista"></div>
+            </div>
+            <div class="progress-text" id="progressTextLista" style="color: #fff; font-weight: bold;">0/80 cadastrados • 0 pagos</div>
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <input type="text" id="buscar" placeholder="🔍 Buscar participante..." style="width: 100%; padding: 12px; border: 2px solid rgba(52, 152, 219, 0.2); border-radius: 12px; background: rgba(255, 255, 255, 0.9); color: #333; margin-bottom: 10px; box-sizing: border-box;">
+            
+            <div style="display: flex; gap: 8px; justify-content: flex-start;">
+                <button id="filtroBtn" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 12px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">🔍</button>
+                
+                <button id="acaoBtn" style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white; padding: 12px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">⚙️</button>
+            </div>
+        </div>
+        
+        <!-- Menu Filtros (oculto inicialmente) -->
+        <div id="menuFiltros" style="display: none; background: rgba(0, 0, 0, 0.5); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+            <h4 style="color: #ffd700; margin: 0 0 10px 0; font-size: 14px;">🔍 Filtros:</h4>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button id="filtroTodos" class="filter-btn" style="background: linear-gradient(135deg, #6c757d, #adb5bd); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 70px;">👥 Todos</button>
+                <button id="filtroPagos" class="filter-btn" style="background: linear-gradient(135deg, #00b894, #00cec9); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 70px;">✅ Pagos</button>
+                <button id="filtroNaoPagos" class="filter-btn" style="background: linear-gradient(135deg, #e74c3c, #ff6b6b); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 70px;">❌ Pendentes</button>
+            </div>
+        </div>
+        
+        <!-- Menu Ações (oculto inicialmente) -->
+        <div id="menuAcoes" style="display: none; background: rgba(0, 0, 0, 0.5); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+            <h4 style="color: #ffd700; margin: 0 0 10px 0; font-size: 14px;">⚙️ Ações:</h4>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button id="alterarStatus" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 80px;">🔄 Status</button>
+                <button id="notificar" style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 80px;">📱 Notificar</button>
+                <button id="excluir" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 80px;">🗑️ Excluir</button>
+            </div>
+        </div>
+
+        <!-- Modal Senha ADM -->
+        <div id="modalSenha" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 2000; justify-content: center; align-items: center;">
+            <div style="background: linear-gradient(135deg, #2c3e50, #34495e); padding: 25px; border-radius: 15px; text-align: center; max-width: 300px; width: 90%;">
+                <h4 style="color: #ffd700; margin: 0 0 15px 0; font-size: 16px;">🔐 Senha de Administrador</h4>
+                
+                <div id="senhaDisplay" style="background: rgba(0, 0, 0, 0.3); padding: 12px; border-radius: 8px; margin-bottom: 15px; font-size: 18px; letter-spacing: 8px; min-height: 24px; color: #fff;"></div>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px;">
+                    <button class="num-btn" data-num="1" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">1</button>
+                    <button class="num-btn" data-num="2" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">2</button>
+                    <button class="num-btn" data-num="3" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">3</button>
+                    <button class="num-btn" data-num="4" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">4</button>
+                    <button class="num-btn" data-num="5" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">5</button>
+                    <button class="num-btn" data-num="6" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">6</button>
+                    <button class="num-btn" data-num="7" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">7</button>
+                    <button class="num-btn" data-num="8" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">8</button>
+                    <button class="num-btn" data-num="9" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">9</button>
+                    <button id="limparSenha" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;">🗑️</button>
+                    <button class="num-btn" data-num="0" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; 
