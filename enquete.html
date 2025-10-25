@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Enquete do Bolão</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    box-sizing: border-box;
+    font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #000;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+  }
+  
+  html, body {
+    height: 100%;
+  }
+
+  .container {
+    width: 90%;
+    max-width: 900px;
+    max-height: 90vh;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    border-radius: 20px;
+    border: 1px solid #444;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+    overflow-y: auto;
+    margin: 20px;
+  }
+
+  .header {
+    text-align: center;
+    padding: 25px 20px 20px;
+    background: linear-gradient(135deg, #333 0%, #222 100%);
+    border-bottom: 1px solid #555;
+  }
+
+  .header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    background: linear-gradient(135deg, #00d4ff 0%, #00a8cc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 50px;
+    background: rgba(0, 0, 0, 0.2);
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .warning {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+    border-color: rgba(255, 193, 7, 0.3);
+  }
+
+  .content {
+    padding: 25px 20px;
+  }
+
+  .voting-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+
+  .section {
+    background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid #555;
+  }
+
+  .section h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0 0 15px 0;
+    text-align: center;
+    color: #fff;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .option {
+    background: #333;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .option::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.5s;
+  }
+
+  .option:hover {
+    background: #444;
+    border-color: #00d4ff;
+    transform: translateY(-2px);
+  }
+
+  .option:hover::before {
+    left: 100%;
+  }
+
+  .option.selected {
+    background: linear-gradient(135deg, #00d4ff 0%, #00a8cc 100%);
+    border-color: #00d4ff;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+    color: #000;
+  }
+
+  .option label {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-right: 12px;
+    cursor: pointer;
+    accent-color: #667eea;
+  }
+
+  .vote-button {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto 30px;
+    background: linear-gradient(135deg, #00d4ff 0%, #00a8cc 100%);
+    color: #000;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 50px;
+    padding: 16px 32px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .vote-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(0, 212, 255, 0.6);
+  }
+
+  .vote-button:active {
+    transform: translateY(-1px);
+  }
+
+  .msg {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 12px;
+    border-radius: 8px;
+    min-height: 20px;
+  }
+
+  .msg.success {
+    background: rgba(76, 175, 80, 0.2);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+    color: #4caf50;
+  }
+
+  .msg.error {
+    background: rgba(244, 67, 54, 0.2);
+    border: 1px solid rgba(244, 67, 54, 0.3);
+    color: #f44336;
+  }
+
+  .msg.warning {
+    background: rgba(255, 193, 7, 0.2);
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    color: #ffc107;
+  }
+
+  .results {
+    padding: 20px;
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .result-category h4 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0 0 20px 0;
+    text-align: center;
+    color: #e0e7ff;
+  }
+
+  .resultado-item {
+    background: #333;
+    border-radius: 12px;
+    margin: 12px 0;
+    padding: 16px 20px;
+    border: 1px solid #555;
+    transition: all 0.3s ease;
+  }
+
+  .resultado-item:hover {
+    background: #444;
+    transform: translateX(5px);
+  }
+
+  .result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .result-label {
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+
+  .result-votes {
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+
+  .barra {
+    background: #555;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 8px;
+    position: relative;
+  }
+
+  .fill {
+    background: linear-gradient(135deg, #00d4ff 0%, #00a8cc 100%);
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.8s ease;
+    position: relative;
+    min-width: 2px;
+  }
+
+  .percentage {
+    position: absolute;
+    right: 10px;
+    top: -25px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #00d4ff;
+  }
+
+  .summary {
+    margin-top: 25px;
+    padding: 20px;
+    background: linear-gradient(135deg, #333 0%, #222 100%);
+    border-radius: 12px;
+    border: 1px solid #555;
+    text-align: center;
+  }
+
+  .summary p {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #e0e7ff;
+  }
+
+  .summary .highlight {
+    color: #000;
+    font-weight: 700;
+  }
+
+  .expandable-section {
+    margin-top: 25px;
+    background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+    border-radius: 16px;
+    border: 1px solid #555;
+    overflow: hidden;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #00d4ff 0%, #00a8cc 100%);
+    border-bottom: 1px solid #555;
+  }
+
+  .section-header:hover {
+    background: linear-gradient(135deg, #00b8e6 0%, #0096b3 100%);
+  }
+
+  .section-header h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    color: #000;
+  }
+
+  .toggle-icon {
+    font-size: 1.2rem;
+    color: #000;
+    transition: transform 0.3s ease;
+    font-weight: bold;
+  }
+
+  .toggle-icon.rotated {
+    transform: rotate(180deg);
+  }
+
+  .section-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+
+  .section-content.expanded {
+    max-height: 2000px;
+  }
+
+  .calculator-section {
+    padding: 20px;
+  }
+
+  .calculator-container {
+    background: #333;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #555;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  .form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    color: #e0e7ff;
+  }
+
+  .form-group input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #555;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    background: #444;
+    color: #fff;
+    transition: all 0.3s ease;
+  }
+
+  .form-group input[type="number"]:focus {
+    outline: none;
+    border-color: #00d4ff;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+  }
+
+  .form-group input[type="number"]::placeholder {
+    color: #999;
+  }
+
+  #calcularBtn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #00d4ff 0%, #00a8cc 100%);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+  }
+
+  #calcularBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
+  }
+
+  #resultadoArea {
+    margin-top: 20px;
+    border-top: 1px solid #555;
+    padding-top: 20px;
+    display: none;
+  }
+
+  #totalArrecadadoInfo {
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #00d4ff;
+    background: rgba(0, 212, 255, 0.1);
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+  }
+
+  .scenario-box {
+    background: #444;
+    border: 1px solid #666;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 15px;
+  }
+
+  .scenario-box h2 {
+    font-size: 1.2rem;
+    color: #00d4ff;
+    margin: 0 0 15px 0;
+    border-bottom: 2px solid #00d4ff;
+    padding-bottom: 8px;
+  }
+
+  .scenario-box p {
+    font-size: 1rem;
+    margin: 10px 0;
+    line-height: 1.5;
+    color: #e0e7ff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .scenario-box p span {
+    font-weight: 700;
+    color: #00d4ff;
+  }
+
+  .scenario-validation {
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 15px;
+  }
+
+  .scenario-validation.success {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4caf50;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+  }
+
+  .scenario-validation.error {
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+    border: 1px solid rgba(244, 67, 54, 0.3);
+  }
+
+  .small-note {
+    font-size: 0.8rem;
+    color: #999;
+    text-align: center;
+    margin-top: 10px;
+    font-style: italic;
+  }
+
+  .rules-section {
+    padding: 20px;
+  }
+
+  .rules-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 25px;
+  }
+
+  .rule-category {
+    background: #444;
+    border: 1px solid #666;
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .rule-category h4 {
+    font-size: 1.2rem;
+    color: #00d4ff;
+    margin: 0 0 15px 0;
+    border-bottom: 2px solid #00d4ff;
+    padding-bottom: 8px;
+    text-align: center;
+  }
+
+  .rule-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #555;
+    margin-bottom: 8px;
+  }
+
+  .rule-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  .rule-label {
+    font-size: 0.95rem;
+    color: #e0e7ff;
+    font-weight: 500;
+  }
+
+  .rule-value {
+    font-size: 0.95rem;
+    color: #00d4ff;
+    font-weight: 700;
+  }
+
+  .rules-note {
+    background: linear-gradient(135deg, #333 0%, #222 100%);
+    border: 1px solid #555;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .rules-note p {
+    margin: 0 0 15px 0;
+    font-size: 1rem;
+    color: #00d4ff;
+  }
+
+  .rules-note ul {
+    margin: 0;
+    padding-left: 20px;
+    color: #e0e7ff;
+  }
+
+  .rules-note li {
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  /* Responsividade */
+  @media (max-width: 768px) {
+    .container {
+      width: 95%;
+      margin: 10px;
+      max-height: 95vh;
+    }
+    
+    .header {
+      padding: 20px 15px 15px;
+    }
+    
+    .header h1 {
+      font-size: 1.7rem;
+    }
+    
+    .content {
+      padding: 20px 15px;
+    }
+    
+    .voting-section {
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .section {
+      padding: 15px;
+    }
+    
+    .section h3 {
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+    }
+    
+    .options {
+      gap: 6px;
+    }
+    
+    .option {
+      padding: 10px 12px;
+    }
+    
+    .option label {
+      font-size: 0.9rem;
+    }
+    
+    .results {
+      padding: 15px;
+    }
+    
+    .results h3 {
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+    }
+    
+    .results-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .container {
+      width: 98%;
+      margin: 5px;
+      max-height: 98vh;
+    }
+    
+    .voting-section {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    
+    .results-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    
+    .rules-container {
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+    
+    .header h1 {
+      font-size: 1.5rem;
+    }
+    
+    .vote-button {
+      font-size: 1rem;
+      padding: 12px 24px;
+    }
+    
+    .content {
+      padding: 15px 10px;
+    }
+    
+    .header {
+      padding: 15px 10px 12px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<main>
+  <div class="container">
+    <div class="header">
+      <h1>🗳️ Enquete do Bolão</h1>
+      <div class="badge" id="modeBadge">Modo: carregando...</div>
+    </div>
+
+    <div class="content">
+      <div class="voting-section">
+        <div class="section">
+          <h3>💰 Valor da Cota</h3>
+          <div class="options" id="valores">
+            <div class="option"><label><input type="checkbox" value="60" name="valor"> R$ 60,00</label></div>
+            <div class="option"><label><input type="checkbox" value="70" name="valor"> R$ 70,00</label></div>
+            <div class="option"><label><input type="checkbox" value="80" name="valor"> R$ 80,00</label></div>
+            <div class="option"><label><input type="checkbox" value="90" name="valor"> R$ 90,00</label></div>
+            <div class="option"><label><input type="checkbox" value="100" name="valor"> R$ 100,00</label></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>👥 Participantes</h3>
+          <div class="options" id="participantes">
+            <div class="option"><label><input type="checkbox" value="60" name="participantes"> 60 pessoas</label></div>
+            <div class="option"><label><input type="checkbox" value="70" name="participantes"> 70 pessoas</label></div>
+            <div class="option"><label><input type="checkbox" value="80" name="participantes"> 80 pessoas</label></div>
+            <div class="option"><label><input type="checkbox" value="90" name="participantes"> 90 pessoas</label></div>
+            <div class="option"><label><input type="checkbox" value="100" name="participantes"> 100 pessoas</label></div>
+          </div>
+        </div>
+      </div>
+
+      <button class="vote-button" id="votar">🗳️ Confirmar Voto</button>
+      <div class="msg" id="mensagem"></div>
+
+      <div class="expandable-section">
+        <div class="section-header" onclick="toggleSection('results')">
+          <h3>📊 Resultados em Tempo Real</h3>
+          <span class="toggle-icon" id="results-icon">▼</span>
+        </div>
+        <div class="section-content" id="results-content">
+          <div class="results">
+            <div class="results-grid">
+              <div class="result-category" id="res-valores"></div>
+              <div class="result-category" id="res-participantes"></div>
+            </div>
+            <div class="summary" id="resumo">
+              <p>Aguardando votos para mostrar o resumo...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="expandable-section">
+        <div class="section-header" onclick="toggleSection('calculator')">
+          <h3>🧮 Calculadora de Cenários</h3>
+          <span class="toggle-icon" id="calculator-icon">▼</span>
+        </div>
+        <div class="section-content" id="calculator-content">
+          <div class="calculator-section">
+            <div class="calculator-container">
+              <div class="form-group">
+                <label for="numCotas">Quantidade de Cotas (participantes):</label>
+                <input type="number" id="numCotas" name="numCotas" min="2" placeholder="Será preenchido automaticamente">
+              </div>
+              <div class="form-group">
+                <label for="valorCota">Valor por Cota (R$):</label>
+                <input type="number" id="valorCota" name="valorCota" min="0.01" step="0.01" placeholder="Será preenchido automaticamente">
+              </div>
+
+              <button type="button" id="calcularBtn">🔄 Recalcular Cenários</button>
+
+              <div id="resultadoArea">
+                <div id="totalArrecadadoInfo"></div>
+                <div id="cenariosResultado"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="expandable-section">
+        <div class="section-header" onclick="toggleSection('rules')">
+          <h3>📋 Regras Oficiais da Caixa</h3>
+          <span class="toggle-icon" id="rules-icon">▼</span>
+        </div>
+        <div class="section-content" id="rules-content">
+          <div class="rules-section">
+            <div class="rules-container">
+              <div class="rule-category">
+                <h4>🎯 Jogos de 6 Números</h4>
+                <div class="rule-item">
+                  <span class="rule-label">Custo por Jogo:</span>
+                  <span class="rule-value">R$ 6,00</span>
+                </div>
+                <div class="rule-item">
+                  <span class="rule-label">Valor Mínimo da Cota:</span>
+                  <span class="rule-value">R$ 7,00</span>
+                </div>
+                <div class="rule-item">
+                  <span class="rule-label">Número de Cotas:</span>
+                  <span class="rule-value">Mín: 2 | Máx: 8</span>
+                </div>
+                <div class="rule-item">
+                  <span class="rule-label">Valor Mínimo do Bolão:</span>
+                  <span class="rule-value">R$ 18,00</span>
+                </div>
+                <div class="rule-item">
+                  <span class="rule-label">Jogos por Bilhete:</span>
+                  <span class="rule-value">Máximo 10</span>
+                </div>
+              </div>
+
+              <div class="rule-category">
+                <h4>🎯 Jogos de 7 Números</h4>
+                <div class="rule-item">
+                  <span class="rule-label">Custo por Jogo:</span>
+                  <span class="rule-value">R$ 42,00</span>
+                </div>
+                <div class="rule-item">
+                  <span class="rule-label">Valor Mínimo da Cota:</span>
+                  <span class="rule-value">R$ 8,00</span>
+                </div>
+                <div class="rule-item">
+                  <span class="rule-label">Número de Cotas:</span>
+                  <span class="rule-value">Mín: 2 | Máx: 50</span>
+                </div>
+                <div class="rule-item">
+                  <span class="rule-label">Valor Mínimo do Bolão:</span>
+                  <span class="rule-value">R$ 42,00</span>
+                </div>
+                <div class="rule-item">
+                  <span class="rule-label">Jogos por Bilhete:</span>
+                  <span class="rule-value">Máximo 10</span>
+                </div>
+              </div>
+
+              <div class="rule-category">
+                <h4>🎯 Jogos de 8 Números</h4>
+                <div class="rule-item">
+                  <span class="rule-label">Custo por Jogo:</span>
+                  <span class="rule-value">R$ 168,00</span>
+                </div>
+                <div class="rule-item">
+                  <span class="rule-label">Valor Mínimo da Cota:</span>
+                  <span class="rule-value">R$ 8,00</span>
+                </div>
+                <div class="rule-item">
+                  <span class="rule-label">Número de Cotas:</span>
+                  <span class="rule-value">Mín: 2 | Máx: 100</span>
+                </div>
+                <div class="rule-item">
+                  <span class="rule-label">Valor Mínimo do Bolão:</span>
+                  <span class="rule-value">R$ 168,00</span>
+                </div>
+                <div class="rule-item">
+                  <span class="rule-label">Jogos por Bilhete:</span>
+                  <span class="rule-value">Máximo 10</span>
+                </div>
+              </div>
+
+              <div class="rules-note">
+                <p><strong>📌 Observações Importantes:</strong></p>
+                <ul>
+                  <li>Todas as regras são baseadas nas normas oficiais da Caixa Econômica Federal</li>
+                  <li>O valor total arrecadado deve ser suficiente para comprar pelo menos 1 jogo</li>
+                  <li>Cada bilhete pode conter no máximo 10 jogos</li>
+                  <li>O número de participantes deve respeitar os limites mínimo e máximo</li>
+                  <li>O valor da cota deve atender ao valor mínimo estabelecido</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+<script>
+  const TEST_MODE = false;
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCvXGUdvZkqtSMMn8VmTOXLA9PXqR85gSk",
+    authDomain: "vagner-34d5b.firebaseapp.com",
+    databaseURL: "https://vagner-34d5b.firebaseio.com",
+    projectId: "vagner-34d5b",
+    storageBucket: "vagner-34d5b.firebasestorage.app",
+    messagingSenderId: "711539772164",
+    appId: "1:711539772164:web:e7736325e6ed365c0bde51"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  const msg = document.getElementById("mensagem");
+  const modeBadge = document.getElementById("modeBadge");
+  modeBadge.textContent = TEST_MODE ? "Modo: TESTE (votos múltiplos permitidos)" : "Modo: PRODUÇÃO (bloqueio por IP ativado)";
+  if(TEST_MODE) modeBadge.classList.add('warning');
+
+  // REGRAS OFICIAIS DO BOLÃO (Baseadas na tabela da Caixa)
+  const regrasBolao = {
+    6:  { nome: "Jogos de 6 números", custoAposta: 6.00,    minCotaValor: 7.00,   minCotas: 2, maxCotas: 8,   minBolaoValor: 18.00,    maxJogosBilhete: 10 },
+    7:  { nome: "Jogos de 7 números", custoAposta: 42.00,   minCotaValor: 8.00,   minCotas: 2, maxCotas: 50,  minBolaoValor: 42.00,    maxJogosBilhete: 10 },
+    8:  { nome: "Jogos de 8 números", custoAposta: 168.00,  minCotaValor: 8.00,   minCotas: 2, maxCotas: 100, minBolaoValor: 168.00,   maxJogosBilhete: 10 }
+  };
+
+  // Função para formatar como moeda BRL
+  function formatCurrency(value) {
+    return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+
+  // Função para calcular cenários
+  function calcularCenarios() {
+    const numCotas = parseInt(document.getElementById('numCotas').value);
+    const valorCota = parseFloat(document.getElementById('valorCota').value);
+    
+    const resultadoArea = document.getElementById('resultadoArea');
+    const totalArrecadadoDiv = document.getElementById('totalArrecadadoInfo');
+    const cenariosResultadoDiv = document.getElementById('cenariosResultado');
+
+    // Resetar áreas de resultado
+    resultadoArea.style.display = 'none';
+    totalArrecadadoDiv.innerHTML = '';
+    cenariosResultadoDiv.innerHTML = '';
+
+    // Validar campos básicos
+    if (isNaN(numCotas) || isNaN(valorCota) || numCotas <= 0 || valorCota <= 0) {
+      return;
+    }
+
+    // Calcular Total Arrecadado
+    const totalArrecadado = numCotas * valorCota;
+    
+    // Exibir total arrecadado
+    resultadoArea.style.display = 'block';
+    totalArrecadadoDiv.innerHTML = `Total Arrecadado: ${formatCurrency(totalArrecadado)}`;
+
+    // Iterar e calcular cada cenário (6, 7 e 8 números)
+    for (const numJogo of [6, 7, 8]) {
+      const regra = regrasBolao[numJogo];
+      let htmlCenario = `<div class="scenario-box">`;
+      htmlCenario += `<h2>${regra.nome}</h2>`;
+
+      // Validar regras da Caixa para este cenário
+      let mensagensValidacao = [];
+      let isValid = true;
+      
+      if (numCotas < regra.minCotas || numCotas > regra.maxCotas) {
+        mensagensValidacao.push(`Número de cotas (${numCotas}) está fora do limite (Mín: ${regra.minCotas}, Máx: ${regra.maxCotas}).`);
+        isValid = false;
+      }
+      
+      if (valorCota < regra.minCotaValor) {
+        mensagensValidacao.push(`Valor da cota (${formatCurrency(valorCota)}) é menor que o mínimo de ${formatCurrency(regra.minCotaValor)}.`);
+        isValid = false;
+      }
+
+      if (totalArrecadado < regra.minBolaoValor) {
+        mensagensValidacao.push(`Total (${formatCurrency(totalArrecadado)}) é menor que o mínimo do bolão de ${formatCurrency(regra.minBolaoValor)}.`);
+        isValid = false;
+      }
+
+      // Calcular Jogos e Bilhetes se o valor for suficiente
+      const totalJogos = Math.floor(totalArrecadado / regra.custoAposta);
+      const totalBilhetes = Math.ceil(totalJogos / regra.maxJogosBilhete);
+
+      if (totalJogos === 0) {
+        mensagensValidacao.push(`Total (${formatCurrency(totalArrecadado)}) não compra nem 1 jogo (custo: ${formatCurrency(regra.custoAposta)}).`);
+        isValid = false;
+        
+        // Adiciona resultados zerados se não for possível
+        htmlCenario += `<p>Quantidade de Jogos: <span>0</span></p>`;
+        htmlCenario += `<p>Quantidade de Bilhetes: <span>0</span></p>`;
+      } else {
+        // Adiciona resultados calculados
+        htmlCenario += `<p>Quantidade de Jogos: <span>${totalJogos}</span></p>`;
+        htmlCenario += `<p>Quantidade de Bilhetes*: <span>${totalBilhetes}</span></p>`;
+        htmlCenario += `<p class="small-note">*Máx. de ${regra.maxJogosBilhete} jogos por bilhete.</p>`;
+      }
+
+      // Adicionar caixa de validação (sucesso ou erro)
+      if (isValid) {
+        htmlCenario += `<div class="scenario-validation success">Este cenário ATENDE às regras da Caixa.</div>`;
+      } else {
+        htmlCenario += `<div class="scenario-validation error">${mensagensValidacao.join('<br>')}</div>`;
+      }
+
+      htmlCenario += `</div>`; // Fecha scenario-box
+      cenariosResultadoDiv.innerHTML += htmlCenario;
+    }
+  }
+
+  // Seleção única por grupo com efeitos visuais
+  const grupoUnico = (nome) => {
+    const checkboxes = document.querySelectorAll(`input[name="${nome}"]`);
+    checkboxes.forEach(chk => {
+      chk.addEventListener("change", () => {
+        // Remove seleção visual de todas as opções
+        checkboxes.forEach(o => {
+          o.closest('.option').classList.remove('selected');
+          if(o !== chk) o.checked = false;
+        });
+        
+        // Adiciona seleção visual na opção atual
+        if(chk.checked) {
+          chk.closest('.option').classList.add('selected');
+        }
+      });
+    });
+  };
+  grupoUnico("valor");
+  grupoUnico("participantes");
+
+  async function getIP() {
+    try { const res = await fetch("https://api.ipify.org?format=json"); return (await res.json()).ip; } 
+    catch { return "desconhecido"; }
+  }
+
+  document.getElementById("votar").addEventListener("click", async ()=>{
+    const valorSel = document.querySelector('input[name="valor"]:checked');
+    const partSel = document.querySelector('input[name="participantes"]:checked');
+    
+    // Limpa classes de mensagem anteriores
+    msg.className = 'msg';
+    
+    if(!valorSel || !partSel){ 
+      msg.textContent="⚠️ Selecione uma opção em cada categoria para votar.";
+      msg.classList.add('warning');
+      return; 
+    }
+
+    // Mostra loading
+    msg.textContent="🔄 Registrando seu voto...";
+    msg.classList.add('warning');
+
+    if(TEST_MODE){
+      await new Promise(resolve => setTimeout(resolve, 800)); // Simula delay
+      db.ref("votos").push({valor: valorSel.value, participantes: partSel.value, ip:"TEST_MODE", data:new Date().toLocaleString()});
+      msg.textContent="✅ Voto registrado com sucesso! (Modo Teste)";
+      msg.classList.remove('warning');
+      msg.classList.add('success');
+      
+      // Remove seleções visuais
+      document.querySelectorAll('.option.selected').forEach(opt => opt.classList.remove('selected'));
+      valorSel.checked=false; 
+      partSel.checked=false;
+      return;
+    }
+
+    const ip = await getIP();
+    try{
+      const snapshot = await db.ref("votos").orderByChild("ip").equalTo(ip).get();
+      if(snapshot.exists()){ 
+        msg.textContent="❌ Você já votou nesta enquete. Apenas um voto por pessoa é permitido.";
+        msg.classList.remove('warning');
+        msg.classList.add('error');
+        return; 
+      }
+      
+      await db.ref("votos").push({valor: valorSel.value, participantes: partSel.value, ip:ip, data:new Date().toLocaleString()});
+      msg.textContent="✅ Seu voto foi registrado com sucesso! Obrigado pela participação.";
+      msg.classList.remove('warning');
+      msg.classList.add('success');
+      
+      // Remove seleções visuais
+      document.querySelectorAll('.option.selected').forEach(opt => opt.classList.remove('selected'));
+      valorSel.checked=false; 
+      partSel.checked=false;
+    } catch(err){ 
+      msg.textContent="❌ Erro ao registrar voto: " + err.message;
+      msg.classList.remove('warning');
+      msg.classList.add('error');
+    }
+  });
+
+  // Função para expandir/contrair seções
+  function toggleSection(sectionId) {
+    const content = document.getElementById(sectionId + '-content');
+    const icon = document.getElementById(sectionId + '-icon');
+    
+    if (content.classList.contains('expanded')) {
+      content.classList.remove('expanded');
+      icon.classList.remove('rotated');
+    } else {
+      content.classList.add('expanded');
+      icon.classList.add('rotated');
+    }
+  }
+
+  // Botão da calculadora
+  document.getElementById('calcularBtn').addEventListener('click', calcularCenarios);
+
+  // Resultados com porcentagem e animações
+  function atualizarResultados(){
+    db.ref("votos").on("value",(snapshot)=>{
+      const votos = snapshot.val() || {};
+      const contValores = {}, contParticipantes = {};
+      const totalVotos = Object.keys(votos).length;
+
+      Object.values(votos).forEach(v=>{
+        contValores[v.valor]=(contValores[v.valor]||0)+1;
+        contParticipantes[v.participantes]=(contParticipantes[v.participantes]||0)+1;
+      });
+
+      const resVal=document.getElementById("res-valores");
+      const resPart=document.getElementById("res-participantes");
+
+      const valoresOrdenados = Object.entries(contValores).filter(([v,q])=>q>0).sort((a,b)=>b[1]-a[1]);
+      const partOrdenados = Object.entries(contParticipantes).filter(([v,q])=>q>0).sort((a,b)=>b[1]-a[1]);
+
+      const criarResultado = (valor, qtd, tipo) => {
+        const perc = totalVotos ? ((qtd/totalVotos)*100).toFixed(1) : 0;
+        const label = tipo === 'valor' ? `R$ ${valor},00` : `${valor} pessoas`;
+        const votoText = qtd === 1 ? 'voto' : 'votos';
+        
+        return `
+          <div class='resultado-item'>
+            <div class='result-header'>
+              <span class='result-label'>${label}</span>
+              <span class='result-votes'>${qtd} ${votoText}</span>
+            </div>
+            <div class='barra'>
+              <div class='fill' style='width:${perc}%'>
+                <span class='percentage'>${perc}%</span>
+              </div>
+            </div>
+          </div>
+        `;
+      };
+
+      // Atualiza resultados de valores
+      if(valoresOrdenados.length > 0) {
+        resVal.innerHTML = `
+          <h4>💰 Valor da Cota</h4>
+          ${valoresOrdenados.slice(0, 3).map(([val,qtd]) => criarResultado(val, qtd, 'valor')).join('')}
+        `;
+      } else {
+        resVal.innerHTML = `
+          <h4>💰 Valor da Cota</h4>
+          <div class='resultado-item' style='text-align: center; opacity: 0.7;'>
+            Aguardando votos...
+          </div>
+        `;
+      }
+
+      // Atualiza resultados de participantes
+      if(partOrdenados.length > 0) {
+        resPart.innerHTML = `
+          <h4>👥 Participantes</h4>
+          ${partOrdenados.slice(0, 3).map(([val,qtd]) => criarResultado(val, qtd, 'participantes')).join('')}
+        `;
+      } else {
+        resPart.innerHTML = `
+          <h4>👥 Participantes</h4>
+          <div class='resultado-item' style='text-align: center; opacity: 0.7;'>
+            Aguardando votos...
+          </div>
+        `;
+      }
+
+      // Atualiza o resumo e preenche a calculadora automaticamente
+      const resumoEl = document.getElementById("resumo");
+      if(totalVotos > 0) {
+        const valorMaisVotado = valoresOrdenados.length > 0 ? valoresOrdenados[0] : null;
+        const partMaisVotado = partOrdenados.length > 0 ? partOrdenados[0] : null;
+        
+        if(valorMaisVotado && partMaisVotado) {
+          const [valorTop, votosValor] = valorMaisVotado;
+          const [partTop, votosPart] = partMaisVotado;
+          
+          resumoEl.innerHTML = `
+            <p>🏆 Até o momento foi escolhido: <span class="highlight">${partTop} participantes</span> com valor de <span class="highlight">R$ ${valorTop},00</span></p>
+            <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 8px;">Total de ${totalVotos} ${totalVotos === 1 ? 'voto' : 'votos'} registrado${totalVotos === 1 ? '' : 's'}</p>
+          `;
+
+          // Preenche automaticamente a calculadora com os resultados da enquete
+          document.getElementById('numCotas').value = partTop;
+          document.getElementById('valorCota').value = valorTop;
+          
+          // Calcula automaticamente os cenários
+          calcularCenarios();
+        }
+      } else {
+        resumoEl.innerHTML = `<p>Aguardando votos para mostrar o resumo...</p>`;
+      }
+
+      // Anima as barras após um pequeno delay
+      setTimeout(() => {
+        document.querySelectorAll('.fill').forEach(fill => {
+          const width = fill.style.width;
+          fill.style.width = '0%';
+          setTimeout(() => {
+            fill.style.width = width;
+          }, 100);
+        });
+      }, 100);
+    });
+  }
+  atualizarResultados();
+</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9942db7400b87263',t:'MTc2MTQwNzI5Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
