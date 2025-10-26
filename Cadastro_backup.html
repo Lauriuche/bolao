@@ -322,33 +322,17 @@
         <button id="verRegras" style="background: linear-gradient(135deg, #95a5a6, #bdc3c7); font-size: 14px; padding: 12px 24px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">📋 Regras</button>
     </div>
 
-    <!-- Modal Regras -->
     <div id="modalRegras" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 2000; justify-content: center; align-items: center;">
         <div style="background: linear-gradient(135deg, #2c3e50, #34495e); padding: 25px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; color: #fff;">
             <h3 style="color: #ffd700; margin: 0 0 20px 0; font-size: 18px; text-align: center;">⚠️ INFORMATIVO: BOLÃO MEGA DA VIRADA ⚠️</h3>
             
             <div style="text-align: left; line-height: 1.6; font-size: 14px;">
-                <!-- Conteúdo será preenchido via JavaScript -->
-            </div>
+                </div>
             
             <button id="fecharRegras" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 20px; width: 100%;">❌ Fechar</button>
         </div>
     </div>
 
-    <!-- Modal Boas-vindas (aparece ao abrir o site) -->
-    <div id="modalBoasVindas" style="display: flex; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 3000; justify-content: center; align-items: center;">
-        <div style="background: linear-gradient(135deg, #2c3e50, #34495e); padding: 25px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; color: #fff;">
-            <h3 style="color: #ffd700; margin: 0 0 20px 0; font-size: 18px; text-align: center;">⚠️ INFORMATIVO: BOLÃO MEGA DA VIRADA ⚠️</h3>
-            
-            <div style="text-align: left; line-height: 1.6; font-size: 14px;">
-                <!-- Conteúdo será preenchido via JavaScript -->
-            </div>
-            
-            <button id="fecharBoasVindas" style="background: linear-gradient(135deg, #00b894, #00cec9); color: white; padding: 15px 30px; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 16px; width: 100%; transition: all 0.3s ease; margin-top: 20px;">ENTRAR PARA LISTA!</button>
-        </div>
-    </div>
-
-    <!-- Modal Confirmação de Cadastro -->
     <div id="modalConfirmacao" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 4000; justify-content: center; align-items: center;">
         <div style="background: linear-gradient(135deg, #00b894, #00cec9); padding: 25px; border-radius: 15px; max-width: 450px; width: 90%; color: #fff; text-align: center;">
             <div style="font-size: 48px; margin-bottom: 15px;">🎉</div>
@@ -386,7 +370,6 @@
     <div class="message" id="mensagem"></div>
 </div>
 
-<!-- Modal Lista -->
 <div class="modal-overlay" id="overlay">
     <div class="modal">
         <h3>📋 Lista de Participantes</h3>
@@ -408,7 +391,6 @@
             </div>
         </div>
         
-        <!-- Menu Filtros (oculto inicialmente) -->
         <div id="menuFiltros" style="display: none; background: rgba(0, 0, 0, 0.5); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
             <h4 style="color: #ffd700; margin: 0 0 10px 0; font-size: 14px;">🔍 Filtros:</h4>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
@@ -418,7 +400,6 @@
             </div>
         </div>
         
-        <!-- Menu Ações (oculto inicialmente) -->
         <div id="menuAcoes" style="display: none; background: rgba(0, 0, 0, 0.5); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
             <h4 style="color: #ffd700; margin: 0 0 10px 0; font-size: 14px;">⚙️ Ações:</h4>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
@@ -428,7 +409,6 @@
             </div>
         </div>
 
-        <!-- Modal Senha ADM -->
         <div id="modalSenha" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 2000; justify-content: center; align-items: center;">
             <div style="background: linear-gradient(135deg, #2c3e50, #34495e); padding: 25px; border-radius: 15px; text-align: center; max-width: 300px; width: 90%;">
                 <h4 style="color: #ffd700; margin: 0 0 15px 0; font-size: 16px;">🔐 Senha de Administrador</h4>
@@ -1148,20 +1128,10 @@ document.getElementById('fecharRegras').addEventListener('click', () => {
   document.getElementById('modalRegras').style.display = 'none';
 });
 
-document.getElementById('fecharBoasVindas').addEventListener('click', () => {
-  document.getElementById('modalBoasVindas').style.display = 'none';
-});
-
 // Fechar modais clicando fora
 document.getElementById('modalRegras').addEventListener('click', (e) => {
   if (e.target === document.getElementById('modalRegras')) {
     document.getElementById('modalRegras').style.display = 'none';
-  }
-});
-
-document.getElementById('modalBoasVindas').addEventListener('click', (e) => {
-  if (e.target === document.getElementById('modalBoasVindas')) {
-    document.getElementById('modalBoasVindas').style.display = 'none';
   }
 });
 
@@ -1297,41 +1267,6 @@ function inicializarElementos() {
     `;
   }
   
-  // Atualizar modal de boas-vindas
-  const modalBoasVindas = document.getElementById('modalBoasVindas');
-  if (modalBoasVindas) {
-    modalBoasVindas.querySelector('h3').textContent = `⚠️ INFORMATIVO: BOLÃO MEGA DA VIRADA ${CONFIG.ANO_SORTEIO} ⚠️`;
-    
-    const conteudoBoasVindas = modalBoasVindas.querySelector('div[style*="text-align: left"]');
-    conteudoBoasVindas.innerHTML = `
-      <p style="margin-bottom: 15px;">Estamos organizando nosso bolão, com um total de <strong style="color: #ffd700;">${CONFIG.LIMITE_PARTICIPANTES} participantes</strong>.</p>
-      
-      <p style="margin-bottom: 15px;"><strong style="color: #00b894;">Custo por Participante:</strong> R$ ${CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',')}</p>
-      
-      <h4 style="color: #ffd700; margin: 20px 0 10px 0; font-size: 16px;">📋 Regras de Participação e Prazos:</h4>
-      
-      <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-        <h5 style="color: #e74c3c; margin: 0 0 10px 0;">📅 Datas Limite:</h5>
-        <p style="margin: 0;"><strong>${CONFIG.DATA_LIMITE_INTERESSE}:</strong> Data final para manifestar interesse (confirmar que quer participar).<br>
-        <strong>${CONFIG.DATA_LIMITE_PAGAMENTO}:</strong> Data final para o pagamento da cota.</p>
-      </div>
-      
-      <div style="background: rgba(231, 76, 60, 0.2); padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #e74c3c;">
-        <h5 style="color: #e74c3c; margin: 0 0 10px 0;">⚠️ Atenção ao Pagamento:</h5>
-        <p style="margin: 0;">O participante que não realizar o pagamento até o dia <strong>${CONFIG.DATA_LIMITE_PAGAMENTO}</strong> será automaticamente excluído do bolão, e a vaga será repassada.</p>
-      </div>
-      
-      <h4 style="color: #ffd700; margin: 20px 0 10px 0; font-size: 16px;">💡 Observações Importantes:</h4>
-      
-      <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 10px;">
-        <p style="margin: 0 0 10px 0;"><strong style="color: #f39c12;">Prazos:</strong> As datas foram definidas para que todos tenham tempo suficiente para pagar (contando com o 13º salário).</p>
-        
-        <p style="margin: 0 0 10px 0;"><strong style="color: #f39c12;">Agilidade:</strong> Quanto antes arrecadarmos o valor, melhor. Deixar para a última hora significa enfrentar lotéricas lotadas.</p>
-        
-        <p style="margin: 0;"><strong style="color: #f39c12;">Jogos:</strong> A quantidade final de bilhetes e jogos será definida ao término da arrecadação, pois dependerá do valor total arrecadado (se todas as ${CONFIG.LIMITE_PARTICIPANTES} cotas forem preenchidas).</p>
-      </div>
-    `;
-  }
 }
 
 // Inicializar
