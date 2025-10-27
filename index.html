@@ -35,7 +35,6 @@
         position: relative;
     }
     
-
     
     h1 {
         font-size: 28px;
@@ -256,7 +255,6 @@
         background: linear-gradient(135deg, #c0392b, #e74c3c);
         transform: scale(1.05);
     }
-    
 
     
     /* Animações para mensagem sobre modal */
@@ -348,6 +346,10 @@
                 <div style="margin-bottom: 8px;"><strong>PIX:</strong> <span id="confirmPix"></span></div>
                 <div style="margin-bottom: 8px;"><strong>Valor:</strong> R$ <span id="confirmValor"></span></div>
                 <div><strong>Prazo:</strong> até <span id="confirmPrazo"></span></div>
+            </div>
+            
+            <div id="qrCodeContainer" style="display: none; margin: 20px 0; text-align: center;">
+                <img id="qrCodeImage" src="" alt="QR Code PIX" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 8px; padding: 10px; background: white;">
             </div>
             
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
@@ -473,16 +475,16 @@ let acaoPendente = null;
 
 const CONFIG = {
   // Participantes
-  LIMITE_PARTICIPANTES: 100,
-  VALOR_PARTICIPACAO: 0.00,
+  LIMITE_PARTICIPANTES: 60,
+  VALOR_PARTICIPACAO: 70.00,
   
   // Datas (formato: DD de Mês)
   DATA_LIMITE_INTERESSE: "30 de Novembro",
   DATA_LIMITE_PAGAMENTO: "10 de Dezembro",
   
   // Contato
-  PIX_PAGAMENTO: "(99) 99102-6112",
-  PIX_QR_CODE: "(99) 99199-8153",
+  PIX_PAGAMENTO: "qrCodeImage",
+  PIX_QR_CODE: "00020126330014br.gov.bcb.pix01110579687937552040000530398654041.005802BR5922Vagner Sousa Lauriuche6009Sao Paulo62290525REC68FF6FA972F267877995596304F39E",
   
   // Textos principais
   TITULO_BOLAO: "Bolão Mega da Virada 2025",
@@ -589,6 +591,7 @@ function mostrarPopupPagamento(participante) {
   // Alterar título para indicar que é para pagamento
   const modal = document.getElementById('modalConfirmacao');
   const titulo = modal.querySelector('h3');
+  const telefoneOriginal = participante.telefone;
   titulo.textContent = 'Informações de Pagamento';
   
   modal.style.display = 'flex';
@@ -626,7 +629,7 @@ function mostrarPopupPagamentoSobreLista(participante) {
     <h3 style="color: #fff; margin: 0 0 15px 0; font-size: 18px;">Informações de Pagamento</h3>
     
     <div style="background: rgba(0, 0, 0, 0.2); padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: left;">
-      <div style="margin-bottom: 10px;"><strong>👤 Nome:</strong> ${participante.nome}</div>
+      <div style="margin-bottom: 10px;"><strong>Nome:</strong> ${participante.nome}</div>
       <div><strong> WhatsApp:</strong> ${participante.telefone}</div>
     </div>
     
@@ -649,17 +652,7 @@ function mostrarPopupPagamentoSobreLista(participante) {
   
   // Event listeners do popup
   document.getElementById('btnWhatsAppPopup').addEventListener('click', () => {
-    const mensagem = `🎯 *${CONFIG.TITULO_BOLAO}*
-
-Olá! Gostaria de efetuar o pagamento da minha participação no bolão.
-
-👤 *Nome:* ${participante.nome}
-📱 *WhatsApp:* ${participante.telefone}
-💰 *Valor:* R$ ${CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',')}
-📅 *Prazo:* até ${CONFIG.DATA_LIMITE_PAGAMENTO}
-💳 *PIX:* ${CONFIG.PIX_PAGAMENTO}
-
-Vou fazer o PIX agora e enviar o comprovante! 🍀`;
+    const mensagem = `🎯 *${CONFIG.TITULO_BOLAO}*\n\nOlá! Gostaria de efetuar o pagamento da minha participação no bolão.\n\n👤 *Nome:* ${participante.nome}\n📱 *WhatsApp:* ${participante.telefone}\n💰 *Valor:* R$ ${CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',')}\n📅 *Prazo:* até ${CONFIG.DATA_LIMITE_PAGAMENTO}\n💳 *PIX:* ${CONFIG.PIX_PAGAMENTO}\n\nVou fazer o PIX agora e enviar o comprovante! 🍀`;
     
     const telefoneOrganizador = CONFIG.PIX_PAGAMENTO.replace(/\D/g, '');
     const telefoneComCodigo = telefoneOrganizador.startsWith('55') ? telefoneOrganizador : '55' + telefoneOrganizador;
@@ -860,7 +853,7 @@ function exibirLista() {
       div.innerHTML = `
         <input type="checkbox" id="check-${participante.key}" style="margin: 0; cursor: pointer; width: 16px; height: 16px;">
         <span style="flex: 1;">${participante.numero}. ${participante.nome}</span>
-        <span class="status ${participante.status.toLowerCase().replace(' ', '-')}">${participante.status}</span>
+        <span class="status ${participante.status.toLowerCase().replace(' ', '-')}" style="cursor: pointer;">${participante.status}</span>
       `;
       
       const checkbox = div.querySelector('input[type="checkbox"]');
@@ -920,7 +913,7 @@ function exibirListaFiltrada(participantesFiltrados) {
     div.innerHTML = `
       <input type="checkbox" id="check-${participante.key}" style="margin: 0; cursor: pointer; width: 16px; height: 16px;">
       <span style="flex: 1;">${participante.numero}. ${participante.nome}</span>
-      <span class="status ${participante.status.toLowerCase().replace(' ', '-')}">${participante.status}</span>
+      <span class="status ${participante.status.toLowerCase().replace(' ', '-')}" style="cursor: pointer;">${participante.status}</span>
     `;
     
     const checkbox = div.querySelector('input[type="checkbox"]');
@@ -1032,21 +1025,7 @@ async function executarAcao(acao) {
       case 'notificar':
         participantesSelecionados.forEach((participante, index) => {
           setTimeout(() => {
-            const mensagem = `🎯 *${CONFIG.TITULO_BOLAO}*
-
-Olá ${participante.nome.split(' ')[0]}!
-
-Sua vaga está reservada no nosso bolão!
-
-💰 *Valor:* R$ ${CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',')}
-📅 *Prazo:* até ${CONFIG.DATA_LIMITE_PAGAMENTO}
-💳 *PIX:* ${CONFIG.PIX_PAGAMENTO}
-
-⚠️ *IMPORTANTE:* Quem não pagar até ${CONFIG.DATA_LIMITE_PAGAMENTO.split(' ')[0]}/${CONFIG.DATA_LIMITE_PAGAMENTO.split(' ')[2]} será excluído automaticamente.
-
-Após o pagamento, envie o comprovante!
-
-*Garanta sua vaga!* 🍀`;
+            const mensagem = `🎯 *${CONFIG.TITULO_BOLAO}*\n\nOlá ${participante.nome.split(' ')[0]}!\n\nSua vaga está reservada no nosso bolão!\n\n💰 *Valor:* R$ ${CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',')}\n📅 *Prazo:* até ${CONFIG.DATA_LIMITE_PAGAMENTO}\n💳 *PIX:* ${CONFIG.PIX_PAGAMENTO}\n\n⚠️ *IMPORTANTE:* Quem não pagar até ${CONFIG.DATA_LIMITE_PAGAMENTO.split(' ')[0]}/${CONFIG.DATA_LIMITE_PAGAMENTO.split(' ')[2]} será excluído automaticamente.\n\nApós o pagamento, envie o comprovante!\n\n*Garanta sua vaga!* 🍀`;
             
             const telefoneFormatado = participante.telefone.replace(/\D/g, '');
             const telefoneComCodigo = telefoneFormatado.startsWith('55') ? telefoneFormatado : '55' + telefoneFormatado;
@@ -1151,17 +1130,7 @@ document.getElementById('btnWhatsAppPagamento').addEventListener('click', () => 
   const prazo = document.getElementById('confirmPrazo').textContent;
   const pix = document.getElementById('confirmPix').textContent;
   
-  const mensagem = `🎯 *${CONFIG.TITULO_BOLAO}*
-
-Olá! Gostaria de efetuar o pagamento da minha participação no bolão.
-
-👤 *Nome:* ${nome}
-📱 *WhatsApp:* ${telefone}
-💰 *Valor:* R$ ${valor}
-📅 *Prazo:* até ${prazo}
-💳 *PIX:* ${pix}
-
-Vou fazer o PIX agora e enviar o comprovante! 🍀`;
+  const mensagem = `🎯 *${CONFIG.TITULO_BOLAO}*\n\nOlá! Gostaria de efetuar o pagamento da minha participação no bolão.\n\n👤 *Nome:* ${nome}\n📱 *WhatsApp:* ${telefone}\n💰 *Valor:* R$ ${valor}\n📅 *Prazo:* até ${prazo}\n💳 *PIX:* ${pix}\n\nVou fazer o PIX agora e enviar o comprovante! 🍀`;
   
   // Usar o PIX como número do WhatsApp (que é o organizador)
   const telefoneOrganizador = CONFIG.PIX_PAGAMENTO.replace(/\D/g, '');
@@ -1171,22 +1140,24 @@ Vou fazer o PIX agora e enviar o comprovante! 🍀`;
   window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
 });
 
-document.getElementById('btnCopiarPix').addEventListener('click', async () => {
+// Função para gerar QR Code
+function gerarQRCode(texto) {
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(texto)}`;
+  return qrCodeUrl;
+}
+
+// Event listener para o QR Code PIX
+document.getElementById('btnCopiarPix').addEventListener('click', () => {
   const pixQrCode = CONFIG.PIX_QR_CODE;
+  const qrCodeUrl = gerarQRCode(pixQrCode);
+  const qrCodeImage = document.getElementById('qrCodeImage');
+  const qrCodeContainer = document.getElementById('qrCodeContainer');
   
-  try {
-    await navigator.clipboard.writeText(pixQrCode);
-    mostrarMensagemSobreModal('📱 QR Code PIX copiado! Cole no seu app do banco.', 'success');
-  } catch (err) {
-    // Fallback para navegadores que não suportam clipboard API
-    const textArea = document.createElement('textarea');
-    textArea.value = pixQrCode;
-    document.body.appendChild(textArea);
-    textArea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textArea);
-    mostrarMensagemSobreModal('📱 QR Code PIX copiado! Cole no seu app do banco.', 'success');
-  }
+  qrCodeImage.src = qrCodeUrl;
+  qrCodeContainer.style.display = 'block';
+  
+  // Scroll para o QR Code
+  qrCodeContainer.scrollIntoView({ behavior: 'smooth' });
 });
 
 // Fechar modal clicando fora
@@ -1199,8 +1170,6 @@ document.getElementById('modalConfirmacao').addEventListener('click', (e) => {
     titulo.textContent = 'Cadastro Realizado!';
   }
 });
-
-
 
 // Fechar modal
 document.getElementById("fecharLista").addEventListener("click", () => {
@@ -1274,5 +1243,5 @@ inicializarElementos();
 atualizarProgresso();
 </script>
 
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9940d84e04167263',t:'MTc2MTM4NjE5Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9940d84e04167263',t:'MTc2MTM4NjE5Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"};b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
