@@ -461,13 +461,6 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const dbRef = ref(db, "participantes");
 
-// Variáveis globais
-let participantes = [];
-let participanteSelecionado = null;
-let participantesSelecionados = [];
-let senhaDigitada = '';
-let acaoPendente = null;
-
 // ========================================
 // 🔧 CONFIGURAÇÕES DO BOLÃO
 // ========================================
@@ -491,7 +484,11 @@ const CONFIG = {
   ANO_SORTEIO: "2025",
   
   // Segurança
-  SENHA_ADM: '6261'
+  SENHA_ADM: '6261',
+  
+  // Configurações do Telegram
+  TELEGRAM_TOKEN: "8307035824:AAFsKe4l1WgbZI1uez-n06Vt-TYiuhZLMt8", // ⚠️ ATENÇÃO: Substitua pelo seu token.
+  TELEGRAM_CHAT_ID: "861365063" // ⚠️ ATENÇÃO: Substitua pelo ID do seu chat.
 };
 
 // ========================================
@@ -500,6 +497,48 @@ const CONFIG = {
 const LIMITE_PARTICIPANTES = CONFIG.LIMITE_PARTICIPANTES;
 const VALOR_PARTICIPACAO = CONFIG.VALOR_PARTICIPACAO;
 const SENHA_ADM = CONFIG.SENHA_ADM;
+const TELEGRAM_TOKEN = CONFIG.TELEGRAM_TOKEN;
+const TELEGRAM_CHAT_ID = CONFIG.TELEGRAM_CHAT_ID;
+
+// Variáveis globais
+let participantes = [];
+let participanteSelecionado = null;
+let participantesSelecionados = [];
+let senhaDigitada = '';
+let acaoPendente = null;
+
+// Função para enviar lista para Telegram
+async function enviarListaTelegram() {
+  try {
+    const listaTexto = participantes
+      .sort((a, b) => a.numero - b.numero)
+      .map(p => `${p.numero}. ${p.nome} - ${p.status === "Pago" ? "✅ Pago" : "❌ Não pago"}`)
+      .join('\n');
+    
+    const mensagem = `📊 *Lista Completa do Bolão*\n\n${listaTexto}`;
+    
+    const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        chat_id: TELEGRAM_CHAT_ID,
+        text: mensagem,
+        parse_mode: 'Markdown'
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Erro HTTP: ${response.status}`);
+    }
+    
+    console.log('Lista enviada para Telegram com sucesso!');
+  } catch (error) {
+    console.error('Erro ao enviar lista para Telegram:', error);
+  }
+}
 
 // Função para mostrar mensagens
 function mostrarMensagem(texto, tipo) {
@@ -733,7 +772,7 @@ function cancelarSenha() {
 
 // Atualizar progresso
 function atualizarProgresso() {
-  get(dbRef).then((snapshot) => {
+  return get(dbRef).then((snapshot) => {
     participantes = snapshot.exists() ? Object.entries(snapshot.val()).map(([key, value]) => ({...value, key})) : [];
     
     const totalCadastrados = participantes.length;
@@ -807,15 +846,21 @@ document.getElementById("cadastrar").addEventListener("click", async () => {
       dataCadastro: new Date().toISOString()
     };
 
-    await push(dbRef, novoCadastro);
+    // Salva o novo cadastro primeiro
+    const novoParticipanteRef = await push(dbRef, novoCadastro);
+    
+    // Atualiza o campo key do novo participante
+    const novoParticipante = {...novoCadastro, key: novoParticipanteRef.key};
     
     document.getElementById("nome").value = "";
     document.getElementById("telefone").value = "";
     
     // Mostrar popup de confirmação
-    mostrarPopupConfirmacao(novoCadastro);
+    mostrarPopupConfirmacao(novoParticipante);
     
-    atualizarProgresso();
+    // Atualiza o progresso e envia a lista para o Telegram
+    await atualizarProgresso();
+    await enviarListaTelegram();
     
   } catch (error) {
     console.error("Erro:", error);
@@ -853,7 +898,7 @@ function exibirLista() {
       div.innerHTML = `
         <input type="checkbox" id="check-${participante.key}" style="margin: 0; cursor: pointer; width: 16px; height: 16px;">
         <span style="flex: 1;">${participante.numero}. ${participante.nome}</span>
-        <span class="status ${participante.status.toLowerCase().replace(' ', '-')}" style="cursor: pointer;">${participante.status}</span>
+        <span class="status ${participante.status.toLowerCase().replace(' ', '-')}" title="${participante.status === "Pago" ? "Pago" : "Não pago"}">${participante.status === "Pago" ? "✅" : "❌"}</span>
       `;
       
       const checkbox = div.querySelector('input[type="checkbox"]');
@@ -913,7 +958,7 @@ function exibirListaFiltrada(participantesFiltrados) {
     div.innerHTML = `
       <input type="checkbox" id="check-${participante.key}" style="margin: 0; cursor: pointer; width: 16px; height: 16px;">
       <span style="flex: 1;">${participante.numero}. ${participante.nome}</span>
-      <span class="status ${participante.status.toLowerCase().replace(' ', '-')}" style="cursor: pointer;">${participante.status}</span>
+      <span class="status ${participante.status.toLowerCase().replace(' ', '-')}" title="${participante.status === "Pago" ? "Pago" : "Não pago"}">${participante.status === "Pago" ? "✅" : "❌"}</span>
     `;
     
     const checkbox = div.querySelector('input[type="checkbox"]');
