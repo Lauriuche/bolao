@@ -329,7 +329,7 @@
     <h1 id="tituloBolao">🎯 <strong>Bolão Mega da Virada 2025</strong></h1>
     
     <div class="info" id="infoGeral">
-        🎰 <strong>80 participantes</strong> • 💰 <strong>R$ 85,00 por pessoa</strong><br>
+        🎰 <strong>60 participantes</strong> • 💰 <strong>R$ 100,00 por pessoa</strong><br>
         <div style="margin-top: 10px;">
             <span class="prize-button">🏆 Premiação Estimada: R$ 1.200.000,00</span>
         </div>
@@ -337,58 +337,18 @@
         <small>📋 Preencha os dados para garantir sua vaga!</small>
     </div>
 
+    <!-- Botão de regras posicionado acima da barra de progresso -->
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+        <button id="verRegras" style="background: linear-gradient(135deg, #95a5a6, #bdc3c7); font-size: 14px; padding: 10px 15px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); width: auto; min-width: 100px;">📋 Regras</button>
+    </div>
+
     <div class="progress-container">
         <div class="progress-bar">
             <div class="progress-fill" id="progressFill"></div>
         </div>
-        <div class="progress-text" id="progressText">0/80 participantes</div>
+        <div class="progress-text" id="progressText">0/60 participantes</div>
         <div style="font-size: 11px; margin-top: 5px; opacity: 0.7;" id="progressSubtext">
             Arrecadado: R$ 0,00
-        </div>
-    </div>
-
-    <div style="display: flex; justify-content: center; margin: 15px 0 10px 0;">
-        <button id="verRegras" style="background: linear-gradient(135deg, #95a5a6, #bdc3c7); font-size: 14px; padding: 12px 24px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);">📋 Regras</button>
-    </div>
-
-    <div id="modalRegras" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 2000; justify-content: center; align-items: center;">
-        <div style="background: linear-gradient(135deg, #2c3e50, #34495e); padding: 25px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; color: #fff;">
-            <h3 style="color: #ffd700; margin: 0 0 20px 0; font-size: 18px; text-align: center;">⚠️ INFORMATIVO: BOLÃO MEGA DA VIRADA ⚠️</h3>
-            
-            <div style="text-align: left; line-height: 1.6; font-size: 14px;">
-                </div>
-            
-            <button id="fecharRegras" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 20px; width: 100%;">❌ Fechar</button>
-        </div>
-    </div>
-
-    <div id="modalConfirmacao" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 4000; justify-content: center; align-items: center;">
-        <div style="background: linear-gradient(135deg, #00b894, #00cec9); padding: 25px; border-radius: 15px; max-width: 450px; width: 90%; color: #fff; text-align: center;">
-            <div style="font-size: 48px; margin-bottom: 15px;">🎉</div>
-            <h3 style="color: #fff; margin: 0 0 15px 0; font-size: 20px;">Cadastro Realizado!</h3>
-            
-            <div style="background: rgba(0, 0, 0, 0.2); padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: left;">
-                <div style="margin-bottom: 10px;"><strong>Nome:</strong> <span id="confirmNome"></span></div>
-                <div><strong>WhatsApp:</strong> <span id="confirmTelefone"></span></div>
-            </div>
-            
-            <div style="background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: left; font-size: 14px;">
-                <h4 style="color: #fff; margin: 0 0 10px 0; font-size: 16px;">💳 Para efetuar o pagamento:</h4>
-                <div style="margin-bottom: 8px;"><strong>PIX:</strong> <span id="confirmPix"></span></div>
-                <div style="margin-bottom: 8px;"><strong>Valor:</strong> R$ <span id="confirmValor"></span></div>
-                <div><strong>Prazo:</strong> até <span id="confirmPrazo"></span></div>
-            </div>
-            
-            <div id="qrCodeContainer" style="display: none; margin: 20px 0; text-align: center;">
-                <img id="qrCodeImage" src="" alt="QR Code PIX" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 8px; padding: 10px; background: white;">
-            </div>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-                <button id="btnWhatsAppPagamento" style="background: linear-gradient(135deg, #25d366, #128c7e); color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px;">📱 WhatsApp</button>
-                <button id="btnCopiarPix" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px;">📱 QR Code PIX</button>
-            </div>
-            
-            <button id="fecharConfirmacao" style="background: linear-gradient(135deg, #34495e, #2c3e50); color: white; padding: 12px 24px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%;">✅ Entendi</button>
         </div>
     </div>
 
@@ -473,6 +433,73 @@
     </div>
 </div>
 
+<div id="modalRegras" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 2000; justify-content: center; align-items: center;">
+    <div style="background: linear-gradient(135deg, #2c3e50, #34495e); padding: 25px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; color: #fff;">
+        <h3 style="color: #ffd700; margin: 0 0 20px 0; font-size: 18px; text-align: center;">⚠️ INFORMATIVO: BOLÃO MEGA DA VIRADA ⚠️</h3>
+        
+        <div style="text-align: left; line-height: 1.6; font-size: 14px;">
+            <p style="margin-bottom: 15px;">Estamos organizando nosso bolão, com um total de <strong style="color: #ffd700;">60 participantes</strong>.</p>
+            
+            <p style="margin-bottom: 15px;"><strong style="color: #00b894;">Custo por Participante:</strong> R$ 100,00</p>
+            
+            <h4 style="color: #ffd700; margin: 20px 0 10px 0; font-size: 16px;">📋 Regras de Participação e Prazos:</h4>
+            
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                <h5 style="color: #e74c3c; margin: 0 0 10px 0;">📅 Datas Limite:</h5>
+                <p style="margin: 0;"><strong>30 de Novembro:</strong> Data final para manifestar interesse (confirmar que quer participar).<br>
+                <strong>10 de Dezembro:</strong> Data final para o pagamento da cota.</p>
+            </div>
+            
+            <div style="background: rgba(231, 76, 60, 0.2); padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #e74c3c;">
+                <h5 style="color: #e74c3c; margin: 0 0 10px 0;">⚠️ Atenção ao Pagamento:</h5>
+                <p style="margin: 0;">O participante que não realizar o pagamento até o dia <strong>10 de Dezembro</strong> será automaticamente excluído do bolão, e a vaga será repassada.</p>
+            </div>
+            
+            <h4 style="color: #ffd700; margin: 20px 0 10px 0; font-size: 16px;">💡 Observações Importantes:</h4>
+            
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 10px;">
+                <p style="margin: 0 0 10px 0;"><strong style="color: #f39c12;">Prazos:</strong> As datas foram definidas para que todos tenham tempo suficiente para pagar (contando com o 13º salário).</p>
+                
+                <p style="margin: 0 0 10px 0;"><strong style="color: #f39c12;">Agilidade:</strong> Quanto antes arrecadarmos o valor, melhor. Deixar para a última hora significa enfrentar lotéricas lotadas.</p>
+                
+                <p style="margin: 0;"><strong style="color: #f39c12;">Jogos:</strong> A quantidade final de bilhetes e jogos será definida ao término da arrecadação, pois dependerá do valor total arrecadado (se todas as 60 cotas forem preenchidas).</p>
+            </div>
+        </div>
+        
+        <button id="fecharRegras" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 20px; width: 100%;">❌ Fechar</button>
+    </div>
+</div>
+
+<div id="modalConfirmacao" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 4000; justify-content: center; align-items: center;">
+    <div style="background: linear-gradient(135deg, #00b894, #00cec9); padding: 25px; border-radius: 15px; max-width: 450px; width: 90%; color: #fff; text-align: center;">
+        <div style="font-size: 48px; margin-bottom: 15px;">🎉</div>
+        <h3 style="color: #fff; margin: 0 0 15px 0; font-size: 20px;">Cadastro Realizado!</h3>
+        
+        <div style="background: rgba(0, 0, 0, 0.2); padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: left;">
+            <div style="margin-bottom: 10px;"><strong>Nome:</strong> <span id="confirmNome"></span></div>
+            <div><strong>WhatsApp:</strong> <span id="confirmTelefone"></span></div>
+        </div>
+        
+        <div style="background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: left; font-size: 14px;">
+            <h4 style="color: #fff; margin: 0 0 10px 0; font-size: 16px;">💳 Para efetuar o pagamento:</h4>
+            <div style="margin-bottom: 8px;"><strong>PIX:</strong> <span id="confirmPix"></span></div>
+            <div style="margin-bottom: 8px;"><strong>Valor:</strong> R$ <span id="confirmValor"></span></div>
+            <div><strong>Prazo:</strong> até <span id="confirmPrazo"></span></div>
+        </div>
+        
+        <div id="qrCodeContainer" style="display: none; margin: 20px 0; text-align: center;">
+            <img id="qrCodeImage" src="" alt="QR Code PIX" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 8px; padding: 10px; background: white;">
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+            <button id="btnWhatsAppPagamento" style="background: linear-gradient(135deg, #25d366, #128c7e); color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px;">📱 WhatsApp</button>
+            <button id="btnCopiarPix" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px;">📱 QR Code PIX</button>
+        </div>
+        
+        <button id="fecharConfirmacao" style="background: linear-gradient(135deg, #34495e, #2c3e50); color: white; padding: 12px 24px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%;">✅ Entendi</button>
+    </div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getDatabase, ref, push, get, update, remove } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
@@ -488,6 +515,7 @@ const firebaseConfig = {
   appId: "1:711539772164:web:e7736325e6ed365c0bde51"
 };
 
+// Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const dbRef = ref(db, "participantes");
@@ -1320,11 +1348,16 @@ function inicializarElementos() {
       </div>
     `;
   }
+  
+  // Atualizar texto da barra de progresso
+  document.getElementById('progressText').textContent = `0/${CONFIG.LIMITE_PARTICIPANTES} participantes`;
 }
 
 // Inicializar elementos quando a página carregar
 document.addEventListener('DOMContentLoaded', () => {
   inicializarElementos();
+  // Carregar dados iniciais
+  atualizarProgresso();
 });
 </script>
 </body>
