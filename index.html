@@ -85,18 +85,21 @@
         width: 90%;
         padding: 14px 16px;
         margin: 8px 0;
-        border: 2px solid transparent;
+        border: 3px solid #ffd700;
         border-radius: 15px;
         font-size: 15px;
         text-align: center;
         background: rgba(255, 255, 255, 0.9);
         color: #333;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
     }
     
     input:focus {
-        border-color: #ffd700;
+        border-color: #ff9800;
         outline: none;
         background: rgba(255, 255, 255, 1);
+        box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
     }
     
     button {
@@ -111,11 +114,13 @@
         font-weight: 700;
         cursor: pointer;
         transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
     
     button:hover {
         transform: translateY(-2px);
         background: linear-gradient(135deg, #ffed4e, #ffc947);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
     }
     
     .btn-grid {
@@ -128,10 +133,12 @@
     .btn-secondary {
         background: linear-gradient(135deg, #6c757d, #adb5bd);
         color: white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
     
     .btn-secondary:hover {
         background: linear-gradient(135deg, #5a6268, #95a5a6);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
     }
     
     .message {
@@ -158,6 +165,27 @@
         color: #f39c12;
         background: rgba(243, 156, 18, 0.1);
         border: 1px solid rgba(243, 156, 18, 0.3);
+    }
+    
+    /* Botão de premiação destacado */
+    .prize-button {
+        background: linear-gradient(135deg, #00b894, #00cec9);
+        color: white;
+        font-weight: bold;
+        padding: 12px 20px;
+        border-radius: 12px;
+        margin: 5px 0;
+        box-shadow: 0 6px 15px rgba(0, 184, 148, 0.4);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        transition: all 0.3s ease;
+        display: inline-block;
+        font-size: 14px;
+        text-align: center;
+    }
+    
+    .prize-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 184, 148, 0.6);
     }
     
     /* Modal */
@@ -302,6 +330,9 @@
     
     <div class="info" id="infoGeral">
         🎰 <strong>80 participantes</strong> • 💰 <strong>R$ 85,00 por pessoa</strong><br>
+        <div style="margin-top: 10px;">
+            <span class="prize-button">🏆 Premiação Estimada: R$ 1.200.000,00</span>
+        </div>
         📅 <strong>Pagamento:</strong> até 10 de Dezembro<br>
         <small>📋 Preencha os dados para garantir sua vaga!</small>
     </div>
@@ -317,7 +348,7 @@
     </div>
 
     <div style="display: flex; justify-content: center; margin: 15px 0 10px 0;">
-        <button id="verRegras" style="background: linear-gradient(135deg, #95a5a6, #bdc3c7); font-size: 14px; padding: 12px 24px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">📋 Regras</button>
+        <button id="verRegras" style="background: linear-gradient(135deg, #95a5a6, #bdc3c7); font-size: 14px; padding: 12px 24px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);">📋 Regras</button>
     </div>
 
     <div id="modalRegras" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 2000; justify-content: center; align-items: center;">
@@ -469,7 +500,8 @@ const dbRef = ref(db, "participantes");
 const CONFIG = {
   // Participantes
   LIMITE_PARTICIPANTES: 60,
-  VALOR_PARTICIPACAO: 70.00,
+  VALOR_PARTICIPACAO: 100.00,
+  PREMIACAO_ESTIMADA: 850000000.00,
   
   // Datas (formato: DD de Mês)
   DATA_LIMITE_INTERESSE: "30 de Novembro",
@@ -507,12 +539,17 @@ let participantesSelecionados = [];
 let senhaDigitada = '';
 let acaoPendente = null;
 
+// Função para formatar número com 2 dígitos
+function formatarNumero(numero) {
+  return numero.toString().padStart(2, '0');
+}
+
 // Função para enviar lista para Telegram
 async function enviarListaTelegram() {
   try {
     const listaTexto = participantes
       .sort((a, b) => a.numero - b.numero)
-      .map(p => `${p.numero}. ${p.nome} - ${p.status === "Pago" ? "✅ Pago" : "❌ Não pago"}`)
+      .map(p => `${formatarNumero(p.numero)} - ${p.status === "Pago" ? "✅ Pago" : "❌ Não pago"} - ${p.nome}`)
       .join('\n');
     
     const mensagem = `📊 *Lista Completa do Bolão*\n\n${listaTexto}`;
@@ -897,7 +934,7 @@ function exibirLista() {
       div.className = "participante";
       div.innerHTML = `
         <input type="checkbox" id="check-${participante.key}" style="margin: 0; cursor: pointer; width: 16px; height: 16px;">
-        <span style="flex: 1;">${participante.numero}. ${participante.nome}</span>
+        <span style="flex: 1;">${formatarNumero(participante.numero)}. ${participante.nome}</span>
         <span class="status ${participante.status.toLowerCase().replace(' ', '-')}" title="${participante.status === "Pago" ? "Pago" : "Não pago"}">${participante.status === "Pago" ? "✅" : "❌"}</span>
       `;
       
@@ -957,7 +994,7 @@ function exibirListaFiltrada(participantesFiltrados) {
     div.className = "participante";
     div.innerHTML = `
       <input type="checkbox" id="check-${participante.key}" style="margin: 0; cursor: pointer; width: 16px; height: 16px;">
-      <span style="flex: 1;">${participante.numero}. ${participante.nome}</span>
+      <span style="flex: 1;">${formatarNumero(participante.numero)}. ${participante.nome}</span>
       <span class="status ${participante.status.toLowerCase().replace(' ', '-')}" title="${participante.status === "Pago" ? "Pago" : "Não pago"}">${participante.status === "Pago" ? "✅" : "❌"}</span>
     `;
     
@@ -1232,7 +1269,7 @@ document.getElementById("overlay").addEventListener("click", (e) => {
   }
 });
 
-// Função para inicializar elementos com configurações
+// Função para inicializar elementos
 function inicializarElementos() {
   // Atualizar título da página
   document.title = CONFIG.TITULO_BOLAO;
@@ -1240,7 +1277,10 @@ function inicializarElementos() {
   
   // Atualizar informações gerais
   document.getElementById('infoGeral').innerHTML = `
-    🎰 <strong>${CONFIG.LIMITE_PARTICIPANTES} participantes</strong> • 💰 <strong>R$ ${CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',')}</strong><br>
+    🎰 <strong>${CONFIG.LIMITE_PARTICIPANTES} participantes</strong> • 💰 <strong>R$ ${CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',')} por pessoa</strong><br>
+    <div style="margin-top: 10px;">
+      <span class="prize-button">🏆 Premiação Estimada: R$ ${CONFIG.PREMIACAO_ESTIMADA.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+    </div>
     📅 <strong>Pagamento:</strong> até ${CONFIG.DATA_LIMITE_PAGAMENTO}<br>
     <small>📋 Preencha os dados para garantir sua vaga!</small>
   `;
@@ -1280,13 +1320,12 @@ function inicializarElementos() {
       </div>
     `;
   }
-  
 }
 
-// Inicializar
-inicializarElementos();
-atualizarProgresso();
+// Inicializar elementos quando a página carregar
+document.addEventListener('DOMContentLoaded', () => {
+  inicializarElementos();
+});
 </script>
-
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9940d84e04167263',t:'MTc2MTM4NjE5Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"};b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
