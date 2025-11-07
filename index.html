@@ -103,7 +103,7 @@
     }
     
     button {
-        width: 92%;
+        width: 90%;
         padding: 16px;
         margin-top: 12px;
         border: none;
@@ -122,23 +122,62 @@
         background: linear-gradient(135deg, #ffed4e, #ffc947);
         box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
     }
-    
     .btn-grid {
-        display: grid;
-        grid-template-columns: 1fr 2fr;
-        gap: 10px;
-        margin-top: 8px;
+       display: grid;
+       grid-template-columns: 1fr 1fr 1fr; /* Três colunas iguais */
+       gap: 10px;
+       margin-top: 8px;
     }
-    
+
+       /* Primeiro botão ocupa só 1 coluna */
+    .btn-primary {
+       grid-column: 1 / 2;
+    }
+
+      /* Segundo botão ocupa as duas colunas restantes */
     .btn-secondary {
-        background: linear-gradient(135deg, #6c757d, #adb5bd);
+       background: linear-gradient(135deg, #6c757d, #adb5bd);
+       color: white;
+       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+       grid-column: 2 / 4; /* Ocupa as colunas 2 e 3 */
+       width: 100%;
+       margin: 12px 0 0 0;
+    }
+
+    .btn-secondary:hover {
+       background: linear-gradient(135deg, #5a6268, #95a5a6);
+       box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    } 
+    
+    /* Botão do WhatsApp */
+    .btn-whatsapp {
+        background: linear-gradient(135deg, #25d366, #128c7e);
         color: white;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        font-weight: bold;
+        box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 16px;
+        grid-column: 1 / -1; /* Ocupa todas as 3 colunas */
+        width: 100%; /* Ocupa todo o espaço disponível */
+        margin: 12px 0 0 0;
     }
     
-    .btn-secondary:hover {
-        background: linear-gradient(135deg, #5a6268, #95a5a6);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    .btn-whatsapp:hover {
+        background: linear-gradient(135deg, #128c7e, #075e54);
+        box-shadow: 0 6px 15px rgba(37, 211, 102, 0.6);
+    }
+    
+    .whatsapp-icon {
+        font-size: 18px;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .message {
@@ -356,8 +395,12 @@
     <input type="tel" id="telefone" placeholder="WHATSAPP (com DDD)" required>
     
     <div class="btn-grid">
-        <button id="verLista" class="btn-secondary">📋LISTA</button>
-        <button id="cadastrar">🚀PARTICIPAR</button>
+        <button id="verLista" class="btn-primar">📋LISTA</button>
+        <button id="cadastrar" class="btn-secondary">🚀PARTICIPAR</button>
+        <button id="entrarGrupo" class="btn-whatsapp">
+            <span class="whatsapp-icon">💬</span>
+            ENTRAR NO GRUPO
+        </button>
     </div>
 
     <div class="message" id="mensagem"></div>
@@ -496,6 +539,14 @@
             <button id="btnCopiarPix" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px;">📱 QR Code PIX</button>
         </div>
         
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+            <button id="btnWhatsAppPagamento" style="background: linear-gradient(135deg, #25d366, #128c7e); color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px;">📱 WhatsApp</button>
+            <button id="btnEntrarGrupo" class="btn-whatsapp">
+                <span class="whatsapp-icon">💬</span>
+                ENTRAR NO GRUPO
+            </button>
+        </div>
+        
         <button id="fecharConfirmacao" style="background: linear-gradient(135deg, #34495e, #2c3e50); color: white; padding: 12px 24px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%;">✅ Entendi</button>
     </div>
 </div>
@@ -580,7 +631,7 @@ async function enviarListaTelegram() {
       .map(p => `${formatarNumero(p.numero)} - ${p.status === "Pago" ? "✅ Pago" : "❌ Não pago"} - ${p.nome}`)
       .join('\n');
     
-    const mensagem = `📊 *Lista Completa do Bolão*\n\n${listaTexto}`;
+    const mensagem = `📊 *Lista Completa do Bolão\n\n${listaTexto}`;
     
     const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
     const response = await fetch(url, {
@@ -1352,6 +1403,16 @@ function inicializarElementos() {
   // Atualizar texto da barra de progresso
   document.getElementById('progressText').textContent = `0/${CONFIG.LIMITE_PARTICIPANTES} participantes`;
 }
+
+// Evento para o botão de entrar no grupo
+document.getElementById('entrarGrupo').addEventListener('click', () => {
+  window.open('https://chat.whatsapp.com/Fdl9PzkiEBq9TnJHtlu2Rm?mode=wwt', '_blank');
+});
+
+// Evento para o botão de entrar no grupo na página de confirmação
+document.getElementById('btnEntrarGrupo').addEventListener('click', () => {
+  window.open('https://chat.whatsapp.com/Fdl9PzkiEBq9TnJHtlu2Rm?mode=wwt', '_blank');
+});
 
 // Inicializar elementos quando a página carregar
 document.addEventListener('DOMContentLoaded', () => {
