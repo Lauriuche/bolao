@@ -108,7 +108,7 @@
         margin-top: 12px;
         border: none;
         border-radius: 15px;
-        background: linear-gradient(135deg, #ffd700, #ffb347);
+        background: linear-gradient(135deg, #ffed4e, #ffc947);
         color: #333;
         font-size: 16px;
         font-weight: 700;
@@ -119,7 +119,7 @@
     
     button:hover {
         transform: translateY(-2px);
-        background: linear-gradient(135deg, #ffed4e, #ffc947);
+        background: linear-gradient(135deg, #ffd700, #ffb347);
         box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
     }
     .btn-grid {
@@ -398,9 +398,7 @@
         <button id="verLista" class="btn-primar">📋LISTA</button>
         <button id="cadastrar" class="btn-secondary">🚀PARTICIPAR</button>
         <button id="entrarGrupo" class="btn-whatsapp">
-            <span class="whatsapp-icon"></span>
-            ENTRAR NO GRUPO DO WHATSAPP 
-        </button>
+            <span class="whatsapp-icon"></span>GRUPO DO WHATSAPP</button>
     </div>
 
     <div class="message" id="mensagem"></div>
@@ -442,6 +440,7 @@
                 <button id="alterarStatus" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 80px;">🔄 Status</button>
                 <button id="notificar" style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 80px;">📱 Notificar</button>
                 <button id="excluir" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 80px;">🗑️ Excluir</button>
+                <button id="enviarTelegram" style="background: linear-gradient(135deg, #00b894, #00cec9); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 80px;">📤 Telegram</button>
             </div>
         </div>
 
@@ -540,7 +539,6 @@
         </div>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-            <button id="btnWhatsAppPagamento" style="background: linear-gradient(135deg, #25d366, #128c7e); color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px;">📱 WhatsApp</button>
             <button id="btnEntrarGrupo" class="btn-whatsapp">
                 <span class="whatsapp-icon">💬</span>
                 ENTRAR NO GRUPO
@@ -631,7 +629,7 @@ async function enviarListaTelegram() {
       .map(p => `${formatarNumero(p.numero)} - ${p.status === "Pago" ? "✅ Pago" : "❌ Não pago"} - ${p.nome}`)
       .join('\n');
     
-    const mensagem = `📊 *Lista Completa do Bolão\n\n${listaTexto}`;
+    const mensagem = `📊 *Lista Completa do Bolão*\n\n${listaTexto}`;
     
     const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
     const response = await fetch(url, {
@@ -651,8 +649,10 @@ async function enviarListaTelegram() {
     }
     
     console.log('Lista enviada para Telegram com sucesso!');
+    mostrarMensagemSobreModal('✅ Lista enviada ao Telegram!', 'success');
   } catch (error) {
     console.error('Erro ao enviar lista para Telegram:', error);
+    mostrarMensagemSobreModal('❌ Erro ao enviar lista ao Telegram!', 'error');
   }
 }
 
@@ -1211,6 +1211,10 @@ async function executarAcao(acao) {
         await update(ref(db), deleteUpdates);
         mostrarMensagem(`✅ ${participantesSelecionados.length} participante(s) excluído(s)!`, "success");
         break;
+        
+      case 'enviarTelegram':
+        await enviarListaTelegram();
+        break;
     }
 
     // Sincronização instantânea após qualquer ação
@@ -1247,6 +1251,15 @@ document.getElementById("excluir").addEventListener("click", () => {
     return;
   }
   mostrarTecladoSenha('excluir');
+});
+
+// Adicionar evento para o botão de enviar ao Telegram
+document.getElementById("enviarTelegram").addEventListener("click", () => {
+  if (participantesSelecionados.length === 0) {
+    mostrarMensagem("⚠️ Selecione pelo menos um participante!", "warning");
+    return;
+  }
+  mostrarTecladoSenha('enviarTelegram');
 });
 
 // Event listeners do teclado virtual
