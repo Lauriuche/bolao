@@ -398,7 +398,9 @@
         <button id="verLista" class="btn-primar">📋LISTA</button>
         <button id="cadastrar" class="btn-secondary">🚀PARTICIPAR</button>
         <button id="entrarGrupo" class="btn-whatsapp">
-            <span class="whatsapp-icon"></span>GRUPO DO WHATSAPP</button>
+            <span class="whatsapp-icon"></span>
+            ENTRAR NO GRUPO DO WHATSAPP 
+        </button>
     </div>
 
     <div class="message" id="mensagem"></div>
@@ -1164,6 +1166,20 @@ document.getElementById("filtroNaoPagos").addEventListener("click", () => {
   exibirListaFiltrada(participantesPendentes);
 });
 
+// Função para obter o primeiro nome corretamente para nomes compostos
+function obterPrimeiroNome(nomeCompleto) {
+  const nomes = nomeCompleto.split(' ');
+  
+  // Se tiver mais de duas partes e for nome composto, pegar as duas primeiras partes
+  if (nomes.length > 2) {
+    // Para nomes compostos como "João Paulo", "Maria das Graças", etc.
+    return nomes[0] + ' ' + nomes[1];
+  } else {
+    // Para nomes simples como "João", "Maria"
+    return nomes[0];
+  }
+}
+
 // Função para executar ações após autenticação
 async function executarAcao(acao) {
   if (participantesSelecionados.length === 0) {
@@ -1186,7 +1202,8 @@ async function executarAcao(acao) {
       case 'notificar':
         participantesSelecionados.forEach((participante, index) => {
           setTimeout(() => {
-            const mensagem = `🎯 *${CONFIG.TITULO_BOLAO}*\n\nOlá ${participante.nome.split(' ')[0]}!\n\nSua vaga está reservada no nosso bolão!\n\n💰 *Valor:* R$ ${CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',')}\n📅 *Prazo:* até ${CONFIG.DATA_LIMITE_PAGAMENTO}\n💳 *PIX:* ${CONFIG.PIX_PAGAMENTO}\n\n⚠️ *IMPORTANTE:* Quem não pagar até ${CONFIG.DATA_LIMITE_PAGAMENTO.split(' ')[0]}/${CONFIG.DATA_LIMITE_PAGAMENTO.split(' ')[2]} será excluído automaticamente.\n\nApós o pagamento, envie o comprovante!\n\n*Garanta sua vaga!* 🍀`;
+            const primeiroNome = obterPrimeiroNome(participante.nome);
+            const mensagem = `🎯 *${CONFIG.TITULO_BOLAO}*\n\nOlá ${primeiroNome}!\n\nSua vaga está reservada no nosso bolão!\n\n💰 *Valor:* R$ ${CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',')}\n📅 *Prazo:* até ${CONFIG.DATA_LIMITE_PAGAMENTO}\n💳 *PIX:* ${CONFIG.PIX_PAGAMENTO}\n\n⚠️ *IMPORTANTE:* Quem não pagar até ${CONFIG.DATA_LIMITE_PAGAMENTO.split(' ')[0]}/${CONFIG.DATA_LIMITE_PAGAMENTO.split(' ')[2]} será excluído automaticamente.\n\nApós o pagamento, envie o comprovante!\n\n*Garanta sua vaga!* 🍀`;
             
             const telefoneFormatado = participante.telefone.replace(/\D/g, '');
             const telefoneComCodigo = telefoneFormatado.startsWith('55') ? telefoneFormatado : '55' + telefoneFormatado;
@@ -1199,7 +1216,14 @@ async function executarAcao(acao) {
         break;
 
       case 'excluir':
-        const nomes = participantesSelecionados.map(p => p.nome.split(' ')[0]).join(', ');
+        const nomes = participantesSelecionados.map(p => {
+          const nomes = p.nome.split(' ');
+          if (nomes.length > 2) {
+            return nomes[0] + ' ' + nomes[1];
+          } else {
+            return nomes[0];
+          }
+        }).join(', ');
         if (!confirm(`Tem certeza que deseja excluir ${participantesSelecionados.length} participante(s)?\n\n${nomes}`)) {
           return;
         }
