@@ -66,39 +66,39 @@
     .pix-key { word-break: break-all; font-family: monospace; color: #555; font-size: 0.8rem; background: #fff; padding: 5px; margin: 5px 0; border-radius: 5px; }
     .btn-copy { background: #3498db; width: 100%; padding: 10px; font-size: 0.8rem; margin-top: 5px; }
 
-    /* --- BOTÃO DE ATUALIZAÇÃO (CORRIGIDO) --- */
-    #btnUpdateApp {
-        display: none; /* Oculto por padrão */
+    /* --- BOTÃO DE VERIFICAR ATUALIZAÇÃO (SÓ PARA APP) --- */
+    #btnCheckUpdate {
+        display: none; /* Oculto por padrão (navegador) */
         position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #2d3436;
-        color: #f1c40f;
-        padding: 15px 30px;
-        border-radius: 50px;
-        font-weight: 900;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-        z-index: 9999;
-        animation: bounce 2s infinite;
-        border: 2px solid #f1c40f;
+        top: 15px;
+        right: 15px;
+        background: rgba(45, 52, 54, 0.9);
+        color: #fff;
+        border: 1px solid rgba(255,255,255,0.2);
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: bold;
+        z-index: 9000;
+        backdrop-filter: blur(5px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        transition: all 0.3s;
         cursor: pointer;
-        font-size: 1rem;
-        text-transform: uppercase;
     }
-    @keyframes bounce {
-        0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
-        40% {transform: translateX(-50%) translateY(-10px);}
-        60% {transform: translateX(-50%) translateY(-5px);}
+    #btnCheckUpdate:active { transform: scale(0.95); background: #000; }
+
+    /* MOSTRAR APENAS NO APP INSTALADO */
+    @media all and (display-mode: standalone) {
+        #btnCheckUpdate { display: block; }
     }
 </style>
 </head>
 <body>
 
-<!-- BOTÃO DE ATUALIZAÇÃO FLUTUANTE -->
-<div id="btnUpdateApp" onclick="window.location.reload()">
-    ↻ CLIQUE PARA ATUALIZAR
-</div>
+<!-- BOTÃO FIXO DE VERIFICAR ATUALIZAÇÃO -->
+<button id="btnCheckUpdate" onclick="verificarAtualizacao()">
+    ↻ ATUALIZAR APP
+</button>
 
 <div class="container">
     <img src="1001855377.png" alt="Logo Camino Supermercados" class="logo-img">
@@ -122,44 +122,67 @@
 <div class="modal-overlay" id="modalSenha"><div class="modal" style="max-width:300px;"><h3 style="margin:0; color:#c0392b;">Senha Admin</h3><div id="senhaDisplay" style="font-size:2rem; letter-spacing:5px; text-align:center; height:40px; color:#333;"></div><div class="numpad"><button class="num-btn" onclick="addDigit('1')">1</button><button class="num-btn" onclick="addDigit('2')">2</button><button class="num-btn" onclick="addDigit('3')">3</button><button class="num-btn" onclick="addDigit('4')">4</button><button class="num-btn" onclick="addDigit('5')">5</button><button class="num-btn" onclick="addDigit('6')">6</button><button class="num-btn" onclick="addDigit('7')">7</button><button class="num-btn" onclick="addDigit('8')">8</button><button class="num-btn" onclick="addDigit('9')">9</button><button class="num-btn" style="background:#c0392b" onclick="clearDigit()">C</button><button class="num-btn" onclick="addDigit('0')">0</button><button class="num-btn" style="background:#7f8c8d" onclick="closeSenha()">✕</button></div></div></div>
 <div class="modal-overlay" id="modalPagamentoAdm"><div class="modal" style="max-width:300px;"><h3 style="margin:0; color:#c0392b;">Definir Valor</h3><p id="nomePgto" style="text-align:center; font-weight:bold; color:#333; margin-bottom:5px;"></p><input type="number" id="valorInput" placeholder="R$ 0,00" style="font-size:1.5rem; border:2px solid #ddd; margin-bottom:10px;"><div style="display:flex; gap:5px; margin-bottom:10px;"><button onclick="setValor(0)" style="flex:1; background:#e74c3c; padding:10px; font-size:0.8rem;">❌ Zerar</button><button onclick="setValor(100)" style="flex:1; background:#00b894; padding:10px; font-size:0.8rem;">✅ Total</button></div><button id="salvarPgto" style="background:#27ae60; width:100%;">💾 Salvar</button><button onclick="document.getElementById('modalPagamentoAdm').style.display='none'" style="background:#7f8c8d; width:100%; margin-top:5px;">Cancelar</button></div></div>
 <div class="modal-overlay" id="modalRegras"><div class="modal"><h3 style="margin-top:0; color:#c0392b;">Regras do Bolão</h3><div style="text-align:left; line-height:1.6; color:#333;"><p>✅ <strong>Valor:</strong> R$ 100,00 (Cota Única)</p><p>📅 <strong>Prazo:</strong> Até 10 de Dezembro</p><p>⚠️ <strong>Regra:</strong> Não pagou até a data, perde a vaga.</p></div><button onclick="document.getElementById('modalRegras').style.display='none'" style="background:#c0392b; width:100%; margin-top:15px;">Fechar</button></div></div>
-
-<!-- MODAL CONFIRMACAO (SEM BOTAO WHATSAPP) -->
-<div class="modal-overlay" id="modalConfirmacao">
-    <div class="modal">
-        <div style="font-size:3rem;">🎉</div>
-        <h3 style="margin:0; color:#00b894;">Cadastro Realizado!</h3>
-        <div style="background:#f1f2f6; padding:15px; border-radius:10px; text-align:center; margin-bottom:10px; color:#333;">
-            <div><strong>Nome:</strong> <span id="confNome" style="text-transform:uppercase;"></span></div>
-            <div style="margin-top:10px; font-size:0.8rem; color:#666;">Agora é só aguardar ou realizar o pagamento.</div>
-        </div>
-        <!-- APENAS O BOTÃO FECHAR -->
-        <button onclick="document.getElementById('modalConfirmacao').style.display='none'" style="background:#7f8c8d; width:100%; margin-top:10px;">Fechar</button>
-    </div>
-</div>
+<div class="modal-overlay" id="modalConfirmacao"><div class="modal"><div style="font-size:3rem;">🎉</div><h3 style="margin:0; color:#00b894;">Cadastro Realizado!</h3><div style="background:#f1f2f6; padding:15px; border-radius:10px; text-align:center; margin-bottom:10px; color:#333;"><div><strong>Nome:</strong> <span id="confNome" style="text-transform:uppercase;"></span></div><div style="margin-top:10px; font-size:0.8rem; color:#666;">Agora é só aguardar ou realizar o pagamento.</div></div><button onclick="document.getElementById('modalConfirmacao').style.display='none'" style="background:#7f8c8d; width:100%; margin-top:10px;">Fechar</button></div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <!-- SCRIPT DE ATUALIZAÇÃO E INSTALAÇÃO -->
 <script>
-    let newWorker;
+    // Variável global para guardar o registro
+    let swRegistration = null;
+
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('sw.js').then(reg => {
-                // Detecta atualização
+                console.log('SW registrado');
+                swRegistration = reg; // Guarda para usar no botão
+                
+                // Monitora atualizações automáticas
                 reg.addEventListener('updatefound', () => {
-                    newWorker = reg.installing;
+                    const newWorker = reg.installing;
                     newWorker.addEventListener('statechange', () => {
-                        // QUANDO O NOVO SW ESTIVER INSTALADO (PRONTO)
                         if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            // MOSTRA O BOTÃO MAS NÃO RECARREGA SOZINHO
-                            document.getElementById('btnUpdateApp').style.display = 'block';
+                            // Atualização encontrada no background
+                            document.getElementById('btnCheckUpdate').innerText = "⚠️ ATUALIZAR AGORA";
+                            document.getElementById('btnCheckUpdate').style.background = "#c0392b";
                         }
                     });
                 });
             });
         });
-        // REMOVIDO O CÓDIGO QUE DAVA AUTO-RELOAD NO 'controllerchange'
+
+        // Recarrega quando o novo SW assumir
+        let refreshing;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (refreshing) return;
+            window.location.reload();
+            refreshing = true;
+        });
     }
+
+    // FUNÇÃO MANUAL DO BOTÃO
+    window.verificarAtualizacao = () => {
+        const btn = document.getElementById('btnCheckUpdate');
+        btn.innerText = "⏳ Buscando...";
+        
+        if (swRegistration) {
+            swRegistration.update().then(() => {
+                // Se o update() não desencadear updatefound/controllerchange em 2s, assume que tá ok
+                setTimeout(() => {
+                    if (btn.innerText !== "⚠️ ATUALIZAR AGORA") {
+                        btn.innerText = "✅ JÁ ATUALIZADO";
+                        btn.style.background = "#27ae60";
+                        setTimeout(() => {
+                            btn.innerText = "↻ ATUALIZAR APP";
+                            btn.style.background = "rgba(45, 52, 54, 0.9)";
+                        }, 3000);
+                    }
+                }, 2000);
+            });
+        } else {
+            window.location.reload(); // Fallback
+        }
+    };
 </script>
 
 <script type="module">
