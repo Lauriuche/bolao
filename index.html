@@ -3,6 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<meta name="theme-color" content="#2d3436">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="Bolão Camino">
+
+<link rel="apple-touch-icon" href="1001855377.png">
+<link rel="icon" type="image/png" href="1001855377.png">
+
 <title>Bolão Colaboradores Camino</title>
 <style>
     /* --- CORES E VARIÁVEIS --- */
@@ -20,6 +30,9 @@
         background: #f1f2f6;
         display: flex; justify-content: center; align-items: center;
         min-height: 100vh;
+        /* Evita seleção de texto para parecer app nativo */
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
     }
 
     .container {
@@ -69,7 +82,8 @@
         border: 2px solid #ecf0f1; border-bottom: 4px solid #badc58;
         border-radius: 12px; font-size: 1rem; text-align: center; outline: none;
         background: #fff; color: #333; font-weight: 600;
-        text-transform: uppercase; 
+        text-transform: uppercase;
+        user-select: text; /* Permite digitar */
     }
     input:focus { border-color: #6ab04c; }
     
@@ -99,7 +113,7 @@
     /* Lado Esquerdo (Seleção) */
     .p-left {
         flex: 1; padding: 12px; cursor: pointer; display: flex; align-items: center;
-        text-transform: uppercase; /* Garante visual lista em caixa alta */
+        text-transform: uppercase;
     }
     
     /* Lado Direito (Icone Transparente) */
