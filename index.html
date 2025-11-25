@@ -4,15 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<link rel="manifest" href="manifest.json">
+<!-- VINCULAÇÃO COM O APLICATIVO (DICA: Mude ?v=2 sempre que trocar o ícone) -->
+<link rel="manifest" href="manifest.json?v=2"> 
+
 <meta name="theme-color" content="#2d3436">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Bolão Camino">
 
-<link rel="apple-touch-icon" href="icon.png">
-<link rel="icon" type="image/png" href="icon.png">
+<!-- ÍCONES -->
+<link rel="apple-touch-icon" href="icon.png?v=2">
+<link rel="icon" type="image/png" href="icon.png?v=2">
 
 <title>Bolão Colaboradores Camino</title>
 
@@ -20,7 +23,7 @@
     /* --- CORES E VARIÁVEIS --- */
     :root { --red-camino: #c0392b; --green-btn: #00b894; --yellow-num: #f1c40f; --dark-bg: #2d3436; }
     body { margin: 0; padding: 15px; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f1f2f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; user-select: none; -webkit-tap-highlight-color: transparent; }
-    .container { background: #ffffff; width: 100%; max-width: 450px; border-radius: 25px; padding: 25px 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); text-align: center; display: flex; flex-direction: column; }
+    .container { background: #ffffff; width: 100%; max-width: 450px; border-radius: 25px; padding: 25px 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); text-align: center; display: flex; flex-direction: column; position: relative; }
     
     /* LOGO */
     .logo-img { max-width: 85%; height: auto; margin: 5px auto 20px auto; max-height: 120px; }
@@ -63,9 +66,38 @@
     .pix-box { background: #f1f2f6; padding: 10px; border-radius: 10px; margin-top: 15px; border: 1px dashed #ccc; }
     .pix-key { word-break: break-all; font-family: monospace; color: #555; font-size: 0.8rem; background: #fff; padding: 5px; margin: 5px 0; border-radius: 5px; }
     .btn-copy { background: #3498db; width: 100%; padding: 10px; font-size: 0.8rem; margin-top: 5px; }
+
+    /* --- BOTÃO DE ATUALIZAÇÃO (NOVO) --- */
+    #btnUpdateApp {
+        display: none; /* Oculto por padrão */
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #2d3436;
+        color: #f1c40f;
+        padding: 12px 25px;
+        border-radius: 30px;
+        font-weight: bold;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        z-index: 9999;
+        animation: bounce 2s infinite;
+        border: 2px solid #f1c40f;
+        cursor: pointer;
+    }
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
+        40% {transform: translateX(-50%) translateY(-10px);}
+        60% {transform: translateX(-50%) translateY(-5px);}
+    }
 </style>
 </head>
 <body>
+
+<!-- BOTÃO DE ATUALIZAÇÃO FLUTUANTE -->
+<div id="btnUpdateApp" onclick="window.location.reload(true)">
+    ↻ NOVA VERSÃO DISPONÍVEL!
+</div>
 
 <div class="container">
     <img src="1001855377.png" alt="Logo Camino Supermercados" class="logo-img">
@@ -83,32 +115,40 @@
     <div id="mensagem" style="margin-top:10px; font-weight:bold; min-height:20px;"></div>
 </div>
 
+<!-- MODAIS -->
 <div class="modal-overlay" id="overlay"><div class="modal"><div style="display:flex; justify-content:space-between; align-items:center;"><h3 style="margin:0; color:#c0392b;">Participantes</h3><button onclick="document.getElementById('overlay').style.display='none'" style="background:none; color:#333; width:auto; padding:0; box-shadow:none; font-size:1.5rem;">✕</button></div><div style="background:#f1f2f6; padding:10px; border-radius:10px; margin:10px 0;"><div style="height:10px; background:#ddd; border-radius:5px; overflow:hidden;"><div id="progressFillLista" style="height:100%; width:0%; background:#00b894;"></div></div><div id="progressTextLista" style="font-size:0.8rem; margin-top:5px; text-align:center;">...</div></div><input type="text" id="buscar" placeholder="🔍 Buscar..." style="margin-bottom:10px; padding:10px; border:1px solid #ddd;"><div style="display:flex; gap:5px; margin-bottom:10px;"><button id="filtroTodos" style="flex:1; background:#7f8c8d; padding:8px;">Todos</button><button id="filtroPagos" style="flex:1; background:#00b894; padding:8px;">Pagos</button><button id="filtroPendentes" style="flex:1; background:#e74c3c; padding:8px;">Pend</button></div><button id="btnSelectAll" class="select-all-btn">☑️ Selecionar Todos</button><div style="border-top:1px solid #ddd; padding-top:10px; display:flex; gap:5px; flex-wrap: wrap;"><button onclick="askPass('pagamento')" style="flex:1; background:#f39c12; padding:10px; font-size:0.75rem;">💰 Pgto</button><button onclick="askPass('notificar')" style="flex:1; background:#25d366; padding:10px; font-size:0.75rem;">📱 Cobrar</button><button onclick="askPass('excluir')" style="flex:1; background:#c0392b; padding:10px; font-size:0.75rem;">🗑️ Excluir</button><button onclick="askPass('telegram')" style="background:#2980b9; width:40px; padding:10px;">✈️</button></div><div id="lista" style="margin-top:15px; max-height:300px; overflow-y:auto;"></div></div></div>
 <div class="modal-overlay" id="modalDetalhes"><div class="modal"><h3 id="detNome" style="margin:0 0 10px 0; color:#2d3436; text-transform:uppercase;">Nome</h3><div style="background:#f9f9f9; padding:15px; border-radius:10px; border:1px solid #eee;"><div style="font-size:0.9rem; color:#666;">Status do Pagamento</div><div id="detStatusBadge" style="font-size:1.2rem; font-weight:bold; margin:5px 0;">Pendente</div><div id="detValor" style="font-size:1rem; color:#333;">Pago: R$ 0,00</div></div><div id="areaPix" class="pix-box" style="display:none;"><div style="font-weight:bold; color:#c0392b; margin-bottom:5px;">⚠️ Regularize seu pagamento</div><div style="font-size:0.8rem;">Copie a chave abaixo e pague no app do seu banco:</div><div id="chavePixTexto" class="pix-key"></div><button onclick="copiarPix()" class="btn-copy">📋 COPIAR CÓDIGO PIX</button></div><div id="areaParabens" style="display:none; margin-top:15px; color:#00b894; font-weight:bold;">✅ Tudo certo! Boa sorte! 🍀</div><button onclick="document.getElementById('modalDetalhes').style.display='none'" style="background:#7f8c8d; width:100%; margin-top:15px;">Fechar</button></div></div>
 <div class="modal-overlay" id="modalSenha"><div class="modal" style="max-width:300px;"><h3 style="margin:0; color:#c0392b;">Senha Admin</h3><div id="senhaDisplay" style="font-size:2rem; letter-spacing:5px; text-align:center; height:40px; color:#333;"></div><div class="numpad"><button class="num-btn" onclick="addDigit('1')">1</button><button class="num-btn" onclick="addDigit('2')">2</button><button class="num-btn" onclick="addDigit('3')">3</button><button class="num-btn" onclick="addDigit('4')">4</button><button class="num-btn" onclick="addDigit('5')">5</button><button class="num-btn" onclick="addDigit('6')">6</button><button class="num-btn" onclick="addDigit('7')">7</button><button class="num-btn" onclick="addDigit('8')">8</button><button class="num-btn" onclick="addDigit('9')">9</button><button class="num-btn" style="background:#c0392b" onclick="clearDigit()">C</button><button class="num-btn" onclick="addDigit('0')">0</button><button class="num-btn" style="background:#7f8c8d" onclick="closeSenha()">✕</button></div></div></div>
 <div class="modal-overlay" id="modalPagamentoAdm"><div class="modal" style="max-width:300px;"><h3 style="margin:0; color:#c0392b;">Definir Valor</h3><p id="nomePgto" style="text-align:center; font-weight:bold; color:#333; margin-bottom:5px;"></p><input type="number" id="valorInput" placeholder="R$ 0,00" style="font-size:1.5rem; border:2px solid #ddd; margin-bottom:10px;"><div style="display:flex; gap:5px; margin-bottom:10px;"><button onclick="setValor(0)" style="flex:1; background:#e74c3c; padding:10px; font-size:0.8rem;">❌ Zerar</button><button onclick="setValor(100)" style="flex:1; background:#00b894; padding:10px; font-size:0.8rem;">✅ Total</button></div><button id="salvarPgto" style="background:#27ae60; width:100%;">💾 Salvar</button><button onclick="document.getElementById('modalPagamentoAdm').style.display='none'" style="background:#7f8c8d; width:100%; margin-top:5px;">Cancelar</button></div></div>
 <div class="modal-overlay" id="modalRegras"><div class="modal"><h3 style="margin-top:0; color:#c0392b;">Regras do Bolão</h3><div style="text-align:left; line-height:1.6; color:#333;"><p>✅ <strong>Valor:</strong> R$ 100,00 (Cota Única)</p><p>📅 <strong>Prazo:</strong> Até 10 de Dezembro</p><p>⚠️ <strong>Regra:</strong> Não pagou até a data, perde a vaga.</p></div><button onclick="document.getElementById('modalRegras').style.display='none'" style="background:#c0392b; width:100%; margin-top:15px;">Fechar</button></div></div>
-
-<div class="modal-overlay" id="modalConfirmacao">
-    <div class="modal">
-        <div style="font-size:3rem;">🎉</div>
-        <h3 style="margin:0; color:#00b894;">Cadastro Realizado!</h3>
-        <div style="background:#f1f2f6; padding:15px; border-radius:10px; text-align:center; margin-bottom:10px; color:#333;">
-            <div><strong>Nome:</strong> <span id="confNome" style="text-transform:uppercase;"></span></div>
-            <div style="margin-top:10px; font-size:0.8rem; color:#666;">Agora é só aguardar ou realizar o pagamento.</div>
-        </div>
-        <button onclick="document.getElementById('modalConfirmacao').style.display='none'" style="background:#7f8c8d; width:100%; margin-top:10px;">Fechar</button>
-    </div>
-</div>
+<div class="modal-overlay" id="modalConfirmacao"><div class="modal"><div style="font-size:3rem;">🎉</div><h3 style="margin:0; color:#00b894;">Cadastro Realizado!</h3><div style="background:#f1f2f6; padding:15px; border-radius:10px; text-align:center; margin-bottom:10px; color:#333;"><div><strong>Nome:</strong> <span id="confNome" style="text-transform:uppercase;"></span></div><div style="margin-top:10px; font-size:0.8rem; color:#666;">Agora é só aguardar ou realizar o pagamento.</div></div><button onclick="document.getElementById('modalConfirmacao').style.display='none'" style="background:#7f8c8d; width:100%; margin-top:10px;">Fechar</button></div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+<!-- SCRIPT DE ATUALIZAÇÃO E INSTALAÇÃO -->
 <script>
+    let newWorker;
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js')
-            .then(reg => console.log('App registrado:', reg))
-            .catch(err => console.log('Erro ao registrar App:', err));
+            navigator.serviceWorker.register('sw.js').then(reg => {
+                // Detecta atualização
+                reg.addEventListener('updatefound', () => {
+                    newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            // Nova versão encontrada!
+                            document.getElementById('btnUpdateApp').style.display = 'block';
+                        }
+                    });
+                });
+            });
+        });
+        // Recarrega a página quando o novo SW assumir o controle
+        let refreshing;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (refreshing) return;
+            window.location.reload();
+            refreshing = true;
         });
     }
 </script>
@@ -147,7 +187,7 @@ function checkPass() { if(document.getElementById('senhaDisplay').innerText===CO
 async function doAction() {
     if(acaoAdmin==='pagamento'){ document.getElementById('nomePgto').innerText = selecionados.length===1 ? selecionados[0].nome : `${selecionados.length} Selecionados`; document.getElementById('valorInput').value = selecionados.length===1 ? (selecionados[0].valorPago||'') : ''; document.getElementById('modalPagamentoAdm').style.display='flex'; }
     else if(acaoAdmin==='excluir'){ if(confirm(`Excluir ${selecionados.length} selecionados?`)){ const u={}; selecionados.forEach(p=>u[`participantes/${p.key}`]=null); await update(ref(db),u); selecionados=[]; updateData(); renderList(getCurrentFilterFn()); setTimeout(enviarListaTelegram,1500); } }
-    else if(acaoAdmin==='notificar'){ selecionados.forEach((p,i)=>{ setTimeout(()=>{ const saldo=CONFIG.VALOR-(p.valorPago||0); let t=p.telefone.replace(/\D/g,''); if(!t.startsWith('55'))t='55'+t; const msg=`Olá ${formatarNomeInteligente(p.nome)}! Lembrete Bolão Camino.\nFalta: R$ ${saldo.toFixed(2).replace('.',',')}\nChave PIX (Copia e Cola): abaixo`; window.open(`https://wa.me/${t}?text=${encodeURIComponent(msg+'\n\n'+CONFIG.PIX)}`, '_blank'); }, i*1500); }); }
+    else if(acaoAdmin==='notificar'){ selecionados.forEach((p,i)=>{ setTimeout(()=>{ const saldo=CONFIG.VALOR-(p.valorPago||0); let t=p.telefone.replace(/\D/g,''); if(!t.startsWith('55'))t='55'+t; const msg=`Olá ${formatarNomeInteligente(p.nome)}! Lembrete Bolão Camino.\nFalta: R$ ${saldo.toFixed(2).replace('.',',')}\nChave PIX (Copia e Cola): abaixo`; const fullMsg = `${msg}\n\n${CONFIG.PIX}`; window.open(`https://wa.me/${t}?text=${encodeURIComponent(fullMsg)}`, '_blank'); }, i*1500); }); }
     else if(acaoAdmin==='telegram'){ enviarListaTelegram(); alert("Enviando..."); }
 }
 
@@ -180,29 +220,26 @@ document.getElementById('btnSelectAll').addEventListener('click',()=>{const f=pa
 function getCurrentFilterFn(){if(currentFilter==='pagos')return p=>(p.valorPago||0)>=CONFIG.VALOR; if(currentFilter==='pendentes')return p=>(p.valorPago||0)<CONFIG.VALOR; return p=>true;}
 document.getElementById('filtroTodos').onclick=()=>{currentFilter='todos';renderList(getCurrentFilterFn());}; document.getElementById('filtroPagos').onclick=()=>{currentFilter='pagos';renderList(getCurrentFilterFn());}; document.getElementById('filtroPendentes').onclick=()=>{currentFilter='pendentes';renderList(getCurrentFilterFn());};
 
-// --- CADASTRO COM VERIFICAÇÃO DE DUPLICIDADE REFORÇADA ---
+// CADASTRO COM VERIFICAÇÃO DE DUPLICIDADE CORRIGIDA
 document.getElementById('cadastrar').addEventListener('click', async()=>{
     const nR = document.getElementById('nome').value.trim(); 
     const n = nR.toUpperCase(); 
     const tRaw = document.getElementById('telefone').value.trim();
-    const tL = tRaw.replace(/\D/g,''); // Limpa telefone para comparar só números
+    const tL = tRaw.replace(/\D/g,''); 
     
     if(!n || !tRaw) return alert("Preencha todos os campos!"); 
     if(participantes.length >= CONFIG.LIMITE) return alert("Bolão lotado!");
 
-    // Verificação de duplicidade
+    // VERIFICA DUPLICIDADE (NOME OU TELEFONE)
     const duplicado = participantes.some(p => {
-        // Garante que os dados do banco existem antes de processar
-        const pNome = (p.nome || "").toUpperCase().trim();
+        const pNome = (p.nome || "").toUpperCase();
         const pTel = (p.telefone || "").replace(/\D/g,'');
-        
-        // Compara Nome exato OU Telefone exato
         return pNome === n || pTel === tL;
     });
 
-    if (duplicado) {
-        alert("⚠️ Já existe um cadastro com este NOME ou TELEFONE na lista.");
-        return; // Para a execução aqui se for duplicado
+    if(duplicado) {
+        alert("⚠️ ERRO: Já existe um cadastro com este Nome ou Telefone!");
+        return; // PARA TUDO AQUI
     }
 
     const num = participantes.length + 1; 
@@ -228,3 +265,4 @@ const td=new Date("2025-12-10T23:59:59").getTime(); setInterval(()=>{const n=new
 </script>
 </body>
 </html>
+
