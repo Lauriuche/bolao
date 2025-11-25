@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2d3436">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bolão Camino">
+
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" type="image/png" href="icon.png">
+
+<title>Bolão Colaboradores Camino</title>
+
+<style>
+    /* --- CORES E VARIÁVEIS --- */
+    :root { --red-camino: #c0392b; --green-btn: #00b894; --yellow-num: #f1c40f; --dark-bg: #2d3436; }
+    body { margin: 0; padding: 15px; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f1f2f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; user-select: none; -webkit-tap-highlight-color: transparent; }
+    .container { background: #ffffff; width: 100%; max-width: 450px; border-radius: 25px; padding: 25px 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); text-align: center; display: flex; flex-direction: column; }
+    
+    /* LOGO */
+    .logo-img { max-width: 85%; height: auto; margin: 5px auto 20px auto; max-height: 120px; }
+    
+    .info-row { font-size: 0.95rem; color: #555; margin-bottom: 5px; }
+    .date-row { font-size: 0.9rem; color: #444; margin-bottom: 15px; }
+    .highlight-area { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .prize-badge { background: linear-gradient(135deg, #00b894, #00cec9); color: white; padding: 10px 20px; border-radius: 25px; font-weight: 700; box-shadow: 0 4px 10px rgba(0, 184, 148, 0.3); }
+    .btn-regras-small { background: #95a5a6; color: white; border: none; padding: 10px 15px; border-radius: 10px; font-weight: 600; cursor: pointer; }
+    .countdown-box { background: #1e272e; border-radius: 15px; padding: 15px 10px; color: white; margin-bottom: 20px; border-bottom: 3px solid #f1c40f; }
+    .countdown-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; opacity: 0.9; }
+    .timer-flex { display: flex; justify-content: center; align-items: center; gap: 5px; }
+    .time-unit { display: flex; flex-direction: column; align-items: center; width: 55px; }
+    .time-num { font-size: 1.6rem; font-weight: 700; color: var(--yellow-num); line-height: 1; }
+    .time-label { font-size: 0.65rem; text-transform: uppercase; margin-top: 5px; color: #ccc; }
+    .time-sep { font-size: 1.2rem; color: #555; margin-bottom: 15px; }
+    .progress-wrapper { margin-bottom: 20px; background: #f1f2f6; padding: 12px; border-radius: 15px; }
+    .progress-track { background: #dfe6e9; height: 14px; border-radius: 7px; overflow: hidden; margin-bottom: 8px; }
+    .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #f1c40f, #2ecc71); border-radius: 7px; transition: width 1s ease; }
+    .progress-stats { font-size: 0.9rem; font-weight: 700; color: #2d3436; }
+    .progress-money { font-size: 0.8rem; color: #636e72; }
+    input { width: 100%; padding: 16px; margin: 8px 0; box-sizing: border-box; border: 2px solid #ecf0f1; border-bottom: 4px solid #badc58; border-radius: 12px; font-size: 1rem; text-align: center; outline: none; background: #fff; color: #333; font-weight: 600; text-transform: uppercase; user-select: text; }
+    input:focus { border-color: #6ab04c; }
+    .btn-row { display: flex; gap: 10px; margin-top: 10px; }
+    button { border: none; border-radius: 12px; padding: 15px; font-weight: 700; font-size: 1rem; cursor: pointer; text-transform: uppercase; color: white; transition: transform 0.1s; }
+    button:active { transform: translateY(2px); }
+    .btn-lista { background: #7f8c8d; flex: 1; }
+    .btn-participar { background: #00b894; flex: 2; }
+    .btn-whatsapp-full { width: 100%; background: #25d366; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 10px; }
+    .modal { background: #fff; color: #333; width: 100%; max-width: 400px; border-radius: 20px; padding: 20px; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+    .participante-item { margin: 5px 0; background: #f1f2f6; border-radius: 8px; display: flex; overflow: hidden; border: 2px solid transparent; transition: 0.2s; min-height: 50px; }
+    .participante-item.selected { border-color: #f1c40f; background: #fff9db; }
+    .p-left { flex: 1; padding: 12px; cursor: pointer; display: flex; align-items: center; text-transform: uppercase; }
+    .p-right { width: 60px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: transparent; cursor: pointer; border-left: 1px solid rgba(0,0,0,0.05); }
+    .status-text { font-size: 0.65rem; font-weight: 700; margin-top: 2px; color: #555; }
+    .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 15px; }
+    .num-btn { background: #2d3436; color: #fff; font-size: 1.2rem; padding: 15px; }
+    .select-all-btn { background: none; border: none; color: #0984e3; font-weight: bold; font-size: 0.9rem; padding: 5px; text-align: right; width: 100%; display: block; }
+    .pix-box { background: #f1f2f6; padding: 10px; border-radius: 10px; margin-top: 15px; border: 1px dashed #ccc; }
+    .pix-key { word-break: break-all; font-family: monospace; color: #555; font-size: 0.8rem; background: #fff; padding: 5px; margin: 5px 0; border-radius: 5px; }
+    .btn-copy { background: #3498db; width: 100%; padding: 10px; font-size: 0.8rem; margin-top: 5px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <img src="1001855377.png" alt="Logo Camino Supermercados" class="logo-img">
+    
+    <div class="info-row"><span>🎰 60 pessoas</span> • <span>💰 R$ 100,00 por pessoa</span></div>
+    <div class="date-row">📅 <strong>Pagamento:</strong> até 10 de Dezembro</div>
+    <div class="highlight-area"><div class="prize-badge">🏆 R$ 850 Milhões</div><button id="verRegras" class="btn-regras-small">📋 Regras</button></div>
+    <div class="countdown-box"><div class="countdown-title">⏰ ENCERRAMENTO DAS COTAS:</div><div class="timer-flex" id="countdown"><div class="time-unit"><span class="time-num" id="dias">00</span><span class="time-label">DIAS</span></div> <div class="time-sep">:</div><div class="time-unit"><span class="time-num" id="horas">00</span><span class="time-label">HS</span></div> <div class="time-sep">:</div><div class="time-unit"><span class="time-num" id="minutos">00</span><span class="time-label">MIN</span></div> <div class="time-sep">:</div><div class="time-unit"><span class="time-num" id="segundos">00</span><span class="time-label">SEG</span></div></div></div>
+    <div class="progress-wrapper"><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats" id="progressText">0/60 participantes</div><div class="progress-money" id="progressSubtext">Arrecadado: R$ 0,00</div></div>
+    <div class="instruction">Para participar do bolão preencher os dados e clicar em <br><strong>PARTICIPAR</strong></div>
+    <input type="text" id="nome" placeholder="NOME COMPLETO">
+    <input type="tel" id="telefone" placeholder="WHATSAPP (com DDD)">
+    <div class="btn-row"><button id="verLista" class="btn-lista">📋 LISTA</button><button id="cadastrar" class="btn-participar">🚀 PARTICIPAR</button></div>
+    <button id="entrarGrupo" class="btn-whatsapp-full">💬 GRUPO WHATSAPP</button>
+    <div id="mensagem" style="margin-top:10px; font-weight:bold; min-height:20px;"></div>
+</div>
+
+<div class="modal-overlay" id="overlay"><div class="modal"><div style="display:flex; justify-content:space-between; align-items:center;"><h3 style="margin:0; color:#c0392b;">Participantes</h3><button onclick="document.getElementById('overlay').style.display='none'" style="background:none; color:#333; width:auto; padding:0; box-shadow:none; font-size:1.5rem;">✕</button></div><div style="background:#f1f2f6; padding:10px; border-radius:10px; margin:10px 0;"><div style="height:10px; background:#ddd; border-radius:5px; overflow:hidden;"><div id="progressFillLista" style="height:100%; width:0%; background:#00b894;"></div></div><div id="progressTextLista" style="font-size:0.8rem; margin-top:5px; text-align:center;">...</div></div><input type="text" id="buscar" placeholder="🔍 Buscar..." style="margin-bottom:10px; padding:10px; border:1px solid #ddd;"><div style="display:flex; gap:5px; margin-bottom:10px;"><button id="filtroTodos" style="flex:1; background:#7f8c8d; padding:8px;">Todos</button><button id="filtroPagos" style="flex:1; background:#00b894; padding:8px;">Pagos</button><button id="filtroPendentes" style="flex:1; background:#e74c3c; padding:8px;">Pend</button></div><button id="btnSelectAll" class="select-all-btn">☑️ Selecionar Todos</button><div style="border-top:1px solid #ddd; padding-top:10px; display:flex; gap:5px; flex-wrap: wrap;"><button onclick="askPass('pagamento')" style="flex:1; background:#f39c12; padding:10px; font-size:0.75rem;">💰 Pgto</button><button onclick="askPass('notificar')" style="flex:1; background:#25d366; padding:10px; font-size:0.75rem;">📱 Cobrar</button><button onclick="askPass('excluir')" style="flex:1; background:#c0392b; padding:10px; font-size:0.75rem;">🗑️ Excluir</button><button onclick="askPass('telegram')" style="background:#2980b9; width:40px; padding:10px;">✈️</button></div><div id="lista" style="margin-top:15px; max-height:300px; overflow-y:auto;"></div></div></div>
+<div class="modal-overlay" id="modalDetalhes"><div class="modal"><h3 id="detNome" style="margin:0 0 10px 0; color:#2d3436; text-transform:uppercase;">Nome</h3><div style="background:#f9f9f9; padding:15px; border-radius:10px; border:1px solid #eee;"><div style="font-size:0.9rem; color:#666;">Status do Pagamento</div><div id="detStatusBadge" style="font-size:1.2rem; font-weight:bold; margin:5px 0;">Pendente</div><div id="detValor" style="font-size:1rem; color:#333;">Pago: R$ 0,00</div></div><div id="areaPix" class="pix-box" style="display:none;"><div style="font-weight:bold; color:#c0392b; margin-bottom:5px;">⚠️ Regularize seu pagamento</div><div style="font-size:0.8rem;">Copie a chave abaixo e pague no app do seu banco:</div><div id="chavePixTexto" class="pix-key"></div><button onclick="copiarPix()" class="btn-copy">📋 COPIAR CÓDIGO PIX</button></div><div id="areaParabens" style="display:none; margin-top:15px; color:#00b894; font-weight:bold;">✅ Tudo certo! Boa sorte! 🍀</div><button onclick="document.getElementById('modalDetalhes').style.display='none'" style="background:#7f8c8d; width:100%; margin-top:15px;">Fechar</button></div></div>
+<div class="modal-overlay" id="modalSenha"><div class="modal" style="max-width:300px;"><h3 style="margin:0; color:#c0392b;">Senha Admin</h3><div id="senhaDisplay" style="font-size:2rem; letter-spacing:5px; text-align:center; height:40px; color:#333;"></div><div class="numpad"><button class="num-btn" onclick="addDigit('1')">1</button><button class="num-btn" onclick="addDigit('2')">2</button><button class="num-btn" onclick="addDigit('3')">3</button><button class="num-btn" onclick="addDigit('4')">4</button><button class="num-btn" onclick="addDigit('5')">5</button><button class="num-btn" onclick="addDigit('6')">6</button><button class="num-btn" onclick="addDigit('7')">7</button><button class="num-btn" onclick="addDigit('8')">8</button><button class="num-btn" onclick="addDigit('9')">9</button><button class="num-btn" style="background:#c0392b" onclick="clearDigit()">C</button><button class="num-btn" onclick="addDigit('0')">0</button><button class="num-btn" style="background:#7f8c8d" onclick="closeSenha()">✕</button></div></div></div>
+<div class="modal-overlay" id="modalPagamentoAdm"><div class="modal" style="max-width:300px;"><h3 style="margin:0; color:#c0392b;">Definir Valor</h3><p id="nomePgto" style="text-align:center; font-weight:bold; color:#333; margin-bottom:5px;"></p><input type="number" id="valorInput" placeholder="R$ 0,00" style="font-size:1.5rem; border:2px solid #ddd; margin-bottom:10px;"><div style="display:flex; gap:5px; margin-bottom:10px;"><button onclick="setValor(0)" style="flex:1; background:#e74c3c; padding:10px; font-size:0.8rem;">❌ Zerar</button><button onclick="setValor(100)" style="flex:1; background:#00b894; padding:10px; font-size:0.8rem;">✅ Total</button></div><button id="salvarPgto" style="background:#27ae60; width:100%;">💾 Salvar</button><button onclick="document.getElementById('modalPagamentoAdm').style.display='none'" style="background:#7f8c8d; width:100%; margin-top:5px;">Cancelar</button></div></div>
+<div class="modal-overlay" id="modalRegras"><div class="modal"><h3 style="margin-top:0; color:#c0392b;">Regras do Bolão</h3><div style="text-align:left; line-height:1.6; color:#333;"><p>✅ <strong>Valor:</strong> R$ 100,00 (Cota Única)</p><p>📅 <strong>Prazo:</strong> Até 10 de Dezembro</p><p>⚠️ <strong>Regra:</strong> Não pagou até a data, perde a vaga.</p></div><button onclick="document.getElementById('modalRegras').style.display='none'" style="background:#c0392b; width:100%; margin-top:15px;">Fechar</button></div></div>
+
+<div class="modal-overlay" id="modalConfirmacao">
+    <div class="modal">
+        <div style="font-size:3rem;">🎉</div>
+        <h3 style="margin:0; color:#00b894;">Cadastro Realizado!</h3>
+        <div style="background:#f1f2f6; padding:15px; border-radius:10px; text-align:center; margin-bottom:10px; color:#333;">
+            <div><strong>Nome:</strong> <span id="confNome" style="text-transform:uppercase;"></span></div>
+            <div style="margin-top:10px; font-size:0.8rem; color:#666;">Agora é só aguardar ou realizar o pagamento.</div>
+        </div>
+        <button onclick="document.getElementById('modalConfirmacao').style.display='none'" style="background:#7f8c8d; width:100%; margin-top:10px;">Fechar</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('App registrado:', reg))
+            .catch(err => console.log('Erro ao registrar App:', err));
+        });
+    }
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getDatabase, ref, push, get, update, remove } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+const CONFIG = {
+  LIMITE: 60, VALOR: 100, PREMIO: 1200000,
+  PIX: "00020126330014br.gov.bcb.pix0111057968793755204000053039865406100.005802BR5922Vagner Sousa Lauriuche6009Sao Paulo62290525REC69261115DB9720696281626304D5EA", 
+  SENHA: '6261',
+  TG_TOKEN: "8307035824:AAFsKe4l1WgbZI1uez-n06Vt-TYiuhZLMt8", TG_CHAT: "861365063"
+};
+const WHATSAPP_ADM = "5599991998153";
+
+const app = initializeApp({ apiKey: "AIzaSyCvXGUdvZkqtSMMn8VmTOXLA9PXqR85gSk", authDomain: "vagner-34d5b.firebaseapp.com", databaseURL: "https://vagner-34d5b.firebaseio.com", projectId: "vagner-34d5b", storageBucket: "vagner-34d5b.firebasestorage.app", messagingSenderId: "711539772164", appId: "1:711539772164:web:e7736325e6ed365c0bde51" });
+const db = getDatabase(app); const dbRef = ref(db, "participantes");
+let participantes = []; let selecionados = []; let acaoAdmin = null; let currentFilter = 'todos';
+
+function formatarNomeInteligente(n) { if(!n)return "Participante"; const p=n.trim().split(/\s+/); if(p.length===0)return "Participante"; const pr=p[0].charAt(0).toUpperCase()+p[0].slice(1).toLowerCase(); const gat=["Ana","Maria","João","José","Luiz","Luis","Carlos","Paulo","Pedro","Vitor","Victor","Julio","Marco","Antonio","André","Anna","Mary"]; if(p.length>1 && gat.includes(pr)){ const s=p[1].toLowerCase(); if(!['da','de','do','dos','das','e'].includes(s)){ return `${pr} ${p[1].charAt(0).toUpperCase()+p[1].slice(1).toLowerCase()}`; } } return pr; }
+
+async function enviarListaTelegram() {
+    const snap = await get(dbRef); const parts = snap.exists() ? Object.entries(snap.val()).map(([k,v]) => ({...v, key:k})) : [];
+    const txt = parts.sort((a,b)=>a.numero-b.numero).map(p => `${p.numero}. ${p.valorPago >= CONFIG.VALOR ? '✅' : '❌'} ${p.nome.toUpperCase()}`).join('\n');
+    try { await fetch(`https://api.telegram.org/bot${CONFIG.TG_TOKEN}/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({chat_id:CONFIG.TG_CHAT, text: `🔄 NOVA ATUALIZAÇÃO DA LISTA:\n\n${txt}`}) }); } catch (e) { console.error(e); }
+}
+
+window.addDigit = (d) => { const el=document.getElementById('senhaDisplay'); if(el.innerText.length<4)el.innerText+=d; if(el.innerText.length===4)setTimeout(checkPass,200); };
+window.clearDigit = () => document.getElementById('senhaDisplay').innerText='';
+window.closeSenha = () => { document.getElementById('modalSenha').style.display='none'; document.getElementById('senhaDisplay').innerText=''; };
+window.askPass = (act) => { if(!selecionados.length && act!=='telegram')return alert("Selecione alguém!"); acaoAdmin=act; document.getElementById('modalSenha').style.display='flex'; };
+window.setValor = (val) => document.getElementById('valorInput').value=val;
+function checkPass() { if(document.getElementById('senhaDisplay').innerText===CONFIG.SENHA){ window.closeSenha(); doAction(); }else{ alert("Senha incorreta"); window.clearDigit(); } }
+
+async function doAction() {
+    if(acaoAdmin==='pagamento'){ document.getElementById('nomePgto').innerText = selecionados.length===1 ? selecionados[0].nome : `${selecionados.length} Selecionados`; document.getElementById('valorInput').value = selecionados.length===1 ? (selecionados[0].valorPago||'') : ''; document.getElementById('modalPagamentoAdm').style.display='flex'; }
+    else if(acaoAdmin==='excluir'){ if(confirm(`Excluir ${selecionados.length} selecionados?`)){ const u={}; selecionados.forEach(p=>u[`participantes/${p.key}`]=null); await update(ref(db),u); selecionados=[]; updateData(); renderList(getCurrentFilterFn()); setTimeout(enviarListaTelegram,1500); } }
+    else if(acaoAdmin==='notificar'){ selecionados.forEach((p,i)=>{ setTimeout(()=>{ const saldo=CONFIG.VALOR-(p.valorPago||0); let t=p.telefone.replace(/\D/g,''); if(!t.startsWith('55'))t='55'+t; const msg=`Olá ${formatarNomeInteligente(p.nome)}! Lembrete Bolão Camino.\nFalta: R$ ${saldo.toFixed(2).replace('.',',')}\nChave PIX (Copia e Cola): abaixo`; window.open(`https://wa.me/${t}?text=${encodeURIComponent(msg+'\n\n'+CONFIG.PIX)}`, '_blank'); }, i*1500); }); }
+    else if(acaoAdmin==='telegram'){ enviarListaTelegram(); alert("Enviando..."); }
+}
+
+async function updateData() {
+    const snap = await get(dbRef); participantes = snap.exists() ? Object.entries(snap.val()).map(([k,v]) => ({...v, key:k})) : [];
+    const t=participantes.length; const m=participantes.reduce((a,b)=>a+(b.valorPago||0),0); const pct=(t/CONFIG.LIMITE)*100;
+    document.getElementById('progressFill').style.width=`${pct}%`; document.getElementById('progressText').innerText=`${t}/${CONFIG.LIMITE} participantes`; document.getElementById('progressSubtext').innerText=`Arrecadado: R$ ${m.toLocaleString('pt-BR',{minimumFractionDigits:2})}`;
+    const lf=document.getElementById('progressFillLista'); if(lf){ lf.style.width=`${pct}%`; const p=participantes.filter(x=>(x.valorPago||0)>=CONFIG.VALOR).length; document.getElementById('progressTextLista').innerText=`${t} Total • ${p} Pagos`; }
+}
+
+function renderList(fn=null) {
+    const div=document.getElementById('lista'); div.innerHTML=''; const d=fn?participantes.filter(fn):participantes;
+    d.sort((a,b)=>a.numero-b.numero).forEach(p=>{
+        const v=p.valorPago||0; let i='🔴', t='PEND'; if(v>=CONFIG.VALOR){i='🟢';t='PAGO';}else if(v>0){i='🟡';t='PARC';}
+        const s=selecionados.some(x=>x.key===p.key);
+        const el=document.createElement('div'); el.className=`participante-item ${s?'selected':''}`;
+        el.innerHTML=`<div class="p-left" onclick="toggleSelect('${p.key}')"><strong>${p.numero}. ${p.nome.toUpperCase()}</strong></div><div class="p-right" onclick="abrirDetalhes('${p.key}')"><span style="font-size:1.4rem;">${i}</span><span class="status-text">${t}</span></div>`;
+        div.appendChild(el);
+    });
+}
+
+window.abrirDetalhes=(k)=>{ const p=participantes.find(x=>x.key===k); if(!p)return; document.getElementById('detNome').innerText=p.nome.toUpperCase(); const v=p.valorPago||0; document.getElementById('detValor').innerText=`Pago: R$ ${v.toFixed(2).replace('.',',')}`; 
+    if(v>=CONFIG.VALOR){ document.getElementById('detStatusBadge').innerText="PAGO 🟢"; document.getElementById('detStatusBadge').style.color="#00b894"; document.getElementById('areaPix').style.display='none'; document.getElementById('areaParabens').style.display='block'; }
+    else{ document.getElementById('detStatusBadge').innerText="PENDENTE 🔴"; document.getElementById('detStatusBadge').style.color="#e74c3c"; if(v>0){document.getElementById('detStatusBadge').innerText="PARCIAL 🟡"; document.getElementById('detStatusBadge').style.color="#f39c12";} document.getElementById('areaPix').style.display='block'; document.getElementById('areaParabens').style.display='none'; document.getElementById('chavePixTexto').innerText=CONFIG.PIX; }
+    document.getElementById('modalDetalhes').style.display='flex';
+};
+window.copiarPix=()=>{navigator.clipboard.writeText(document.getElementById('chavePixTexto').innerText).then(()=>alert("Código Pix Copiado!"));};
+window.toggleSelect=(k)=>{const p=participantes.find(x=>x.key===k); if(selecionados.some(x=>x.key===k))selecionados=selecionados.filter(x=>x.key!==k); else selecionados.push(p); renderList(getCurrentFilterFn());};
+document.getElementById('btnSelectAll').addEventListener('click',()=>{const f=participantes.filter(getCurrentFilterFn()); const all=f.every(p=>selecionados.some(s=>s.key===p.key)); selecionados=all?[]:[...f]; renderList(getCurrentFilterFn());});
+function getCurrentFilterFn(){if(currentFilter==='pagos')return p=>(p.valorPago||0)>=CONFIG.VALOR; if(currentFilter==='pendentes')return p=>(p.valorPago||0)<CONFIG.VALOR; return p=>true;}
+document.getElementById('filtroTodos').onclick=()=>{currentFilter='todos';renderList(getCurrentFilterFn());}; document.getElementById('filtroPagos').onclick=()=>{currentFilter='pagos';renderList(getCurrentFilterFn());}; document.getElementById('filtroPendentes').onclick=()=>{currentFilter='pendentes';renderList(getCurrentFilterFn());};
+
+// --- CADASTRO COM VERIFICAÇÃO DE DUPLICIDADE REFORÇADA ---
+document.getElementById('cadastrar').addEventListener('click', async()=>{
+    const nR = document.getElementById('nome').value.trim(); 
+    const n = nR.toUpperCase(); 
+    const tRaw = document.getElementById('telefone').value.trim();
+    const tL = tRaw.replace(/\D/g,''); // Limpa telefone para comparar só números
+    
+    if(!n || !tRaw) return alert("Preencha todos os campos!"); 
+    if(participantes.length >= CONFIG.LIMITE) return alert("Bolão lotado!");
+
+    // Verificação de duplicidade
+    const duplicado = participantes.some(p => {
+        // Garante que os dados do banco existem antes de processar
+        const pNome = (p.nome || "").toUpperCase().trim();
+        const pTel = (p.telefone || "").replace(/\D/g,'');
+        
+        // Compara Nome exato OU Telefone exato
+        return pNome === n || pTel === tL;
+    });
+
+    if (duplicado) {
+        alert("⚠️ Já existe um cadastro com este NOME ou TELEFONE na lista.");
+        return; // Para a execução aqui se for duplicado
+    }
+
+    const num = participantes.length + 1; 
+    await update(push(dbRef),{nome:n, telefone:tRaw, numero:num, valorPago:0, data:new Date().toISOString()});
+    
+    document.getElementById('nome').value=''; 
+    document.getElementById('telefone').value=''; 
+    document.getElementById('confNome').innerText=n; 
+    document.getElementById('modalConfirmacao').style.display='flex'; 
+    confetti({particleCount:150,spread:70,origin:{y:0.6}}); 
+    updateData(); 
+    setTimeout(enviarListaTelegram,1500);
+});
+
+// LINK DO GRUPO CORRIGIDO
+document.getElementById('entrarGrupo').onclick = () => window.open('https://chat.whatsapp.com/Fdl9PzkiEBq9TnJHtlu2Rm', '_blank');
+
+document.getElementById('verLista').onclick=()=>{document.getElementById('overlay').style.display='flex';renderList();}; document.getElementById('verRegras').onclick=()=>{document.getElementById('modalRegras').style.display='flex';}; 
+document.getElementById('buscar').addEventListener('input',(e)=>{const t=e.target.value.toLowerCase();renderList(p=>p.nome.toLowerCase().includes(t));});
+document.getElementById('salvarPgto').onclick=async()=>{const v=parseFloat(document.getElementById('valorInput').value); if(isNaN(v))return alert("Valor inválido"); const u={}; selecionados.forEach(p=>u[`participantes/${p.key}/valorPago`]=v); await update(ref(db),u); alert("Salvo!"); document.getElementById('modalPagamentoAdm').style.display='none'; selecionados=[]; updateData(); renderList(getCurrentFilterFn()); setTimeout(enviarListaTelegram,1500);};
+
+const td=new Date("2025-12-10T23:59:59").getTime(); setInterval(()=>{const n=new Date().getTime();const d=td-n; if(d<0){document.getElementById("countdown").innerHTML="EXPIRADO";return;} document.getElementById("dias").innerText=Math.floor(d/(1000*60*60*24)); document.getElementById("horas").innerText=Math.floor((d%(1000*60*60*24))/(1000*60*60)); document.getElementById("minutos").innerText=Math.floor((d%(1000*60*60))/(1000*60)); document.getElementById("segundos").innerText=Math.floor((d%(1000*60))/1000);},1000); updateData();
+</script>
+</body>
+</html>
