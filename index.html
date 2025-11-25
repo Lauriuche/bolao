@@ -2,404 +2,341 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bolão Mega da Virada 2025</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Bolão Colaboradores Camino</title>
 <style>
+    /* --- RESET E VARIÁVEIS --- */
+    :root {
+        --primary-color: #ffd700;
+        --bg-gradient: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #2c3e50);
+    }
+
+    /* Animação do Fundo */
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
+
     body {
         box-sizing: border-box;
-        margin: 0;
-        font-family: "Arial", sans-serif;
-        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background: var(--bg-gradient);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: 100%;
+        min-height: 100dvh;
         color: #fff;
-        padding: 20px;
+        padding: 15px;
     }
-    
-    html {
-        height: 100%;
-    }
-    
+
+    /* --- CONTAINER PRINCIPAL --- */
     .container {
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(20px);
-        width: 95%;
+        width: 100%;
         max-width: 480px;
-        border-radius: 25px;
-        padding: 30px 25px;
+        border-radius: 20px;
+        padding: 25px 20px;
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         text-align: center;
         color: #333;
         position: relative;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
-    
-    
+
+    /* --- LOGO --- */
+    .logo-img {
+        display: block;
+        max-width: 80%;
+        height: auto;
+        margin: 0 auto 10px auto;
+        max-height: 100px;
+    }
+
+    /* Tipografia */
     h1 {
-        font-size: 28px;
-        color: #333;
+        font-size: clamp(1.1rem, 5vw, 1.5rem);
+        color: #d63031;
         margin-bottom: 8px;
-        font-weight: 700;
+        font-weight: 800;
+        line-height: 1.2;
+        text-transform: uppercase;
     }
     
     .info {
-        font-size: 15px;
-        color: #333;
-        margin-bottom: 20px;
-        line-height: 1.5;
+        font-size: clamp(0.9rem, 4vw, 1rem);
+        color: #444;
+        margin-bottom: 15px;
+        line-height: 1.4;
     }
-    
+
+    /* --- CONTADOR --- */
+    .countdown-wrapper {
+        background: rgba(0, 0, 0, 0.85);
+        border-radius: 12px;
+        padding: 10px;
+        margin: 15px 0;
+        border: 1px solid rgba(255, 215, 0, 0.5);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .countdown-label { 
+        margin: 0 0 5px 0; font-size: 0.75rem; 
+        opacity: 0.9; text-transform: uppercase; color: #fff; letter-spacing: 1px;
+    }
+    .countdown { 
+        display: flex; justify-content: center; align-items: center; 
+        color: #ffd700; font-weight: bold; gap: 5px;
+    }
+    .time-block { display: flex; flex-direction: column; align-items: center; min-width: 18%; }
+    .time-block span { 
+        font-size: clamp(1.2rem, 6vw, 1.5rem);
+        line-height: 1; text-shadow: 0 2px 4px rgba(0,0,0,0.5); 
+    }
+    .time-block small { 
+        font-size: 0.6rem; color: #ddd; text-transform: uppercase; margin-top: 2px; 
+    }
+    .separator { font-size: 1.2rem; color: rgba(255, 255, 255, 0.4); margin-bottom: 8px; }
+
+    /* --- PROGRESSO --- */
     .progress-container {
-        margin: 20px 0;
-        padding: 20px;
+        margin: 15px 0; padding: 12px;
         background: rgba(255, 255, 255, 0.1);
-        border-radius: 15px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    .progress-bar {
-        width: 100%;
-        height: 20px;
-        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid #e0e0e0;
         border-radius: 12px;
-        overflow: hidden;
     }
-    
+    .progress-bar { 
+        width: 100%; height: 18px; 
+        background: #e0e0e0; border-radius: 10px; overflow: hidden; 
+    }
     .progress-fill {
-        height: 100%;
+        height: 100%; width: 0%;
         background: linear-gradient(90deg, #ffd700, #ffb347, #00b894);
-        width: 0%;
-        transition: width 1s ease;
-        border-radius: 12px;
+        transition: width 1s ease; border-radius: 10px;
     }
+    .progress-text { font-size: 0.9rem; margin-top: 5px; color: #333; font-weight: 700; }
+    .progress-subtext { font-size: 0.75rem; color: #666; }
+
+    /* --- INPUTS (COM PULSAR LEVE) --- */
     
-    .progress-text {
-        font-size: 14px;
-        margin-top: 10px;
-        color: #333;
-        font-weight: 600;
+    @keyframes pulse-input {
+        0% { transform: scale(1); box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-color: #e0e0e0; }
+        50% { transform: scale(1.02); box-shadow: 0 0 15px rgba(0, 148, 50, 0.15); border-color: #badc58; }
+        100% { transform: scale(1); box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-color: #e0e0e0; }
     }
-    
+
     input {
-        width: 90%;
-        padding: 14px 16px;
-        margin: 8px 0;
-        border: 3px solid #ffd700;
-        border-radius: 15px;
-        font-size: 15px;
-        text-align: center;
-        background: rgba(255, 255, 255, 0.9);
-        color: #333;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-    }
-    
-    input:focus {
-        border-color: #ff9800;
-        outline: none;
-        background: rgba(255, 255, 255, 1);
-        box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
-    }
-    
-    button {
-        width: 90%;
+        width: 100%;
+        box-sizing: border-box;
         padding: 16px;
-        margin-top: 12px;
-        border: none;
-        border-radius: 15px;
-        background: linear-gradient(135deg, #ffed4e, #ffc947);
+        margin: 10px 0;
+        background: #fff;
+        border: 2px solid #e0e0e0;
+        border-bottom: 5px solid #009432;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-align: center;
         color: #333;
-        font-size: 16px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        animation: pulse-input 3s infinite ease-in-out;
+    }
+    
+    input::placeholder {
+        color: #aaa;
+        font-weight: 400;
+        letter-spacing: 1px;
+    }
+
+    input:focus { 
+        border-color: #d63031;
+        outline: none; 
+        animation: none; 
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    }
+
+    /* --- BOTÕES --- */
+    button {
+        width: 100%;
+        padding: 14px;
+        margin-top: 8px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
         font-weight: 700;
         cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    button:active { transform: scale(0.98); }
+
+    .btn-grid { 
+        display: grid; 
+        grid-template-columns: 1fr 2fr; 
+        gap: 10px; 
+        margin-top: 10px; 
     }
     
-    button:hover {
-        transform: translateY(-2px);
-        background: linear-gradient(135deg, #ffd700, #ffb347);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    .btn-primary { 
+        grid-column: 1 / 2; 
+        background: linear-gradient(135deg, #7f8c8d, #95a5a6); color: white;
+        font-size: 0.9rem;
     }
-    .btn-grid {
-       display: grid;
-       grid-template-columns: 1fr 1fr 1fr; /* Três colunas iguais */
-       gap: 10px;
-       margin-top: 8px;
-    }
-
-       /* Primeiro botão ocupa só 1 coluna */
-    .btn-primary {
-       grid-column: 1 / 2;
-    }
-
-      /* Segundo botão ocupa as duas colunas restantes */
+    
     .btn-secondary {
-       background: linear-gradient(135deg, #6c757d, #adb5bd);
-       color: white;
-       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-       grid-column: 2 / 4; /* Ocupa as colunas 2 e 3 */
-       width: 100%;
-       margin: 12px 0 0 0;
+        grid-column: 2 / 3;
+        background: linear-gradient(135deg, #009432, #2ecc71);
+        color: white;
+        border: 1px solid rgba(255,255,255,0.2);
+        animation: pulse-green 2s infinite;
     }
 
-    .btn-secondary:hover {
-       background: linear-gradient(135deg, #5a6268, #95a5a6);
-       box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-    } 
-    
-    /* Botão do WhatsApp */
     .btn-whatsapp {
-        background: linear-gradient(135deg, #25d366, #128c7e);
-        color: white;
-        font-weight: bold;
-        box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 16px;
-        grid-column: 1 / -1; /* Ocupa todas as 3 colunas */
-        width: 100%; /* Ocupa todo o espaço disponível */
-        margin: 12px 0 0 0;
+        grid-column: 1 / -1; 
+        background: linear-gradient(135deg, #25d366, #128c7e); color: white;
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        margin-top: 5px;
     }
     
-    .btn-whatsapp:hover {
-        background: linear-gradient(135deg, #128c7e, #075e54);
-        box-shadow: 0 6px 15px rgba(37, 211, 102, 0.6);
-    }
-    
-    .whatsapp-icon {
-        font-size: 18px;
-        width: 24px;
-        height: 24px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .message {
-        margin-top: 15px;
-        font-size: 15px;
-        font-weight: 600;
-        padding: 10px;
-        border-radius: 10px;
-    }
-    
-    .success {
-        color: #00b894;
-        background: rgba(0, 184, 148, 0.1);
-        border: 1px solid rgba(0, 184, 148, 0.3);
-    }
-    
-    .error {
-        color: #e74c3c;
-        background: rgba(231, 76, 60, 0.1);
-        border: 1px solid rgba(231, 76, 60, 0.3);
-    }
-    
-    .warning {
-        color: #f39c12;
-        background: rgba(243, 156, 18, 0.1);
-        border: 1px solid rgba(243, 156, 18, 0.3);
-    }
-    
-    /* Botão de premiação destacado */
-    .prize-button {
-        background: linear-gradient(135deg, #00b894, #00cec9);
-        color: white;
-        font-weight: bold;
-        padding: 12px 20px;
-        border-radius: 12px;
-        margin: 5px 0;
-        box-shadow: 0 6px 15px rgba(0, 184, 148, 0.4);
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        transition: all 0.3s ease;
-        display: inline-block;
-        font-size: 14px;
-        text-align: center;
-    }
-    
-    .prize-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(0, 184, 148, 0.6);
-    }
-    
-    /* Modal */
-    .modal-overlay {
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(0, 0, 0, 0.8);
-        display: none;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-    }
-    
-    .modal {
-        background: linear-gradient(135deg, rgba(44, 62, 80, 0.95) 0%, rgba(52, 73, 94, 0.95) 100%);
-        border-radius: 20px;
-        width: 90%;
-        max-width: 600px;
-        max-height: 80vh;
-        padding: 25px;
-        color: #fff;
-        overflow-y: auto;
-    }
-    
-    .modal h3 {
-        margin-top: 0;
-        font-size: 24px;
-        color: #ffd700;
-        margin-bottom: 20px;
-    }
-    
-    .close-btn {
-        background: linear-gradient(135deg, #e74c3c, #c0392b);
-        color: white;
-        padding: 12px 24px;
-        border: none;
-        border-radius: 12px;
-        font-weight: 600;
-        cursor: pointer;
-        margin-top: 20px;
-        width: auto;
-    }
-    
-    .lista {
-        text-align: left;
-        font-size: 13px;
-        max-height: 400px;
-        overflow-y: auto;
-        color: #fff;
-        padding: 10px;
-        background: rgba(0, 0, 0, 0.3);
-        border-radius: 12px;
-        margin: 15px 0;
-    }
-    
-    .participante {
-        padding: 12px;
-        margin: 5px 0;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 8px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        gap: 10px;
-    }
-    
-    .participante:hover {
-        background: rgba(255, 255, 255, 0.2);
-        transform: translateX(5px);
-    }
-    
-    .status {
-        font-weight: bold;
-        text-transform: uppercase;
-        font-size: 11px;
-        padding: 4px 8px;
-        border-radius: 6px;
-    }
-    
-    .pago {
-        color: #fff;
-        background: linear-gradient(135deg, #00b894, #00cec9);
-    }
-    
-    .nao-pago {
-        color: #fff;
-        background: linear-gradient(135deg, #e74c3c, #ff6b6b);
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-    
-    .nao-pago:hover {
-        background: linear-gradient(135deg, #c0392b, #e74c3c);
-        transform: scale(1.05);
+    .btn-regras {
+        background: #95a5a6; color: white; 
+        font-size: 0.8rem; padding: 6px 12px; 
+        width: auto; display: inline-block; margin: 0;
     }
 
-    
-    /* Animações para mensagem sobre modal */
-    @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateX(-50%) translateY(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
+    @keyframes pulse-green {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.02); box-shadow: 0 0 15px rgba(0, 148, 50, 0.4); }
+        100% { transform: scale(1); }
+    }
+
+    /* --- MODAIS --- */
+    .modal-overlay {
+        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 0, 0, 0.85); 
+        display: none;
+        justify-content: center; align-items: center; 
+        z-index: 1000;
+        padding: 10px;
+    }
+    .modal {
+        background: linear-gradient(135deg, #2c3e50, #34495e);
+        border-radius: 15px; 
+        width: 100%; 
+        max-width: 500px; 
+        max-height: 85dvh; 
+        padding: 20px; 
+        color: #fff; 
+        overflow-y: auto; 
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .lista {
+        text-align: left; font-size: 0.9rem; 
+        max-height: 40vh; 
+        overflow-y: auto;
+        background: rgba(0,0,0,0.2); 
+        border-radius: 12px; 
+        padding: 8px; margin-top: 15px;
+    }
+    .participante {
+        padding: 10px; margin: 5px 0; background: rgba(255,255,255,0.08);
+        border-radius: 8px; display: flex; justify-content: space-between; align-items: center;
+        gap: 8px;
     }
     
-    @keyframes slideUp {
-        from {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-        to {
-            opacity: 0;
-            transform: translateX(-50%) translateY(-20px);
-        }
+    .status { font-weight: bold; font-size: 0.7rem; padding: 3px 6px; border-radius: 4px; text-transform: uppercase; white-space: nowrap; }
+    .status.pago { background: #00b894; color: #fff; }
+    .status.nao-pago { background: #e74c3c; color: #fff; }
+    .status.parcial { background: #f39c12; color: #fff; }
+
+    /* --- RESPONSIVIDADE PEQUENA --- */
+    @media (max-width: 380px) {
+        .container { padding: 15px 12px; }
+        h1 { font-size: 1.2rem; }
+        .logo-img { max-height: 80px; }
+        .btn-grid { grid-template-columns: 1fr; gap: 8px; }
+        .btn-primary, .btn-secondary { grid-column: auto; }
     }
+
+    /* Utilitários */
+    .prize-button { 
+        background: linear-gradient(135deg, #00b894, #00cec9); 
+        padding: 8px 15px; border-radius: 20px; color: white; font-weight: bold; 
+        display: inline-block; box-shadow: 0 4px 10px rgba(0,184,148,0.4); 
+        margin-top: 5px; font-size: 0.9rem; white-space: nowrap;
+    }
+    .message { margin-top: 15px; padding: 10px; border-radius: 10px; font-weight: bold; font-size: 0.9rem; }
+    .message.success { background: rgba(0, 184, 148, 0.2); color: #00b894; border: 1px solid #00b894; }
+    .message.error { background: rgba(231, 76, 60, 0.2); color: #e74c3c; border: 1px solid #e74c3c; }
     
-    @media (max-width: 768px) {
-        .container {
-            padding: 20px 18px;
-            width: 98%;
-        }
-        
-        .modal {
-            width: 95%;
-            padding: 20px;
-        }
-    }
+    /* Inputs Admin */
+    .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 15px; }
+    .num-btn { background: #34495e; padding: 12px; font-size: 1.2rem; margin: 0; }
 </style>
 </head>
 <body>
 
 <div class="container">
-
+    <img src="1001855377.png" alt="Logo Camino Supermercados" class="logo-img">
     
-    <h1 id="tituloBolao">🎯 <strong>Bolão Mega da Virada 2025</strong></h1>
+    <h1 id="tituloBolao"><strong>Bolão dos Colaboradores Camino</strong></h1>
     
     <div class="info" id="infoGeral">
-        🎰 <strong>60 participantes</strong> • 💰 <strong>R$ 100,00 por pessoa</strong><br>
-        <div style="margin-top: 10px;">
-            <span class="prize-button">🏆 Premiação Estimada: R$ 1.200.000,00</span>
         </div>
-        📅 <strong>Pagamento:</strong> até 10 de Dezembro<br>
-        <small>📋 Preencha os dados para garantir sua vaga!</small>
+    
+    <div class="countdown-wrapper">
+        <p class="countdown-label">⏰ Encerramento das Cotas:</p>
+        <div id="countdown" class="countdown">
+            <div class="time-block"><span id="dias">00</span><small>Dias</small></div>
+            <div class="separator">:</div>
+            <div class="time-block"><span id="horas">00</span><small>Hs</small></div>
+            <div class="separator">:</div>
+            <div class="time-block"><span id="minutos">00</span><small>Min</small></div>
+            <div class="separator">:</div>
+            <div class="time-block"><span id="segundos">00</span><small>Seg</small></div>
+        </div>
     </div>
 
-    <!-- Botão de regras posicionado acima da barra de progresso -->
-    <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
-        <button id="verRegras" style="background: linear-gradient(135deg, #95a5a6, #bdc3c7); font-size: 14px; padding: 10px 15px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); width: auto; min-width: 100px;">📋 Regras</button>
+    <div style="font-size: 0.9rem; margin: 10px 0;">
+        📅 <strong>Pagamento:</strong> até 10 de Dezembro<br>
+    </div>
+
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 5px;">
+        <button id="verRegras" class="btn-regras">📋 Regras</button>
     </div>
 
     <div class="progress-container">
         <div class="progress-bar">
             <div class="progress-fill" id="progressFill"></div>
         </div>
-        <div class="progress-text" id="progressText">0/60 participantes</div>
-        <div style="font-size: 11px; margin-top: 5px; opacity: 0.7;" id="progressSubtext">
-            Arrecadado: R$ 0,00
-        </div>
+        <div class="progress-text" id="progressText">Carregando...</div>
+        <div class="progress-subtext" id="progressSubtext">Arrecadado: R$ 0,00</div>
     </div>
 
     <input type="text" id="nome" placeholder="NOME COMPLETO" required>
     <input type="tel" id="telefone" placeholder="WHATSAPP (com DDD)" required>
     
     <div class="btn-grid">
-        <button id="verLista" class="btn-primar">📋LISTA</button>
-        <button id="cadastrar" class="btn-secondary">🚀PARTICIPAR</button>
+        <button id="verLista" class="btn-primary">📋 LISTA</button>
+        <button id="cadastrar" class="btn-secondary">🚀 PARTICIPAR</button>
         <button id="entrarGrupo" class="btn-whatsapp">
-            <span class="whatsapp-icon"></span>
-            GRUPO DO WHATSAPPA
+            <span style="font-size: 1.2rem; margin-right: 5px;">💬</span> GRUPO WHATSAPP
         </button>
     </div>
 
@@ -408,155 +345,117 @@
 
 <div class="modal-overlay" id="overlay">
     <div class="modal">
-        <h3><strong>📋 Lista de Participantes</strong></h3>
-        
-        <div class="progress-container">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFillLista"></div>
-            </div>
-            <div class="progress-text" id="progressTextLista" style="color: #fff; font-weight: bold;">0/80 cadastrados • 0 pagos</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h3 style="margin:0">📋 Participantes</h3>
+            <button id="fecharListaX" style="background:none; border:none; font-size:1.5rem; width:auto; padding:0; color:#fff; margin:0;">✕</button>
         </div>
         
-        <div style="margin-bottom: 15px;">
-            <input type="text" id="buscar" placeholder="🔍 Buscar participante..." style="width: 100%; padding: 12px; border: 2px solid rgba(52, 152, 219, 0.2); border-radius: 12px; background: rgba(255, 255, 255, 0.9); color: #333; margin-bottom: 10px; box-sizing: border-box;">
-            
-            <div style="display: flex; gap: 8px; justify-content: flex-start;">
-                <button id="filtroBtn" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 12px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">🔍</button>
-                
-                <button id="acaoBtn" style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white; padding: 12px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">⚙️</button>
-            </div>
+        <div class="progress-container" style="padding:8px; margin:5px 0;">
+            <div class="progress-bar"><div class="progress-fill" id="progressFillLista"></div></div>
+            <div class="progress-text" id="progressTextLista" style="color:#fff; font-size:0.8rem">...</div>
         </div>
         
-        <div id="menuFiltros" style="display: none; background: rgba(0, 0, 0, 0.5); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-            <h4 style="color: #ffd700; margin: 0 0 10px 0; font-size: 14px;">🔍 Filtros:</h4>
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                <button id="filtroTodos" class="filter-btn" style="background: linear-gradient(135deg, #6c757d, #adb5bd); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 70px;">👥 Todos</button>
-                <button id="filtroPagos" class="filter-btn" style="background: linear-gradient(135deg, #00b894, #00cec9); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 70px;">✅ Pagos</button>
-                <button id="filtroNaoPagos" class="filter-btn" style="background: linear-gradient(135deg, #e74c3c, #ff6b6b); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 70px;">❌ Pendentes</button>
-            </div>
+        <input type="text" id="buscar" placeholder="🔍 Buscar..." style="margin-bottom:10px;">
+        
+        <div style="display:flex; gap:5px; margin-bottom:10px;">
+            <button id="filtroTodos" style="flex:1; padding:8px; font-size:0.8rem; margin:0; background:#7f8c8d;">Todos</button>
+            <button id="filtroPagos" style="flex:1; padding:8px; font-size:0.8rem; margin:0; background:#00b894;">Pagos</button>
+            <button id="filtroPendentes" style="flex:1; padding:8px; font-size:0.8rem; margin:0; background:#e74c3c;">Pend</button>
         </div>
         
-        <div id="menuAcoes" style="display: none; background: rgba(0, 0, 0, 0.5); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-            <h4 style="color: #ffd700; margin: 0 0 10px 0; font-size: 14px;">⚙️ Ações:</h4>
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                <button id="alterarStatus" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 80px;">🔄 Status</button>
-                <button id="notificar" style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 80px;">📱 Notificar</button>
-                <button id="excluir" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 80px;">🗑️ Excluir</button>
-                <button id="enviarTelegram" style="background: linear-gradient(135deg, #00b894, #00cec9); color: white; padding: 8px 12px; border: none; border-radius: 8px; font-size: 11px; cursor: pointer; flex: 1; min-width: 80px;">📤 Telegram</button>
-            </div>
+        <div style="display:flex; gap:5px; border-top:1px solid rgba(255,255,255,0.2); padding-top:10px;">
+             <button id="btnAdminPagamento" style="background:#f39c12; font-size:0.8rem; padding:8px; margin:0;">💰 Gerir Pgto</button>
+             <button id="btnAdminExcluir" style="background:#c0392b; font-size:0.8rem; padding:8px; margin:0;">🗑️ Excluir</button>
+             <button id="btnAdminTelegram" style="background:#2980b9; font-size:1.2rem; padding:8px; margin:0; width:40px;">✈️</button>
         </div>
 
-        <div id="modalSenha" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 2000; justify-content: center; align-items: center;">
-            <div style="background: linear-gradient(135deg, #2c3e50, #34495e); padding: 25px; border-radius: 15px; text-align: center; max-width: 300px; width: 90%;">
-                <h4 style="color: #ffd700; margin: 0 0 15px 0; font-size: 16px;">🔐 Senha de Administrador</h4>
-                
-                <div id="senhaDisplay" style="background: rgba(0, 0, 0, 0.3); padding: 12px; border-radius: 8px; margin-bottom: 15px; font-size: 18px; letter-spacing: 8px; min-height: 24px; color: #fff;"></div>
-                
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px;">
-                    <button class="num-btn" data-num="1" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">1</button>
-                    <button class="num-btn" data-num="2" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">2</button>
-                    <button class="num-btn" data-num="3" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">3</button>
-                    <button class="num-btn" data-num="4" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">4</button>
-                    <button class="num-btn" data-num="5" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">5</button>
-                    <button class="num-btn" data-num="6" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">6</button>
-                    <button class="num-btn" data-num="7" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">7</button>
-                    <button class="num-btn" data-num="8" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">8</button>
-                    <button class="num-btn" data-num="9" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">9</button>
-                    <button id="limparSenha" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;">🗑️</button>
-                    <button class="num-btn" data-num="0" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; cursor: pointer;">0</button>
-                    <div style="background: rgba(0, 0, 0, 0.2); padding: 15px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #aaa;">Auto</div>
-                </div>
-                
-                <button id="cancelarSenha" style="background: linear-gradient(135deg, #6c757d, #adb5bd); color: white; padding: 10px 20px; border: none; border-radius: 8px; font-size: 12px; cursor: pointer; width: 100%;">❌ Cancelar</button>
-            </div>
-        </div>
-        
         <div class="lista" id="lista"></div>
-        
-        <button class="close-btn" id="fecharLista">❌ Fechar</button>
     </div>
 </div>
 
-<div id="modalRegras" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 2000; justify-content: center; align-items: center;">
-    <div style="background: linear-gradient(135deg, #2c3e50, #34495e); padding: 25px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; color: #fff;">
-        <h3 style="color: #ffd700; margin: 0 0 20px 0; font-size: 18px; text-align: center;">⚠️ INFORMATIVO: BOLÃO MEGA DA VIRADA ⚠️</h3>
-        
-        <div style="text-align: left; line-height: 1.6; font-size: 14px;">
-            <p style="margin-bottom: 15px;">Estamos organizando nosso bolão, com um total de <strong style="color: #ffd700;">60 participantes</strong>.</p>
-            
-            <p style="margin-bottom: 15px;"><strong style="color: #00b894;">Custo por Participante:</strong> R$ 100,00</p>
-            
-            <h4 style="color: #ffd700; margin: 20px 0 10px 0; font-size: 16px;">📋 Regras de Participação e Prazos:</h4>
-            
-            <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                <h5 style="color: #e74c3c; margin: 0 0 10px 0;">📅 Datas Limite:</h5>
-                <p style="margin: 0;"><strong>30 de Novembro:</strong> Data final para manifestar interesse (confirmar que quer participar).<br>
-                <strong>10 de Dezembro:</strong> Data final para o pagamento da cota.</p>
-            </div>
-            
-            <div style="background: rgba(231, 76, 60, 0.2); padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #e74c3c;">
-                <h5 style="color: #e74c3c; margin: 0 0 10px 0;">⚠️ Atenção ao Pagamento:</h5>
-                <p style="margin: 0;">O participante que não realizar o pagamento até o dia <strong>10 de Dezembro</strong> será automaticamente excluído do bolão, e a vaga será repassada.</p>
-            </div>
-            
-            <h4 style="color: #ffd700; margin: 20px 0 10px 0; font-size: 16px;">💡 Observações Importantes:</h4>
-            
-            <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 10px;">
-                <p style="margin: 0 0 10px 0;"><strong style="color: #f39c12;">Prazos:</strong> As datas foram definidas para que todos tenham tempo suficiente para pagar (contando com o 13º salário).</p>
-                
-                <p style="margin: 0 0 10px 0;"><strong style="color: #f39c12;">Agilidade:</strong> Quanto antes arrecadarmos o valor, melhor. Deixar para a última hora significa enfrentar lotéricas lotadas.</p>
-                
-                <p style="margin: 0;"><strong style="color: #f39c12;">Jogos:</strong> A quantidade final de bilhetes e jogos será definida ao término da arrecadação, pois dependerá do valor total arrecadado (se todas as 60 cotas forem preenchidas).</p>
-            </div>
+<div id="modalSenha" class="modal-overlay" style="z-index: 2000;">
+    <div class="modal" style="max-width:320px;">
+        <h4>🔐 Senha Admin</h4>
+        <div id="senhaDisplay" style="font-size:1.5rem; letter-spacing:5px; min-height:30px; margin-bottom:10px;"></div>
+        <div class="numpad">
+            <button class="num-btn" data-num="1">1</button><button class="num-btn" data-num="2">2</button><button class="num-btn" data-num="3">3</button>
+            <button class="num-btn" data-num="4">4</button><button class="num-btn" data-num="5">5</button><button class="num-btn" data-num="6">6</button>
+            <button class="num-btn" data-num="7">7</button><button class="num-btn" data-num="8">8</button><button class="num-btn" data-num="9">9</button>
+            <button id="limparSenha" style="background:#c0392b; margin:0;">C</button>
+            <button class="num-btn" data-num="0">0</button>
+            <button id="cancelarSenha" style="background:#7f8c8d; margin:0;">✕</button>
         </div>
-        
-        <button id="fecharRegras" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 20px; width: 100%;">❌ Fechar</button>
     </div>
 </div>
 
-<div id="modalConfirmacao" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 4000; justify-content: center; align-items: center;">
-    <div style="background: linear-gradient(135deg, #00b894, #00cec9); padding: 25px; border-radius: 15px; max-width: 450px; width: 90%; color: #fff; text-align: center;">
-        <div style="font-size: 48px; margin-bottom: 15px;">🎉</div>
-        <h3 style="color: #fff; margin: 0 0 15px 0; font-size: 20px;">Cadastro Realizado!</h3>
-        
-        <div style="background: rgba(0, 0, 0, 0.2); padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: left;">
-            <div style="margin-bottom: 10px;"><strong>Nome:</strong> <span id="confirmNome"></span></div>
+<div id="modalPagamentoAdm" class="modal-overlay" style="z-index: 3000;">
+    <div class="modal" style="max-width:320px;">
+        <h3>💰 Definir Valor</h3>
+        <p id="nomeParticipantePagamento" style="color:#ffd700"></p>
+        <input type="number" id="valorInputAdm" placeholder="R$ 0,00" style="font-size:1.2rem; margin:15px 0;">
+        <div style="display:flex; gap:10px;">
+            <button class="quick-val" data-val="0" style="background:#e74c3c; margin:0;">Zerar</button>
+            <button class="quick-val" data-val="100" style="background:#00b894; margin:0;">R$ 100</button>
+        </div>
+        <button id="salvarPagamento" style="background:#27ae60; margin-top:15px;">💾 Salvar</button>
+        <button id="fecharPagamentoAdm" style="background:#7f8c8d;">Cancelar</button>
+    </div>
+</div>
+
+<div id="modalConfirmacao" class="modal-overlay" style="z-index: 4000;">
+    <div class="modal">
+        <div style="font-size: 3rem; margin-bottom: 10px;">🎉</div>
+        <h3>Cadastro Sucesso!</h3>
+        <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:10px; text-align:left; margin:10px 0;">
+            <div><strong>Nome:</strong> <span id="confirmNome"></span></div>
             <div><strong>WhatsApp:</strong> <span id="confirmTelefone"></span></div>
         </div>
-        
-        <div style="background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: left; font-size: 14px;">
-            <h4 style="color: #fff; margin: 0 0 10px 0; font-size: 16px;">💳 Para efetuar o pagamento:</h4>
-            <div style="margin-bottom: 8px;"><strong>PIX:</strong> <span id="confirmPix"></span></div>
-            <div style="margin-bottom: 8px;"><strong>Valor:</strong> R$ <span id="confirmValor"></span></div>
-            <div><strong>Prazo:</strong> até <span id="confirmPrazo"></span></div>
+        <div style="background:rgba(255,255,255,0.1); padding:15px; border-radius:10px; margin:10px 0; font-size:0.9rem;">
+            <div><strong>PIX:</strong> <span id="confirmPix"></span></div>
+            <div><strong>Valor:</strong> R$ <span id="confirmValor"></span></div>
         </div>
-        
-        <div id="qrCodeContainer" style="display: none; margin: 20px 0; text-align: center;">
-            <img id="qrCodeImage" src="" alt="QR Code PIX" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 8px; padding: 10px; background: white;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <button id="btnWhatsAppPagamento" style="background:#25d366; margin:0;">WhatsApp</button>
+            <button id="btnCopiarPix" style="background:#3498db; margin:0;">Copiar PIX</button>
         </div>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-            <button id="btnWhatsAppPagamento" style="background: linear-gradient(135deg, #25d366, #128c7e); color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px;">📱 WhatsApp</button>
-            <button id="btnCopiarPix" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px;">📱 QR Code PIX</button>
-        </div>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-            <button id="btnEntrarGrupo" class="btn-whatsapp">
-                <span class="whatsapp-icon">💬</span>
-                ENTRAR NO GRUPO
-            </button>
-        </div>
-        
-        <button id="fecharConfirmacao" style="background: linear-gradient(135deg, #34495e, #2c3e50); color: white; padding: 12px 24px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%;">✅ Entendi</button>
+        <button id="fecharConfirmacao" style="background:#34495e; margin-top:10px;">Fechar</button>
     </div>
 </div>
+
+<div id="modalRegras" class="modal-overlay">
+    <div class="modal">
+        <h3>ℹ️ Regras</h3>
+        <div style="text-align:left; font-size:0.9rem; line-height:1.5;">
+            <p>1. Cota Única: R$ 100,00</p>
+            <p>2. Pagamento até 10/12</p>
+            <p>3. Não pagou = Excluído</p>
+            <p>4. Pagamento parcial fica "Laranja"</p>
+        </div>
+        <button id="fecharRegras" style="background:#c0392b;">Fechar</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getDatabase, ref, push, get, update, remove } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-// Configuração Firebase
-const firebaseConfig = {
+// === CONFIG ===
+const CONFIG = {
+  LIMITE: 60,
+  VALOR: 100.00,
+  PREMIO: 1200000.00,
+  PRAZO: "10 de Dezembro",
+  TITULO: "BOLÃO DOS COLABORADORES CAMINO",
+  PIX: "(99) 9 9102-6112",
+  PIX_KEY: "00020126330014br.gov.bcb.pix0111057968793755204000053039865406100.005802BR5922Vagner Sousa Lauriuche6009Sao Paulo62290525REC690A942DB7E1336267138563049C6B",
+  SENHA: '6261',
+  TG_TOKEN: "8307035824:AAFsKe4l1WgbZI1uez-n06Vt-TYiuhZLMt8",
+  TG_CHAT: "861365063"
+};
+
+const app = initializeApp({
   apiKey: "AIzaSyCvXGUdvZkqtSMMn8VmTOXLA9PXqR85gSk",
   authDomain: "vagner-34d5b.firebaseapp.com",
   databaseURL: "https://vagner-34d5b.firebaseio.com",
@@ -564,899 +463,248 @@ const firebaseConfig = {
   storageBucket: "vagner-34d5b.firebasestorage.app",
   messagingSenderId: "711539772164",
   appId: "1:711539772164:web:e7736325e6ed365c0bde51"
-};
+});
 
-// Inicializar Firebase
-const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const dbRef = ref(db, "participantes");
 
-// ========================================
-// 🔧 CONFIGURAÇÕES DO BOLÃO
-// ========================================
-// Altere apenas os valores abaixo conforme necessário
+let participantes = [];
+let selecionados = [];
+let senhaDigitada = '';
+let acaoAdmin = null;
 
-const CONFIG = {
-  // Participantes
-  LIMITE_PARTICIPANTES: 60,
-  VALOR_PARTICIPACAO: 100.00,
-  PREMIACAO_ESTIMADA: 850000000.00,
-  
-  // Datas (formato: DD de Mês)
-  DATA_LIMITE_INTERESSE: "30 de Novembro",
-  DATA_LIMITE_PAGAMENTO: "10 de Dezembro",
-  
-  // Contato
-  PIX_PAGAMENTO: "(99) 9 9102-6112",
-  PIX_QR_CODE: "00020126330014br.gov.bcb.pix0111057968793755204000053039865406100.005802BR5922Vagner Sousa Lauriuche6009Sao Paulo62290525REC690A942DB7E1336267138563049C6B",
-  
-  // Textos principais
-  TITULO_BOLAO: "BOLÃO MEGA DA VIRADA 2025",
-  ANO_SORTEIO: "2025",
-  
-  // Segurança
-  SENHA_ADM: '6261',
-  
-  // Configurações do Telegram
-  TELEGRAM_TOKEN: "8307035824:AAFsKe4l1WgbZI1uez-n06Vt-TYiuhZLMt8", // ⚠️ ATENÇÃO: Substitua pelo seu token.
-  TELEGRAM_CHAT_ID: "861365063" // ⚠️ ATENÇÃO: Substitua pelo ID do seu chat.
+// === HELPERS ===
+const fmtMoney = v => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+const fmtNum = n => n.toString().padStart(2, '0');
+const msg = (txt, tipo='success') => {
+    const m = document.getElementById('mensagem');
+    m.textContent = txt; m.className = `message ${tipo}`;
+    setTimeout(() => { m.textContent=''; m.className='message'; }, 3000);
 };
 
-// ========================================
-// Constantes derivadas (NÃO ALTERAR)
-// ========================================
-const LIMITE_PARTICIPANTES = CONFIG.LIMITE_PARTICIPANTES;
-const VALOR_PARTICIPACAO = CONFIG.VALOR_PARTICIPACAO;
-const SENHA_ADM = CONFIG.SENHA_ADM;
-const TELEGRAM_TOKEN = CONFIG.TELEGRAM_TOKEN;
-const TELEGRAM_CHAT_ID = CONFIG.TELEGRAM_CHAT_ID;
-
-// Variáveis globais
-let participantes = [];
-let participanteSelecionado = null;
-let participantesSelecionados = [];
-let senhaDigitada = '';
-let acaoPendente = null;
-
-// Função para formatar número com 2 dígitos
-function formatarNumero(numero) {
-  return numero.toString().padStart(2, '0');
-}
-
-// Função para enviar lista para Telegram
-async function enviarListaTelegram() {
-  try {
-    const listaTexto = participantes
-      .sort((a, b) => a.numero - b.numero)
-      .map(p => `${formatarNumero(p.numero)} - ${p.status === "Pago" ? "✅ Pago" : "❌ Não pago"} - ${p.nome}`)
-      .join('\n');
+// === LOGIC ===
+async function updateData() {
+    const snap = await get(dbRef);
+    participantes = snap.exists() ? Object.entries(snap.val()).map(([k,v]) => ({...v, key:k})) : [];
     
-    const mensagem = `📊 *Lista Completa do Bolão*\n\n${listaTexto}`;
+    const total = participantes.length;
+    const arrecadado = participantes.reduce((acc, p) => acc + (p.valorPago || 0), 0);
+    const pct = (total / CONFIG.LIMITE) * 100;
+
+    // Home
+    document.getElementById('progressFill').style.width = `${pct}%`;
+    document.getElementById('progressText').textContent = `${total}/${CONFIG.LIMITE} participantes`;
+    document.getElementById('progressSubtext').textContent = `Arrecadado: ${fmtMoney(arrecadado)}`;
     
-    const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        chat_id: TELEGRAM_CHAT_ID,
-        text: mensagem,
-        parse_mode: 'Markdown'
-      })
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Erro HTTP: ${response.status}`);
+    // Modal Lista
+    const elListFill = document.getElementById('progressFillLista');
+    if(elListFill) {
+        elListFill.style.width = `${pct}%`;
+        const pagosFull = participantes.filter(p => (p.valorPago||0) >= CONFIG.VALOR).length;
+        document.getElementById('progressTextLista').textContent = `${total} Total • ${pagosFull} Pagos (100%)`;
     }
-    
-    console.log('Lista enviada para Telegram com sucesso!');
-    mostrarMensagemSobreModal('✅ Lista enviada ao Telegram!', 'success');
-  } catch (error) {
-    console.error('Erro ao enviar lista para Telegram:', error);
-    mostrarMensagemSobreModal('❌ Erro ao enviar lista ao Telegram!', 'error');
-  }
 }
 
-// Função para mostrar mensagens
-function mostrarMensagem(texto, tipo) {
-  const mensagem = document.getElementById('mensagem');
-  mensagem.textContent = texto;
-  mensagem.className = `message ${tipo}`;
-  
-  setTimeout(() => {
-    mensagem.textContent = '';
-    mensagem.className = 'message';
-  }, 4000);
+// === LISTA ===
+function getStatus(v) {
+    v = parseFloat(v||0);
+    if(v >= CONFIG.VALOR) return {t:"PAGO", c:"pago", i:"✅"};
+    if(v > 0) return {t:`PARCIAL`, c:"parcial", i:"⚠️"};
+    return {t:"PENDENTE", c:"nao-pago", i:"❌"};
 }
 
-// Função para mostrar mensagem sobre modal
-function mostrarMensagemSobreModal(texto, tipo) {
-  // Remover mensagem anterior se existir
-  const mensagemExistente = document.getElementById('mensagemSobreModal');
-  if (mensagemExistente) {
-    mensagemExistente.remove();
-  }
-  
-  // Criar nova mensagem
-  const mensagem = document.createElement('div');
-  mensagem.id = 'mensagemSobreModal';
-  mensagem.textContent = texto;
-  mensagem.style.cssText = `
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10000;
-    padding: 15px 25px;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 15px;
-    text-align: center;
-    max-width: 90%;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    animation: slideDown 0.3s ease;
-  `;
-  
-  // Aplicar cores baseado no tipo
-  if (tipo === 'success') {
-    mensagem.style.color = '#fff';
-    mensagem.style.background = 'linear-gradient(135deg, #00b894, #00cec9)';
-    mensagem.style.border = '2px solid rgba(0, 184, 148, 0.5)';
-  } else if (tipo === 'error') {
-    mensagem.style.color = '#fff';
-    mensagem.style.background = 'linear-gradient(135deg, #e74c3c, #ff6b6b)';
-    mensagem.style.border = '2px solid rgba(231, 76, 60, 0.5)';
-  } else if (tipo === 'warning') {
-    mensagem.style.color = '#fff';
-    mensagem.style.background = 'linear-gradient(135deg, #f39c12, #e67e22)';
-    mensagem.style.border = '2px solid rgba(243, 156, 18, 0.5)';
-  }
-  
-  document.body.appendChild(mensagem);
-  
-  // Remover após 3 segundos
-  setTimeout(() => {
-    if (mensagem && mensagem.parentNode) {
-      mensagem.style.animation = 'slideUp 0.3s ease';
-      setTimeout(() => {
-        mensagem.remove();
-      }, 300);
-    }
-  }, 3000);
-}
-
-// Função para mostrar popup de confirmação
-function mostrarPopupConfirmacao(participante) {
-  document.getElementById('confirmNome').textContent = participante.nome;
-  document.getElementById('confirmTelefone').textContent = participante.telefone;
-  document.getElementById('confirmPix').textContent = CONFIG.PIX_PAGAMENTO;
-  document.getElementById('confirmValor').textContent = CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',');
-  document.getElementById('confirmPrazo').textContent = CONFIG.DATA_LIMITE_PAGAMENTO;
-  
-  document.getElementById('modalConfirmacao').style.display = 'flex';
-}
-
-// Função para mostrar popup de pagamento (para participantes não pagos)
-function mostrarPopupPagamento(participante) {
-  document.getElementById('confirmNome').textContent = participante.nome;
-  document.getElementById('confirmTelefone').textContent = participante.telefone;
-  document.getElementById('confirmPix').textContent = CONFIG.PIX_PAGAMENTO;
-  document.getElementById('confirmValor').textContent = CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',');
-  document.getElementById('confirmPrazo').textContent = CONFIG.DATA_LIMITE_PAGAMENTO;
-  
-  // Alterar título para indicar que é para pagamento
-  const modal = document.getElementById('modalConfirmacao');
-  const titulo = modal.querySelector('h3');
-  const telefoneOriginal = participante.telefone;
-  titulo.textContent = 'Informações de Pagamento';
-  
-  modal.style.display = 'flex';
-}
-
-// Função para mostrar popup de pagamento sobre a lista
-function mostrarPopupPagamentoSobreLista(participante) {
-  // Remover popup anterior se existir
-  const popupExistente = document.getElementById('popupPagamentoLista');
-  if (popupExistente) {
-    popupExistente.remove();
-  }
-  
-  // Criar popup
-  const popup = document.createElement('div');
-  popup.id = 'popupPagamentoLista';
-  popup.style.cssText = `
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: linear-gradient(135deg, #00b894, #00cec9);
-    padding: 25px;
-    border-radius: 15px;
-    max-width: 400px;
-    width: 90%;
-    color: #fff;
-    text-align: center;
-    z-index: 6000;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  `;
-  
-  popup.innerHTML = `
-    <div style="font-size: 32px; margin-bottom: 15px;">💳</div>
-    <h3 style="color: #fff; margin: 0 0 15px 0; font-size: 18px;">Informações de Pagamento</h3>
+function renderList(filterFn = null) {
+    const div = document.getElementById("lista");
+    div.innerHTML = "";
+    const data = filterFn ? participantes.filter(filterFn) : participantes;
     
-    <div style="background: rgba(0, 0, 0, 0.2); padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: left;">
-      <div style="margin-bottom: 10px;"><strong>Nome:</strong> ${participante.nome}</div>
-      <div><strong> WhatsApp:</strong> ${participante.telefone}</div>
-    </div>
-    
-    <div style="background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: left; font-size: 14px;">
-      <h4 style="color: #fff; margin: 0 0 10px 0; font-size: 16px;">💳 Para efetuar o pagamento:</h4>
-      <div style="margin-bottom: 8px;"><strong>PIX:</strong> ${CONFIG.PIX_PAGAMENTO}</div>
-      <div style="margin-bottom: 8px;"><strong>Valor:</strong> R$ ${CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',')}</div>
-      <div><strong>Prazo:</strong> até ${CONFIG.DATA_LIMITE_PAGAMENTO}</div>
-    </div>
-    
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-      <button id="btnWhatsAppPopup" style="background: linear-gradient(135deg, #25d366, #128c7e); color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px;">📱 WhatsApp</button>
-      <button id="btnCopiarPixPopup" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px;">📱 QR Code PIX</button>
-    </div>
-    
-    <button id="fecharPopupPagamento" style="background: linear-gradient(135deg, #34495e, #2c3e50); color: white; padding: 12px 24px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%;">✅ Fechar</button>
-  `;
-  
-  document.body.appendChild(popup);
-  
-  // Event listeners do popup
-  document.getElementById('btnWhatsAppPopup').addEventListener('click', () => {
-    const mensagem = `🎯 *${CONFIG.TITULO_BOLAO}*\n\nOlá! Gostaria de efetuar o pagamento da minha participação no bolão.\n\n👤 *Nome:* ${participante.nome}\n📱 *WhatsApp:* ${participante.telefone}\n💰 *Valor:* R$ ${CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',')}\n📅 *Prazo:* até ${CONFIG.DATA_LIMITE_PAGAMENTO}\n💳 *PIX:* ${CONFIG.PIX_PAGAMENTO}\n\nVou fazer o PIX agora e enviar o comprovante! 🍀`;
-    
-    const telefoneOrganizador = CONFIG.PIX_PAGAMENTO.replace(/\D/g, '');
-    const telefoneComCodigo = telefoneOrganizador.startsWith('55') ? telefoneOrganizador : '55' + telefoneOrganizador;
-    const whatsappUrl = `https://wa.me/${telefoneComCodigo}?text=${encodeURIComponent(mensagem)}`;
-    
-    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
-  });
-  
-  document.getElementById('btnCopiarPixPopup').addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(CONFIG.PIX_QR_CODE);
-      mostrarMensagemSobreModal('📱 QR Code PIX copiado! Cole no seu app do banco.', 'success');
-    } catch (err) {
-      const textArea = document.createElement('textarea');
-      textArea.value = CONFIG.PIX_QR_CODE;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textArea);
-      mostrarMensagemSobreModal('📱 QR Code PIX copiado! Cole no seu app do banco.', 'success');
-    }
-  });
-  
-  document.getElementById('fecharPopupPagamento').addEventListener('click', () => {
-    popup.remove();
-  });
-  
-  // Fechar clicando fora
-  popup.addEventListener('click', (e) => {
-    if (e.target === popup) {
-      popup.remove();
-    }
-  });
-}
+    if(!data.length) return div.innerHTML = "<div style='text-align:center; padding:10px; color:#aaa'>Vazio</div>";
 
-// Funções do teclado virtual
-function mostrarTecladoSenha(acao) {
-  acaoPendente = acao;
-  senhaDigitada = '';
-  document.getElementById('senhaDisplay').textContent = '';
-  document.getElementById('modalSenha').style.display = 'flex';
-}
+    data.sort((a,b) => a.numero - b.numero).forEach(p => {
+        const st = getStatus(p.valorPago);
+        const sel = selecionados.some(s => s.key === p.key);
+        
+        const el = document.createElement("div");
+        el.className = "participante";
+        if(sel) el.style.background = "rgba(255,215,0,0.2)";
+        
+        const valTxt = st.c === 'parcial' ? `<span style="font-size:0.7rem; color:#f39c12">(${fmtMoney(p.valorPago)})</span>` : '';
 
-function adicionarDigito(digito) {
-  if (senhaDigitada.length < 4) {
-    senhaDigitada += digito;
-    document.getElementById('senhaDisplay').textContent = '*'.repeat(senhaDigitada.length);
-    
-    // Se completou 4 dígitos, verificar automaticamente
-    if (senhaDigitada.length === 4) {
-      setTimeout(() => {
-        verificarSenha();
-      }, 200); // Pequeno delay para mostrar o último *
-    }
-  }
-}
-
-function limparSenha() {
-  senhaDigitada = '';
-  document.getElementById('senhaDisplay').textContent = '';
-}
-
-function verificarSenha() {
-  if (senhaDigitada === SENHA_ADM) {
-    document.getElementById('modalSenha').style.display = 'none';
-    executarAcao(acaoPendente);
-  } else {
-    mostrarMensagem('❌ Senha incorreta!', 'error');
-    limparSenha();
-  }
-}
-
-function cancelarSenha() {
-  document.getElementById('modalSenha').style.display = 'none';
-  senhaDigitada = '';
-  acaoPendente = null;
-}
-
-// Atualizar progresso
-function atualizarProgresso() {
-  return get(dbRef).then((snapshot) => {
-    participantes = snapshot.exists() ? Object.entries(snapshot.val()).map(([key, value]) => ({...value, key})) : [];
-    
-    const totalCadastrados = participantes.length;
-    const totalPagos = participantes.filter(p => p.status === "Pago").length;
-    const progresso = (totalCadastrados / LIMITE_PARTICIPANTES) * 100;
-    const valorArrecadado = totalPagos * VALOR_PARTICIPACAO;
-    
-    // Atualizar barra principal
-    document.getElementById('progressFill').style.width = progresso + '%';
-    document.getElementById('progressText').textContent = `${totalCadastrados}/${LIMITE_PARTICIPANTES} participantes`;
-    document.getElementById('progressSubtext').textContent = `Arrecadado: R$ ${valorArrecadado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-    
-    // Atualizar barra da lista se estiver aberta
-    const progressFillLista = document.getElementById('progressFillLista');
-    const progressTextLista = document.getElementById('progressTextLista');
-    if (progressFillLista && progressTextLista) {
-      const progressoPagos = totalCadastrados > 0 ? (totalPagos / totalCadastrados) * 100 : 0;
-      progressFillLista.style.width = progressoPagos + '%';
-      progressTextLista.textContent = `${totalCadastrados}/${LIMITE_PARTICIPANTES} cadastrados • ${totalPagos} pagos`;
-    }
-  });
-}
-
-// Cadastrar participante
-document.getElementById("cadastrar").addEventListener("click", async () => {
-  const nome = document.getElementById("nome").value.trim();
-  const telefone = document.getElementById("telefone").value.trim();
-
-  if (!nome || !telefone) {
-    mostrarMensagem("⚠️ Preencha todos os campos!", "error");
-    return;
-  }
-
-  // Validar nome completo
-  if (nome.split(' ').length < 2) {
-    mostrarMensagem("⚠️ Digite o nome completo!", "error");
-    return;
-  }
-
-  // Validar telefone
-  if (telefone.replace(/\D/g, '').length < 11) {
-    mostrarMensagem("⚠️ Telefone deve conter DDD + número!", "error");
-    return;
-  }
-
-  try {
-    const snapshot = await get(dbRef);
-    const participantesAtuais = snapshot.exists() ? Object.values(snapshot.val()) : [];
-
-    if (participantesAtuais.length >= LIMITE_PARTICIPANTES) {
-      mostrarMensagem(`❌ Limite de ${LIMITE_PARTICIPANTES} participantes atingido!`, "error");
-      return;
-    }
-
-    // Verificar duplicatas
-    const duplicado = participantesAtuais.some(p =>
-      p.nome.toLowerCase() === nome.toLowerCase() ||
-      p.telefone.replace(/\D/g, '') === telefone.replace(/\D/g, '')
-    );
-
-    if (duplicado) {
-      mostrarMensagem("⚠️ Esse cadastro já existe!", "warning");
-      return;
-    }
-
-    const novoCadastro = {
-      numero: participantesAtuais.length + 1,
-      nome: nome.toUpperCase(),
-      telefone,
-      status: "Não pago",
-      dataCadastro: new Date().toISOString()
-    };
-
-    // Salva o novo cadastro primeiro
-    const novoParticipanteRef = await push(dbRef, novoCadastro);
-    
-    // Atualiza o campo key do novo participante
-    const novoParticipante = {...novoCadastro, key: novoParticipanteRef.key};
-    
-    document.getElementById("nome").value = "";
-    document.getElementById("telefone").value = "";
-    
-    // Mostrar popup de confirmação
-    mostrarPopupConfirmacao(novoParticipante);
-    
-    // Atualiza o progresso e envia a lista para o Telegram
-    await atualizarProgresso();
-    await enviarListaTelegram();
-    
-  } catch (error) {
-    console.error("Erro:", error);
-    mostrarMensagem("❌ Erro ao cadastrar. Tente novamente!", "error");
-  }
-});
-
-// Ver lista
-document.getElementById("verLista").addEventListener("click", async () => {
-  try {
-    await atualizarProgresso();
-    exibirLista();
-    document.getElementById("overlay").style.display = "flex";
-  } catch (error) {
-    console.error("Erro:", error);
-    mostrarMensagem("❌ Erro ao carregar lista!", "error");
-  }
-});
-
-// Exibir lista
-function exibirLista() {
-  const lista = document.getElementById("lista");
-  lista.innerHTML = "";
-
-  if (participantes.length === 0) {
-    lista.innerHTML = '<div style="text-align: center; padding: 20px; opacity: 0.7;">Nenhum participante encontrado</div>';
-    return;
-  }
-
-  participantes
-    .sort((a, b) => a.numero - b.numero)
-    .forEach(participante => {
-      const div = document.createElement("div");
-      div.className = "participante";
-      div.innerHTML = `
-        <input type="checkbox" id="check-${participante.key}" style="margin: 0; cursor: pointer; width: 16px; height: 16px;">
-        <span style="flex: 1;">${formatarNumero(participante.numero)}. ${participante.nome}</span>
-        <span class="status ${participante.status.toLowerCase().replace(' ', '-')}" title="${participante.status === "Pago" ? "Pago" : "Não pago"}">${participante.status === "Pago" ? "✅" : "❌"}</span>
-      `;
-      
-      const checkbox = div.querySelector('input[type="checkbox"]');
-      
-      checkbox.addEventListener('change', (e) => {
-        e.stopPropagation();
-        if (checkbox.checked) {
-          participantesSelecionados.push(participante);
-          div.style.background = 'rgba(255, 215, 0, 0.3)';
-        } else {
-          participantesSelecionados = participantesSelecionados.filter(p => p.key !== participante.key);
-          div.style.background = 'rgba(255, 255, 255, 0.1)';
-        }
-      });
-      
-      div.addEventListener('click', (e) => {
-        if (e.target.type !== 'checkbox' && !e.target.classList.contains('status')) {
-          // Se já pagou, apenas selecionar
-          checkbox.checked = !checkbox.checked;
-          checkbox.dispatchEvent(new Event('change'));
-        }
-      });
-      
-      // Event listener específico para o status "Não pago"
-      const statusElement = div.querySelector('.status');
-      if (participante.status === "Não pago") {
-        statusElement.addEventListener('click', (e) => {
-          e.stopPropagation();
-          mostrarPopupPagamentoSobreLista(participante);
-        });
-      }
-      
-      lista.appendChild(div);
+        // NOME COMPLETO AQUI
+        el.innerHTML = `
+            <div style="display:flex; align-items:center; width:100%; gap:10px;">
+                <input type="checkbox" ${sel?'checked':''} style="width:18px; height:18px; margin:0; flex-shrink:0;">
+                <div style="flex:1; text-align:left; word-break: break-word;">
+                    <span style="font-weight:bold">${fmtNum(p.numero)}. ${p.nome}</span>
+                </div>
+                <div style="flex-shrink:0; display:flex; align-items:center; gap:5px;">
+                    ${valTxt}
+                    <span class="status ${st.c}">${st.i}</span>
+                </div>
+            </div>
+        `;
+        
+        el.onclick = (e) => {
+            if(e.target.type !== 'checkbox') {
+                const chk = el.querySelector('input');
+                chk.checked = !chk.checked;
+            }
+            toggleSel(p);
+        };
+        div.appendChild(el);
     });
 }
 
-// Buscar
-document.getElementById("buscar").addEventListener("input", (e) => {
-  const termo = e.target.value.toLowerCase();
-  const participantesFiltrados = participantes.filter(p => 
-    p.nome.toLowerCase().includes(termo) || 
-    p.telefone.includes(termo) ||
-    p.numero.toString().includes(termo)
-  );
-  
-  exibirListaFiltrada(participantesFiltrados);
-});
+function toggleSel(p) {
+    const idx = selecionados.findIndex(s => s.key === p.key);
+    if(idx >= 0) selecionados.splice(idx, 1);
+    else selecionados.push(p);
+    renderList(getCurrentFilter()); 
+}
 
-// Função para exibir lista filtrada
-function exibirListaFiltrada(participantesFiltrados) {
-  const lista = document.getElementById("lista");
-  lista.innerHTML = "";
-  
-  participantesFiltrados.forEach(participante => {
-    const div = document.createElement("div");
-    div.className = "participante";
-    div.innerHTML = `
-      <input type="checkbox" id="check-${participante.key}" style="margin: 0; cursor: pointer; width: 16px; height: 16px;">
-      <span style="flex: 1;">${formatarNumero(participante.numero)}. ${participante.nome}</span>
-      <span class="status ${participante.status.toLowerCase().replace(' ', '-')}" title="${participante.status === "Pago" ? "Pago" : "Não pago"}">${participante.status === "Pago" ? "✅" : "❌"}</span>
-    `;
+let currentFilter = 'todos';
+function getCurrentFilter() {
+    if(currentFilter === 'pagos') return p => (p.valorPago||0) >= CONFIG.VALOR;
+    if(currentFilter === 'pendentes') return p => (p.valorPago||0) < CONFIG.VALOR;
+    return null;
+}
+
+// === ACTIONS ===
+document.getElementById('cadastrar').onclick = async () => {
+    const n = document.getElementById('nome').value.trim().toUpperCase();
+    const t = document.getElementById('telefone').value.trim();
+    if(!n || !t || n.split(' ').length < 2) return msg("Nome completo e Zap!", "error");
     
-    const checkbox = div.querySelector('input[type="checkbox"]');
+    const snap = await get(dbRef);
+    const all = snap.exists() ? Object.values(snap.val()) : [];
+    if(all.length >= CONFIG.LIMITE) return msg("Lotou!", "error");
+    if(all.some(p => p.nome === n)) return msg("Já existe!", "error");
     
-    // Manter seleção se já estava selecionado
-    if (participantesSelecionados.some(p => p.key === participante.key)) {
-      checkbox.checked = true;
-      div.style.background = 'rgba(255, 215, 0, 0.3)';
+    const novo = { numero: all.length+1, nome: n, telefone: t, valorPago: 0 };
+    await push(dbRef, novo);
+    
+    document.getElementById('nome').value = '';
+    document.getElementById('telefone').value = '';
+    
+    // Confirmação
+    document.getElementById('confirmNome').innerText = n;
+    document.getElementById('confirmTelefone').innerText = t;
+    document.getElementById('confirmPix').innerText = CONFIG.PIX;
+    document.getElementById('confirmValor').innerText = CONFIG.VALOR.toFixed(2);
+    document.getElementById('modalConfirmacao').style.display = 'flex';
+    
+    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    updateData();
+    sendTG(`➕ *Novo:* ${n}`);
+};
+
+// Admin Flow
+function askPass(action) {
+    if(!selecionados.length && action !== 'telegram') return msg("Selecione alguém!", "error");
+    acaoAdmin = action;
+    senhaDigitada = '';
+    document.getElementById('senhaDisplay').innerText = '';
+    document.getElementById('modalSenha').style.display = 'flex';
+}
+
+async function doAction() {
+    if(acaoAdmin === 'pagamento') {
+        if(selecionados.length !== 1) return alert("Selecione 1 pessoa.");
+        const p = selecionados[0];
+        document.getElementById('nomeParticipantePagamento').innerText = p.nome;
+        document.getElementById('valorInputAdm').value = p.valorPago || 0;
+        document.getElementById('modalPagamentoAdm').style.display = 'flex';
     }
-    
-    checkbox.addEventListener('change', (e) => {
-      e.stopPropagation();
-      if (checkbox.checked) {
-        if (!participantesSelecionados.some(p => p.key === participante.key)) {
-          participantesSelecionados.push(participante);
+    else if(acaoAdmin === 'excluir') {
+        if(confirm(`Apagar ${selecionados.length}?`)) {
+            const u = {}; selecionados.forEach(p => u[`participantes/${p.key}`] = null);
+            await update(ref(db), u);
+            selecionados = []; updateData(); renderList(); msg("Excluído!");
         }
-        div.style.background = 'rgba(255, 215, 0, 0.3)';
-      } else {
-        participantesSelecionados = participantesSelecionados.filter(p => p.key !== participante.key);
-        div.style.background = 'rgba(255, 255, 255, 0.1)';
-      }
-    });
-    
-    div.addEventListener('click', (e) => {
-      if (e.target.type !== 'checkbox' && !e.target.classList.contains('status')) {
-        // Se já pagou, apenas selecionar
-        checkbox.checked = !checkbox.checked;
-        checkbox.dispatchEvent(new Event('change'));
-      }
-    });
-    
-    // Event listener específico para o status "Não pago"
-    const statusElement = div.querySelector('.status');
-    if (participante.status === "Não pago") {
-      statusElement.addEventListener('click', (e) => {
-        e.stopPropagation();
-        mostrarPopupPagamentoSobreLista(participante);
-      });
     }
-    
-    lista.appendChild(div);
-  });
-}
-
-// Botão Filtros
-document.getElementById("filtroBtn").addEventListener("click", () => {
-  const menuFiltros = document.getElementById("menuFiltros");
-  const menuAcoes = document.getElementById("menuAcoes");
-  
-  // Se o menu filtros está fechado, abrir e fechar o de ações
-  if (menuFiltros.style.display === "none" || menuFiltros.style.display === "") {
-    menuFiltros.style.display = "block";
-    menuAcoes.style.display = "none";
-  } else {
-    // Se está aberto, fechar
-    menuFiltros.style.display = "none";
-  }
-});
-
-// Botão Ações
-document.getElementById("acaoBtn").addEventListener("click", () => {
-  const menuFiltros = document.getElementById("menuFiltros");
-  const menuAcoes = document.getElementById("menuAcoes");
-  
-  // Se o menu ações está fechado, abrir e fechar o de filtros
-  if (menuAcoes.style.display === "none" || menuAcoes.style.display === "") {
-    menuAcoes.style.display = "block";
-    menuFiltros.style.display = "none";
-  } else {
-    // Se está aberto, fechar
-    menuAcoes.style.display = "none";
-  }
-});
-
-// Filtros
-document.getElementById("filtroTodos").addEventListener("click", () => {
-  exibirListaFiltrada(participantes);
-});
-
-document.getElementById("filtroPagos").addEventListener("click", () => {
-  const participantesPagos = participantes.filter(p => p.status === "Pago");
-  exibirListaFiltrada(participantesPagos);
-});
-
-document.getElementById("filtroNaoPagos").addEventListener("click", () => {
-  const participantesPendentes = participantes.filter(p => p.status === "Não pago");
-  exibirListaFiltrada(participantesPendentes);
-});
-
-// Função para obter o primeiro nome corretamente para nomes compostos
-function obterPrimeiroNome(nomeCompleto) {
-  const nomes = nomeCompleto.split(' ');
-  
-  // Se tiver mais de duas partes e for nome composto, pegar as duas primeiras partes
-  if (nomes.length > 2) {
-    // Para nomes compostos como "João Paulo", "Maria das Graças", etc.
-    return nomes[0] + ' ' + nomes[1];
-  } else {
-    // Para nomes simples como "João", "Maria"
-    return nomes[0];
-  }
-}
-
-// Função para executar ações após autenticação
-async function executarAcao(acao) {
-  if (participantesSelecionados.length === 0) {
-    mostrarMensagem("⚠️ Selecione pelo menos um participante!", "warning");
-    return;
-  }
-
-  try {
-    switch (acao) {
-      case 'alterarStatus':
-        const updates = {};
-        for (const participante of participantesSelecionados) {
-          const novoStatus = participante.status === "Pago" ? "Não pago" : "Pago";
-          updates[`participantes/${participante.key}/status`] = novoStatus;
-        }
-        await update(ref(db), updates);
-        mostrarMensagem(`✅ Status alterado para ${participantesSelecionados.length} participante(s)!`, "success");
-        break;
-
-      case 'notificar':
-        participantesSelecionados.forEach((participante, index) => {
-          setTimeout(() => {
-            const primeiroNome = obterPrimeiroNome(participante.nome);
-            const mensagem = `🎯 *${CONFIG.TITULO_BOLAO}*\n\nOlá ${primeiroNome}!\n\nSua vaga está reservada no nosso bolão!\n\n💰 *Valor:* R$ ${CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',')}\n📅 *Prazo:* até ${CONFIG.DATA_LIMITE_PAGAMENTO}\n💳 *PIX:* ${CONFIG.PIX_PAGAMENTO}\n\n⚠️ *IMPORTANTE:* Quem não pagar até ${CONFIG.DATA_LIMITE_PAGAMENTO.split(' ')[0]}/${CONFIG.DATA_LIMITE_PAGAMENTO.split(' ')[2]} será excluído automaticamente.\n\nApós o pagamento, envie o comprovante!\n\n*Garanta sua vaga!* 🍀`;
-            
-            const telefoneFormatado = participante.telefone.replace(/\D/g, '');
-            const telefoneComCodigo = telefoneFormatado.startsWith('55') ? telefoneFormatado : '55' + telefoneFormatado;
-            const whatsappUrl = `https://wa.me/${telefoneComCodigo}?text=${encodeURIComponent(mensagem)}`;
-            
-            window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
-          }, index * 1000);
-        });
-        mostrarMensagem(`📱 WhatsApp aberto para ${participantesSelecionados.length} participante(s)!`, "success");
-        break;
-
-      case 'excluir':
-        const nomes = participantesSelecionados.map(p => {
-          const nomes = p.nome.split(' ');
-          if (nomes.length > 2) {
-            return nomes[0] + ' ' + nomes[1];
-          } else {
-            return nomes[0];
-          }
-        }).join(', ');
-        if (!confirm(`Tem certeza que deseja excluir ${participantesSelecionados.length} participante(s)?\n\n${nomes}`)) {
-          return;
-        }
-        
-        const deleteUpdates = {};
-        for (const participante of participantesSelecionados) {
-          deleteUpdates[`participantes/${participante.key}`] = null;
-        }
-        await update(ref(db), deleteUpdates);
-        mostrarMensagem(`✅ ${participantesSelecionados.length} participante(s) excluído(s)!`, "success");
-        break;
-        
-      case 'enviarTelegram':
-        await enviarListaTelegram();
-        break;
+    else if(acaoAdmin === 'telegram') {
+        const txt = participantes.sort((a,b)=>a.numero-b.numero)
+            .map(p => `${fmtNum(p.numero)} ${getStatus(p.valorPago).i} ${p.nome}`).join('\n');
+        await sendTG(`📊 *Lista*\n${txt}`);
+        msg("Enviado!");
     }
-
-    // Sincronização instantânea após qualquer ação
-    participantesSelecionados = [];
-    await atualizarProgresso();
-    exibirLista();
-    
-  } catch (error) {
-    console.error("Erro:", error);
-    mostrarMensagem("❌ Erro ao executar ação!", "error");
-  }
 }
 
-// Event listeners para ações com autenticação
-document.getElementById("alterarStatus").addEventListener("click", () => {
-  if (participantesSelecionados.length === 0) {
-    mostrarMensagem("⚠️ Selecione pelo menos um participante!", "warning");
-    return;
-  }
-  mostrarTecladoSenha('alterarStatus');
+// Numpad
+document.querySelectorAll('.num-btn').forEach(b => {
+    b.onclick = () => {
+        senhaDigitada += b.dataset.num;
+        document.getElementById('senhaDisplay').innerText = '*'.repeat(senhaDigitada.length);
+        if(senhaDigitada.length === 4) {
+            setTimeout(() => {
+                if(senhaDigitada === CONFIG.SENHA) {
+                    document.getElementById('modalSenha').style.display = 'none';
+                    doAction();
+                } else {
+                    msg("Senha errada", "error");
+                    senhaDigitada = ''; document.getElementById('senhaDisplay').innerText='';
+                }
+            }, 100);
+        }
+    }
 });
+document.getElementById('limparSenha').onclick = () => { senhaDigitada=''; document.getElementById('senhaDisplay').innerText=''; };
+document.getElementById('cancelarSenha').onclick = () => document.getElementById('modalSenha').style.display = 'none';
 
-document.getElementById("notificar").addEventListener("click", () => {
-  if (participantesSelecionados.length === 0) {
-    mostrarMensagem("⚠️ Selecione pelo menos um participante!", "warning");
-    return;
-  }
-  mostrarTecladoSenha('notificar');
-});
+// Save Payment
+document.getElementById('salvarPagamento').onclick = async () => {
+    const v = parseFloat(document.getElementById('valorInputAdm').value);
+    if(isNaN(v) || v < 0) return alert("Valor inválido");
+    await update(ref(db, `participantes/${selecionados[0].key}`), { valorPago: v });
+    document.getElementById('modalPagamentoAdm').style.display = 'none';
+    selecionados = []; updateData(); renderList(); msg("Atualizado!");
+};
+document.querySelectorAll('.quick-val').forEach(b => b.onclick = () => document.getElementById('valorInputAdm').value = b.dataset.val);
+document.getElementById('fecharPagamentoAdm').onclick = () => document.getElementById('modalPagamentoAdm').style.display = 'none';
 
-document.getElementById("excluir").addEventListener("click", () => {
-  if (participantesSelecionados.length === 0) {
-    mostrarMensagem("⚠️ Selecione pelo menos um participante!", "warning");
-    return;
-  }
-  mostrarTecladoSenha('excluir');
-});
+// Filter Buttons
+document.getElementById('filtroTodos').onclick = () => { currentFilter='todos'; renderList(); };
+document.getElementById('filtroPagos').onclick = () => { currentFilter='pagos'; renderList(p => (p.valorPago||0)>=CONFIG.VALOR); };
+document.getElementById('filtroPendentes').onclick = () => { currentFilter='pendentes'; renderList(p => (p.valorPago||0)<CONFIG.VALOR); };
+document.getElementById('buscar').oninput = (e) => renderList(p => p.nome.includes(e.target.value.toUpperCase()));
 
-// Adicionar evento para o botão de enviar ao Telegram
-document.getElementById("enviarTelegram").addEventListener("click", () => {
-  if (participantesSelecionados.length === 0) {
-    mostrarMensagem("⚠️ Selecione pelo menos um participante!", "warning");
-    return;
-  }
-  mostrarTecladoSenha('enviarTelegram');
-});
+// UI Bindings
+document.getElementById('verLista').onclick = () => { updateData(); renderList(); document.getElementById('overlay').style.display='flex'; };
+document.getElementById('fecharListaX').onclick = () => { document.getElementById('overlay').style.display='none'; selecionados=[]; };
+document.getElementById('btnAdminPagamento').onclick = () => askPass('pagamento');
+document.getElementById('btnAdminExcluir').onclick = () => askPass('excluir');
+document.getElementById('btnAdminTelegram').onclick = () => askPass('telegram');
+document.getElementById('btnCopiarPix').onclick = () => { navigator.clipboard.writeText(CONFIG.PIX_KEY); alert("PIX Copiado!"); };
+document.getElementById('btnWhatsAppPagamento').onclick = () => {
+    const n = document.getElementById('confirmNome').innerText;
+    window.open(`https://wa.me/55${CONFIG.PIX.replace(/\D/g,'')}?text=Ola, cadastro feito: ${n}`);
+};
+document.getElementById('fecharConfirmacao').onclick = () => document.getElementById('modalConfirmacao').style.display='none';
+document.getElementById('verRegras').onclick = () => document.getElementById('modalRegras').style.display='flex';
+document.getElementById('fecharRegras').onclick = () => document.getElementById('modalRegras').style.display='none';
+document.getElementById('entrarGrupo').onclick = () => window.open("https://chat.whatsapp.com/Fdl9PzkiEBq9TnJHtlu2Rm", "_blank");
 
-// Event listeners do teclado virtual
-document.querySelectorAll('.num-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    adicionarDigito(btn.dataset.num);
-  });
-});
-
-document.getElementById('limparSenha').addEventListener('click', limparSenha);
-document.getElementById('cancelarSenha').addEventListener('click', cancelarSenha);
-
-// Event listeners dos modais
-document.getElementById('verRegras').addEventListener('click', () => {
-  document.getElementById('modalRegras').style.display = 'flex';
-});
-
-document.getElementById('fecharRegras').addEventListener('click', () => {
-  document.getElementById('modalRegras').style.display = 'none';
-});
-
-// Fechar modais clicando fora
-document.getElementById('modalRegras').addEventListener('click', (e) => {
-  if (e.target === document.getElementById('modalRegras')) {
-    document.getElementById('modalRegras').style.display = 'none';
-  }
-});
-
-// Event listeners do modal de confirmação
-document.getElementById('fecharConfirmacao').addEventListener('click', () => {
-  document.getElementById('modalConfirmacao').style.display = 'none';
-  // Restaurar título original
-  const modal = document.getElementById('modalConfirmacao');
-  const titulo = modal.querySelector('h3');
-  titulo.textContent = 'Cadastro Realizado!';
-});
-
-document.getElementById('btnWhatsAppPagamento').addEventListener('click', () => {
-  const nome = document.getElementById('confirmNome').textContent;
-  const telefone = document.getElementById('confirmTelefone').textContent;
-  const valor = document.getElementById('confirmValor').textContent;
-  const prazo = document.getElementById('confirmPrazo').textContent;
-  const pix = document.getElementById('confirmPix').textContent;
-  
-  const mensagem = `🎯 *${CONFIG.TITULO_BOLAO}*\n\nOlá! Gostaria de efetuar o pagamento da minha participação no bolão.\n\n👤 *Nome:* ${nome}\n📱 *WhatsApp:* ${telefone}\n💰 *Valor:* R$ ${valor}\n📅 *Prazo:* até ${prazo}\n💳 *PIX:* ${pix}\n\nVou fazer o PIX agora e enviar o comprovante! 🍀`;
-  
-  // Usar o PIX como número do WhatsApp (que é o organizador)
-  const telefoneOrganizador = CONFIG.PIX_PAGAMENTO.replace(/\D/g, '');
-  const telefoneComCodigo = telefoneOrganizador.startsWith('55') ? telefoneOrganizador : '55' + telefoneOrganizador;
-  const whatsappUrl = `https://wa.me/${telefoneComCodigo}?text=${encodeURIComponent(mensagem)}`;
-  
-  window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
-});
-
-// Função para gerar QR Code
-function gerarQRCode(texto) {
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(texto)}`;
-  return qrCodeUrl;
+async function sendTG(t) {
+    try { await fetch(`https://api.telegram.org/bot${CONFIG.TG_TOKEN}/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({chat_id:CONFIG.TG_CHAT, text:t, parse_mode:'Markdown'}) }); } catch(e){}
 }
 
-// Event listener para o QR Code PIX
-document.getElementById('btnCopiarPix').addEventListener('click', () => {
-  const pixQrCode = CONFIG.PIX_QR_CODE;
-  const qrCodeUrl = gerarQRCode(pixQrCode);
-  const qrCodeImage = document.getElementById('qrCodeImage');
-  const qrCodeContainer = document.getElementById('qrCodeContainer');
-  
-  qrCodeImage.src = qrCodeUrl;
-  qrCodeContainer.style.display = 'block';
-  
-  // Scroll para o QR Code
-  qrCodeContainer.scrollIntoView({ behavior: 'smooth' });
-});
+// Init
+document.getElementById('tituloBolao').innerHTML = `<strong>${CONFIG.TITULO}</strong>`;
+document.getElementById('infoGeral').innerHTML = `
+    🎰 <strong>${CONFIG.LIMITE} pessoas</strong> • 💰 <strong>${fmtMoney(CONFIG.VALOR)} por pessoa</strong>
+    <div style="margin-top:5px;">
+        <span class="prize-button">🏆 R$ 850 Milhões</span>
+    </div>`;
 
-// Fechar modal clicando fora
-document.getElementById('modalConfirmacao').addEventListener('click', (e) => {
-  if (e.target === document.getElementById('modalConfirmacao')) {
-    document.getElementById('modalConfirmacao').style.display = 'none';
-    // Restaurar título original
-    const modal = document.getElementById('modalConfirmacao');
-    const titulo = modal.querySelector('h3');
-    titulo.textContent = 'Cadastro Realizado!';
-  }
-});
-
-// Fechar modal
-document.getElementById("fecharLista").addEventListener("click", () => {
-  document.getElementById("overlay").style.display = "none";
-  participanteSelecionado = null;
-  participantesSelecionados = [];
-});
-
-// Fechar modal clicando fora
-document.getElementById("overlay").addEventListener("click", (e) => {
-  if (e.target === document.getElementById("overlay")) {
-    document.getElementById("overlay").style.display = "none";
-    participanteSelecionado = null;
-    participantesSelecionados = [];
-  }
-});
-
-// Função para inicializar elementos
-function inicializarElementos() {
-  // Atualizar título da página
-  document.title = CONFIG.TITULO_BOLAO;
-  document.getElementById('tituloBolao').textContent = `🎯 ${CONFIG.TITULO_BOLAO}`;
-  
-  // Atualizar informações gerais
-  document.getElementById('infoGeral').innerHTML = `
-    🎰 <strong>${CONFIG.LIMITE_PARTICIPANTES} participantes</strong> • 💰 <strong>R$ ${CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',')} por pessoa</strong><br>
-    <div style="margin-top: 10px;">
-      <span class="prize-button">🏆 Premiação Estimada: R$ ${CONFIG.PREMIACAO_ESTIMADA.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
-    </div>
-    📅 <strong>Pagamento:</strong> até ${CONFIG.DATA_LIMITE_PAGAMENTO}<br>
-    <small>📋 Preencha os dados para garantir sua vaga!</small>
-  `;
-  
-  // Atualizar modal de regras
-  const modalRegras = document.getElementById('modalRegras');
-  if (modalRegras) {
-    modalRegras.querySelector('h3').textContent = `⚠️ INFORMATIVO: BOLÃO MEGA DA VIRADA ${CONFIG.ANO_SORTEIO} ⚠️`;
-    
-    const conteudoRegras = modalRegras.querySelector('div[style*="text-align: left"]');
-    conteudoRegras.innerHTML = `
-      <p style="margin-bottom: 15px;">Estamos organizando nosso bolão, com um total de <strong style="color: #ffd700;">${CONFIG.LIMITE_PARTICIPANTES} participantes</strong>.</p>
-      
-      <p style="margin-bottom: 15px;"><strong style="color: #00b894;">Custo por Participante:</strong> R$ ${CONFIG.VALOR_PARTICIPACAO.toFixed(2).replace('.', ',')}</p>
-      
-      <h4 style="color: #ffd700; margin: 20px 0 10px 0; font-size: 16px;">📋 Regras de Participação e Prazos:</h4>
-      
-      <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-        <h5 style="color: #e74c3c; margin: 0 0 10px 0;">📅 Datas Limite:</h5>
-        <p style="margin: 0;"><strong>${CONFIG.DATA_LIMITE_INTERESSE}:</strong> Data final para manifestar interesse (confirmar que quer participar).<br>
-        <strong>${CONFIG.DATA_LIMITE_PAGAMENTO}:</strong> Data final para o pagamento da cota.</p>
-      </div>
-      
-      <div style="background: rgba(231, 76, 60, 0.2); padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #e74c3c;">
-        <h5 style="color: #e74c3c; margin: 0 0 10px 0;">⚠️ Atenção ao Pagamento:</h5>
-        <p style="margin: 0;">O participante que não realizar o pagamento até o dia <strong>${CONFIG.DATA_LIMITE_PAGAMENTO}</strong> será automaticamente excluído do bolão, e a vaga será repassada.</p>
-      </div>
-      
-      <h4 style="color: #ffd700; margin: 20px 0 10px 0; font-size: 16px;">💡 Observações Importantes:</h4>
-      
-      <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 10px;">
-        <p style="margin: 0 0 10px 0;"><strong style="color: #f39c12;">Prazos:</strong> As datas foram definidas para que todos tenham tempo suficiente para pagar (contando com o 13º salário).</p>
-        
-        <p style="margin: 0 0 10px 0;"><strong style="color: #f39c12;">Agilidade:</strong> Quanto antes arrecadarmos o valor, melhor. Deixar para a última hora significa enfrentar lotéricas lotadas.</p>
-        
-        <p style="margin: 0;"><strong style="color: #f39c12;">Jogos:</strong> A quantidade final de bilhetes e jogos será definida ao término da arrecadação, pois dependerá do valor total arrecadado (se todas as ${CONFIG.LIMITE_PARTICIPANTES} cotas forem preenchidas).</p>
-      </div>
-    `;
-  }
-  
-  // Atualizar texto da barra de progresso
-  document.getElementById('progressText').textContent = `0/${CONFIG.LIMITE_PARTICIPANTES} participantes`;
-}
-
-// Evento para o botão de entrar no grupo
-document.getElementById('entrarGrupo').addEventListener('click', () => {
-  window.open('https://chat.whatsapp.com/Fdl9PzkiEBq9TnJHtlu2Rm?mode=wwt', '_blank');
-});
-
-// Evento para o botão de entrar no grupo na página de confirmação
-document.getElementById('btnEntrarGrupo').addEventListener('click', () => {
-  window.open('https://chat.whatsapp.com/Fdl9PzkiEBq9TnJHtlu2Rm?mode=wwt', '_blank');
-});
-
-// Inicializar elementos quando a página carregar
-document.addEventListener('DOMContentLoaded', () => {
-  inicializarElementos();
-  // Carregar dados iniciais
-  atualizarProgresso();
-});
+setInterval(() => {
+    const d = new Date(`Dec 10, 2025 23:59:59`).getTime() - Date.now();
+    if(d<0) return;
+    document.getElementById('dias').innerText = fmtNum(Math.floor(d/(864e5)));
+    document.getElementById('horas').innerText = fmtNum(Math.floor((d%864e5)/36e5));
+    document.getElementById('minutos').innerText = fmtNum(Math.floor((d%36e5)/6e4));
+    document.getElementById('segundos').innerText = fmtNum(Math.floor((d%6e4)/1e3));
+}, 1000);
+updateData();
 </script>
 </body>
 </html>
