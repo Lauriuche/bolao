@@ -69,6 +69,8 @@
         border: 2px solid #ecf0f1; border-bottom: 4px solid #badc58;
         border-radius: 12px; font-size: 1rem; text-align: center; outline: none;
         background: #fff; color: #333; font-weight: 600;
+        /* Garante visualmente maiusculo enquanto digita */
+        text-transform: uppercase; 
     }
     input:focus { border-color: #6ab04c; }
     
@@ -87,7 +89,7 @@
     .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 10px; }
     .modal { background: #fff; color: #333; width: 100%; max-width: 400px; border-radius: 20px; padding: 20px; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
     
-    /* --- ITEM DA LISTA (ATUALIZADO) --- */
+    /* --- ITEM DA LISTA --- */
     .participante-item { 
         margin: 5px 0; background: #f1f2f6; border-radius: 8px; 
         display: flex; overflow: hidden; border: 2px solid transparent; 
@@ -98,18 +100,18 @@
     /* Lado Esquerdo (Seleção) */
     .p-left {
         flex: 1; padding: 12px; cursor: pointer; display: flex; align-items: center;
+        text-transform: uppercase; /* Garante lista em caixa alta */
     }
     
     /* Lado Direito (Icone Transparente) */
     .p-right {
         width: 60px; display: flex; flex-direction: column; 
         justify-content: center; align-items: center;
-        background: transparent; /* TRANSPARENCIA AQUI */
+        background: transparent; 
         cursor: pointer;
-        border-left: 1px solid rgba(0,0,0,0.05); /* Divisoria bem sutil */
+        border-left: 1px solid rgba(0,0,0,0.05);
     }
     
-    /* Texto do Status pequeno embaixo do ícone */
     .status-text {
         font-size: 0.65rem; font-weight: 700; margin-top: 2px; color: #555;
     }
@@ -226,7 +228,7 @@
 
 <div class="modal-overlay" id="modalDetalhes">
     <div class="modal">
-        <h3 id="detNome" style="margin:0 0 10px 0; color:#2d3436;">Nome do Participante</h3>
+        <h3 id="detNome" style="margin:0 0 10px 0; color:#2d3436; text-transform:uppercase;">Nome do Participante</h3>
         
         <div style="background:#f9f9f9; padding:15px; border-radius:10px; border:1px solid #eee;">
             <div style="font-size:0.9rem; color:#666;">Status do Pagamento</div>
@@ -238,7 +240,7 @@
             <div style="font-weight:bold; color:#c0392b; margin-bottom:5px;">⚠️ Regularize seu pagamento</div>
             <div style="font-size:0.8rem;">Copie a chave abaixo e pague no app do seu banco:</div>
             <div id="chavePixTexto" class="pix-key"></div>
-            <button onclick="copiarPix()" class="btn-copy">📋 COPIAR CHAVE PIX</button>
+            <button onclick="copiarPix()" class="btn-copy">📋 COPIAR CÓDIGO PIX</button>
         </div>
 
         <div id="areaParabens" style="display:none; margin-top:15px; color:#00b894; font-weight:bold;">
@@ -301,8 +303,8 @@
         <div style="font-size:3rem;">🎉</div>
         <h3 style="margin:0; color:#00b894;">Cadastro Realizado!</h3>
         <div style="background:#f1f2f6; padding:15px; border-radius:10px; text-align:left; margin-bottom:10px; color:#333;">
-            <div><strong>Nome:</strong> <span id="confNome"></span></div>
-            <div><strong>PIX:</strong> <span id="confPix"></span></div>
+            <div><strong>Nome:</strong> <span id="confNome" style="text-transform:uppercase;"></span></div>
+            <div><strong>Comprovante:</strong> <span>Enviar no WhatsApp</span></div>
         </div>
         <button id="btnZapConf" style="background:#25d366; width:100%;">Enviar Comprovante</button>
         <button onclick="document.getElementById('modalConfirmacao').style.display='none'" style="background:#7f8c8d; width:100%; margin-top:10px;">Fechar</button>
@@ -315,16 +317,17 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getDatabase, ref, push, get, update, remove } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-// CONFIGURAÇÃO - COLOQUE A CHAVE PIX REAL AQUI NA VARIAVEL PIX
+// --- CONFIGURAÇÃO ---
 const CONFIG = {
   LIMITE: 60, VALOR: 100, PREMIO: 1200000,
-  PIX: "00020126360014BR.GOV.BCB.PIX0114+55999910261125204000053039865802BR5925Vagner Aparecido de Olive6009SAO PAULO62070503***63041D3D", 
+  // CÓDIGO PIX ATUALIZADO
+  PIX: "00020126330014br.gov.bcb.pix0111057968793755204000053039865406100.005802BR5922Vagner Sousa Lauriuche6009Sao Paulo62290525REC69261115DB9720696281626304D5EA", 
   SENHA: '6261',
   TG_TOKEN: "8307035824:AAFsKe4l1WgbZI1uez-n06Vt-TYiuhZLMt8", TG_CHAT: "861365063"
 };
 
-// Chave visual (curta) para confirmação
-const PIX_VISUAL = "(99) 9 9102-6112"; 
+// Número para envio do comprovante no WhatsApp
+const WHATSAPP_ADM = "5599991998153";
 
 const app = initializeApp({
   apiKey: "AIzaSyCvXGUdvZkqtSMMn8VmTOXLA9PXqR85gSk",
@@ -344,7 +347,7 @@ let selecionados = [];
 let acaoAdmin = null;
 let currentFilter = 'todos';
 
-// FUNÇÃO AUXILIAR DE NOME
+// FUNÇÃO AUXILIAR DE NOME (Para mensagem de cobrança)
 function formatarNomeInteligente(nomeCompleto) {
     if (!nomeCompleto) return "Participante";
     const partes = nomeCompleto.trim().split(/\s+/);
@@ -404,8 +407,11 @@ async function doAction() {
                 let tel = p.telefone.replace(/\D/g, '');
                 if(!tel.startsWith('55')) tel = '55'+tel;
                 const nomeTratado = formatarNomeInteligente(p.nome);
-                const msg = `Olá ${nomeTratado}! Lembrete Bolão Camino.\nFalta: R$ ${saldo.toFixed(2).replace('.',',')}\nPIX: ${PIX_VISUAL}`;
-                window.open(`https://wa.me/${tel}?text=${encodeURIComponent(msg)}`, '_blank');
+                const msg = `Olá ${nomeTratado}! Lembrete Bolão Camino.\nFalta: R$ ${saldo.toFixed(2).replace('.',',')}\nChave PIX (Copia e Cola): abaixo`;
+                // Envia o texto e em seguida o pix seria manual, mas aqui mandamos o link com texto
+                // Para mandar o PIXzao no corpo do zap, pode ficar grande, mas aqui vai o texto:
+                const fullMsg = `${msg}\n\n${CONFIG.PIX}`;
+                window.open(`https://wa.me/${tel}?text=${encodeURIComponent(fullMsg)}`, '_blank');
             }, i * 1500);
         });
     }
@@ -444,7 +450,6 @@ function renderList(fn = null) {
     data.sort((a,b) => a.numero - b.numero).forEach(p => {
         const v = p.valorPago || 0;
         
-        // --- LOGICA DOS ÍCONES ---
         let icon = '🔴';
         let text = 'PEND';
         
@@ -461,7 +466,6 @@ function renderList(fn = null) {
         const el = document.createElement('div');
         el.className = `participante-item ${isSel ? 'selected' : ''}`;
         
-        // ESTRUTURA: ESQUERDA (SELECT) | DIREITA (ICONE SEM FUNDO)
         el.innerHTML = `
             <div class="p-left" onclick="toggleSelect('${p.key}')">
                 <strong>${p.numero}. ${p.nome}</strong>
@@ -512,7 +516,7 @@ window.abrirDetalhes = (key) => {
 window.copiarPix = () => {
     const texto = document.getElementById('chavePixTexto').innerText;
     navigator.clipboard.writeText(texto).then(() => {
-        alert("Chave Pix Copiada!");
+        alert("Código Pix Copiado!");
     });
 }
 
@@ -544,8 +548,11 @@ document.getElementById('filtroPendentes').onclick = () => { currentFilter='pend
 
 // CADASTRO
 document.getElementById('cadastrar').addEventListener('click', async () => {
-    const nome = document.getElementById('nome').value.trim();
+    const nomeRaw = document.getElementById('nome').value.trim();
+    // FORÇA O NOME EM MAIÚSCULO AO SALVAR NO BANCO
+    const nome = nomeRaw.toUpperCase();
     const tel = document.getElementById('telefone').value.trim();
+    
     if(!nome || !tel) return alert("Preencha todos os campos!");
     if(participantes.length >= CONFIG.LIMITE) return alert("Bolão lotado!");
 
@@ -555,15 +562,17 @@ document.getElementById('cadastrar').addEventListener('click', async () => {
     
     document.getElementById('nome').value = ''; document.getElementById('telefone').value = '';
     document.getElementById('confNome').innerText = nome;
-    document.getElementById('confPix').innerText = PIX_VISUAL;
     document.getElementById('modalConfirmacao').style.display = 'flex';
     
     confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     updateData();
 });
 
+// AQUI ESTÁ A LÓGICA DO BOTÃO DE ENVIAR COMPROVANTE ATUALIZADA
 document.getElementById('btnZapConf').onclick = () => {
-    window.open(`https://wa.me/55${PIX_VISUAL.replace(/\D/g,'')}?text=Cadastrei no Bolão!`, '_blank');
+    const nomeConfirmado = document.getElementById('confNome').innerText;
+    const texto = `Olá, sou ${nomeConfirmado}, Me cadastrei no Bolão!`;
+    window.open(`https://wa.me/${WHATSAPP_ADM}?text=${encodeURIComponent(texto)}`, '_blank');
 };
 
 document.getElementById('verLista').onclick = () => { document.getElementById('overlay').style.display = 'flex'; renderList(); };
