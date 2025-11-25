@@ -5,289 +5,183 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Bolão Colaboradores Camino</title>
 <style>
-    /* --- RESET E VARIÁVEIS --- */
+    /* --- VARIÁVEIS DE CORES --- */
     :root {
-        --primary-color: #ffd700;
-        --bg-gradient: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #2c3e50);
+        --red-camino: #c0392b;     /* Vermelho do Título */
+        --green-btn: #00b894;      /* Verde do Botão Participar */
+        --yellow-num: #f1c40f;     /* Amarelo dos números */
     }
 
-    /* Animação do Fundo */
-    @keyframes gradientBG {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-
-    html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        overflow-x: hidden;
-    }
-
+    /* --- FUNDO DA PÁGINA --- */
     body {
-        box-sizing: border-box;
+        margin: 0;
+        padding: 15px;
         font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        background: var(--bg-gradient);
-        background-size: 400% 400%;
-        animation: gradientBG 15s ease infinite;
+        background: #f1f2f6; /* Fundo claro sólido igual da referência */
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: 100dvh;
-        color: #fff;
-        padding: 15px;
+        min-height: 100vh;
     }
 
     /* --- CONTAINER PRINCIPAL --- */
     .container {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(20px);
+        background: #ffffff;
         width: 100%;
-        max-width: 480px;
-        border-radius: 20px;
+        max-width: 450px;
+        border-radius: 25px;
         padding: 25px 20px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         text-align: center;
-        color: #333;
-        position: relative;
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
-        justify-content: center;
     }
 
-    /* --- LOGO --- */
+    /* --- LOGO (RESTAURADA) --- */
     .logo-img {
         display: block;
         max-width: 80%;
         height: auto;
-        margin: 0 auto 10px auto;
+        margin: 0 auto 15px auto; /* Margem abaixo da logo */
         max-height: 100px;
     }
 
-    /* Tipografia */
+    /* --- CABEÇALHO --- */
     h1 {
-        font-size: clamp(1.1rem, 5vw, 1.5rem);
-        color: #d63031;
-        margin-bottom: 8px;
+        font-size: 1.4rem;
+        color: var(--red-camino); /* Cor vermelha */
+        margin: 0 0 10px 0;
         font-weight: 800;
-        line-height: 1.2;
         text-transform: uppercase;
+        line-height: 1.2;
     }
-    
-    .info {
-        font-size: clamp(0.9rem, 4vw, 1rem);
+
+    .info-row {
+        font-size: 0.95rem;
+        color: #555;
+        margin-bottom: 5px;
+    }
+
+    .date-row {
+        font-size: 0.9rem;
         color: #444;
         margin-bottom: 15px;
-        line-height: 1.4;
     }
 
-    /* --- CONTADOR --- */
-    .countdown-wrapper {
-        background: rgba(0, 0, 0, 0.85);
-        border-radius: 12px;
-        padding: 10px;
-        margin: 15px 0;
-        border: 1px solid rgba(255, 215, 0, 0.5);
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    /* --- ÁREA DE DESTAQUE (PRÊMIO E REGRAS) --- */
+    .highlight-area {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
     }
-    .countdown-label { 
-        margin: 0 0 5px 0; font-size: 0.75rem; 
-        opacity: 0.9; text-transform: uppercase; color: #fff; letter-spacing: 1px;
-    }
-    .countdown { 
-        display: flex; justify-content: center; align-items: center; 
-        color: #ffd700; font-weight: bold; gap: 5px;
-    }
-    .time-block { display: flex; flex-direction: column; align-items: center; min-width: 18%; }
-    .time-block span { 
-        font-size: clamp(1.2rem, 6vw, 1.5rem);
-        line-height: 1; text-shadow: 0 2px 4px rgba(0,0,0,0.5); 
-    }
-    .time-block small { 
-        font-size: 0.6rem; color: #ddd; text-transform: uppercase; margin-top: 2px; 
-    }
-    .separator { font-size: 1.2rem; color: rgba(255, 255, 255, 0.4); margin-bottom: 8px; }
 
-    /* --- PROGRESSO --- */
-    .progress-container {
-        margin: 15px 0; padding: 12px;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid #e0e0e0;
-        border-radius: 12px;
+    .prize-badge {
+        background: linear-gradient(135deg, #00b894, #00cec9);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-weight: 700;
+        font-size: 1rem;
+        box-shadow: 0 4px 10px rgba(0, 184, 148, 0.3);
     }
-    .progress-bar { 
-        width: 100%; height: 18px; 
-        background: #e0e0e0; border-radius: 10px; overflow: hidden; 
+
+    .btn-regras-small {
+        background: #95a5a6;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        display: flex; align-items: center; gap: 5px;
+    }
+
+    /* --- CONTADOR PRETO --- */
+    .countdown-box {
+        background: #1e272e; /* Fundo preto */
+        border-radius: 15px;
+        padding: 15px 10px;
+        color: white;
+        margin-bottom: 20px;
+        border-bottom: 3px solid #f1c40f;
+    }
+
+    .countdown-title {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+        opacity: 0.9;
+    }
+
+    .timer-flex {
+        display: flex; justify-content: center; align-items: center; gap: 5px;
+    }
+
+    .time-unit {
+        display: flex; flex-direction: column; align-items: center; width: 55px;
+    }
+
+    .time-num {
+        font-size: 1.6rem; font-weight: 700; color: var(--yellow-num); line-height: 1;
+    }
+
+    .time-label {
+        font-size: 0.65rem; text-transform: uppercase; margin-top: 5px; color: #ccc;
+    }
+
+    .time-sep { font-size: 1.2rem; color: #555; margin-bottom: 15px; }
+
+    /* --- BARRA DE PROGRESSO --- */
+    .progress-wrapper {
+        margin-bottom: 20px;
+        background: #f1f2f6; padding: 12px; border-radius: 15px;
+    }
+    .progress-track {
+        background: #dfe6e9; height: 14px; border-radius: 7px; overflow: hidden; margin-bottom: 8px;
     }
     .progress-fill {
-        height: 100%; width: 0%;
-        background: linear-gradient(90deg, #ffd700, #ffb347, #00b894);
-        transition: width 1s ease; border-radius: 10px;
+        height: 100%; width: 0%; background: linear-gradient(90deg, #f1c40f, #2ecc71); border-radius: 7px; transition: width 1s ease;
     }
-    .progress-text { font-size: 0.9rem; margin-top: 5px; color: #333; font-weight: 700; }
-    .progress-subtext { font-size: 0.75rem; color: #666; }
+    .progress-stats { font-size: 0.9rem; font-weight: 700; color: #2d3436; }
+    .progress-money { font-size: 0.8rem; color: #636e72; }
 
-    /* --- INPUTS (COM PULSAR LEVE) --- */
-    
-    @keyframes pulse-input {
-        0% { transform: scale(1); box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-color: #e0e0e0; }
-        50% { transform: scale(1.02); box-shadow: 0 0 15px rgba(0, 148, 50, 0.15); border-color: #badc58; }
-        100% { transform: scale(1); box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-color: #e0e0e0; }
+    /* --- TEXTO INSTRUÇÃO --- */
+    .instruction {
+        font-size: 0.95rem; color: #2d3436; font-weight: 600; margin-bottom: 15px; line-height: 1.4;
     }
 
+    /* --- INPUTS (ESTILO DA FOTO) --- */
     input {
-        width: 100%;
-        box-sizing: border-box;
-        padding: 16px;
-        margin: 10px 0;
-        background: #fff;
-        border: 2px solid #e0e0e0;
-        border-bottom: 5px solid #009432;
-        border-radius: 12px;
-        font-size: 1.1rem;
-        font-weight: 600;
-        text-align: center;
-        color: #333;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        animation: pulse-input 3s infinite ease-in-out;
+        width: 100%; box-sizing: border-box; padding: 16px; margin: 8px 0;
+        border: 2px solid #ecf0f1; border-bottom: 4px solid #badc58; /* Borda verde clara */
+        border-radius: 12px; font-size: 1rem; text-align: center; outline: none;
+        background: #fff; color: #333; font-weight: 600; transition: all 0.3s;
     }
-    
-    input::placeholder {
-        color: #aaa;
-        font-weight: 400;
-        letter-spacing: 1px;
-    }
-
-    input:focus { 
-        border-color: #d63031;
-        outline: none; 
-        animation: none; 
-        transform: translateY(-2px);
-        box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-    }
+    input::placeholder { color: #b2bec3; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 0.5px; }
+    input:focus { border-color: #6ab04c; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(106, 176, 76, 0.15); }
 
     /* --- BOTÕES --- */
+    .btn-row { display: flex; gap: 10px; margin-top: 10px; }
     button {
-        width: 100%;
-        padding: 14px;
-        margin-top: 8px;
-        border: none;
-        border-radius: 10px;
-        font-size: 1rem;
-        font-weight: 700;
-        cursor: pointer;
-        transition: transform 0.2s, box-shadow 0.2s;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        border: none; border-radius: 12px; padding: 15px; font-weight: 700; font-size: 1rem;
+        cursor: pointer; text-transform: uppercase; color: white; transition: transform 0.1s;
     }
-    button:active { transform: scale(0.98); }
+    button:active { transform: translateY(2px); }
+    .btn-lista { background: #7f8c8d; flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; }
+    .btn-participar { background: #00b894; flex: 2; display: flex; align-items: center; justify-content: center; gap: 5px; }
+    .btn-whatsapp-full { width: 100%; background: #25d366; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
-    .btn-grid { 
-        display: grid; 
-        grid-template-columns: 1fr 2fr; 
-        gap: 10px; 
-        margin-top: 10px; 
-    }
-    
-    .btn-primary { 
-        grid-column: 1 / 2; 
-        background: linear-gradient(135deg, #7f8c8d, #95a5a6); color: white;
-        font-size: 0.9rem;
-    }
-    
-    .btn-secondary {
-        grid-column: 2 / 3;
-        background: linear-gradient(135deg, #009432, #2ecc71);
-        color: white;
-        border: 1px solid rgba(255,255,255,0.2);
-        animation: pulse-green 2s infinite;
-    }
-
-    .btn-whatsapp {
-        grid-column: 1 / -1; 
-        background: linear-gradient(135deg, #25d366, #128c7e); color: white;
-        display: flex; align-items: center; justify-content: center; gap: 8px;
-        margin-top: 5px;
-    }
-    
-    .btn-regras {
-        background: #95a5a6; color: white; 
-        font-size: 0.8rem; padding: 6px 12px; 
-        width: auto; display: inline-block; margin: 0;
-    }
-
-    @keyframes pulse-green {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.02); box-shadow: 0 0 15px rgba(0, 148, 50, 0.4); }
-        100% { transform: scale(1); }
-    }
-
-    /* --- MODAIS --- */
-    .modal-overlay {
-        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(0, 0, 0, 0.85); 
-        display: none;
-        justify-content: center; align-items: center; 
-        z-index: 1000;
-        padding: 10px;
-    }
-    .modal {
-        background: linear-gradient(135deg, #2c3e50, #34495e);
-        border-radius: 15px; 
-        width: 100%; 
-        max-width: 500px; 
-        max-height: 85dvh; 
-        padding: 20px; 
-        color: #fff; 
-        overflow-y: auto; 
-        text-align: center;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-
-    .lista {
-        text-align: left; font-size: 0.9rem; 
-        max-height: 40vh; 
-        overflow-y: auto;
-        background: rgba(0,0,0,0.2); 
-        border-radius: 12px; 
-        padding: 8px; margin-top: 15px;
-    }
-    .participante {
-        padding: 10px; margin: 5px 0; background: rgba(255,255,255,0.08);
-        border-radius: 8px; display: flex; justify-content: space-between; align-items: center;
-        gap: 8px;
-    }
-    
-    .status { font-weight: bold; font-size: 0.7rem; padding: 3px 6px; border-radius: 4px; text-transform: uppercase; white-space: nowrap; }
-    .status.pago { background: #00b894; color: #fff; }
-    .status.nao-pago { background: #e74c3c; color: #fff; }
-    .status.parcial { background: #f39c12; color: #fff; }
-
-    /* --- RESPONSIVIDADE PEQUENA --- */
-    @media (max-width: 380px) {
-        .container { padding: 15px 12px; }
-        h1 { font-size: 1.2rem; }
-        .logo-img { max-height: 80px; }
-        .btn-grid { grid-template-columns: 1fr; gap: 8px; }
-        .btn-primary, .btn-secondary { grid-column: auto; }
-    }
-
-    /* Utilitários */
-    .prize-button { 
-        background: linear-gradient(135deg, #00b894, #00cec9); 
-        padding: 8px 15px; border-radius: 20px; color: white; font-weight: bold; 
-        display: inline-block; box-shadow: 0 4px 10px rgba(0,184,148,0.4); 
-        margin-top: 5px; font-size: 0.9rem; white-space: nowrap;
-    }
-    .message { margin-top: 15px; padding: 10px; border-radius: 10px; font-weight: bold; font-size: 0.9rem; }
-    .message.success { background: rgba(0, 184, 148, 0.2); color: #00b894; border: 1px solid #00b894; }
-    .message.error { background: rgba(231, 76, 60, 0.2); color: #e74c3c; border: 1px solid #e74c3c; }
-    
-    /* Inputs Admin */
+    /* --- MODAIS (Mantidos iguais) --- */
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 10px; }
+    .modal { background: #fff; color: #333; width: 100%; max-width: 400px; border-radius: 20px; padding: 20px; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+    .participante-item { padding: 10px; margin: 5px 0; background: #f1f2f6; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
     .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 15px; }
-    .num-btn { background: #34495e; padding: 12px; font-size: 1.2rem; margin: 0; }
+    .num-btn { background: #2d3436; color: #fff; font-size: 1.2rem; padding: 15px; }
 </style>
 </head>
 <body>
@@ -295,143 +189,144 @@
 <div class="container">
     <img src="1001855377.png" alt="Logo Camino Supermercados" class="logo-img">
     
-    <h1 id="tituloBolao"><strong>Bolão dos Colaboradores Camino</strong></h1>
+    <h1>BOLÃO DOS COLABORADORES CAMINO</h1>
     
-    <div class="info" id="infoGeral">
+    <div class="info-row">
+        <span>🎰 60 pessoas</span> • <span>💰 R$ 100,00 por pessoa</span>
+    </div>
+    <div class="date-row">
+        📅 <strong>Pagamento:</strong> até 10 de Dezembro
+    </div>
+
+    <div class="highlight-area">
+        <div class="prize-badge">🏆 R$ 850 Milhões</div>
+        <button id="verRegras" class="btn-regras-small">📋 Regras</button>
+    </div>
+
+    <div class="countdown-box">
+        <div class="countdown-title">⏰ ENCERRAMENTO DAS COTAS:</div>
+        <div class="timer-flex" id="countdown">
+            <div class="time-unit"><span class="time-num" id="dias">00</span><span class="time-label">DIAS</span></div>
+            <div class="time-sep">:</div>
+            <div class="time-unit"><span class="time-num" id="horas">00</span><span class="time-label">HS</span></div>
+            <div class="time-sep">:</div>
+            <div class="time-unit"><span class="time-num" id="minutos">00</span><span class="time-label">MIN</span></div>
+            <div class="time-sep">:</div>
+            <div class="time-unit"><span class="time-num" id="segundos">00</span><span class="time-label">SEG</span></div>
         </div>
-    
-    <div class="countdown-wrapper">
-        <p class="countdown-label">⏰ Encerramento das Cotas:</p>
-        <div id="countdown" class="countdown">
-            <div class="time-block"><span id="dias">00</span><small>Dias</small></div>
-            <div class="separator">:</div>
-            <div class="time-block"><span id="horas">00</span><small>Hs</small></div>
-            <div class="separator">:</div>
-            <div class="time-block"><span id="minutos">00</span><small>Min</small></div>
-            <div class="separator">:</div>
-            <div class="time-block"><span id="segundos">00</span><small>Seg</small></div>
-        </div>
     </div>
 
-    <div style="font-size: 0.9rem; margin: 10px 0;">
-        📅 <strong>Pagamento:</strong> até 10 de Dezembro<br>
-    </div>
-
-    <div style="display: flex; justify-content: flex-end; margin-bottom: 5px;">
-        <button id="verRegras" class="btn-regras">📋 Regras</button>
-    </div>
-
-    <div class="progress-container">
-        <div class="progress-bar">
+    <div class="progress-wrapper">
+        <div class="progress-track">
             <div class="progress-fill" id="progressFill"></div>
         </div>
-        <div class="progress-text" id="progressText">Carregando...</div>
-        <div class="progress-subtext" id="progressSubtext">Arrecadado: R$ 0,00</div>
+        <div class="progress-stats" id="progressText">0/60 participantes</div>
+        <div class="progress-money" id="progressSubtext">Arrecadado: R$ 0,00</div>
     </div>
 
-    <input type="text" id="nome" placeholder="NOME COMPLETO" required>
-    <input type="tel" id="telefone" placeholder="WHATSAPP (com DDD)" required>
+    <div class="instruction">
+        Para participar do bolão preencher os dados e clicar em <br><strong>PARTICIPAR</strong>
+    </div>
+
+    <input type="text" id="nome" placeholder="NOME COMPLETO">
+    <input type="tel" id="telefone" placeholder="WHATSAPP (com DDD)">
+
+    <div class="btn-row">
+        <button id="verLista" class="btn-lista">📋 LISTA</button>
+        <button id="cadastrar" class="btn-participar">🚀 PARTICIPAR</button>
+    </div>
     
-    <div class="btn-grid">
-        <button id="verLista" class="btn-primary">📋 LISTA</button>
-        <button id="cadastrar" class="btn-secondary">🚀 PARTICIPAR</button>
-        <button id="entrarGrupo" class="btn-whatsapp">
-            <span style="font-size: 1.2rem; margin-right: 5px;">💬</span> GRUPO WHATSAPP
-        </button>
-    </div>
+    <button id="entrarGrupo" class="btn-whatsapp-full">💬 GRUPO WHATSAPP</button>
 
-    <div class="message" id="mensagem"></div>
+    <div id="mensagem" style="margin-top:10px; font-weight:bold; min-height:20px;"></div>
 </div>
 
 <div class="modal-overlay" id="overlay">
     <div class="modal">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <h3 style="margin:0">📋 Participantes</h3>
-            <button id="fecharListaX" style="background:none; border:none; font-size:1.5rem; width:auto; padding:0; color:#fff; margin:0;">✕</button>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="margin:0; color:#c0392b;">Participantes</h3>
+            <button onclick="document.getElementById('overlay').style.display='none'" style="background:none; color:#333; width:auto; padding:0; box-shadow:none; font-size:1.5rem;">✕</button>
         </div>
         
-        <div class="progress-container" style="padding:8px; margin:5px 0;">
-            <div class="progress-bar"><div class="progress-fill" id="progressFillLista"></div></div>
-            <div class="progress-text" id="progressTextLista" style="color:#fff; font-size:0.8rem">...</div>
+        <div style="background:#f1f2f6; padding:10px; border-radius:10px; margin:10px 0;">
+            <div style="height:10px; background:#ddd; border-radius:5px; overflow:hidden;">
+                <div id="progressFillLista" style="height:100%; width:0%; background:#00b894;"></div>
+            </div>
+            <div id="progressTextLista" style="font-size:0.8rem; margin-top:5px; text-align:center;">...</div>
         </div>
-        
-        <input type="text" id="buscar" placeholder="🔍 Buscar..." style="margin-bottom:10px;">
+
+        <input type="text" id="buscar" placeholder="🔍 Buscar..." style="margin-bottom:10px; padding:10px; border:1px solid #ddd;">
         
         <div style="display:flex; gap:5px; margin-bottom:10px;">
-            <button id="filtroTodos" style="flex:1; padding:8px; font-size:0.8rem; margin:0; background:#7f8c8d;">Todos</button>
-            <button id="filtroPagos" style="flex:1; padding:8px; font-size:0.8rem; margin:0; background:#00b894;">Pagos</button>
-            <button id="filtroPendentes" style="flex:1; padding:8px; font-size:0.8rem; margin:0; background:#e74c3c;">Pend</button>
-        </div>
-        
-        <div style="display:flex; gap:5px; border-top:1px solid rgba(255,255,255,0.2); padding-top:10px;">
-             <button id="btnAdminPagamento" style="background:#f39c12; font-size:0.8rem; padding:8px; margin:0;">💰 Gerir Pgto</button>
-             <button id="btnAdminExcluir" style="background:#c0392b; font-size:0.8rem; padding:8px; margin:0;">🗑️ Excluir</button>
-             <button id="btnAdminTelegram" style="background:#2980b9; font-size:1.2rem; padding:8px; margin:0; width:40px;">✈️</button>
+            <button id="filtroTodos" style="flex:1; background:#7f8c8d; padding:8px;">Todos</button>
+            <button id="filtroPagos" style="flex:1; background:#00b894; padding:8px;">Pagos</button>
+            <button id="filtroPendentes" style="flex:1; background:#e74c3c; padding:8px;">Pend</button>
         </div>
 
-        <div class="lista" id="lista"></div>
+        <div style="border-top:1px solid #ddd; padding-top:10px; display:flex; gap:5px;">
+            <button onclick="askPass('pagamento')" style="flex:1; background:#f39c12; padding:8px; font-size:0.75rem;">💰 Pgto</button>
+            <button onclick="askPass('excluir')" style="flex:1; background:#c0392b; padding:8px; font-size:0.75rem;">🗑️ Excluir</button>
+            <button onclick="askPass('telegram')" style="background:#2980b9; width:40px; padding:8px;">✈️</button>
+        </div>
+
+        <div id="lista" style="margin-top:15px; max-height:300px; overflow-y:auto;"></div>
     </div>
 </div>
 
-<div id="modalSenha" class="modal-overlay" style="z-index: 2000;">
-    <div class="modal" style="max-width:320px;">
-        <h4>🔐 Senha Admin</h4>
-        <div id="senhaDisplay" style="font-size:1.5rem; letter-spacing:5px; min-height:30px; margin-bottom:10px;"></div>
+<div class="modal-overlay" id="modalSenha">
+    <div class="modal" style="max-width:300px;">
+        <h3 style="margin:0; color:#c0392b;">Senha Admin</h3>
+        <div id="senhaDisplay" style="font-size:2rem; letter-spacing:5px; text-align:center; height:40px; color:#333;"></div>
         <div class="numpad">
-            <button class="num-btn" data-num="1">1</button><button class="num-btn" data-num="2">2</button><button class="num-btn" data-num="3">3</button>
-            <button class="num-btn" data-num="4">4</button><button class="num-btn" data-num="5">5</button><button class="num-btn" data-num="6">6</button>
-            <button class="num-btn" data-num="7">7</button><button class="num-btn" data-num="8">8</button><button class="num-btn" data-num="9">9</button>
-            <button id="limparSenha" style="background:#c0392b; margin:0;">C</button>
-            <button class="num-btn" data-num="0">0</button>
-            <button id="cancelarSenha" style="background:#7f8c8d; margin:0;">✕</button>
+            <button class="num-btn" onclick="addDigit('1')">1</button>
+            <button class="num-btn" onclick="addDigit('2')">2</button>
+            <button class="num-btn" onclick="addDigit('3')">3</button>
+            <button class="num-btn" onclick="addDigit('4')">4</button>
+            <button class="num-btn" onclick="addDigit('5')">5</button>
+            <button class="num-btn" onclick="addDigit('6')">6</button>
+            <button class="num-btn" onclick="addDigit('7')">7</button>
+            <button class="num-btn" onclick="addDigit('8')">8</button>
+            <button class="num-btn" onclick="addDigit('9')">9</button>
+            <button class="num-btn" style="background:#c0392b" onclick="clearDigit()">C</button>
+            <button class="num-btn" onclick="addDigit('0')">0</button>
+            <button class="num-btn" style="background:#7f8c8d" onclick="closeSenha()">✕</button>
         </div>
     </div>
 </div>
 
-<div id="modalPagamentoAdm" class="modal-overlay" style="z-index: 3000;">
-    <div class="modal" style="max-width:320px;">
-        <h3>💰 Definir Valor</h3>
-        <p id="nomeParticipantePagamento" style="color:#ffd700"></p>
-        <input type="number" id="valorInputAdm" placeholder="R$ 0,00" style="font-size:1.2rem; margin:15px 0;">
-        <div style="display:flex; gap:10px;">
-            <button class="quick-val" data-val="0" style="background:#e74c3c; margin:0;">Zerar</button>
-            <button class="quick-val" data-val="100" style="background:#00b894; margin:0;">R$ 100</button>
-        </div>
-        <button id="salvarPagamento" style="background:#27ae60; margin-top:15px;">💾 Salvar</button>
-        <button id="fecharPagamentoAdm" style="background:#7f8c8d;">Cancelar</button>
+<div class="modal-overlay" id="modalPagamentoAdm">
+    <div class="modal" style="max-width:300px;">
+        <h3 style="margin:0; color:#c0392b;">Definir Valor</h3>
+        <p id="nomePgto" style="text-align:center; font-weight:bold; color:#333;"></p>
+        <input type="number" id="valorInput" placeholder="0,00" style="font-size:1.5rem; border:2px solid #ddd;">
+        <button id="salvarPgto" style="background:#27ae60; width:100%; margin-top:10px;">Salvar</button>
+        <button onclick="document.getElementById('modalPagamentoAdm').style.display='none'" style="background:#7f8c8d; width:100%; margin-top:5px;">Cancelar</button>
     </div>
 </div>
 
-<div id="modalConfirmacao" class="modal-overlay" style="z-index: 4000;">
+<div class="modal-overlay" id="modalRegras">
     <div class="modal">
-        <div style="font-size: 3rem; margin-bottom: 10px;">🎉</div>
-        <h3>Cadastro Sucesso!</h3>
-        <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:10px; text-align:left; margin:10px 0;">
-            <div><strong>Nome:</strong> <span id="confirmNome"></span></div>
-            <div><strong>WhatsApp:</strong> <span id="confirmTelefone"></span></div>
+        <h3 style="margin-top:0; color:#c0392b;">Regras do Bolão</h3>
+        <div style="text-align:left; line-height:1.6; color:#333;">
+            <p>✅ <strong>Valor:</strong> R$ 100,00 (Cota Única)</p>
+            <p>📅 <strong>Prazo:</strong> Até 10 de Dezembro</p>
+            <p>⚠️ <strong>Regra:</strong> Não pagou até a data, perde a vaga.</p>
+            <p>🟠 <strong>Status:</strong> Pagamento parcial fica "Laranja".</p>
         </div>
-        <div style="background:rgba(255,255,255,0.1); padding:15px; border-radius:10px; margin:10px 0; font-size:0.9rem;">
-            <div><strong>PIX:</strong> <span id="confirmPix"></span></div>
-            <div><strong>Valor:</strong> R$ <span id="confirmValor"></span></div>
-        </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <button id="btnWhatsAppPagamento" style="background:#25d366; margin:0;">WhatsApp</button>
-            <button id="btnCopiarPix" style="background:#3498db; margin:0;">Copiar PIX</button>
-        </div>
-        <button id="fecharConfirmacao" style="background:#34495e; margin-top:10px;">Fechar</button>
+        <button onclick="document.getElementById('modalRegras').style.display='none'" style="background:#c0392b; width:100%; margin-top:15px;">Fechar</button>
     </div>
 </div>
 
-<div id="modalRegras" class="modal-overlay">
+<div class="modal-overlay" id="modalConfirmacao">
     <div class="modal">
-        <h3>ℹ️ Regras</h3>
-        <div style="text-align:left; font-size:0.9rem; line-height:1.5;">
-            <p>1. Cota Única: R$ 100,00</p>
-            <p>2. Pagamento até 10/12</p>
-            <p>3. Não pagou = Excluído</p>
-            <p>4. Pagamento parcial fica "Laranja"</p>
+        <div style="font-size:3rem;">🎉</div>
+        <h3 style="margin:0; color:#00b894;">Cadastro Realizado!</h3>
+        <div style="background:#f1f2f6; padding:15px; border-radius:10px; text-align:left; margin-bottom:10px; color:#333;">
+            <div><strong>Nome:</strong> <span id="confNome"></span></div>
+            <div><strong>PIX:</strong> <span id="confPix"></span></div>
         </div>
-        <button id="fecharRegras" style="background:#c0392b;">Fechar</button>
+        <button id="btnZapConf" style="background:#25d366; width:100%;">Enviar Comprovante</button>
+        <button onclick="document.getElementById('modalConfirmacao').style.display='none'" style="background:#7f8c8d; width:100%; margin-top:10px;">Fechar</button>
     </div>
 </div>
 
@@ -441,18 +336,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getDatabase, ref, push, get, update, remove } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-// === CONFIG ===
 const CONFIG = {
-  LIMITE: 60,
-  VALOR: 100.00,
-  PREMIO: 1200000.00,
-  PRAZO: "10 de Dezembro",
-  TITULO: "BOLÃO DOS COLABORADORES CAMINO",
-  PIX: "(99) 9 9102-6112",
-  PIX_KEY: "00020126330014br.gov.bcb.pix0111057968793755204000053039865406100.005802BR5922Vagner Sousa Lauriuche6009Sao Paulo62290525REC690A942DB7E1336267138563049C6B",
-  SENHA: '6261',
-  TG_TOKEN: "8307035824:AAFsKe4l1WgbZI1uez-n06Vt-TYiuhZLMt8",
-  TG_CHAT: "861365063"
+  LIMITE: 60, VALOR: 100, PREMIO: 1200000,
+  PIX: "(99) 9 9102-6112", SENHA: '6261',
+  TG_TOKEN: "8307035824:AAFsKe4l1WgbZI1uez-n06Vt-TYiuhZLMt8", TG_CHAT: "861365063"
 };
 
 const app = initializeApp({
@@ -470,240 +357,175 @@ const dbRef = ref(db, "participantes");
 
 let participantes = [];
 let selecionados = [];
-let senhaDigitada = '';
 let acaoAdmin = null;
 
-// === HELPERS ===
-const fmtMoney = v => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-const fmtNum = n => n.toString().padStart(2, '0');
-const msg = (txt, tipo='success') => {
-    const m = document.getElementById('mensagem');
-    m.textContent = txt; m.className = `message ${tipo}`;
-    setTimeout(() => { m.textContent=''; m.className='message'; }, 3000);
+// Funções Globais para HTML acessar
+window.addDigit = (d) => {
+    const el = document.getElementById('senhaDisplay');
+    if(el.innerText.length < 4) el.innerText += d;
+    if(el.innerText.length === 4) setTimeout(checkPass, 200);
+};
+window.clearDigit = () => document.getElementById('senhaDisplay').innerText = '';
+window.closeSenha = () => {
+    document.getElementById('modalSenha').style.display = 'none';
+    document.getElementById('senhaDisplay').innerText = '';
+};
+window.askPass = (act) => {
+    if(!selecionados.length && act !== 'telegram') return alert("Selecione alguém!");
+    acaoAdmin = act;
+    document.getElementById('modalSenha').style.display = 'flex';
 };
 
-// === LOGIC ===
+function checkPass() {
+    const pass = document.getElementById('senhaDisplay').innerText;
+    if(pass === CONFIG.SENHA) {
+        window.closeSenha();
+        doAction();
+    } else {
+        alert("Senha incorreta");
+        window.clearDigit();
+    }
+}
+
+async function doAction() {
+    if(acaoAdmin === 'pagamento') {
+        const p = selecionados[0];
+        document.getElementById('nomePgto').innerText = p.nome;
+        document.getElementById('valorInput').value = p.valorPago || 0;
+        document.getElementById('modalPagamentoAdm').style.display = 'flex';
+    } else if(acaoAdmin === 'excluir') {
+        if(confirm("Excluir selecionados?")) {
+            const updates = {};
+            selecionados.forEach(p => updates[`participantes/${p.key}`] = null);
+            await update(ref(db), updates);
+            selecionados = []; updateData(); renderList();
+        }
+    } else if(acaoAdmin === 'telegram') {
+        // Enviar Telegram
+        const txt = participantes.sort((a,b)=>a.numero-b.numero)
+            .map(p => `${p.numero}. ${p.valorPago >= 100 ? '✅' : '❌'} ${p.nome}`).join('\n');
+        fetch(`https://api.telegram.org/bot${CONFIG.TG_TOKEN}/sendMessage`, {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({chat_id:CONFIG.TG_CHAT, text: `Lista:\n${txt}`})
+        });
+        alert("Enviado!");
+    }
+}
+
+// Update
 async function updateData() {
     const snap = await get(dbRef);
     participantes = snap.exists() ? Object.entries(snap.val()).map(([k,v]) => ({...v, key:k})) : [];
-    
     const total = participantes.length;
-    const arrecadado = participantes.reduce((acc, p) => acc + (p.valorPago || 0), 0);
+    const money = participantes.reduce((a,b) => a + (b.valorPago||0), 0);
     const pct = (total / CONFIG.LIMITE) * 100;
 
     // Home
     document.getElementById('progressFill').style.width = `${pct}%`;
-    document.getElementById('progressText').textContent = `${total}/${CONFIG.LIMITE} participantes`;
-    document.getElementById('progressSubtext').textContent = `Arrecadado: ${fmtMoney(arrecadado)}`;
+    document.getElementById('progressText').innerText = `${total}/${CONFIG.LIMITE} participantes`;
+    document.getElementById('progressSubtext').innerText = `Arrecadado: R$ ${money.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
     
-    // Modal Lista
-    const elListFill = document.getElementById('progressFillLista');
-    if(elListFill) {
-        elListFill.style.width = `${pct}%`;
-        const pagosFull = participantes.filter(p => (p.valorPago||0) >= CONFIG.VALOR).length;
-        document.getElementById('progressTextLista').textContent = `${total} Total • ${pagosFull} Pagos (100%)`;
+    // Lista
+    const listFill = document.getElementById('progressFillLista');
+    if(listFill) {
+        listFill.style.width = `${pct}%`;
+        const pagos = participantes.filter(p => (p.valorPago||0) >= CONFIG.VALOR).length;
+        document.getElementById('progressTextLista').innerText = `${total} Total • ${pagos} Pagos`;
     }
 }
 
-// === LISTA ===
-function getStatus(v) {
-    v = parseFloat(v||0);
-    if(v >= CONFIG.VALOR) return {t:"PAGO", c:"pago", i:"✅"};
-    if(v > 0) return {t:`PARCIAL`, c:"parcial", i:"⚠️"};
-    return {t:"PENDENTE", c:"nao-pago", i:"❌"};
-}
-
-function renderList(filterFn = null) {
-    const div = document.getElementById("lista");
-    div.innerHTML = "";
-    const data = filterFn ? participantes.filter(filterFn) : participantes;
+// Render Lista
+function renderList(fn = null) {
+    const div = document.getElementById('lista');
+    div.innerHTML = '';
+    const data = fn ? participantes.filter(fn) : participantes;
     
-    if(!data.length) return div.innerHTML = "<div style='text-align:center; padding:10px; color:#aaa'>Vazio</div>";
-
     data.sort((a,b) => a.numero - b.numero).forEach(p => {
-        const st = getStatus(p.valorPago);
-        const sel = selecionados.some(s => s.key === p.key);
+        const v = p.valorPago || 0;
+        let badge = v >= CONFIG.VALOR ? '<span style="color:#00b894; font-weight:bold;">PAGO</span>' : '<span style="color:#e74c3c; font-weight:bold;">PEND</span>';
+        if(v > 0 && v < CONFIG.VALOR) badge = '<span style="color:#f39c12; font-weight:bold;">PARCIAL</span>';
         
-        const el = document.createElement("div");
-        el.className = "participante";
-        if(sel) el.style.background = "rgba(255,215,0,0.2)";
+        const isSel = selecionados.some(s => s.key === p.key);
         
-        const valTxt = st.c === 'parcial' ? `<span style="font-size:0.7rem; color:#f39c12">(${fmtMoney(p.valorPago)})</span>` : '';
-
-        // NOME COMPLETO AQUI
+        const el = document.createElement('div');
+        el.className = 'participante-item';
+        if(isSel) el.style.border = "2px solid #f1c40f";
+        
         el.innerHTML = `
-            <div style="display:flex; align-items:center; width:100%; gap:10px;">
-                <input type="checkbox" ${sel?'checked':''} style="width:18px; height:18px; margin:0; flex-shrink:0;">
-                <div style="flex:1; text-align:left; word-break: break-word;">
-                    <span style="font-weight:bold">${fmtNum(p.numero)}. ${p.nome}</span>
-                </div>
-                <div style="flex-shrink:0; display:flex; align-items:center; gap:5px;">
-                    ${valTxt}
-                    <span class="status ${st.c}">${st.i}</span>
-                </div>
+            <div style="flex:1;">
+                <strong>${p.numero}. ${p.nome}</strong>
+                ${v > 0 && v < CONFIG.VALOR ? `<div style="font-size:0.8rem; color:#666">Pago: R$ ${v}</div>` : ''}
             </div>
+            <div>${badge}</div>
         `;
-        
-        el.onclick = (e) => {
-            if(e.target.type !== 'checkbox') {
-                const chk = el.querySelector('input');
-                chk.checked = !chk.checked;
-            }
-            toggleSel(p);
+        el.onclick = () => {
+            const idx = selecionados.findIndex(s => s.key === p.key);
+            if(idx >= 0) selecionados.splice(idx, 1);
+            else selecionados.push(p);
+            renderList(fn);
         };
         div.appendChild(el);
     });
 }
 
-function toggleSel(p) {
-    const idx = selecionados.findIndex(s => s.key === p.key);
-    if(idx >= 0) selecionados.splice(idx, 1);
-    else selecionados.push(p);
-    renderList(getCurrentFilter()); 
-}
-
-let currentFilter = 'todos';
-function getCurrentFilter() {
-    if(currentFilter === 'pagos') return p => (p.valorPago||0) >= CONFIG.VALOR;
-    if(currentFilter === 'pendentes') return p => (p.valorPago||0) < CONFIG.VALOR;
-    return null;
-}
-
-// === ACTIONS ===
+// Events
 document.getElementById('cadastrar').onclick = async () => {
     const n = document.getElementById('nome').value.trim().toUpperCase();
     const t = document.getElementById('telefone').value.trim();
-    if(!n || !t || n.split(' ').length < 2) return msg("Nome completo e Zap!", "error");
+    if(!n || !t) return alert("Preencha tudo!");
     
-    const snap = await get(dbRef);
-    const all = snap.exists() ? Object.values(snap.val()) : [];
-    if(all.length >= CONFIG.LIMITE) return msg("Lotou!", "error");
-    if(all.some(p => p.nome === n)) return msg("Já existe!", "error");
+    // Check Full
+    if(participantes.length >= CONFIG.LIMITE) return alert("Lotado!");
     
-    const novo = { numero: all.length+1, nome: n, telefone: t, valorPago: 0 };
-    await push(dbRef, novo);
+    await push(dbRef, {
+        numero: participantes.length + 1,
+        nome: n, telefone: t, valorPago: 0
+    });
     
     document.getElementById('nome').value = '';
     document.getElementById('telefone').value = '';
     
     // Confirmação
-    document.getElementById('confirmNome').innerText = n;
-    document.getElementById('confirmTelefone').innerText = t;
-    document.getElementById('confirmPix').innerText = CONFIG.PIX;
-    document.getElementById('confirmValor').innerText = CONFIG.VALOR.toFixed(2);
+    document.getElementById('confNome').innerText = n;
+    document.getElementById('confPix').innerText = CONFIG.PIX;
     document.getElementById('modalConfirmacao').style.display = 'flex';
-    
-    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    confetti();
     updateData();
-    sendTG(`➕ *Novo:* ${n}`);
 };
 
-// Admin Flow
-function askPass(action) {
-    if(!selecionados.length && action !== 'telegram') return msg("Selecione alguém!", "error");
-    acaoAdmin = action;
-    senhaDigitada = '';
-    document.getElementById('senhaDisplay').innerText = '';
-    document.getElementById('modalSenha').style.display = 'flex';
-}
-
-async function doAction() {
-    if(acaoAdmin === 'pagamento') {
-        if(selecionados.length !== 1) return alert("Selecione 1 pessoa.");
-        const p = selecionados[0];
-        document.getElementById('nomeParticipantePagamento').innerText = p.nome;
-        document.getElementById('valorInputAdm').value = p.valorPago || 0;
-        document.getElementById('modalPagamentoAdm').style.display = 'flex';
-    }
-    else if(acaoAdmin === 'excluir') {
-        if(confirm(`Apagar ${selecionados.length}?`)) {
-            const u = {}; selecionados.forEach(p => u[`participantes/${p.key}`] = null);
-            await update(ref(db), u);
-            selecionados = []; updateData(); renderList(); msg("Excluído!");
-        }
-    }
-    else if(acaoAdmin === 'telegram') {
-        const txt = participantes.sort((a,b)=>a.numero-b.numero)
-            .map(p => `${fmtNum(p.numero)} ${getStatus(p.valorPago).i} ${p.nome}`).join('\n');
-        await sendTG(`📊 *Lista*\n${txt}`);
-        msg("Enviado!");
-    }
-}
-
-// Numpad
-document.querySelectorAll('.num-btn').forEach(b => {
-    b.onclick = () => {
-        senhaDigitada += b.dataset.num;
-        document.getElementById('senhaDisplay').innerText = '*'.repeat(senhaDigitada.length);
-        if(senhaDigitada.length === 4) {
-            setTimeout(() => {
-                if(senhaDigitada === CONFIG.SENHA) {
-                    document.getElementById('modalSenha').style.display = 'none';
-                    doAction();
-                } else {
-                    msg("Senha errada", "error");
-                    senhaDigitada = ''; document.getElementById('senhaDisplay').innerText='';
-                }
-            }, 100);
-        }
-    }
-});
-document.getElementById('limparSenha').onclick = () => { senhaDigitada=''; document.getElementById('senhaDisplay').innerText=''; };
-document.getElementById('cancelarSenha').onclick = () => document.getElementById('modalSenha').style.display = 'none';
-
-// Save Payment
-document.getElementById('salvarPagamento').onclick = async () => {
-    const v = parseFloat(document.getElementById('valorInputAdm').value);
-    if(isNaN(v) || v < 0) return alert("Valor inválido");
-    await update(ref(db, `participantes/${selecionados[0].key}`), { valorPago: v });
-    document.getElementById('modalPagamentoAdm').style.display = 'none';
-    selecionados = []; updateData(); renderList(); msg("Atualizado!");
+document.getElementById('verLista').onclick = () => {
+    updateData(); renderList();
+    document.getElementById('overlay').style.display = 'flex';
 };
-document.querySelectorAll('.quick-val').forEach(b => b.onclick = () => document.getElementById('valorInputAdm').value = b.dataset.val);
-document.getElementById('fecharPagamentoAdm').onclick = () => document.getElementById('modalPagamentoAdm').style.display = 'none';
+document.getElementById('verRegras').onclick = () => document.getElementById('modalRegras').style.display = 'flex';
+document.getElementById('entrarGrupo').onclick = () => window.open("https://chat.whatsapp.com/Fdl9PzkiEBq9TnJHtlu2Rm");
+document.getElementById('btnZapConf').onclick = () => {
+    const n = document.getElementById('confNome').innerText;
+    window.open(`https://wa.me/55${CONFIG.PIX.replace(/\D/g,'')}?text=Cadastro novo: ${n}`);
+};
+document.getElementById('salvarPgto').onclick = async () => {
+    const v = parseFloat(document.getElementById('valorInput').value);
+    await update(ref(db, `participantes/${selecionados[0].key}`), {valorPago: v});
+    document.getElementById('modalPagamentoAdm').style.display='none';
+    selecionados = []; updateData(); renderList();
+};
 
-// Filter Buttons
-document.getElementById('filtroTodos').onclick = () => { currentFilter='todos'; renderList(); };
-document.getElementById('filtroPagos').onclick = () => { currentFilter='pagos'; renderList(p => (p.valorPago||0)>=CONFIG.VALOR); };
-document.getElementById('filtroPendentes').onclick = () => { currentFilter='pendentes'; renderList(p => (p.valorPago||0)<CONFIG.VALOR); };
+// Filters
+document.getElementById('filtroTodos').onclick = () => renderList();
+document.getElementById('filtroPagos').onclick = () => renderList(p => (p.valorPago||0) >= CONFIG.VALOR);
+document.getElementById('filtroPendentes').onclick = () => renderList(p => (p.valorPago||0) < CONFIG.VALOR);
 document.getElementById('buscar').oninput = (e) => renderList(p => p.nome.includes(e.target.value.toUpperCase()));
 
-// UI Bindings
-document.getElementById('verLista').onclick = () => { updateData(); renderList(); document.getElementById('overlay').style.display='flex'; };
-document.getElementById('fecharListaX').onclick = () => { document.getElementById('overlay').style.display='none'; selecionados=[]; };
-document.getElementById('btnAdminPagamento').onclick = () => askPass('pagamento');
-document.getElementById('btnAdminExcluir').onclick = () => askPass('excluir');
-document.getElementById('btnAdminTelegram').onclick = () => askPass('telegram');
-document.getElementById('btnCopiarPix').onclick = () => { navigator.clipboard.writeText(CONFIG.PIX_KEY); alert("PIX Copiado!"); };
-document.getElementById('btnWhatsAppPagamento').onclick = () => {
-    const n = document.getElementById('confirmNome').innerText;
-    window.open(`https://wa.me/55${CONFIG.PIX.replace(/\D/g,'')}?text=Ola, cadastro feito: ${n}`);
-};
-document.getElementById('fecharConfirmacao').onclick = () => document.getElementById('modalConfirmacao').style.display='none';
-document.getElementById('verRegras').onclick = () => document.getElementById('modalRegras').style.display='flex';
-document.getElementById('fecharRegras').onclick = () => document.getElementById('modalRegras').style.display='none';
-document.getElementById('entrarGrupo').onclick = () => window.open("https://chat.whatsapp.com/Fdl9PzkiEBq9TnJHtlu2Rm", "_blank");
-
-async function sendTG(t) {
-    try { await fetch(`https://api.telegram.org/bot${CONFIG.TG_TOKEN}/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({chat_id:CONFIG.TG_CHAT, text:t, parse_mode:'Markdown'}) }); } catch(e){}
-}
-
-// Init
-document.getElementById('tituloBolao').innerHTML = `<strong>${CONFIG.TITULO}</strong>`;
-document.getElementById('infoGeral').innerHTML = `
-    🎰 <strong>${CONFIG.LIMITE} pessoas</strong> • 💰 <strong>${fmtMoney(CONFIG.VALOR)} por pessoa</strong>
-    <div style="margin-top:5px;">
-        <span class="prize-button">🏆 R$ 850 Milhões</span>
-    </div>`;
-
+// Timer
 setInterval(() => {
-    const d = new Date(`Dec 10, 2025 23:59:59`).getTime() - Date.now();
-    if(d<0) return;
-    document.getElementById('dias').innerText = fmtNum(Math.floor(d/(864e5)));
-    document.getElementById('horas').innerText = fmtNum(Math.floor((d%864e5)/36e5));
-    document.getElementById('minutos').innerText = fmtNum(Math.floor((d%36e5)/6e4));
-    document.getElementById('segundos').innerText = fmtNum(Math.floor((d%6e4)/1e3));
+    const diff = new Date("Dec 10, 2025 23:59:59") - new Date();
+    if(diff < 0) return;
+    document.getElementById('dias').innerText = Math.floor(diff/86400000).toString().padStart(2,'0');
+    document.getElementById('horas').innerText = Math.floor((diff%86400000)/3600000).toString().padStart(2,'0');
+    document.getElementById('minutos').innerText = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
+    document.getElementById('segundos').innerText = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
 }, 1000);
+
 updateData();
 </script>
 </body>
