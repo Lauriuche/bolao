@@ -69,7 +69,6 @@
         border: 2px solid #ecf0f1; border-bottom: 4px solid #badc58;
         border-radius: 12px; font-size: 1rem; text-align: center; outline: none;
         background: #fff; color: #333; font-weight: 600;
-        /* Garante visualmente maiusculo enquanto digita */
         text-transform: uppercase; 
     }
     input:focus { border-color: #6ab04c; }
@@ -100,7 +99,7 @@
     /* Lado Esquerdo (Seleção) */
     .p-left {
         flex: 1; padding: 12px; cursor: pointer; display: flex; align-items: center;
-        text-transform: uppercase; /* Garante lista em caixa alta */
+        text-transform: uppercase; /* Garante visual lista em caixa alta */
     }
     
     /* Lado Direito (Icone Transparente) */
@@ -320,7 +319,6 @@ import { getDatabase, ref, push, get, update, remove } from "https://www.gstatic
 // --- CONFIGURAÇÃO ---
 const CONFIG = {
   LIMITE: 60, VALOR: 100, PREMIO: 1200000,
-  // CÓDIGO PIX ATUALIZADO
   PIX: "00020126330014br.gov.bcb.pix0111057968793755204000053039865406100.005802BR5922Vagner Sousa Lauriuche6009Sao Paulo62290525REC69261115DB9720696281626304D5EA", 
   SENHA: '6261',
   TG_TOKEN: "8307035824:AAFsKe4l1WgbZI1uez-n06Vt-TYiuhZLMt8", TG_CHAT: "861365063"
@@ -364,6 +362,28 @@ function formatarNomeInteligente(nomeCompleto) {
     return primeiroNome;
 }
 
+// --- FUNÇÃO DE ENVIO AUTOMÁTICO TELEGRAM (EM CAIXA ALTA) ---
+async function enviarListaTelegram() {
+    const snap = await get(dbRef);
+    const parts = snap.exists() ? Object.entries(snap.val()).map(([k,v]) => ({...v, key:k})) : [];
+    
+    // GERA A LISTA EM TEXTO (CAIXA ALTA)
+    const txt = parts.sort((a,b)=>a.numero-b.numero)
+        .map(p => `${p.numero}. ${p.valorPago >= CONFIG.VALOR ? '✅' : '❌'} ${p.nome.toUpperCase()}`)
+        .join('\n');
+    
+    try {
+        await fetch(`https://api.telegram.org/bot${CONFIG.TG_TOKEN}/sendMessage`, {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({chat_id:CONFIG.TG_CHAT, text: `🔄 NOVA ATUALIZAÇÃO DA LISTA:\n\n${txt}`})
+        });
+        console.log("Lista enviada ao Telegram.");
+    } catch (e) {
+        console.error("Erro Telegram:", e);
+    }
+}
+
 // LOGICA DE SENHA ADMIN
 window.addDigit = (d) => {
     const el = document.getElementById('senhaDisplay');
@@ -397,7 +417,11 @@ async function doAction() {
             const updates = {};
             selecionados.forEach(p => updates[`participantes/${p.key}`] = null);
             await update(ref(db), updates);
-            selecionados = []; updateData(); renderList(getCurrentFilterFn());
+            selecionados = []; 
+            updateData(); 
+            renderList(getCurrentFilterFn());
+            // AUTO TELEGRAM - Exclusão
+            setTimeout(enviarListaTelegram, 1500);
         }
     } 
     else if(acaoAdmin === 'notificar') {
@@ -408,17 +432,15 @@ async function doAction() {
                 if(!tel.startsWith('55')) tel = '55'+tel;
                 const nomeTratado = formatarNomeInteligente(p.nome);
                 const msg = `Olá ${nomeTratado}! Lembrete Bolão Camino.\nFalta: R$ ${saldo.toFixed(2).replace('.',',')}\nChave PIX (Copia e Cola): abaixo`;
-                // Envia o texto e em seguida o pix seria manual, mas aqui mandamos o link com texto
-                // Para mandar o PIXzao no corpo do zap, pode ficar grande, mas aqui vai o texto:
                 const fullMsg = `${msg}\n\n${CONFIG.PIX}`;
                 window.open(`https://wa.me/${tel}?text=${encodeURIComponent(fullMsg)}`, '_blank');
             }, i * 1500);
         });
     }
     else if(acaoAdmin === 'telegram') {
-        const txt = participantes.sort((a,b)=>a.numero-b.numero).map(p => `${p.numero}. ${p.valorPago >= 100 ? '✅' : '❌'} ${p.nome}`).join('\n');
-        fetch(`https://api.telegram.org/bot${CONFIG.TG_TOKEN}/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({chat_id:CONFIG.TG_CHAT, text: `Lista:\n${txt}`}) });
-        alert("Enviado!");
+        // Envio manual forçado
+        enviarListaTelegram();
+        alert("Enviando...");
     }
 }
 
@@ -468,7 +490,7 @@ function renderList(fn = null) {
         
         el.innerHTML = `
             <div class="p-left" onclick="toggleSelect('${p.key}')">
-                <strong>${p.numero}. ${p.nome}</strong>
+                <strong>${p.numero}. ${p.nome.toUpperCase()}</strong>
             </div>
             <div class="p-right" onclick="abrirDetalhes('${p.key}')">
                 <span style="font-size:1.4rem;">${icon}</span>
@@ -484,7 +506,7 @@ window.abrirDetalhes = (key) => {
     const p = participantes.find(x => x.key === key);
     if(!p) return;
 
-    document.getElementById('detNome').innerText = p.nome;
+    document.getElementById('detNome').innerText = p.nome.toUpperCase();
     
     const v = p.valorPago || 0;
     const detStatus = document.getElementById('detStatusBadge');
@@ -566,9 +588,11 @@ document.getElementById('cadastrar').addEventListener('click', async () => {
     
     confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     updateData();
+    // AUTO TELEGRAM - Cadastro
+    setTimeout(enviarListaTelegram, 1500);
 });
 
-// AQUI ESTÁ A LÓGICA DO BOTÃO DE ENVIAR COMPROVANTE ATUALIZADA
+// LÓGICA DO BOTÃO DE ENVIAR COMPROVANTE (MENSAGEM PERSONALIZADA)
 document.getElementById('btnZapConf').onclick = () => {
     const nomeConfirmado = document.getElementById('confNome').innerText;
     const texto = `Olá, sou ${nomeConfirmado}, Me cadastrei no Bolão!`;
@@ -592,7 +616,11 @@ document.getElementById('salvarPgto').onclick = async () => {
     await update(ref(db), updates);
     alert("Salvo!");
     document.getElementById('modalPagamentoAdm').style.display = 'none';
-    selecionados = []; updateData(); renderList(getCurrentFilterFn());
+    selecionados = []; 
+    updateData(); 
+    renderList(getCurrentFilterFn());
+    // AUTO TELEGRAM - Alteração de Pagamento
+    setTimeout(enviarListaTelegram, 1500);
 };
 
 // TIMER
