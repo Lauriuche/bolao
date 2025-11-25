@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site em Manutenção</title>
+    <style>
+        /* --- CONFIGURAÇÕES GERAIS --- */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* --- CONTAINER PRINCIPAL --- */
+        .container {
+            max-width: 600px;
+            padding: 40px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            margin: 20px;
+        }
+
+        /* --- ÍCONE ANIMADO --- */
+        .icon-gear {
+            font-size: 80px;
+            color: #e67e22; /* Cor laranja de atenção/construção */
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: spin 4s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        /* --- TEXTOS --- */
+        h1 {
+            font-size: 2.5rem;
+            margin: 0 0 15px 0;
+            color: #2c3e50;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+
+        /* --- RODAPÉ / CONTATO --- */
+        .footer {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #bdc3c7;
+            border-top: 1px solid #ecf0f1;
+            padding-top: 20px;
+        }
+
+        /* --- BOTÃO DE RECARREGAR (OPCIONAL) --- */
+        .btn-retry {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-retry:hover {
+            background-color: #2980b9;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Ícone de Engrenagem -->
+        <div class="icon-gear">⚙️</div>
+        
+        <h1>Em Manutenção</h1>
+        
+        <p>Estamos fazendo algumas melhorias no sistema para atendê-lo melhor.<br>
+        Por favor, volte em alguns instantes.</p>
+
+        <a href="index.html" class="btn-retry">Tentar Novamente</a>
+
+        <div class="footer">
+            &copy; 2025 Bolão Camino. Todos os direitos reservados.
+        </div>
+    </div>
+
+</body>
+</html>
+
+  
