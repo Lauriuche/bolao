@@ -7,9 +7,9 @@
 <style>
     /* --- VARIÁVEIS DE CORES --- */
     :root {
-        --red-camino: #c0392b;     /* Vermelho do Título */
-        --green-btn: #00b894;      /* Verde do Botão Participar */
-        --yellow-num: #f1c40f;     /* Amarelo dos números */
+        --red-camino: #c0392b;
+        --green-btn: #00b894;
+        --yellow-num: #f1c40f;
     }
 
     /* --- FUNDO DA PÁGINA --- */
@@ -17,7 +17,7 @@
         margin: 0;
         padding: 15px;
         font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        background: #f1f2f6; /* Fundo claro sólido igual da referência */
+        background: #f1f2f6;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -38,25 +38,16 @@
         flex-direction: column;
     }
 
-    /* --- LOGO (RESTAURADA) --- */
+    /* --- LOGO --- */
     .logo-img {
         display: block;
-        max-width: 80%;
+        max-width: 85%; /* Levemente maior para compensar a falta do título */
         height: auto;
-        margin: 0 auto 15px auto; /* Margem abaixo da logo */
-        max-height: 100px;
+        margin: 5px auto 20px auto; /* Mais espaço abaixo */
+        max-height: 120px;
     }
 
-    /* --- CABEÇALHO --- */
-    h1 {
-        font-size: 1.4rem;
-        color: var(--red-camino); /* Cor vermelha */
-        margin: 0 0 10px 0;
-        font-weight: 800;
-        text-transform: uppercase;
-        line-height: 1.2;
-    }
-
+    /* --- INFORMAÇÕES --- */
     .info-row {
         font-size: 0.95rem;
         color: #555;
@@ -69,7 +60,7 @@
         margin-bottom: 15px;
     }
 
-    /* --- ÁREA DE DESTAQUE (PRÊMIO E REGRAS) --- */
+    /* --- ÁREA DE DESTAQUE --- */
     .highlight-area {
         display: flex;
         justify-content: center;
@@ -102,7 +93,7 @@
 
     /* --- CONTADOR PRETO --- */
     .countdown-box {
-        background: #1e272e; /* Fundo preto */
+        background: #1e272e;
         border-radius: 15px;
         padding: 15px 10px;
         color: white;
@@ -118,22 +109,10 @@
         opacity: 0.9;
     }
 
-    .timer-flex {
-        display: flex; justify-content: center; align-items: center; gap: 5px;
-    }
-
-    .time-unit {
-        display: flex; flex-direction: column; align-items: center; width: 55px;
-    }
-
-    .time-num {
-        font-size: 1.6rem; font-weight: 700; color: var(--yellow-num); line-height: 1;
-    }
-
-    .time-label {
-        font-size: 0.65rem; text-transform: uppercase; margin-top: 5px; color: #ccc;
-    }
-
+    .timer-flex { display: flex; justify-content: center; align-items: center; gap: 5px; }
+    .time-unit { display: flex; flex-direction: column; align-items: center; width: 55px; }
+    .time-num { font-size: 1.6rem; font-weight: 700; color: var(--yellow-num); line-height: 1; }
+    .time-label { font-size: 0.65rem; text-transform: uppercase; margin-top: 5px; color: #ccc; }
     .time-sep { font-size: 1.2rem; color: #555; margin-bottom: 15px; }
 
     /* --- BARRA DE PROGRESSO --- */
@@ -141,12 +120,8 @@
         margin-bottom: 20px;
         background: #f1f2f6; padding: 12px; border-radius: 15px;
     }
-    .progress-track {
-        background: #dfe6e9; height: 14px; border-radius: 7px; overflow: hidden; margin-bottom: 8px;
-    }
-    .progress-fill {
-        height: 100%; width: 0%; background: linear-gradient(90deg, #f1c40f, #2ecc71); border-radius: 7px; transition: width 1s ease;
-    }
+    .progress-track { background: #dfe6e9; height: 14px; border-radius: 7px; overflow: hidden; margin-bottom: 8px; }
+    .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #f1c40f, #2ecc71); border-radius: 7px; transition: width 1s ease; }
     .progress-stats { font-size: 0.9rem; font-weight: 700; color: #2d3436; }
     .progress-money { font-size: 0.8rem; color: #636e72; }
 
@@ -155,10 +130,10 @@
         font-size: 0.95rem; color: #2d3436; font-weight: 600; margin-bottom: 15px; line-height: 1.4;
     }
 
-    /* --- INPUTS (ESTILO DA FOTO) --- */
+    /* --- INPUTS --- */
     input {
         width: 100%; box-sizing: border-box; padding: 16px; margin: 8px 0;
-        border: 2px solid #ecf0f1; border-bottom: 4px solid #badc58; /* Borda verde clara */
+        border: 2px solid #ecf0f1; border-bottom: 4px solid #badc58;
         border-radius: 12px; font-size: 1rem; text-align: center; outline: none;
         background: #fff; color: #333; font-weight: 600; transition: all 0.3s;
     }
@@ -176,7 +151,7 @@
     .btn-participar { background: #00b894; flex: 2; display: flex; align-items: center; justify-content: center; gap: 5px; }
     .btn-whatsapp-full { width: 100%; background: #25d366; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
-    /* --- MODAIS (Mantidos iguais) --- */
+    /* --- MODAIS --- */
     .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 10px; }
     .modal { background: #fff; color: #333; width: 100%; max-width: 400px; border-radius: 20px; padding: 20px; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
     .participante-item { padding: 10px; margin: 5px 0; background: #f1f2f6; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
@@ -188,8 +163,6 @@
 
 <div class="container">
     <img src="1001855377.png" alt="Logo Camino Supermercados" class="logo-img">
-    
-    <h1>BOLÃO DOS COLABORADORES CAMINO</h1>
     
     <div class="info-row">
         <span>🎰 60 pessoas</span> • <span>💰 R$ 100,00 por pessoa</span>
