@@ -5,65 +5,46 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Bolão Colaboradores Camino</title>
 <style>
-    /* --- VARIÁVEIS DE CORES --- */
+    /* --- CORES E VARIÁVEIS --- */
     :root {
         --red-camino: #c0392b;
         --green-btn: #00b894;
         --yellow-num: #f1c40f;
+        --dark-bg: #2d3436;
     }
 
-    /* --- FUNDO DA PÁGINA --- */
+    /* --- GERAL --- */
     body {
-        margin: 0;
-        padding: 15px;
+        margin: 0; padding: 15px;
         font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         background: #f1f2f6;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        display: flex; justify-content: center; align-items: center;
         min-height: 100vh;
     }
 
-    /* --- CONTAINER PRINCIPAL --- */
     .container {
-        background: #ffffff;
-        width: 100%;
-        max-width: 450px;
-        border-radius: 25px;
-        padding: 25px 20px;
+        background: #ffffff; width: 100%; max-width: 450px;
+        border-radius: 25px; padding: 25px 20px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
+        text-align: center; display: flex; flex-direction: column;
     }
 
-    /* --- LOGO --- */
-    .logo-img {
-        display: block;
-        max-width: 85%;
-        height: auto;
-        margin: 5px auto 20px auto;
-        max-height: 120px;
-    }
-
-    /* --- INFORMAÇÕES --- */
+    .logo-img { max-width: 85%; height: auto; margin: 5px auto 20px auto; max-height: 120px; }
     .info-row { font-size: 0.95rem; color: #555; margin-bottom: 5px; }
     .date-row { font-size: 0.9rem; color: #444; margin-bottom: 15px; }
 
-    /* --- ÁREA DE DESTAQUE --- */
+    /* --- DESTAQUE E TIMER --- */
     .highlight-area { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 20px; }
     .prize-badge {
         background: linear-gradient(135deg, #00b894, #00cec9);
-        color: white; padding: 10px 20px; border-radius: 25px; font-weight: 700; font-size: 1rem;
+        color: white; padding: 10px 20px; border-radius: 25px; font-weight: 700; 
         box-shadow: 0 4px 10px rgba(0, 184, 148, 0.3);
     }
     .btn-regras-small {
         background: #95a5a6; color: white; border: none; padding: 10px 15px; border-radius: 10px;
-        font-weight: 600; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 5px;
+        font-weight: 600; cursor: pointer;
     }
 
-    /* --- CONTADOR --- */
     .countdown-box {
         background: #1e272e; border-radius: 15px; padding: 15px 10px; color: white;
         margin-bottom: 20px; border-bottom: 3px solid #f1c40f;
@@ -75,55 +56,82 @@
     .time-label { font-size: 0.65rem; text-transform: uppercase; margin-top: 5px; color: #ccc; }
     .time-sep { font-size: 1.2rem; color: #555; margin-bottom: 15px; }
 
-    /* --- BARRA DE PROGRESSO --- */
+    /* --- PROGRESSO --- */
     .progress-wrapper { margin-bottom: 20px; background: #f1f2f6; padding: 12px; border-radius: 15px; }
     .progress-track { background: #dfe6e9; height: 14px; border-radius: 7px; overflow: hidden; margin-bottom: 8px; }
     .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #f1c40f, #2ecc71); border-radius: 7px; transition: width 1s ease; }
     .progress-stats { font-size: 0.9rem; font-weight: 700; color: #2d3436; }
     .progress-money { font-size: 0.8rem; color: #636e72; }
 
-    /* --- INSTRUÇÃO --- */
-    .instruction { font-size: 0.95rem; color: #2d3436; font-weight: 600; margin-bottom: 15px; line-height: 1.4; }
-
-    /* --- INPUTS --- */
+    /* --- INPUTS E BOTOES --- */
     input {
-        width: 100%; box-sizing: border-box; padding: 16px; margin: 8px 0;
+        width: 100%; padding: 16px; margin: 8px 0; box-sizing: border-box;
         border: 2px solid #ecf0f1; border-bottom: 4px solid #badc58;
         border-radius: 12px; font-size: 1rem; text-align: center; outline: none;
-        background: #fff; color: #333; font-weight: 600; transition: all 0.3s;
+        background: #fff; color: #333; font-weight: 600;
     }
-    input::placeholder { color: #b2bec3; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 0.5px; }
-    input:focus { border-color: #6ab04c; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(106, 176, 76, 0.15); }
-
-    /* --- BOTÕES --- */
+    input:focus { border-color: #6ab04c; }
+    
     .btn-row { display: flex; gap: 10px; margin-top: 10px; }
     button {
         border: none; border-radius: 12px; padding: 15px; font-weight: 700; font-size: 1rem;
         cursor: pointer; text-transform: uppercase; color: white; transition: transform 0.1s;
     }
     button:active { transform: translateY(2px); }
-    .btn-lista { background: #7f8c8d; flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; }
-    .btn-participar { background: #00b894; flex: 2; display: flex; align-items: center; justify-content: center; gap: 5px; }
+    
+    .btn-lista { background: #7f8c8d; flex: 1; }
+    .btn-participar { background: #00b894; flex: 2; }
     .btn-whatsapp-full { width: 100%; background: #25d366; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
-    /* --- MODAIS --- */
+    /* --- MODAIS GERAIS --- */
     .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 10px; }
     .modal { background: #fff; color: #333; width: 100%; max-width: 400px; border-radius: 20px; padding: 20px; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
     
-    .participante-item { padding: 10px; margin: 5px 0; background: #f1f2f6; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border: 2px solid transparent; transition: 0.2s; }
+    /* --- ITEM DA LISTA (ATUALIZADO) --- */
+    .participante-item { 
+        margin: 5px 0; background: #f1f2f6; border-radius: 8px; 
+        display: flex; overflow: hidden; border: 2px solid transparent; 
+        transition: 0.2s; min-height: 50px;
+    }
     .participante-item.selected { border-color: #f1c40f; background: #fff9db; }
     
+    /* Lado Esquerdo (Seleção) */
+    .p-left {
+        flex: 1; padding: 12px; cursor: pointer; display: flex; align-items: center;
+    }
+    
+    /* Lado Direito (Icone Transparente) */
+    .p-right {
+        width: 60px; display: flex; flex-direction: column; 
+        justify-content: center; align-items: center;
+        background: transparent; /* TRANSPARENCIA AQUI */
+        cursor: pointer;
+        border-left: 1px solid rgba(0,0,0,0.05); /* Divisoria bem sutil */
+    }
+    
+    /* Texto do Status pequeno embaixo do ícone */
+    .status-text {
+        font-size: 0.65rem; font-weight: 700; margin-top: 2px; color: #555;
+    }
+
+    /* --- NUMPAD E OUTROS --- */
     .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 15px; }
     .num-btn { background: #2d3436; color: #fff; font-size: 1.2rem; padding: 15px; }
-    
-    /* Select All Button */
     .select-all-btn {
         background: none; border: none; color: #0984e3; 
-        font-weight: bold; font-size: 0.9rem; 
-        padding: 5px; margin-bottom: 5px; cursor: pointer;
+        font-weight: bold; font-size: 0.9rem; padding: 5px; 
         text-align: right; width: 100%; display: block;
     }
-    .select-all-btn:hover { text-decoration: underline; }
+
+    /* --- CAIXA PIX COPIA E COLA --- */
+    .pix-box {
+        background: #f1f2f6; padding: 10px; border-radius: 10px; margin-top: 15px; border: 1px dashed #ccc;
+    }
+    .pix-key {
+        word-break: break-all; font-family: monospace; color: #555; font-size: 0.8rem;
+        background: #fff; padding: 5px; margin: 5px 0; border-radius: 5px;
+    }
+    .btn-copy { background: #3498db; width: 100%; padding: 10px; font-size: 0.8rem; margin-top: 5px; }
 </style>
 </head>
 <body>
@@ -205,13 +213,39 @@
 
         <button id="btnSelectAll" class="select-all-btn">☑️ Selecionar Todos</button>
 
-        <div style="border-top:1px solid #ddd; padding-top:10px; display:flex; gap:5px;">
-            <button onclick="askPass('pagamento')" style="flex:1; background:#f39c12; padding:8px; font-size:0.75rem;">💰 Pgto</button>
-            <button onclick="askPass('excluir')" style="flex:1; background:#c0392b; padding:8px; font-size:0.75rem;">🗑️ Excluir</button>
-            <button onclick="askPass('telegram')" style="background:#2980b9; width:40px; padding:8px;">✈️</button>
+        <div style="border-top:1px solid #ddd; padding-top:10px; display:flex; gap:5px; flex-wrap: wrap;">
+            <button onclick="askPass('pagamento')" style="flex:1; background:#f39c12; padding:10px; font-size:0.75rem;">💰 Pgto</button>
+            <button onclick="askPass('notificar')" style="flex:1; background:#25d366; padding:10px; font-size:0.75rem;">📱 Cobrar</button>
+            <button onclick="askPass('excluir')" style="flex:1; background:#c0392b; padding:10px; font-size:0.75rem;">🗑️ Excluir</button>
+            <button onclick="askPass('telegram')" style="background:#2980b9; width:40px; padding:10px;">✈️</button>
         </div>
 
         <div id="lista" style="margin-top:15px; max-height:300px; overflow-y:auto;"></div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modalDetalhes">
+    <div class="modal">
+        <h3 id="detNome" style="margin:0 0 10px 0; color:#2d3436;">Nome do Participante</h3>
+        
+        <div style="background:#f9f9f9; padding:15px; border-radius:10px; border:1px solid #eee;">
+            <div style="font-size:0.9rem; color:#666;">Status do Pagamento</div>
+            <div id="detStatusBadge" style="font-size:1.2rem; font-weight:bold; margin:5px 0;">Pendente</div>
+            <div id="detValor" style="font-size:1rem; color:#333;">Pago: R$ 0,00</div>
+        </div>
+
+        <div id="areaPix" class="pix-box" style="display:none;">
+            <div style="font-weight:bold; color:#c0392b; margin-bottom:5px;">⚠️ Regularize seu pagamento</div>
+            <div style="font-size:0.8rem;">Copie a chave abaixo e pague no app do seu banco:</div>
+            <div id="chavePixTexto" class="pix-key"></div>
+            <button onclick="copiarPix()" class="btn-copy">📋 COPIAR CHAVE PIX</button>
+        </div>
+
+        <div id="areaParabens" style="display:none; margin-top:15px; color:#00b894; font-weight:bold;">
+            ✅ Tudo certo! Boa sorte! 🍀
+        </div>
+
+        <button onclick="document.getElementById('modalDetalhes').style.display='none'" style="background:#7f8c8d; width:100%; margin-top:15px;">Fechar</button>
     </div>
 </div>
 
@@ -240,15 +274,11 @@
     <div class="modal" style="max-width:300px;">
         <h3 style="margin:0; color:#c0392b;">Definir Valor</h3>
         <p id="nomePgto" style="text-align:center; font-weight:bold; color:#333; margin-bottom:5px;"></p>
-        <div style="font-size:0.8rem; text-align:center; color:#666; margin-bottom:15px;">Aplicar para todos selecionados</div>
-        
         <input type="number" id="valorInput" placeholder="R$ 0,00" style="font-size:1.5rem; border:2px solid #ddd; margin-bottom:10px;">
-        
         <div style="display:flex; gap:5px; margin-bottom:10px;">
             <button onclick="setValor(0)" style="flex:1; background:#e74c3c; padding:10px; font-size:0.8rem;">❌ Zerar</button>
             <button onclick="setValor(100)" style="flex:1; background:#00b894; padding:10px; font-size:0.8rem;">✅ Total</button>
         </div>
-
         <button id="salvarPgto" style="background:#27ae60; width:100%;">💾 Salvar</button>
         <button onclick="document.getElementById('modalPagamentoAdm').style.display='none'" style="background:#7f8c8d; width:100%; margin-top:5px;">Cancelar</button>
     </div>
@@ -261,7 +291,6 @@
             <p>✅ <strong>Valor:</strong> R$ 100,00 (Cota Única)</p>
             <p>📅 <strong>Prazo:</strong> Até 10 de Dezembro</p>
             <p>⚠️ <strong>Regra:</strong> Não pagou até a data, perde a vaga.</p>
-            <p>🟠 <strong>Status:</strong> Pagamento parcial fica "Laranja".</p>
         </div>
         <button onclick="document.getElementById('modalRegras').style.display='none'" style="background:#c0392b; width:100%; margin-top:15px;">Fechar</button>
     </div>
@@ -286,11 +315,16 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getDatabase, ref, push, get, update, remove } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
+// CONFIGURAÇÃO - COLOQUE A CHAVE PIX REAL AQUI NA VARIAVEL PIX
 const CONFIG = {
   LIMITE: 60, VALOR: 100, PREMIO: 1200000,
-  PIX: "(99) 9 9102-6112", SENHA: '6261',
+  PIX: "00020126360014BR.GOV.BCB.PIX0114+55999910261125204000053039865802BR5925Vagner Aparecido de Olive6009SAO PAULO62070503***63041D3D", 
+  SENHA: '6261',
   TG_TOKEN: "8307035824:AAFsKe4l1WgbZI1uez-n06Vt-TYiuhZLMt8", TG_CHAT: "861365063"
 };
+
+// Chave visual (curta) para confirmação
+const PIX_VISUAL = "(99) 9 9102-6112"; 
 
 const app = initializeApp({
   apiKey: "AIzaSyCvXGUdvZkqtSMMn8VmTOXLA9PXqR85gSk",
@@ -310,66 +344,78 @@ let selecionados = [];
 let acaoAdmin = null;
 let currentFilter = 'todos';
 
-// Funções Globais
+// FUNÇÃO AUXILIAR DE NOME
+function formatarNomeInteligente(nomeCompleto) {
+    if (!nomeCompleto) return "Participante";
+    const partes = nomeCompleto.trim().split(/\s+/);
+    if (partes.length === 0) return "Participante";
+    const primeiroNome = partes[0].charAt(0).toUpperCase() + partes[0].slice(1).toLowerCase();
+    const gatilhosCompostos = ["Ana", "Maria", "João", "José", "Luiz", "Luis", "Carlos", "Paulo", "Pedro", "Vitor", "Victor", "Julio", "Marco", "Antonio", "André", "Anna", "Mary"];
+    if (partes.length > 1 && gatilhosCompostos.includes(primeiroNome)) {
+        const seg = partes[1].toLowerCase();
+        if (!['da', 'de', 'do', 'dos', 'das', 'e'].includes(seg)) {
+            const segFmt = partes[1].charAt(0).toUpperCase() + partes[1].slice(1).toLowerCase();
+            return `${primeiroNome} ${segFmt}`;
+        }
+    }
+    return primeiroNome;
+}
+
+// LOGICA DE SENHA ADMIN
 window.addDigit = (d) => {
     const el = document.getElementById('senhaDisplay');
     if(el.innerText.length < 4) el.innerText += d;
     if(el.innerText.length === 4) setTimeout(checkPass, 200);
 };
 window.clearDigit = () => document.getElementById('senhaDisplay').innerText = '';
-window.closeSenha = () => {
-    document.getElementById('modalSenha').style.display = 'none';
-    document.getElementById('senhaDisplay').innerText = '';
-};
+window.closeSenha = () => { document.getElementById('modalSenha').style.display = 'none'; document.getElementById('senhaDisplay').innerText = ''; };
 window.askPass = (act) => {
-    if(!selecionados.length && act !== 'telegram') return alert("Selecione alguém!");
+    if(!selecionados.length && act !== 'telegram') return alert("Selecione alguém na lista (lado esquerdo)!");
     acaoAdmin = act;
     document.getElementById('modalSenha').style.display = 'flex';
 };
-window.setValor = (val) => {
-    document.getElementById('valorInput').value = val;
-};
+window.setValor = (val) => document.getElementById('valorInput').value = val;
 
 function checkPass() {
-    const pass = document.getElementById('senhaDisplay').innerText;
-    if(pass === CONFIG.SENHA) {
-        window.closeSenha();
-        doAction();
-    } else {
-        alert("Senha incorreta");
-        window.clearDigit();
-    }
+    if(document.getElementById('senhaDisplay').innerText === CONFIG.SENHA) {
+        window.closeSenha(); doAction();
+    } else { alert("Senha incorreta"); window.clearDigit(); }
 }
 
 async function doAction() {
     if(acaoAdmin === 'pagamento') {
-        // Ação em Massa ou Individual para Pagamento
         const label = selecionados.length === 1 ? selecionados[0].nome : `${selecionados.length} Selecionados`;
         document.getElementById('nomePgto').innerText = label;
-        
-        // Se for só um, preenche o valor atual, senão vazio
         document.getElementById('valorInput').value = selecionados.length === 1 ? (selecionados[0].valorPago || '') : '';
-        
         document.getElementById('modalPagamentoAdm').style.display = 'flex';
-    } else if(acaoAdmin === 'excluir') {
+    } 
+    else if(acaoAdmin === 'excluir') {
         if(confirm(`Excluir ${selecionados.length} selecionados?`)) {
             const updates = {};
             selecionados.forEach(p => updates[`participantes/${p.key}`] = null);
             await update(ref(db), updates);
             selecionados = []; updateData(); renderList(getCurrentFilterFn());
         }
-    } else if(acaoAdmin === 'telegram') {
-        const txt = participantes.sort((a,b)=>a.numero-b.numero)
-            .map(p => `${p.numero}. ${p.valorPago >= 100 ? '✅' : '❌'} ${p.nome}`).join('\n');
-        fetch(`https://api.telegram.org/bot${CONFIG.TG_TOKEN}/sendMessage`, {
-            method:'POST', headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({chat_id:CONFIG.TG_CHAT, text: `Lista:\n${txt}`})
+    } 
+    else if(acaoAdmin === 'notificar') {
+        selecionados.forEach((p, i) => {
+            setTimeout(() => {
+                const saldo = CONFIG.VALOR - (p.valorPago || 0);
+                let tel = p.telefone.replace(/\D/g, '');
+                if(!tel.startsWith('55')) tel = '55'+tel;
+                const nomeTratado = formatarNomeInteligente(p.nome);
+                const msg = `Olá ${nomeTratado}! Lembrete Bolão Camino.\nFalta: R$ ${saldo.toFixed(2).replace('.',',')}\nPIX: ${PIX_VISUAL}`;
+                window.open(`https://wa.me/${tel}?text=${encodeURIComponent(msg)}`, '_blank');
+            }, i * 1500);
         });
+    }
+    else if(acaoAdmin === 'telegram') {
+        const txt = participantes.sort((a,b)=>a.numero-b.numero).map(p => `${p.numero}. ${p.valorPago >= 100 ? '✅' : '❌'} ${p.nome}`).join('\n');
+        fetch(`https://api.telegram.org/bot${CONFIG.TG_TOKEN}/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({chat_id:CONFIG.TG_CHAT, text: `Lista:\n${txt}`}) });
         alert("Enviado!");
     }
 }
 
-// Update
 async function updateData() {
     const snap = await get(dbRef);
     participantes = snap.exists() ? Object.entries(snap.val()).map(([k,v]) => ({...v, key:k})) : [];
@@ -377,12 +423,10 @@ async function updateData() {
     const money = participantes.reduce((a,b) => a + (b.valorPago||0), 0);
     const pct = (total / CONFIG.LIMITE) * 100;
 
-    // Home
     document.getElementById('progressFill').style.width = `${pct}%`;
     document.getElementById('progressText').innerText = `${total}/${CONFIG.LIMITE} participantes`;
     document.getElementById('progressSubtext').innerText = `Arrecadado: R$ ${money.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
     
-    // Lista
     const listFill = document.getElementById('progressFillLista');
     if(listFill) {
         listFill.style.width = `${pct}%`;
@@ -391,7 +435,7 @@ async function updateData() {
     }
 }
 
-// Render Lista
+// RENDERIZACAO DA LISTA DIVIDIDA
 function renderList(fn = null) {
     const div = document.getElementById('lista');
     div.innerHTML = '';
@@ -399,117 +443,158 @@ function renderList(fn = null) {
     
     data.sort((a,b) => a.numero - b.numero).forEach(p => {
         const v = p.valorPago || 0;
-        let badge = v >= CONFIG.VALOR ? '<span style="color:#00b894; font-weight:bold;">PAGO</span>' : '<span style="color:#e74c3c; font-weight:bold;">PEND</span>';
-        if(v > 0 && v < CONFIG.VALOR) badge = '<span style="color:#f39c12; font-weight:bold;">PARCIAL</span>';
+        
+        // --- LOGICA DOS ÍCONES ---
+        let icon = '🔴';
+        let text = 'PEND';
+        
+        if(v >= CONFIG.VALOR) { 
+            icon = '🟢'; 
+            text = 'PAGO'; 
+        } else if(v > 0) { 
+            icon = '🟡'; 
+            text = 'PARC'; 
+        }
         
         const isSel = selecionados.some(s => s.key === p.key);
         
         const el = document.createElement('div');
         el.className = `participante-item ${isSel ? 'selected' : ''}`;
         
+        // ESTRUTURA: ESQUERDA (SELECT) | DIREITA (ICONE SEM FUNDO)
         el.innerHTML = `
-            <div style="flex:1;">
+            <div class="p-left" onclick="toggleSelect('${p.key}')">
                 <strong>${p.numero}. ${p.nome}</strong>
-                ${v > 0 && v < CONFIG.VALOR ? `<div style="font-size:0.8rem; color:#666">Pago: R$ ${v}</div>` : ''}
             </div>
-            <div>${badge}</div>
+            <div class="p-right" onclick="abrirDetalhes('${p.key}')">
+                <span style="font-size:1.4rem;">${icon}</span>
+                <span class="status-text">${text}</span>
+            </div>
         `;
-        el.onclick = () => {
-            const idx = selecionados.findIndex(s => s.key === p.key);
-            if(idx >= 0) selecionados.splice(idx, 1);
-            else selecionados.push(p);
-            renderList(fn);
-        };
         div.appendChild(el);
     });
 }
 
-// Select All Logic
-document.getElementById('btnSelectAll').onclick = () => {
-    const currentFn = getCurrentFilterFn();
-    const visible = currentFn ? participantes.filter(currentFn) : participantes;
-    const allSelected = visible.every(p => selecionados.some(s => s.key === p.key));
+// JANELA DE DETALHES
+window.abrirDetalhes = (key) => {
+    const p = participantes.find(x => x.key === key);
+    if(!p) return;
+
+    document.getElementById('detNome').innerText = p.nome;
     
-    if (allSelected) {
-        selecionados = selecionados.filter(s => !visible.some(v => v.key === s.key));
+    const v = p.valorPago || 0;
+    const detStatus = document.getElementById('detStatusBadge');
+    const areaPix = document.getElementById('areaPix');
+    const areaParabens = document.getElementById('areaParabens');
+
+    document.getElementById('detValor').innerText = `Valor Pago: R$ ${v.toFixed(2).replace('.',',')}`;
+
+    if (v >= CONFIG.VALOR) {
+        detStatus.innerText = "PAGO 🟢";
+        detStatus.style.color = "#00b894";
+        areaPix.style.display = "none";
+        areaParabens.style.display = "block";
     } else {
-        visible.forEach(p => {
-            if(!selecionados.some(s => s.key === p.key)) selecionados.push(p);
-        });
+        detStatus.innerText = "PENDENTE 🔴";
+        detStatus.style.color = "#e74c3c";
+        if(v > 0) {
+            detStatus.innerText = "PARCIAL 🟡";
+            detStatus.style.color = "#f39c12";
+        }
+        areaPix.style.display = "block";
+        areaParabens.style.display = "none";
+        document.getElementById('chavePixTexto').innerText = CONFIG.PIX;
     }
-    renderList(currentFn);
+
+    document.getElementById('modalDetalhes').style.display = 'flex';
+}
+
+window.copiarPix = () => {
+    const texto = document.getElementById('chavePixTexto').innerText;
+    navigator.clipboard.writeText(texto).then(() => {
+        alert("Chave Pix Copiada!");
+    });
+}
+
+// LOGICA DE SELEÇÃO (ADMIN)
+window.toggleSelect = (key) => {
+    const p = participantes.find(x => x.key === key);
+    if(selecionados.some(s => s.key === key)) {
+        selecionados = selecionados.filter(s => s.key !== key);
+    } else { selecionados.push(p); }
+    renderList(getCurrentFilterFn());
 };
+
+document.getElementById('btnSelectAll').addEventListener('click', () => {
+    const filtered = participantes.filter(getCurrentFilterFn());
+    const allSelected = filtered.every(p => selecionados.some(s => s.key === p.key));
+    if (allSelected) selecionados = []; else selecionados = [...filtered];
+    renderList(getCurrentFilterFn());
+});
 
 function getCurrentFilterFn() {
     if(currentFilter === 'pagos') return p => (p.valorPago||0) >= CONFIG.VALOR;
     if(currentFilter === 'pendentes') return p => (p.valorPago||0) < CONFIG.VALOR;
-    return null;
+    return p => true;
 }
 
-// Events
-document.getElementById('cadastrar').onclick = async () => {
-    const n = document.getElementById('nome').value.trim().toUpperCase();
-    const t = document.getElementById('telefone').value.trim();
-    if(!n || !t) return alert("Preencha tudo!");
-    if(participantes.length >= CONFIG.LIMITE) return alert("Lotado!");
+document.getElementById('filtroTodos').onclick = () => { currentFilter='todos'; renderList(getCurrentFilterFn()); };
+document.getElementById('filtroPagos').onclick = () => { currentFilter='pagos'; renderList(getCurrentFilterFn()); };
+document.getElementById('filtroPendentes').onclick = () => { currentFilter='pendentes'; renderList(getCurrentFilterFn()); };
+
+// CADASTRO
+document.getElementById('cadastrar').addEventListener('click', async () => {
+    const nome = document.getElementById('nome').value.trim();
+    const tel = document.getElementById('telefone').value.trim();
+    if(!nome || !tel) return alert("Preencha todos os campos!");
+    if(participantes.length >= CONFIG.LIMITE) return alert("Bolão lotado!");
+
+    const numero = participantes.length + 1;
+    const newRef = push(dbRef);
+    await update(newRef, { nome, telefone: tel, numero, valorPago: 0, data: new Date().toISOString() });
     
-    await push(dbRef, {
-        numero: participantes.length + 1,
-        nome: n, telefone: t, valorPago: 0
-    });
-    
-    document.getElementById('nome').value = '';
-    document.getElementById('telefone').value = '';
-    
-    document.getElementById('confNome').innerText = n;
-    document.getElementById('confPix').innerText = CONFIG.PIX;
+    document.getElementById('nome').value = ''; document.getElementById('telefone').value = '';
+    document.getElementById('confNome').innerText = nome;
+    document.getElementById('confPix').innerText = PIX_VISUAL;
     document.getElementById('modalConfirmacao').style.display = 'flex';
-    confetti();
+    
+    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     updateData();
-};
+});
 
-document.getElementById('verLista').onclick = () => {
-    updateData(); renderList();
-    document.getElementById('overlay').style.display = 'flex';
-};
-document.getElementById('verRegras').onclick = () => document.getElementById('modalRegras').style.display = 'flex';
-document.getElementById('entrarGrupo').onclick = () => window.open("https://chat.whatsapp.com/Fdl9PzkiEBq9TnJHtlu2Rm");
 document.getElementById('btnZapConf').onclick = () => {
-    const n = document.getElementById('confNome').innerText;
-    window.open(`https://wa.me/55${CONFIG.PIX.replace(/\D/g,'')}?text=Cadastro novo: ${n}`);
+    window.open(`https://wa.me/55${PIX_VISUAL.replace(/\D/g,'')}?text=Cadastrei no Bolão!`, '_blank');
 };
 
-// Salvar Pagamento em Massa
+document.getElementById('verLista').onclick = () => { document.getElementById('overlay').style.display = 'flex'; renderList(); };
+document.getElementById('verRegras').onclick = () => document.getElementById('modalRegras').style.display = 'flex';
+document.getElementById('entrarGrupo').onclick = () => window.open('https://chat.whatsapp.com/SEU_LINK_AQUI', '_blank');
+
+document.getElementById('buscar').addEventListener('input', (e) => {
+    const term = e.target.value.toLowerCase();
+    renderList(p => p.nome.toLowerCase().includes(term));
+});
+
 document.getElementById('salvarPgto').onclick = async () => {
-    const v = parseFloat(document.getElementById('valorInput').value);
-    if (isNaN(v)) return alert("Digite um valor!");
-    
+    const val = parseFloat(document.getElementById('valorInput').value);
+    if(isNaN(val)) return alert("Valor inválido");
     const updates = {};
-    selecionados.forEach(p => {
-        updates[`participantes/${p.key}/valorPago`] = v;
-    });
-    
+    selecionados.forEach(p => updates[`participantes/${p.key}/valorPago`] = val);
     await update(ref(db), updates);
-    document.getElementById('modalPagamentoAdm').style.display='none';
-    selecionados = []; 
-    updateData(); 
-    renderList(getCurrentFilterFn());
+    alert("Salvo!");
+    document.getElementById('modalPagamentoAdm').style.display = 'none';
+    selecionados = []; updateData(); renderList(getCurrentFilterFn());
 };
 
-// Filters
-document.getElementById('filtroTodos').onclick = () => { currentFilter = 'todos'; renderList(); };
-document.getElementById('filtroPagos').onclick = () => { currentFilter = 'pagos'; renderList(getCurrentFilterFn()); };
-document.getElementById('filtroPendentes').onclick = () => { currentFilter = 'pendentes'; renderList(getCurrentFilterFn()); };
-document.getElementById('buscar').oninput = (e) => renderList(p => p.nome.includes(e.target.value.toUpperCase()));
-
-// Timer
+// TIMER
+const targetDate = new Date("2025-12-10T23:59:59").getTime(); 
 setInterval(() => {
-    const diff = new Date("Dec 10, 2025 23:59:59") - new Date();
-    if(diff < 0) return;
-    document.getElementById('dias').innerText = Math.floor(diff/86400000).toString().padStart(2,'0');
-    document.getElementById('horas').innerText = Math.floor((diff%86400000)/3600000).toString().padStart(2,'0');
-    document.getElementById('minutos').innerText = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
-    document.getElementById('segundos').innerText = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
+    const now = new Date().getTime(); const distance = targetDate - now;
+    if(distance < 0) { document.getElementById("countdown").innerHTML = "EXPIRADO"; return; }
+    document.getElementById("dias").innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
+    document.getElementById("horas").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    document.getElementById("minutos").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    document.getElementById("segundos").innerText = Math.floor((distance % (1000 * 60)) / 1000);
 }, 1000);
 
 updateData();
