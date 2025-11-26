@@ -1,6 +1,6 @@
 // --- CONFIGURAÇÃO DE VERSÃO ---
 // TODA VEZ que atualizar o site, mude esse nome (ex: v1 -> v2 -> v3)
-const CACHE_NAME = 'bolao-camino-v7'; 
+const CACHE_NAME = 'bolao-camino-v8-layout'; 
 
 const ASSETS = [
   './',
