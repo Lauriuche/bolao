@@ -19,19 +19,37 @@
         margin: 0; padding: 10px;
         font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         background: var(--bg-color);
-        min-height: 100vh; display: flex; justify-content: center; align-items: flex-start;
+        min-height: 100vh; display: flex; justify-content: center; align-items: center;
+        overflow: hidden; /* Evita rolagem no fundo */
     }
 
     .container {
         background: var(--card-bg);
         width: 100%; max-width: 420px;
+        
+        /* AJUSTE: Altura automática (compacta) por padrão */
+        height: auto; 
+        max-height: 95vh; /* Limite de segurança */
+        
         border-radius: 20px; padding: 15px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        text-align: center; margin-top: 5px;
+        text-align: center; 
+        display: flex;
+        flex-direction: column;
+        
+        /* Transição suave ao expandir */
+        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        
+        overflow: hidden; /* Esconde o que passar do tamanho */
+    }
+
+    /* CLASSE DE EXPANSÃO: Quando ativa, ocupa a tela */
+    .container.expanded {
+        height: 90vh; /* Cresce para ocupar a tela */
     }
 
     /* --- TOPO --- */
-    .logo-img { max-width: 400px; margin-bottom: 5px; }
+    .logo-img { max-width: 400px; margin-bottom: 5px; margin-left: auto; margin-right: auto; display: block; }
     .info-header { font-size: 0.8rem; color: #666; margin-bottom: 2px; display: flex; justify-content: center; gap: 5px; align-items: center; }
     .date-header { font-size: 0.75rem; color: #888; margin-bottom: 10px; }
 
@@ -48,167 +66,81 @@
     .time-unit { font-size: 0.55rem; margin-top: 2px; opacity: 0.7; }
     .time-sep { font-size: 1rem; color: #555; margin-top: 2px; }
 
-    /* --- BARRA DE PROGRESSO TRIPLA (VERDE) --- */
-    .progress-area { 
-        margin-bottom: 15px; 
-        background: #f5f6fa; 
-        padding: 15px 10px; 
-        border-radius: 10px; 
-    }
-    
-    .progress-capsule {
-        position: relative;
-        height: 20px;
-        background: #e0e0e0;
-        border: 1px solid #999;
-        border-radius: 10px;
-        overflow: hidden;
-        margin-bottom: 8px;
-        box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
-    }
-
-    .metallic-bar {
-        position: absolute;
-        top: 0; left: 0; bottom: 0;
-        height: 100%;
-        border-right: 1px solid rgba(255,255,255,0.2);
-        transition: width 1s ease-in-out;
-        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    }
-
-    /* 1. Base: Inscritos (Verde Água Claro) */
-    .bar-layer-reg {
-        z-index: 1;
-        background: linear-gradient(to bottom, #81ecec, #00cec9, #00b894);
-    }
-
-    /* 2. Meio: Parcial (Verde Lima/Amarelado) */
-    .bar-layer-partial {
-        z-index: 2;
-        background: linear-gradient(to bottom, #badc58, #6ab04c, #badc58);
-    }
-
-    /* 3. Topo: Pago Total (Verde Escuro) */
-    .bar-layer-paid {
-        z-index: 3;
-        background: linear-gradient(to bottom, #55efc4, #009432, #006266);
-        border-top-right-radius: 2px;
-        border-bottom-right-radius: 2px;
-    }
-
-    /* Legenda Estatística */
-    .progress-legend {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 0.7rem;
-        font-weight: bold;
-        color: #555;
-        margin-top: 8px;
-    }
-    
+    /* --- PROGRESSO --- */
+    .progress-area { margin-bottom: 15px; background: #f5f6fa; padding: 15px 10px; border-radius: 10px; }
+    .progress-capsule { position: relative; height: 20px; background: #e0e0e0; border: 1px solid #999; border-radius: 10px; overflow: hidden; margin-bottom: 8px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.2); }
+    .metallic-bar { position: absolute; top: 0; left: 0; bottom: 0; height: 100%; border-right: 1px solid rgba(255,255,255,0.2); transition: width 1s ease-in-out; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+    .bar-layer-reg { z-index: 1; background: linear-gradient(to bottom, #81ecec, #00cec9, #00b894); }
+    .bar-layer-partial { z-index: 2; background: linear-gradient(to bottom, #badc58, #6ab04c, #badc58); }
+    .bar-layer-paid { z-index: 3; background: linear-gradient(to bottom, #55efc4, #009432, #006266); border-top-right-radius: 2px; border-bottom-right-radius: 2px; }
+    .progress-legend { display: flex; justify-content: space-between; align-items: center; font-size: 0.65rem; font-weight: bold; color: #555; margin-top: 8px; }
     .legend-item { display: flex; align-items: center; gap: 4px; }
-    
-    /* Bolinhas da legenda */
-    .dot-leg-total { width: 8px; height: 8px; border-radius: 50%; background: #00cec9; }
-    .dot-leg-paid { width: 8px; height: 8px; border-radius: 50%; background: #009432; }
-    .dot-leg-part { width: 8px; height: 8px; border-radius: 50%; background: #badc58; }
-
+    .dot-leg-paid { width: 10px; height: 10px; border-radius: 50%; background: #009432; }
+    .dot-leg-part { width: 10px; height: 10px; border-radius: 50%; background: #badc58; }
+    .dot-leg-pend { width: 10px; height: 10px; border-radius: 50%; background: #00cec9; }
     .progress-money { font-size: 0.7rem; color: #777; margin-top: 5px; font-weight: normal; }
 
     /* --- FORMULÁRIO --- */
     .instruction { font-size: 0.8rem; color: #444; margin-bottom: 10px; }
-    
-    @keyframes pulse-input {
-        0% { box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-color: #e0e0e0; }
-        50% { box-shadow: 0 0 10px rgba(0, 184, 148, 0.2); border-color: #badc58; }
-        100% { box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-color: #e0e0e0; }
-    }
-
-    input.form-input {
-        width: 100%; box-sizing: border-box; padding: 12px; margin-bottom: 8px;
-        border: 1px solid #e0e0e0; border-bottom: 3px solid #badc58; border-radius: 8px;
-        font-size: 0.9rem; text-align: center; outline: none; background: #fff;
-        animation: pulse-input 3s infinite;
-    }
+    @keyframes pulse-input { 0% { border-color: #e0e0e0; } 50% { border-color: #badc58; } 100% { border-color: #e0e0e0; } }
+    input.form-input { width: 100%; box-sizing: border-box; padding: 12px; margin-bottom: 8px; border: 1px solid #e0e0e0; border-bottom: 3px solid #badc58; border-radius: 8px; font-size: 0.9rem; text-align: center; outline: none; background: #fff; animation: pulse-input 3s infinite; }
     input.form-input:focus { border-bottom-color: var(--primary-green); animation: none; }
 
     .action-row { display: grid; grid-template-columns: 1fr 1.5fr; gap: 8px; margin-bottom: 8px; }
     button { cursor: pointer; border: none; outline: none; transition: 0.2s; }
     button:active { transform: scale(0.98); }
-    
     .btn-gray-block { background: var(--secondary-gray); color: white; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 0.8rem; }
     .btn-green-block { background: var(--primary-green); color: white; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 5px; }
-    .btn-list-expand { width: 100%; background: #2ecc71; color: white; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; }
-
-    /* --- LISTA --- */
-    #listaContainer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: #fff; margin-top: 0; }
     
-    #listaContainer.open { 
-        max-height: 65vh; 
-        margin-top: 15px; 
-        overflow-y: auto; 
-        padding-bottom: 30px;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
+    /* BOTÃO EXPANDIR */
+    .btn-list-expand { width: 100%; background: #2ecc71; color: white; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; margin-bottom: 0; }
+
+    /* --- ÁREA DA LISTA --- */
+    #listaContainer { 
+        display: none; /* Escondido inicialmente */
+        flex-direction: column;
+        flex: 1;
+        margin-top: 15px;
+        border-top: 1px solid #eee;
+        padding-top: 10px;
+        overflow: hidden; /* Garante que o scroll seja interno */
     }
-    #listaContainer.open::-webkit-scrollbar { display: none; }
+    
+    /* Quando container expande, lista aparece */
+    .container.expanded #listaContainer {
+        display: flex;
+        animation: fadeIn 0.5s ease;
+    }
+    
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     /* TOOLBAR */
-    .toolbar {
-        display: flex; align-items: center; gap: 5px; 
-        padding: 5px 0; margin-bottom: 5px;
-        position: sticky; top: 0; background: #fff; z-index: 10;
-        border-bottom: 1px solid #eee;
-    }
-
-    .search-input-clean {
-        flex: 1; padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px;
-        font-size: 0.85rem; background: #f9f9f9; outline: none; min-width: 0;
-    }
-    
-    .filter-select {
-        background: #f0f2f5; border: 1px solid #ddd; color: #333;
-        padding: 8px 2px; border-radius: 6px; font-size: 0.8rem; font-weight: bold;
-        width: 75px; outline: none; cursor: pointer;
-    }
-
+    .toolbar { display: flex; align-items: center; gap: 5px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0; margin-bottom: 5px; }
+    .search-input-clean { flex: 1; padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.85rem; background: #f9f9f9; outline: none; min-width: 0; }
+    .filter-select { background: #f0f2f5; border: 1px solid #ddd; color: #333; padding: 8px 2px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; width: 75px; outline: none; cursor: pointer; }
     .icon-group { display: flex; gap: 4px; }
-    .icon-btn {
-        width: 32px; height: 32px; border-radius: 6px; border: none; color: white;
-        display: flex; align-items: center; justify-content: center; font-size: 1rem;
-        cursor: pointer;
+    .icon-btn { width: 32px; height: 32px; border-radius: 6px; border: none; color: white; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; }
+    .bg-y { background: #f1c40f; } .bg-g { background: #2ecc71; } .bg-r { background: #e74c3c; } .bg-b { background: #3498db; }
+
+    /* LISTA ITEMS (SCROLL INTERNO) */
+    #listaDiv {
+        flex: 1; 
+        overflow-y: auto; /* Rola apenas os nomes */
+        padding-bottom: 20px;
     }
     
-    .bg-y { background: #f1c40f; }
-    .bg-g { background: #2ecc71; }
-    .bg-r { background: #e74c3c; }
-    .bg-b { background: #3498db; }
+    /* Esconde scrollbar da lista */
+    #listaDiv::-webkit-scrollbar { display: none; }
 
-    /* LISTA ITENS */
-    .select-all-row {
-        text-align: left; padding: 8px 5px; font-weight: 600; color: #555; font-size: 0.85rem;
-        cursor: pointer; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 8px;
-    }
-
-    .list-item {
-        background: #fff; padding: 0; border-bottom: 1px solid #f5f5f5;
-        display: flex; align-items: stretch; min-height: 45px;
-    }
+    .select-all-row { text-align: left; padding: 8px 5px; font-weight: 600; color: #555; font-size: 0.85rem; cursor: pointer; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 8px; }
+    .list-item { background: #fff; padding: 0; border-bottom: 1px solid #f5f5f5; display: flex; align-items: stretch; min-height: 45px; }
     .list-item.selected { background: #fffceb; }
-    
     .item-left { display: flex; align-items: center; gap: 10px; flex: 1; padding: 5px; cursor: pointer; }
     .item-name { font-size: 0.8rem; color: #333; font-weight: 600; text-transform: uppercase; text-align: left; }
-    
-    .item-right { 
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        width: 50px; border-left: 1px solid #f5f5f5; cursor: pointer;
-    }
+    .item-right { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 50px; border-left: 1px solid #f5f5f5; cursor: pointer; }
     .item-right:active { background: #f0f0f0; }
-
     .status-dot { width: 14px; height: 14px; border-radius: 50%; margin-bottom: 2px; }
     .status-txt { font-size: 0.5rem; font-weight: bold; text-transform: uppercase; color: #555; }
-    
     .dot-g { background: #2ecc71; } .dot-r { background: #e74c3c; } .dot-o { background: #f1c40f; }
 
     /* MODAIS */
@@ -220,8 +152,8 @@
 </head>
 <body>
 
-<div class="container">
-    <img src="1001855377.png" alt="Logo" class="logo-img">
+<div class="container" id="mainContainer">
+    <img src="1001859236.png" alt="Logo" class="logo-img">
     <div class="info-header"><span>🎰 60 pessoas</span> • <span>💰 R$ 100,00</span></div>
     <div class="date-header">📅 Pagamento: até 20 de Dezembro</div>
 
@@ -249,11 +181,10 @@
             <div class="metallic-bar bar-layer-partial" id="barPartial"></div>
             <div class="metallic-bar bar-layer-paid" id="barPaid"></div>
         </div>
-        
         <div class="progress-legend">
-            <div class="legend-item"><span class="dot-leg-total"></span> <span id="txtTotal">0/60</span></div>
-            <div class="legend-item"><span class="dot-leg-paid"></span> <span id="txtPaid">0/0 Pago</span></div>
-            <div class="legend-item"><span class="dot-leg-part"></span> <span id="txtPartial">0/0 Parc</span></div>
+            <div class="legend-item"><span class="dot-leg-paid"></span> <span id="txtPaid">0 Pagos</span></div>
+            <div class="legend-item"><span class="dot-leg-part"></span> <span id="txtPartial">0 Parc</span></div>
+            <div class="legend-item"><span class="dot-leg-pend"></span> <span id="txtPend">0 Pend</span></div>
         </div>
         <div class="progress-money" id="pMoney">Arrecadado: R$ 0,00</div>
     </div>
@@ -267,7 +198,7 @@
         <button class="btn-green-block" id="btnCadastrar">🚀 PARTICIPAR</button>
     </div>
 
-    <button class="btn-list-expand" onclick="toggleLista()">Lista de participantes ⌄</button>
+    <button class="btn-list-expand" id="btnToggleLista" onclick="toggleLista()">Lista de participantes ⌄</button>
 
     <div id="listaContainer">
         <div class="toolbar">
@@ -317,13 +248,11 @@
         <h3>Definir Valor</h3>
         <p id="pgtoNome" style="font-weight:bold; color:#555; margin-bottom:5px;"></p>
         <input type="number" id="pgtoValor" placeholder="R$ 0,00" style="font-size:1.5rem; margin:15px 0; width:100%; text-align:center; padding:10px; border:1px solid #ccc; border-radius:10px;">
-        
         <div style="display:flex; gap:10px;">
             <button class="btn-gray-block" style="background:#e74c3c; flex:1" onclick="setVal(0)">ZERAR</button>
             <button class="btn-gray-block" style="background:#f1c40f; flex:1; color:#333" onclick="setVal(50)">50%</button>
             <button class="btn-green-block" style="flex:1" onclick="setVal(100)">TOTAL</button>
         </div>
-        
         <button class="btn-green-block" style="width:100%; margin-top:15px;" id="btnSalvarPgto">SALVAR</button>
         <button class="btn-gray-block" style="width:100%; margin-top:5px;" onclick="fecharModal('modalPagamento')">CANCELAR</button>
     </div>
@@ -365,11 +294,21 @@ const dbRef = ref(db, "participantes");
 
 let parts = [], sels = [], acao = null, filtro = 'todos';
 
+// Toggle Container Expand
 window.toggleLista = () => {
-    const el = document.getElementById('listaContainer');
-    el.classList.toggle('open');
-    updateData(); renderList();
+    const c = document.getElementById('mainContainer');
+    const btn = document.getElementById('btnToggleLista');
+    
+    if(c.classList.contains('expanded')) {
+        c.classList.remove('expanded');
+        btn.innerText = "Lista de participantes ⌄";
+    } else {
+        c.classList.add('expanded');
+        btn.innerText = "Fechar Lista ⌃";
+        updateData(); renderList();
+    }
 };
+
 window.filtrar = (f) => { filtro = f; renderList(); };
 window.fecharModal = (id) => document.getElementById(id).style.display = 'none';
 window.digitar = (k) => {
@@ -406,22 +345,21 @@ async function updateData(){
     const total = parts.length;
     const paidCount = parts.filter(p => (p.valorPago||0) >= CONFIG.VALOR).length;
     const partialCount = parts.filter(p => (p.valorPago||0) > 0 && (p.valorPago||0) < CONFIG.VALOR).length;
-    
+    const pendCount = total - paidCount - partialCount;
+    const anyMoneyCount = paidCount + partialCount;
     const money = parts.reduce((a,b)=>a+(b.valorPago||0),0);
     
     const pctReg = (total / CONFIG.LIMITE) * 100;
-    const pctPartial = ((paidCount + partialCount) / CONFIG.LIMITE) * 100;
+    const pctPartial = (anyMoneyCount / CONFIG.LIMITE) * 100;
     const pctPaid = (paidCount / CONFIG.LIMITE) * 100;
 
-    // Atualizar Barras
     document.getElementById('barReg').style.width = `${pctReg}%`;
     document.getElementById('barPartial').style.width = `${pctPartial}%`;
     document.getElementById('barPaid').style.width = `${pctPaid}%`;
     
-    // Atualizar Textos Estatísticos
-    document.getElementById('txtTotal').innerText = `Total ${total}/${CONFIG.LIMITE}`;
-    document.getElementById('txtPaid').innerText = `Pago ${paidCount}/${total}`;
-    document.getElementById('txtPartial').innerText = `Parc ${partialCount}/${total}`;
+    document.getElementById('txtPaid').innerText = `${paidCount} Pagos`;
+    document.getElementById('txtPartial').innerText = `${partialCount} Parc`;
+    document.getElementById('txtPend').innerText = `${pendCount} Pend`;
     document.getElementById('pMoney').innerText = `Arrecadado: R$ ${money.toLocaleString('pt-BR',{minimumFractionDigits:2})}`;
 }
 
