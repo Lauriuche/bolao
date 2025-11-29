@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Bolão Colaboradores Camino</title>
+
+<link rel="icon" type="image/png" href="fvcon.png">
+<link rel="apple-touch-icon" href="fvcon.png">
+
 <style>
     :root {
         --bg-color: #f0f2f5;
@@ -26,30 +30,25 @@
     .container {
         background: var(--card-bg);
         width: 100%; max-width: 420px;
-        
-        /* AJUSTE: Altura automática (compacta) por padrão */
+        /* Altura dinâmica automática (compacta) */
         height: auto; 
-        max-height: 95vh; /* Limite de segurança */
-        
+        max-height: 95vh; 
         border-radius: 20px; padding: 15px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         text-align: center; 
         display: flex;
         flex-direction: column;
-        
-        /* Transição suave ao expandir */
         transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-        
-        overflow: hidden; /* Esconde o que passar do tamanho */
+        overflow: hidden; 
     }
 
-    /* CLASSE DE EXPANSÃO: Quando ativa, ocupa a tela */
+    /* CLASSE DE EXPANSÃO */
     .container.expanded {
         height: 90vh; /* Cresce para ocupar a tela */
     }
 
     /* --- TOPO --- */
-    .logo-img { max-width: 400px; margin-bottom: 5px; margin-left: auto; margin-right: auto; display: block; }
+    .logo-img { max-width: 160px; margin-bottom: 5px; margin-left: auto; margin-right: auto; display: block; }
     .info-header { font-size: 0.8rem; color: #666; margin-bottom: 2px; display: flex; justify-content: center; gap: 5px; align-items: center; }
     .date-header { font-size: 0.75rem; color: #888; margin-bottom: 10px; }
 
@@ -66,13 +65,15 @@
     .time-unit { font-size: 0.55rem; margin-top: 2px; opacity: 0.7; }
     .time-sep { font-size: 1rem; color: #555; margin-top: 2px; }
 
-    /* --- PROGRESSO --- */
+    /* --- BARRA DE PROGRESSO TRIPLA --- */
     .progress-area { margin-bottom: 15px; background: #f5f6fa; padding: 15px 10px; border-radius: 10px; }
     .progress-capsule { position: relative; height: 20px; background: #e0e0e0; border: 1px solid #999; border-radius: 10px; overflow: hidden; margin-bottom: 8px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.2); }
     .metallic-bar { position: absolute; top: 0; left: 0; bottom: 0; height: 100%; border-right: 1px solid rgba(255,255,255,0.2); transition: width 1s ease-in-out; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+    
     .bar-layer-reg { z-index: 1; background: linear-gradient(to bottom, #81ecec, #00cec9, #00b894); }
     .bar-layer-partial { z-index: 2; background: linear-gradient(to bottom, #badc58, #6ab04c, #badc58); }
     .bar-layer-paid { z-index: 3; background: linear-gradient(to bottom, #55efc4, #009432, #006266); border-top-right-radius: 2px; border-bottom-right-radius: 2px; }
+
     .progress-legend { display: flex; justify-content: space-between; align-items: center; font-size: 0.65rem; font-weight: bold; color: #555; margin-top: 8px; }
     .legend-item { display: flex; align-items: center; gap: 4px; }
     .dot-leg-paid { width: 10px; height: 10px; border-radius: 50%; background: #009432; }
@@ -95,41 +96,30 @@
     /* BOTÃO EXPANDIR */
     .btn-list-expand { width: 100%; background: #2ecc71; color: white; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; margin-bottom: 0; }
 
-    /* --- ÁREA DA LISTA --- */
+    /* --- LISTA (ACORDEÃO) --- */
     #listaContainer { 
-        display: none; /* Escondido inicialmente */
+        display: none; 
         flex-direction: column;
         flex: 1;
         margin-top: 15px;
         border-top: 1px solid #eee;
         padding-top: 10px;
-        overflow: hidden; /* Garante que o scroll seja interno */
+        overflow: hidden; 
     }
     
-    /* Quando container expande, lista aparece */
-    .container.expanded #listaContainer {
-        display: flex;
-        animation: fadeIn 0.5s ease;
-    }
-    
+    .container.expanded #listaContainer { display: flex; animation: fadeIn 0.5s ease; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     /* TOOLBAR */
-    .toolbar { display: flex; align-items: center; gap: 5px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0; margin-bottom: 5px; }
+    .toolbar { display: flex; align-items: center; gap: 5px; padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; }
     .search-input-clean { flex: 1; padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.85rem; background: #f9f9f9; outline: none; min-width: 0; }
     .filter-select { background: #f0f2f5; border: 1px solid #ddd; color: #333; padding: 8px 2px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; width: 75px; outline: none; cursor: pointer; }
     .icon-group { display: flex; gap: 4px; }
     .icon-btn { width: 32px; height: 32px; border-radius: 6px; border: none; color: white; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; }
     .bg-y { background: #f1c40f; } .bg-g { background: #2ecc71; } .bg-r { background: #e74c3c; } .bg-b { background: #3498db; }
 
-    /* LISTA ITEMS (SCROLL INTERNO) */
-    #listaDiv {
-        flex: 1; 
-        overflow-y: auto; /* Rola apenas os nomes */
-        padding-bottom: 20px;
-    }
-    
-    /* Esconde scrollbar da lista */
+    /* LISTA SCROLL */
+    #listaDiv { flex: 1; overflow-y: auto; padding-bottom: 20px; scrollbar-width: none; -ms-overflow-style: none; }
     #listaDiv::-webkit-scrollbar { display: none; }
 
     .select-all-row { text-align: left; padding: 8px 5px; font-weight: 600; color: #555; font-size: 0.85rem; cursor: pointer; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 8px; }
@@ -153,49 +143,51 @@
 <body>
 
 <div class="container" id="mainContainer">
-    <img src="1001855377.png" alt="Logo" class="logo-img">
-    <div class="info-header"><span>🎰 60 pessoas</span> • <span>💰 R$ 100,00</span></div>
-    <div class="date-header">📅 Pagamento: até 20 de Dezembro</div>
+    <div id="topContent">
+        <img src="1001859236.png" alt="Logo" class="logo-img">
+        <div class="info-header"><span>🎰 60 pessoas</span> • <span>💰 R$ 100,00</span></div>
+        <div class="date-header">📅 Pagamento: até 20 de Dezembro</div>
 
-    <div class="badges-row">
-        <div class="badge-premio">🏆 R$ 850 Milhões</div>
-        <button class="btn-regras" onclick="document.getElementById('modalRegras').style.display='flex'">📋 REGRAS</button>
-    </div>
-
-    <div class="countdown-card">
-        <div class="countdown-label">⏰ ENCERRAMENTO DAS COTAS:</div>
-        <div class="timer-grid">
-            <div class="time-box"><span class="time-val" id="dias">00</span><span class="time-unit">DIAS</span></div>
-            <div class="time-sep">:</div>
-            <div class="time-box"><span class="time-val" id="horas">00</span><span class="time-unit">HS</span></div>
-            <div class="time-sep">:</div>
-            <div class="time-box"><span class="time-val" id="minutos">00</span><span class="time-unit">MIN</span></div>
-            <div class="time-sep">:</div>
-            <div class="time-box"><span class="time-val" id="segundos">00</span><span class="time-unit">SEG</span></div>
+        <div class="badges-row">
+            <div class="badge-premio">🏆 R$ 850 Milhões</div>
+            <button class="btn-regras" onclick="document.getElementById('modalRegras').style.display='flex'">📋 REGRAS</button>
         </div>
-    </div>
 
-    <div class="progress-area">
-        <div class="progress-capsule">
-            <div class="metallic-bar bar-layer-reg" id="barReg"></div>
-            <div class="metallic-bar bar-layer-partial" id="barPartial"></div>
-            <div class="metallic-bar bar-layer-paid" id="barPaid"></div>
+        <div class="countdown-card">
+            <div class="countdown-label">⏰ ENCERRAMENTO DAS COTAS:</div>
+            <div class="timer-grid">
+                <div class="time-box"><span class="time-val" id="dias">00</span><span class="time-unit">DIAS</span></div>
+                <div class="time-sep">:</div>
+                <div class="time-box"><span class="time-val" id="horas">00</span><span class="time-unit">HS</span></div>
+                <div class="time-sep">:</div>
+                <div class="time-box"><span class="time-val" id="minutos">00</span><span class="time-unit">MIN</span></div>
+                <div class="time-sep">:</div>
+                <div class="time-box"><span class="time-val" id="segundos">00</span><span class="time-unit">SEG</span></div>
+            </div>
         </div>
-        <div class="progress-legend">
-            <div class="legend-item"><span class="dot-leg-paid"></span> <span id="txtPaid">0 Pagos</span></div>
-            <div class="legend-item"><span class="dot-leg-part"></span> <span id="txtPartial">0 Parc</span></div>
-            <div class="legend-item"><span class="dot-leg-pend"></span> <span id="txtPend">0 Pend</span></div>
+
+        <div class="progress-area">
+            <div class="progress-capsule">
+                <div class="metallic-bar bar-layer-reg" id="barReg"></div>
+                <div class="metallic-bar bar-layer-partial" id="barPartial"></div>
+                <div class="metallic-bar bar-layer-paid" id="barPaid"></div>
+            </div>
+            <div class="progress-legend">
+                <div class="legend-item"><span class="dot-leg-paid"></span> <span id="txtPaid">0 Pagos</span></div>
+                <div class="legend-item"><span class="dot-leg-part"></span> <span id="txtPartial">0 Parc</span></div>
+                <div class="legend-item"><span class="dot-leg-pend"></span> <span id="txtPend">0 Pend</span></div>
+            </div>
+            <div class="progress-money" id="pMoney">Arrecadado: R$ 0,00</div>
         </div>
-        <div class="progress-money" id="pMoney">Arrecadado: R$ 0,00</div>
-    </div>
 
-    <p class="instruction">Para participar do bolão preencher os dados e clicar em <strong>PARTICIPAR</strong></p>
-    <input type="text" class="form-input" id="nome" placeholder="NOME COMPLETO">
-    <input type="tel" class="form-input" id="telefone" placeholder="WHATSAPP (COM DDD)">
+        <p class="instruction">Para participar do bolão preencher os dados e clicar em <strong>PARTICIPAR</strong></p>
+        <input type="text" class="form-input" id="nome" placeholder="NOME COMPLETO">
+        <input type="tel" class="form-input" id="telefone" placeholder="WHATSAPP (COM DDD)">
 
-    <div class="action-row">
-        <button class="btn-gray-block" id="btnZapGroup">Grupo whatsapp</button>
-        <button class="btn-green-block" id="btnCadastrar">🚀 PARTICIPAR</button>
+        <div class="action-row">
+            <button class="btn-gray-block" id="btnZapGroup">Grupo whatsapp</button>
+            <button class="btn-green-block" id="btnCadastrar">🚀 PARTICIPAR</button>
+        </div>
     </div>
 
     <button class="btn-list-expand" id="btnToggleLista" onclick="toggleLista()">Lista de participantes ⌄</button>
@@ -294,16 +286,18 @@ const dbRef = ref(db, "participantes");
 
 let parts = [], sels = [], acao = null, filtro = 'todos';
 
-// Toggle Container Expand
 window.toggleLista = () => {
-    const c = document.getElementById('mainContainer');
+    const container = document.getElementById('mainContainer');
     const btn = document.getElementById('btnToggleLista');
+    const top = document.getElementById('topContent');
     
-    if(c.classList.contains('expanded')) {
-        c.classList.remove('expanded');
+    if (container.classList.contains('expanded')) {
+        container.classList.remove('expanded');
+        top.style.display = 'block';
         btn.innerText = "Lista de participantes ⌄";
     } else {
-        c.classList.add('expanded');
+        container.classList.add('expanded');
+        top.style.display = 'none';
         btn.innerText = "Fechar Lista ⌃";
         updateData(); renderList();
     }
