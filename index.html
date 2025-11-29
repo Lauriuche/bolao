@@ -4,10 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Bolão Colaboradores Camino</title>
-
-<link rel="icon" type="image/png" href="fvcon.png">
-<link rel="apple-touch-icon" href="fvcon.png">
-
 <style>
     :root {
         --bg-color: #f0f2f5;
@@ -144,7 +140,7 @@
 
 <div class="container" id="mainContainer">
     <div id="topContent">
-        <img src="1001855377.png" alt="Logo" class="logo-img">
+        <img src="1001859236.png" alt="Logo" class="logo-img">
         <div class="info-header"><span>🎰 60 pessoas</span> • <span>💰 R$ 100,00</span></div>
         <div class="date-header">📅 Pagamento: até 20 de Dezembro</div>
 
@@ -340,6 +336,7 @@ async function updateData(){
     const paidCount = parts.filter(p => (p.valorPago||0) >= CONFIG.VALOR).length;
     const partialCount = parts.filter(p => (p.valorPago||0) > 0 && (p.valorPago||0) < CONFIG.VALOR).length;
     const pendCount = total - paidCount - partialCount;
+    
     const anyMoneyCount = paidCount + partialCount;
     const money = parts.reduce((a,b)=>a+(b.valorPago||0),0);
     
@@ -492,7 +489,7 @@ document.getElementById('btnZapConf').onclick = () => {
 };
 
 setInterval(()=>{
-    const d=new Date("Dec 10, 2025 23:59:59")-new Date(); if(d<0)return;
+    const d=new Date("Dec 20, 2025 23:59:59")-new Date(); if(d<0)return;
     document.getElementById('dias').innerText=Math.floor(d/864e5).toString().padStart(2,'0');
     document.getElementById('horas').innerText=Math.floor((d%864e5)/36e5).toString().padStart(2,'0');
     document.getElementById('minutos').innerText=Math.floor((d%36e5)/6e4).toString().padStart(2,'0');
