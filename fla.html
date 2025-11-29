@@ -1,638 +1,260 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
- <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bolão Final Libertadores</title>
-  <script src="/_sdk/element_sdk.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/@phosphor-icons/web"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&amp;display=swap" rel="stylesheet">
-  <style>
-        body {
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        
-        html, body {
-            height: 100%;
-            width: 100%;
-        }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bolão Final Libertadores - Exportar Imagem</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Ícones -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
+    <!-- Biblioteca para gerar Imagem (html2canvas) -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        
+        /* Estilos de Impressão */
         @media print {
-            body { 
-                background-color: white !important; 
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
+            body { background-color: white !important; -webkit-print-color-adjust: exact; }
             .no-print { display: none !important; }
-            .print-container { 
-                box-shadow: none !important; 
-                margin: 0 !important; 
-                width: 100% !important; 
-                max-width: none !important; 
-            }
-            @page { 
-                size: A4 landscape; 
-                margin: 10mm; 
-            }
+            .print-container { box-shadow: none !important; margin: 0 !important; width: 100% !important; max-width: none !important; }
+            @page { size: A4 landscape; margin: 10mm; }
         }
 
-        .gradient-bg { 
-            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); 
-        }
-        
-        .card-shadow { 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
-        }
-        
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #10b981;
-            color: white;
-            padding: 16px 24px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            display: none;
-            z-index: 1000;
-            animation: slideIn 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        
-        .columns-2 {
-            column-count: 2;
-            column-gap: 2rem;
-        }
-        
-        .break-inside-avoid {
-            break-inside: avoid;
-            page-break-inside: avoid;
-        }
+        .gradient-bg { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); }
+        .card-shadow { box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
     </style>
-  <style>@view-transition { navigation: auto; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
- </head>
- <body class="min-h-full w-full"><!-- Fundo Gradiente -->
-  <div class="fixed inset-0 gradient-bg -z-10 no-print"></div><!-- Toast de Notificação -->
-  <div id="toast" class="toast no-print">
-   <div class="flex items-center gap-2"><i class="ph-fill ph-check-circle text-xl"></i> <span id="toastMessage">Ação realizada com sucesso!</span>
-   </div>
-  </div><!-- CONTROLES -->
-  <div class="no-print w-full p-6">
-   <div class="bg-white rounded-xl card-shadow p-6 mb-8 max-w-7xl mx-auto">
-    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 gap-4">
-     <div>
-      <h1 class="text-3xl font-extrabold text-blue-900 flex items-center gap-2"><i class="ph-fill ph-trophy text-yellow-500 text-4xl"></i> <span id="headerTitle">Bolão Final Libertadores</span></h1>
-      <p class="text-gray-500 text-sm mt-1">Gerador profissional com exportação para Word</p>
-     </div>
-     <div class="flex flex-wrap gap-3"><button onclick="toggleEdit()" class="flex items-center gap-2 px-5 py-2.5 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-lg font-semibold transition-all shadow-sm"> <i class="ph ph-pencil-simple text-lg"></i> <span id="btnEditText">Editar Dados</span> </button> <button onclick="exportToWord()" class="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg font-semibold shadow-md hover:bg-blue-700 transition-all hover:shadow-lg"> <i class="ph-fill ph-file-doc text-lg"></i> Baixar Word </button> <button onclick="exportToPDF()" class="flex items-center gap-2 px-5 py-2.5 bg-red-600 text-white rounded-lg font-semibold shadow-md hover:bg-red-700 transition-all hover:shadow-lg"> <i class="ph-fill ph-file-pdf text-lg"></i> Baixar PDF </button> <button onclick="window.print()" class="flex items-center gap-2 px-5 py-2.5 bg-green-600 text-white rounded-lg font-semibold shadow-md hover:bg-green-700 transition-all hover:shadow-lg"> <i class="ph-fill ph-printer text-lg"></i> Imprimir </button>
-     </div>
-    </div><!-- Área de Edição -->
-    <div id="editForm" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 bg-blue-50 p-6 rounded-xl border-2 border-blue-100">
-     <div><label class="block text-sm font-semibold text-gray-700 mb-2">Título do Bolão</label> <input type="text" id="confTitle" class="w-full border-2 border-gray-300 p-3 rounded-lg focus:border-blue-500 focus:outline-none transition-colors" placeholder="Ex: Bolão da Final">
-     </div>
-     <div><label class="block text-sm font-semibold text-gray-700 mb-2">Time A</label> <input type="text" id="confTeamA" class="w-full border-2 border-gray-300 p-3 rounded-lg focus:border-blue-500 focus:outline-none transition-colors" placeholder="Ex: Flamengo">
-     </div>
-     <div><label class="block text-sm font-semibold text-gray-700 mb-2">Time B</label> <input type="text" id="confTeamB" class="w-full border-2 border-gray-300 p-3 rounded-lg focus:border-blue-500 focus:outline-none transition-colors" placeholder="Ex: Palmeiras">
-     </div>
-     <div><label class="block text-sm font-semibold text-gray-700 mb-2">Valor (R$)</label> <input type="number" id="confValue" class="w-full border-2 border-gray-300 p-3 rounded-lg focus:border-blue-500 focus:outline-none transition-colors" step="0.50" placeholder="Ex: 5.00">
-     </div>
-     <div><label class="block text-sm font-semibold text-gray-700 mb-2">Chave PIX</label> <input type="text" id="confPix" class="w-full border-2 border-gray-300 p-3 rounded-lg focus:border-blue-500 focus:outline-none transition-colors" placeholder="Ex: 11999999999">
-     </div>
-     <div><label class="block text-sm font-semibold text-gray-700 mb-2">Descrição do Prêmio</label> <input type="text" id="confPrize" class="w-full border-2 border-gray-300 p-3 rounded-lg focus:border-blue-500 focus:outline-none transition-colors" placeholder="Ex: 70% do arrecadado">
-     </div>
-     <div class="lg:col-span-3 flex justify-end"><button onclick="applyChanges()" class="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg font-bold shadow-md hover:bg-blue-700 transition-all"> <i class="ph-fill ph-check-circle text-lg"></i> Aplicar Alterações </button>
-     </div>
+</head>
+<body class="min-h-screen pb-10">
+
+    <div class="fixed inset-0 gradient-bg -z-10 no-print"></div>
+
+    <!-- CONTROLES -->
+    <div class="no-print max-w-6xl mx-auto p-6">
+        <div class="bg-white rounded-xl card-shadow p-6 mb-8">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                <div>
+                    <h1 class="text-2xl font-extrabold text-blue-900 flex items-center gap-2">
+                        <i class="ph ph-trophy text-yellow-500"></i> Bolão Final Libertadores
+                    </h1>
+                    <p class="text-gray-500 text-sm">Gerar ficheiros para impressão e partilha</p>
+                </div>
+                
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="toggleEdit()" class="flex items-center gap-2 px-3 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-lg font-semibold text-sm transition-all">
+                        <i class="ph ph-pencil-simple"></i> <span id="btnEditText">Editar</span>
+                    </button>
+                    
+                    <!-- Botão Word -->
+                    <button onclick="exportToWord()" class="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg font-semibold shadow hover:bg-blue-700 text-sm transition-all">
+                        <i class="ph ph-file-doc"></i> Word
+                    </button>
+
+                    <!-- NOVO: Botão Imagem -->
+                    <button onclick="downloadImage()" class="flex items-center gap-2 px-3 py-2 bg-purple-600 text-white rounded-lg font-semibold shadow hover:bg-purple-700 text-sm transition-all">
+                        <i class="ph ph-image"></i> Baixar Imagem
+                    </button>
+
+                    <button onclick="window.print()" class="flex items-center gap-2 px-3 py-2 bg-green-600 text-white rounded-lg font-semibold shadow hover:bg-green-700 text-sm transition-all">
+                        <i class="ph ph-printer"></i> Imprimir
+                    </button>
+                </div>
+            </div>
+
+            <!-- Área de Edição -->
+            <div id="editForm" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 bg-blue-50 p-4 rounded-xl border border-blue-100">
+                <div class="flex flex-col"><label class="text-[10px] font-bold uppercase text-blue-800">Título</label><input type="text" id="confTitle" class="border p-2 rounded" oninput="updateUI()"></div>
+                <div class="flex flex-col"><label class="text-[10px] font-bold uppercase text-blue-800">Time A</label><input type="text" id="confTeamA" class="border p-2 rounded" oninput="updateUI()"></div>
+                <div class="flex flex-col"><label class="text-[10px] font-bold uppercase text-blue-800">Time B</label><input type="text" id="confTeamB" class="border p-2 rounded" oninput="updateUI()"></div>
+                <div class="flex flex-col"><label class="text-[10px] font-bold uppercase text-blue-800">Valor</label><input type="number" id="confValue" class="border p-2 rounded" step="0.5" oninput="updateUI()"></div>
+                <div class="flex flex-col"><label class="text-[10px] font-bold uppercase text-blue-800">Pix</label><input type="text" id="confPix" class="border p-2 rounded" oninput="updateUI()"></div>
+                <div class="flex flex-col"><label class="text-[10px] font-bold uppercase text-blue-800">Prêmio</label><input type="text" id="confPrize" class="border p-2 rounded" oninput="updateUI()"></div>
+            </div>
+        </div>
     </div>
-   </div>
-  </div><!-- PREVIEW PARA IMPRESSÃO -->
-  <div id="printArea" class="print-container mx-auto bg-white card-shadow w-full max-w-[1400px] min-h-[800px] p-8 mb-8"><!-- Header -->
-   <header class="flex flex-col lg:flex-row justify-between items-start lg:items-end border-b-4 border-gray-800 pb-4 mb-6 gap-4">
-    <div class="flex-grow">
-     <h1 id="dispTitle" class="text-4xl font-black text-gray-900 uppercase leading-tight">Bolão da Final da Libertadores</h1>
-     <p class="text-gray-500 font-medium text-sm mt-2">Organização Oficial • Boa Sorte!</p>
+
+    <!-- ÁREA DO BOLÃO (O que será transformado em imagem) -->
+    <div id="printArea" class="print-container mx-auto bg-white card-shadow w-[297mm] min-h-[210mm] p-8 relative">
+        <!-- Header -->
+        <header class="flex justify-between items-end border-b-4 border-gray-800 pb-4 mb-6">
+            <div>
+                <h1 id="dispTitle" class="text-4xl font-black text-gray-900 uppercase tracking-tight">Bolão da Final da Libertadores</h1>
+                <p class="text-gray-500 font-medium text-sm mt-1 flex items-center gap-1">
+                    <i class="ph-fill ph-check-circle text-green-500"></i> Organização Oficial
+                </p>
+            </div>
+            <div class="flex gap-4 text-center">
+                <div class="bg-gray-100 p-2 rounded w-24 border border-gray-200">
+                    <div class="text-[10px] text-gray-500 font-bold uppercase">Valor</div>
+                    <div class="font-black text-xl text-gray-800">R$ <span id="dispValue">5,00</span></div>
+                </div>
+                <div class="bg-gray-100 p-2 rounded w-48 border border-gray-200 flex flex-col justify-center">
+                    <div class="text-[10px] text-gray-500 font-bold uppercase">Prêmio</div>
+                    <div id="dispPrizeText" class="font-bold text-sm text-green-700 leading-tight">70% do arrecadado</div>
+                </div>
+                <div class="bg-gray-800 text-white p-2 rounded w-32 border border-gray-800 flex flex-col justify-center">
+                    <div class="text-[10px] text-gray-400 font-bold uppercase flex justify-center items-center gap-1"><i class="ph ph-qr-code"></i> Pix</div>
+                    <div id="dispPix" class="font-bold text-sm truncate">99984511179</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Grade Web (Layout de 2 Colunas) -->
+        <div id="webGrid" class="columns-2 gap-8">
+            <!-- Preenchido via JS -->
+        </div>
+        
+        <div class="mt-8 pt-4 border-t border-gray-200 flex justify-between text-[10px] text-gray-400 font-medium uppercase">
+            <span>Documento Gerado Digitalmente</span>
+            <span>Boa Sorte aos Participantes!</span>
+        </div>
     </div>
-    <div class="flex flex-wrap gap-3 text-center">
-     <div class="bg-gradient-to-br from-green-50 to-green-100 p-3 rounded-lg w-28 border-2 border-green-200 shadow-sm">
-      <div class="text-xs text-green-700 font-bold uppercase">
-       Valor
-      </div>
-      <div class="font-black text-2xl text-green-800">
-       R$ <span id="dispValue">5,00</span>
-      </div>
-     </div>
-     <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 p-3 rounded-lg w-48 border-2 border-yellow-200 shadow-sm flex flex-col justify-center">
-      <div class="text-xs text-yellow-700 font-bold uppercase">
-       Prêmio
-      </div>
-      <div id="dispPrizeText" class="font-bold text-sm text-yellow-800 leading-tight mt-1">
-       70% do arrecadado
-      </div>
-     </div>
-     <div class="bg-gradient-to-br from-blue-600 to-blue-700 text-white p-3 rounded-lg w-40 border-2 border-blue-800 shadow-sm">
-      <div class="text-xs text-blue-200 font-bold uppercase">
-       PIX
-      </div>
-      <div id="dispPix" class="font-bold text-sm truncate mt-1">
-       99984511179
-      </div>
-     </div>
-    </div>
-   </header><!-- Grade Web (Layout de 2 Colunas) -->
-   <div id="webGrid" class="columns-2 gap-8"><!-- Preenchido via JS -->
-   </div>
-   <div class="mt-8 pt-4 border-t-2 border-gray-200 text-center">
-    <p class="text-xs text-gray-400 font-medium">Documento Gerado Digitalmente • Bolão Libertadores</p>
-   </div>
-  </div>
-  <script>
-        // CONFIGURAÇÃO PADRÃO
-        const defaultConfig = {
+
+    <script>
+        // CONFIGURAÇÃO
+        const config = {
             title: 'Bolão da Final da Libertadores',
-            team_a: 'Botafogo',
-            team_b: 'Atlético-MG',
-            value: '5.00',
+            teamA: 'Flamengo',
+            teamB: 'Palmeiras',
+            value: 5.00,
             pix: '99984511179',
-            prize_text: '70% do valor arrecadado'
+            prizeText: '70% do valor arrecadado'
         };
 
-        // Inicialização do SDK
-        async function onConfigChange(config) {
-            const title = config.title || defaultConfig.title;
-            const teamA = config.team_a || defaultConfig.team_a;
-            const teamB = config.team_b || defaultConfig.team_b;
-            const value = config.value || defaultConfig.value;
-            const pix = config.pix || defaultConfig.pix;
-            const prizeText = config.prize_text || defaultConfig.prize_text;
+        // Init
+        document.getElementById('confTitle').value = config.title;
+        document.getElementById('confTeamA').value = config.teamA;
+        document.getElementById('confTeamB').value = config.teamB;
+        document.getElementById('confValue').value = config.value;
+        document.getElementById('confPix').value = config.pix;
+        document.getElementById('confPrize').value = config.prizeText;
 
-            // Atualizar elementos da interface
-            document.getElementById('confTitle').value = title;
-            document.getElementById('confTeamA').value = teamA;
-            document.getElementById('confTeamB').value = teamB;
-            document.getElementById('confValue').value = value;
-            document.getElementById('confPix').value = pix;
-            document.getElementById('confPrize').value = prizeText;
+        function updateUI() {
+            config.title = document.getElementById('confTitle').value;
+            config.teamA = document.getElementById('confTeamA').value;
+            config.teamB = document.getElementById('confTeamB').value;
+            config.value = document.getElementById('confValue').value;
+            config.pix = document.getElementById('confPix').value;
+            config.prizeText = document.getElementById('confPrize').value;
 
-            document.getElementById('headerTitle').textContent = title;
-            document.getElementById('dispTitle').textContent = title.toUpperCase();
-            document.getElementById('dispValue').textContent = parseFloat(value).toFixed(2).replace('.', ',');
-            document.getElementById('dispPix').textContent = pix;
-            document.getElementById('dispPrizeText').textContent = prizeText;
+            document.getElementById('dispTitle').innerText = config.title;
+            document.getElementById('dispValue').innerText = parseFloat(config.value).toFixed(2).replace('.',',');
+            document.getElementById('dispPix').innerText = config.pix;
+            document.getElementById('dispPrizeText').innerText = config.prizeText;
 
-            renderWebGrid(teamA, teamB);
-        }
-
-        if (window.elementSdk) {
-            window.elementSdk.init({
-                defaultConfig,
-                onConfigChange,
-                mapToCapabilities: () => ({
-                    recolorables: [],
-                    borderables: [],
-                    fontEditable: undefined,
-                    fontSizeable: undefined
-                }),
-                mapToEditPanelValues: (config) => new Map([
-                    ["title", config.title || defaultConfig.title],
-                    ["team_a", config.team_a || defaultConfig.team_a],
-                    ["team_b", config.team_b || defaultConfig.team_b],
-                    ["value", config.value || defaultConfig.value],
-                    ["pix", config.pix || defaultConfig.pix],
-                    ["prize_text", config.prize_text || defaultConfig.prize_text]
-                ])
-            });
-        }
-
-        function getConfig() {
-            if (window.elementSdk && window.elementSdk.config) {
-                return window.elementSdk.config;
-            }
-            return defaultConfig;
+            renderWebGrid();
         }
 
         function toggleEdit() {
             const form = document.getElementById('editForm');
             const btn = document.getElementById('btnEditText');
-            if (form.classList.contains('hidden')) {
+            if(form.classList.contains('hidden')){
                 form.classList.remove('hidden');
-                btn.textContent = 'Fechar';
+                btn.innerText = 'Fechar';
             } else {
                 form.classList.add('hidden');
-                btn.textContent = 'Editar Dados';
+                btn.innerText = 'Editar';
             }
         }
 
-        function applyChanges() {
-            const newConfig = {
-                title: document.getElementById('confTitle').value,
-                team_a: document.getElementById('confTeamA').value,
-                team_b: document.getElementById('confTeamB').value,
-                value: document.getElementById('confValue').value,
-                pix: document.getElementById('confPix').value,
-                prize_text: document.getElementById('confPrize').value
-            };
-
-            if (window.elementSdk) {
-                window.elementSdk.setConfig(newConfig);
-            }
-
-            showToast('Alterações aplicadas com sucesso!');
-            toggleEdit();
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
-            toastMessage.textContent = message;
-            toast.style.display = 'block';
-            
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
-        }
-
-        // Renderiza a visualização HTML na tela
-        function renderWebGrid(teamA, teamB) {
+        function renderWebGrid() {
             const grid = document.getElementById('webGrid');
             const total = 200;
-            const blockSize = 25;
+            const blockSize = 25; 
             let html = '';
             
             const createRows = (start, end) => {
                 let rows = '';
-                for (let i = start + 1; i <= end; i++) {
+                for(let i=start+1; i<=end; i++){
                     rows += `
-                    <div class="flex items-center border-b border-gray-200 text-xs h-9 hover:bg-blue-50 transition-colors">
-                        <div class="w-10 font-bold text-gray-600 text-center bg-gray-50 h-full flex items-center justify-center border-r-2 border-gray-300">
-                            ${String(i).padStart(3, '0')}
+                    <div class="flex items-center border-b border-gray-200 text-xs h-8">
+                        <div class="w-10 font-bold text-gray-500 text-center bg-gray-50 h-full flex items-center justify-center border-r text-[10px]">${String(i).padStart(3,'0')}</div>
+                        <div class="w-28 text-center font-bold border-r h-full flex items-center justify-center bg-white px-1 text-[11px]">
+                            ${config.teamA.substring(0,3).toUpperCase()} <span class="mx-1 text-gray-300 font-light">x</span> ${config.teamB.substring(0,3).toUpperCase()}
                         </div>
-                        <div class="w-28 text-center font-bold border-r-2 border-gray-200 h-full flex items-center justify-center bg-white px-1">
-                            <span class="text-blue-700">${teamA.substring(0, 3).toUpperCase()}</span> 
-                            <span class="mx-2 text-gray-400 font-normal">×</span> 
-                            <span class="text-green-700">${teamB.substring(0, 3).toUpperCase()}</span>
-                        </div>
-                        <div class="flex-grow h-full relative px-3">
-                            <div class="absolute bottom-2 left-3 right-3 border-b border-dotted border-gray-300"></div>
+                        <div class="flex-grow h-full relative">
+                             <!-- Linha para escrever nome -->
+                             <div class="absolute bottom-1.5 left-2 right-2 border-b border-dotted border-gray-300"></div>
                         </div>
                     </div>`;
                 }
                 return rows;
             };
 
-            for (let i = 0; i < total; i += blockSize) {
-                html += `
-                <div class="break-inside-avoid mb-6 border-2 border-gray-300 rounded-lg overflow-hidden bg-white shadow-md hover:shadow-lg transition-shadow">
-                    <div class="bg-gradient-to-r from-gray-100 to-gray-200 text-xs font-bold uppercase py-2 text-center border-b-2 border-gray-300 flex">
-                        <div class="w-10 border-r-2 border-gray-300">#</div>
-                        <div class="w-28 border-r-2 border-gray-300">Placar</div>
+            for(let i=0; i<total; i+=blockSize) {
+                html += `<div class="break-inside-avoid mb-6 border border-gray-300 rounded overflow-hidden bg-white shadow-sm">
+                    <div class="bg-gray-100 text-[10px] font-bold uppercase py-1.5 text-center border-b border-gray-300 flex text-gray-600">
+                        <div class="w-10 border-r">#</div>
+                        <div class="w-28 border-r">Placar</div>
                         <div class="flex-grow">Nome do Participante</div>
                     </div>
-                    ${createRows(i, Math.min(i + blockSize, total))}
+                    ${createRows(i, Math.min(i+blockSize, total))}
                 </div>`;
             }
             grid.innerHTML = html;
         }
 
-        // EXPORTAÇÃO PARA PDF
-        function exportToPDF() {
-            const config = getConfig();
-            const teamA = config.team_a || defaultConfig.team_a;
-            const teamB = config.team_b || defaultConfig.team_b;
-            const value = config.value || defaultConfig.value;
-            const pix = config.pix || defaultConfig.pix;
-            const prizeText = config.prize_text || defaultConfig.prize_text;
-            const title = config.title || defaultConfig.title;
+        // --- FUNÇÃO PARA BAIXAR IMAGEM ---
+        function downloadImage() {
+            const element = document.getElementById("printArea");
+            
+            // Feedback visual
+            const oldText = document.querySelector('button[onclick="downloadImage()"]').innerText;
+            document.querySelector('button[onclick="downloadImage()"]').innerText = "Gerando...";
 
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF({
-                orientation: 'portrait',
-                unit: 'mm',
-                format: 'a4'
+            html2canvas(element, {
+                scale: 2, // Aumenta a resolução (2x) para ficar nítido
+                useCORS: true,
+                backgroundColor: "#ffffff", // Garante fundo branco
+                logging: false
+            }).then(canvas => {
+                // Cria um link falso para download
+                const link = document.createElement('a');
+                link.download = 'Bolao_Libertadores.png';
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+                
+                document.querySelector('button[onclick="downloadImage()"]').innerText = oldText;
+            }).catch(err => {
+                console.error("Erro ao gerar imagem:", err);
+                alert("Erro ao gerar imagem. Tente usar o botão Imprimir > Salvar como PDF.");
+                document.querySelector('button[onclick="downloadImage()"]').innerText = oldText;
             });
-
-            const pageWidth = 210;
-            const pageHeight = 297;
-            const margin = 15;
-            const contentWidth = pageWidth - (margin * 2);
-
-            // Função para adicionar cabeçalho
-            function addHeader(doc, pageNum) {
-                doc.setFillColor(30, 58, 138);
-                doc.rect(0, 0, pageWidth, 35, 'F');
-                
-                doc.setTextColor(255, 255, 255);
-                doc.setFontSize(18);
-                doc.setFont('helvetica', 'bold');
-                doc.text(title.toUpperCase(), pageWidth / 2, 12, { align: 'center' });
-                
-                doc.setFontSize(9);
-                doc.setFont('helvetica', 'normal');
-                doc.text(`VALOR: R$ ${parseFloat(value).toFixed(2).replace('.', ',')} | PIX: ${pix}`, pageWidth / 2, 20, { align: 'center' });
-                doc.text(`PRÊMIO: ${prizeText}`, pageWidth / 2, 27, { align: 'center' });
-                
-                doc.setTextColor(150, 150, 150);
-                doc.setFontSize(7);
-                doc.text(`Página ${pageNum}`, pageWidth / 2, 32, { align: 'center' });
-            }
-
-            // Função para adicionar rodapé
-            function addFooter(doc) {
-                doc.setTextColor(150, 150, 150);
-                doc.setFontSize(7);
-                doc.text('Documento Gerado Digitalmente • Bolão Libertadores', pageWidth / 2, pageHeight - 8, { align: 'center' });
-            }
-
-            // Função para desenhar uma linha de aposta
-            function drawBetLine(doc, y, num, teamA, teamB) {
-                const lineHeight = 10;
-                
-                // Background alternado
-                if (num % 2 === 0) {
-                    doc.setFillColor(249, 250, 251);
-                    doc.rect(margin, y, contentWidth, lineHeight, 'F');
-                }
-                
-                // Bordas
-                doc.setDrawColor(200, 200, 200);
-                doc.setLineWidth(0.1);
-                doc.rect(margin, y, contentWidth, lineHeight);
-                
-                // Número
-                doc.setFillColor(229, 231, 235);
-                doc.rect(margin, y, 15, lineHeight, 'F');
-                doc.setTextColor(75, 85, 99);
-                doc.setFontSize(9);
-                doc.setFont('helvetica', 'bold');
-                doc.text(String(num).padStart(3, '0'), margin + 7.5, y + 6.5, { align: 'center' });
-                
-                // Placar
-                doc.setFontSize(8);
-                doc.setFont('helvetica', 'bold');
-                doc.setTextColor(30, 64, 175);
-                doc.text(teamA.substring(0, 3).toUpperCase(), margin + 20, y + 6.5);
-                
-                doc.setTextColor(150, 150, 150);
-                doc.setFont('helvetica', 'normal');
-                doc.text('×', margin + 34, y + 6.5);
-                
-                doc.setTextColor(21, 128, 61);
-                doc.setFont('helvetica', 'bold');
-                doc.text(teamB.substring(0, 3).toUpperCase(), margin + 39, y + 6.5);
-                
-                // Linha para nome
-                doc.setDrawColor(200, 200, 200);
-                doc.setLineWidth(0.1);
-                doc.line(margin + 53, y + 8, pageWidth - margin - 2, y + 8);
-                
-                doc.setTextColor(180, 180, 180);
-                doc.setFontSize(7);
-                doc.setFont('helvetica', 'italic');
-                doc.text('Nome do Participante', margin + 55, y + 6);
-            }
-
-            // Gerar PDF com 2 páginas (100 apostas por página)
-            let currentPage = 1;
-            
-            // PÁGINA 1: Apostas 001-100
-            addHeader(pdf, currentPage);
-            
-            let yPosition = 45;
-            for (let i = 1; i <= 100; i++) {
-                drawBetLine(pdf, yPosition, i, teamA, teamB);
-                yPosition += 10;
-                
-                if (yPosition > pageHeight - 20) {
-                    addFooter(pdf);
-                    break;
-                }
-            }
-            addFooter(pdf);
-            
-            // PÁGINA 2: Apostas 101-200
-            pdf.addPage();
-            currentPage++;
-            addHeader(pdf, currentPage);
-            
-            yPosition = 45;
-            for (let i = 101; i <= 200; i++) {
-                drawBetLine(pdf, yPosition, i, teamA, teamB);
-                yPosition += 10;
-                
-                if (yPosition > pageHeight - 20) {
-                    addFooter(pdf);
-                    break;
-                }
-            }
-            addFooter(pdf);
-            
-            // Salvar PDF
-            pdf.save('Bolao_Libertadores.pdf');
-            showToast('PDF gerado com sucesso!');
         }
 
-        // EXPORTAÇÃO PARA WORD
+        // --- FUNÇÃO WORD ---
         function exportToWord() {
-            const config = getConfig();
-            const teamA = config.team_a || defaultConfig.team_a;
-            const teamB = config.team_b || defaultConfig.team_b;
-            const value = config.value || defaultConfig.value;
-            const pix = config.pix || defaultConfig.pix;
-            const prizeText = config.prize_text || defaultConfig.prize_text;
-            const title = config.title || defaultConfig.title;
-
-            const tableContent = generateWordTableRows(teamA, teamB);
+            // (Mesma lógica do passo anterior, mantida para funcionalidade completa)
+            const tableContent = generateWordTableRows();
+            const preHtml = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'><head><meta charset='utf-8'><title>Doc</title>
+            <style>@page{mso-page-orientation:landscape;size:29.7cm 21.0cm;margin:1cm;}body{font-family:Arial;}table{border-collapse:collapse;width:100%;font-size:10pt;}td{border:1px solid #000;height:25px;text-align:center;}.col-name{width:200px;text-align:left;}.col-gap{border:none;width:20px;}</style></head><body>`;
             
-            const preHtml = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-            <head>
-                <meta charset='utf-8'>
-                <title>Bolão Export</title>
-                <style>
-                    @page {
-                        mso-page-orientation: landscape;
-                        size: 29.7cm 21.0cm;
-                        margin: 1.0cm 1.0cm 1.0cm 1.0cm;
-                    }
-                    body { 
-                        font-family: Arial, sans-serif; 
-                        margin: 0;
-                        padding: 20px;
-                    }
-                    .header { 
-                        text-align: center; 
-                        margin-bottom: 25px; 
-                        padding-bottom: 15px;
-                        border-bottom: 3px solid #000;
-                    }
-                    .title { 
-                        font-size: 26pt; 
-                        font-weight: bold; 
-                        color: #1e3a8a;
-                        margin-bottom: 8px;
-                    }
-                    .subtitle { 
-                        font-size: 11pt; 
-                        margin-top: 5px; 
-                        color: #333;
-                    }
-                    
-                    table { 
-                        border-collapse: collapse; 
-                        width: 100%; 
-                        table-layout: fixed; 
-                        font-size: 9pt; 
-                    }
-                    td, th { 
-                        border: 1px solid #000; 
-                        height: 22px; 
-                        vertical-align: middle; 
-                        padding: 2px;
-                    }
-                    
-                    .col-id { 
-                        width: 28px; 
-                        text-align: center; 
-                        background-color: #e5e7eb; 
-                        font-weight: bold; 
-                        font-size: 8pt;
-                    }
-                    .col-team { 
-                        width: 35px; 
-                        text-align: center; 
-                        font-weight: bold;
-                    }
-                    .col-x { 
-                        width: 18px; 
-                        text-align: center; 
-                        color: #888; 
-                        border-left: none; 
-                        border-right: none;
-                    }
-                    .col-name { 
-                        width: 260px; 
-                        padding-left: 5px;
-                    }
-                    .col-gap { 
-                        width: 25px; 
-                        border: none; 
-                        background-color: #fff;
-                    }
-                    
-                    .header-row { 
-                        background-color: #cbd5e1; 
-                        font-weight: bold; 
-                        text-align: center; 
-                        font-size: 8pt;
-                        height: 25px;
-                    }
-                    
-                    .footer {
-                        margin-top: 20px;
-                        text-align: center;
-                        font-size: 8pt;
-                        color: #666;
-                        border-top: 1px solid #ccc;
-                        padding-top: 10px;
-                    }
-                </style>
-            </head>
-            <body>`;
-
-            const headerHtml = `
-            <div class='header'>
-                <div class='title'>${title.toUpperCase()}</div>
-                <div class='subtitle'>
-                    <strong>VALOR:</strong> R$ ${parseFloat(value).toFixed(2).replace('.', ',')} &nbsp;|&nbsp; 
-                    <strong>PIX:</strong> ${pix} &nbsp;|&nbsp; 
-                    <strong>PRÊMIO:</strong> ${prizeText}
-                </div>
-            </div>`;
-
-            const tableHeader = `
-            <tr class="header-row">
-                <td class="col-id">Nº</td>
-                <td class="col-team">${teamA.substring(0, 3).toUpperCase()}</td>
-                <td class="col-x">×</td>
-                <td class="col-team">${teamB.substring(0, 3).toUpperCase()}</td>
-                <td class="col-name">NOME DO PARTICIPANTE</td>
-                
-                <td class="col-gap"></td>
-                
-                <td class="col-id">Nº</td>
-                <td class="col-team">${teamA.substring(0, 3).toUpperCase()}</td>
-                <td class="col-x">×</td>
-                <td class="col-team">${teamB.substring(0, 3).toUpperCase()}</td>
-                <td class="col-name">NOME DO PARTICIPANTE</td>
-            </tr>`;
-
-            const footerHtml = `
-            <div class='footer'>
-                <p>Documento Gerado Digitalmente • Bolão Libertadores • Boa Sorte a Todos!</p>
-            </div>`;
-
-            const postHtml = `</body></html>`;
-
-            const content = preHtml + headerHtml + "<table>" + tableHeader + tableContent + "</table>" + footerHtml + postHtml;
-
+            const headerHtml = `<div style="text-align:center;margin-bottom:20px"><h1 style="margin:0">${config.title.toUpperCase()}</h1><p style="margin:5px">R$ ${config.value} | Pix: ${config.pix} | ${config.prizeText}</p></div>`;
+            
+            const content = preHtml + headerHtml + "<table>" + tableContent + "</table></body></html>";
             const blob = new Blob(['\ufeff', content], { type: 'application/msword' });
-            const url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(content);
-            
-            const downloadLink = document.createElement("a");
-            document.body.appendChild(downloadLink);
-            
-            if (navigator.msSaveOrOpenBlob) {
-                navigator.msSaveOrOpenBlob(blob, 'Bolao_Libertadores.doc');
-            } else {
-                downloadLink.href = url;
-                downloadLink.download = 'Bolao_Libertadores.doc';
-                downloadLink.click();
-            }
-            document.body.removeChild(downloadLink);
-            
-            showToast('Download do Word iniciado!');
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.download = 'Bolao_Libertadores.doc';
+            link.href = url;
+            link.click();
         }
 
-        function generateWordTableRows(teamA, teamB) {
+        function generateWordTableRows() {
             let rows = '';
-            for (let i = 1; i <= 100; i++) {
-                const idLeft = i;
-                const idRight = i + 100;
-                
-                rows += `<tr>
-                    <td class="col-id">${String(idLeft).padStart(3, '0')}</td>
-                    <td class="col-team"></td>
-                    <td class="col-x">×</td>
-                    <td class="col-team"></td>
-                    <td class="col-name"></td>
-                    
-                    <td class="col-gap"></td>
-                    
-                    <td class="col-id">${String(idRight).padStart(3, '0')}</td>
-                    <td class="col-team"></td>
-                    <td class="col-x">×</td>
-                    <td class="col-team"></td>
-                    <td class="col-name"></td>
-                </tr>`;
+            for(let i=1; i<=100; i++) {
+                rows += `<tr><td>${i}</td><td></td><td>x</td><td></td><td class="col-name"></td><td class="col-gap"></td><td>${i+100}</td><td></td><td>x</td><td></td><td class="col-name"></td></tr>`;
             }
             return rows;
         }
 
-        // Inicialização
-        onConfigChange(defaultConfig);
+        updateUI();
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a623b856426ad35',t:'MTc2NDQyMDY0NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
+
