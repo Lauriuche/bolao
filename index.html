@@ -20,31 +20,25 @@
         font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         background: var(--bg-color);
         min-height: 100vh; display: flex; justify-content: center; align-items: center;
-        overflow: hidden; /* Evita rolagem no fundo */
+        overflow: hidden;
     }
 
     .container {
         background: var(--card-bg);
         width: 100%; max-width: 420px;
-        /* Altura dinâmica automática (compacta) */
-        height: auto; 
-        max-height: 95vh; 
+        height: auto; max-height: 95vh;
         border-radius: 20px; padding: 15px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        text-align: center; 
-        display: flex;
-        flex-direction: column;
+        text-align: center;
+        display: flex; flex-direction: column;
         transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-        overflow: hidden; 
+        overflow: hidden;
     }
 
-    /* CLASSE DE EXPANSÃO */
-    .container.expanded {
-        height: 90vh; /* Cresce para ocupar a tela */
-    }
+    .container.expanded { height: 90vh; }
 
     /* --- TOPO --- */
-    .logo-img { max-width: 400px; margin-bottom: 5px; margin-left: auto; margin-right: auto; display: block; }
+    .logo-img { max-width: 160px; margin-bottom: 5px; margin-left: auto; margin-right: auto; display: block; }
     .info-header { font-size: 0.8rem; color: #666; margin-bottom: 2px; display: flex; justify-content: center; gap: 5px; align-items: center; }
     .date-header { font-size: 0.75rem; color: #888; margin-bottom: 10px; }
 
@@ -61,20 +55,16 @@
     .time-unit { font-size: 0.55rem; margin-top: 2px; opacity: 0.7; }
     .time-sep { font-size: 1rem; color: #555; margin-top: 2px; }
 
-    /* --- BARRA DE PROGRESSO TRIPLA --- */
+    /* --- BARRA DE PROGRESSO --- */
     .progress-area { margin-bottom: 15px; background: #f5f6fa; padding: 15px 10px; border-radius: 10px; }
     .progress-capsule { position: relative; height: 20px; background: #e0e0e0; border: 1px solid #999; border-radius: 10px; overflow: hidden; margin-bottom: 8px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.2); }
     .metallic-bar { position: absolute; top: 0; left: 0; bottom: 0; height: 100%; border-right: 1px solid rgba(255,255,255,0.2); transition: width 1s ease-in-out; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
-    
     .bar-layer-reg { z-index: 1; background: linear-gradient(to bottom, #81ecec, #00cec9, #00b894); }
     .bar-layer-partial { z-index: 2; background: linear-gradient(to bottom, #badc58, #6ab04c, #badc58); }
     .bar-layer-paid { z-index: 3; background: linear-gradient(to bottom, #55efc4, #009432, #006266); border-top-right-radius: 2px; border-bottom-right-radius: 2px; }
-
+    
     .progress-legend { display: flex; justify-content: space-between; align-items: center; font-size: 0.65rem; font-weight: bold; color: #555; margin-top: 8px; }
     .legend-item { display: flex; align-items: center; gap: 4px; }
-    .dot-leg-paid { width: 10px; height: 10px; border-radius: 50%; background: #009432; }
-    .dot-leg-part { width: 10px; height: 10px; border-radius: 50%; background: #badc58; }
-    .dot-leg-pend { width: 10px; height: 10px; border-radius: 50%; background: #00cec9; }
     .progress-money { font-size: 0.7rem; color: #777; margin-top: 5px; font-weight: normal; }
 
     /* --- FORMULÁRIO --- */
@@ -88,25 +78,13 @@
     button:active { transform: scale(0.98); }
     .btn-gray-block { background: var(--secondary-gray); color: white; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 0.8rem; }
     .btn-green-block { background: var(--primary-green); color: white; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 5px; }
-    
-    /* BOTÃO EXPANDIR */
     .btn-list-expand { width: 100%; background: #2ecc71; color: white; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; margin-bottom: 0; }
 
-    /* --- LISTA (ACORDEÃO) --- */
-    #listaContainer { 
-        display: none; 
-        flex-direction: column;
-        flex: 1;
-        margin-top: 15px;
-        border-top: 1px solid #eee;
-        padding-top: 10px;
-        overflow: hidden; 
-    }
-    
+    /* --- LISTA --- */
+    #listaContainer { display: none; flex-direction: column; flex: 1; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px; overflow: hidden; }
     .container.expanded #listaContainer { display: flex; animation: fadeIn 0.5s ease; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-    /* TOOLBAR */
     .toolbar { display: flex; align-items: center; gap: 5px; padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; }
     .search-input-clean { flex: 1; padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.85rem; background: #f9f9f9; outline: none; min-width: 0; }
     .filter-select { background: #f0f2f5; border: 1px solid #ddd; color: #333; padding: 8px 2px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; width: 75px; outline: none; cursor: pointer; }
@@ -114,7 +92,6 @@
     .icon-btn { width: 32px; height: 32px; border-radius: 6px; border: none; color: white; display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; }
     .bg-y { background: #f1c40f; } .bg-g { background: #2ecc71; } .bg-r { background: #e74c3c; } .bg-b { background: #3498db; }
 
-    /* LISTA SCROLL */
     #listaDiv { flex: 1; overflow-y: auto; padding-bottom: 20px; scrollbar-width: none; -ms-overflow-style: none; }
     #listaDiv::-webkit-scrollbar { display: none; }
 
@@ -123,11 +100,12 @@
     .list-item.selected { background: #fffceb; }
     .item-left { display: flex; align-items: center; gap: 10px; flex: 1; padding: 5px; cursor: pointer; }
     .item-name { font-size: 0.8rem; color: #333; font-weight: 600; text-transform: uppercase; text-align: left; }
-    .item-right { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 50px; border-left: 1px solid #f5f5f5; cursor: pointer; }
+    
+    /* Área Direita (Status Emojis) */
+    .item-right { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 60px; border-left: 1px solid #f5f5f5; cursor: pointer; }
     .item-right:active { background: #f0f0f0; }
-    .status-dot { width: 14px; height: 14px; border-radius: 50%; margin-bottom: 2px; }
+    .status-emoji { font-size: 1.2rem; margin-bottom: 2px; }
     .status-txt { font-size: 0.5rem; font-weight: bold; text-transform: uppercase; color: #555; }
-    .dot-g { background: #2ecc71; } .dot-r { background: #e74c3c; } .dot-o { background: #f1c40f; }
 
     /* MODAIS */
     .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 3000; padding: 20px; }
@@ -169,9 +147,9 @@
                 <div class="metallic-bar bar-layer-paid" id="barPaid"></div>
             </div>
             <div class="progress-legend">
-                <div class="legend-item"><span class="dot-leg-paid"></span> <span id="txtPaid">0 Pagos</span></div>
-                <div class="legend-item"><span class="dot-leg-part"></span> <span id="txtPartial">0 Parc</span></div>
-                <div class="legend-item"><span class="dot-leg-pend"></span> <span id="txtPend">0 Pend</span></div>
+                <div class="legend-item">🟢 <span id="txtPaid">0 Pagos</span></div>
+                <div class="legend-item">⚠️ <span id="txtPartial">0 Parc</span></div>
+                <div class="legend-item">🔴 <span id="txtPend">0 Pend</span></div>
             </div>
             <div class="progress-money" id="pMoney">Arrecadado: R$ 0,00</div>
         </div>
@@ -195,7 +173,7 @@
                 <option value="todos">Filtro</option>
                 <option value="todos">👥 Todos</option>
                 <option value="pagos">🟢 Pagos</option>
-                <option value="parciais">🟠 Parcial</option>
+                <option value="parciais">⚠️ Parcial</option>
                 <option value="pendentes">🔴 Pend</option>
             </select>
             <div class="icon-group">
@@ -367,9 +345,9 @@ function renderList(){
 
     list.forEach(p => {
         const v = p.valorPago||0;
-        let dotClass = 'dot-r', txtStatus = 'PEND';
-        if(v >= CONFIG.VALOR) { dotClass='dot-g'; txtStatus='PAGO'; }
-        else if(v > 0) { dotClass='dot-o'; txtStatus='PARCIAL'; }
+        let emojiStatus = '🔴', txtStatus = 'PEND';
+        if(v >= CONFIG.VALOR) { emojiStatus='🟢'; txtStatus='PAGO'; }
+        else if(v > 0) { emojiStatus='⚠️'; txtStatus='PARCIAL'; }
         
         const isSel = sels.some(s=>s.key===p.key);
         
@@ -385,13 +363,13 @@ function renderList(){
         leftDiv.onclick = () => {
             const idx = sels.findIndex(s=>s.key===p.key);
             if(idx>=0) sels.splice(idx,1); else sels.push(p);
-            renderList(); updateSelectAllIcon();
+            renderList();
         };
 
         const rightDiv = document.createElement('div');
         rightDiv.className = 'item-right';
         rightDiv.innerHTML = `
-            <div class="status-dot ${dotClass}"></div>
+            <div class="status-emoji">${emojiStatus}</div>
             <div class="status-txt">${txtStatus}</div>
         `;
         rightDiv.onclick = (e) => { e.stopPropagation(); quickPay(p); };
@@ -400,7 +378,6 @@ function renderList(){
         el.appendChild(rightDiv);
         div.appendChild(el);
     });
-    updateSelectAllIcon();
 }
 
 document.getElementById('buscar').oninput = () => renderList();
@@ -421,18 +398,6 @@ window.toggleSelectAll = () => {
     }
     renderList();
 };
-
-function updateSelectAllIcon(){
-    let list = parts;
-    if(filtro==='pagos') list = list.filter(p=>(p.valorPago||0)>=CONFIG.VALOR);
-    if(filtro==='pendentes') list = list.filter(p=>(p.valorPago||0)==0);
-    if(filtro==='parciais') list = list.filter(p=>(p.valorPago||0)>0 && (p.valorPago||0)<CONFIG.VALOR);
-    const term = document.getElementById('buscar').value.toUpperCase();
-    if(term) list = list.filter(p=>p.nome.includes(term));
-    
-    const allSel = list.length > 0 && list.every(p=>sels.some(s=>s.key===p.key));
-    document.getElementById('iconSelectAll').innerText = allSel ? '☑️' : '🔲';
-}
 
 async function execAcao(){
     if(acao === 'pagamento'){
@@ -457,8 +422,23 @@ async function execAcao(){
         });
     }
     else if(acao === 'telegram'){
-        const t = parts.sort((a,b)=>a.numero-b.numero).map(p=>`${p.numero}. ${p.valorPago>=CONFIG.VALOR?'✅':'❌'} ${p.nome}`).join('\n');
-        fetch(`https://api.telegram.org/bot${CONFIG.TG_TOKEN}/sendMessage`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:CONFIG.TG_CHAT,text:`Lista:\n${t}`})});
+        const listaFormatada = parts.sort((a,b) => a.numero - b.numero).map(p => {
+            const v = p.valorPago || 0;
+            let icon = '🔴'; 
+            if(v >= CONFIG.VALOR) icon = '🟢'; 
+            else if(v > 0) icon = '⚠️';
+            const extra = (icon === '⚠️') ? ` (R$ ${v})` : '';
+            return `${p.numero}. ${icon} ${p.nome}${extra}`;
+        }).join('\n');
+
+        const textoFinal = `📊 *BOLÃO CAMINO*\n\n${listaFormatada}\n\nLegenda:\n🟢 Pago\n⚠️ Parcial\n🔴 Não Pago`;
+
+        fetch(`https://api.telegram.org/bot${CONFIG.TG_TOKEN}/sendMessage`,{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({chat_id:CONFIG.TG_CHAT, text: textoFinal})
+        });
+        alert("Enviado!");
     }
 }
 
