@@ -25,7 +25,7 @@
 
     .container {
         background: var(--card-bg);
-        width: 100%; max-width: 420px;
+        width: 100%; max-width: 450px; /* Ajustado para comportar a logo maior */
         height: auto; max-height: 95vh;
         border-radius: 20px; padding: 15px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.05);
@@ -38,7 +38,14 @@
     .container.expanded { height: 90vh; }
 
     /* --- TOPO --- */
-    .logo-img { max-width: 500px; margin-bottom: 5px; margin-left: auto; margin-right: auto; display: block; }
+    .logo-img { 
+        display: block;
+        width: 100%; /* Ocupa o espaço disponível até o max-width */
+        max-width: 450px; /* Largura solicitada */
+        height: auto;
+        margin: 0 auto 10px auto; /* Centralização */
+    }
+
     .info-header { font-size: 0.8rem; color: #666; margin-bottom: 2px; display: flex; justify-content: center; gap: 5px; align-items: center; }
     .date-header { font-size: 0.75rem; color: #888; margin-bottom: 10px; }
 
@@ -65,6 +72,9 @@
     
     .progress-legend { display: flex; justify-content: space-between; align-items: center; font-size: 0.65rem; font-weight: bold; color: #555; margin-top: 8px; }
     .legend-item { display: flex; align-items: center; gap: 4px; }
+    .dot-leg-paid { width: 10px; height: 10px; border-radius: 50%; background: #009432; }
+    .dot-leg-part { width: 10px; height: 10px; border-radius: 50%; background: #badc58; }
+    .dot-leg-pend { width: 10px; height: 10px; border-radius: 50%; background: #00cec9; }
     .progress-money { font-size: 0.7rem; color: #777; margin-top: 5px; font-weight: normal; }
 
     /* --- FORMULÁRIO --- */
@@ -147,9 +157,9 @@
                 <div class="metallic-bar bar-layer-paid" id="barPaid"></div>
             </div>
             <div class="progress-legend">
-                <div class="legend-item">🟢 <span id="txtPaid">0 Pagos</span></div>
-                <div class="legend-item">⚠️ <span id="txtPartial">0 Parc</span></div>
-                <div class="legend-item">🔴 <span id="txtPend">0 Pend</span></div>
+                <div class="legend-item"><span class="dot-leg-paid"></span> <span id="txtPaid">0 Pagos</span></div>
+                <div class="legend-item"><span class="dot-leg-part"></span> <span id="txtPartial">0 Parc</span></div>
+                <div class="legend-item"><span class="dot-leg-pend"></span> <span id="txtPend">0 Pend</span></div>
             </div>
             <div class="progress-money" id="pMoney">Arrecadado: R$ 0,00</div>
         </div>
@@ -173,7 +183,7 @@
                 <option value="todos">Filtro</option>
                 <option value="todos">👥 Todos</option>
                 <option value="pagos">🟢 Pagos</option>
-                <option value="parciais">⚠️ Parcial</option>
+                <option value="parciais">🟡 Parcial</option>
                 <option value="pendentes">🔴 Pend</option>
             </select>
             <div class="icon-group">
@@ -214,11 +224,13 @@
         <h3>Definir Valor</h3>
         <p id="pgtoNome" style="font-weight:bold; color:#555; margin-bottom:5px;"></p>
         <input type="number" id="pgtoValor" placeholder="R$ 0,00" style="font-size:1.5rem; margin:15px 0; width:100%; text-align:center; padding:10px; border:1px solid #ccc; border-radius:10px;">
+        
         <div style="display:flex; gap:10px;">
             <button class="btn-gray-block" style="background:#e74c3c; flex:1" onclick="setVal(0)">ZERAR</button>
             <button class="btn-gray-block" style="background:#f1c40f; flex:1; color:#333" onclick="setVal(50)">50%</button>
             <button class="btn-green-block" style="flex:1" onclick="setVal(100)">TOTAL</button>
         </div>
+        
         <button class="btn-green-block" style="width:100%; margin-top:15px;" id="btnSalvarPgto">SALVAR</button>
         <button class="btn-gray-block" style="width:100%; margin-top:5px;" onclick="fecharModal('modalPagamento')">CANCELAR</button>
     </div>
