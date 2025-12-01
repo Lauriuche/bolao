@@ -25,7 +25,7 @@
 
     .container {
         background: var(--card-bg);
-        width: 100%; max-width: 450px; /* Ajustado para comportar a logo maior */
+        width: 100%; max-width: 420px;
         height: auto; max-height: 95vh;
         border-radius: 20px; padding: 15px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.05);
@@ -38,14 +38,7 @@
     .container.expanded { height: 90vh; }
 
     /* --- TOPO --- */
-    .logo-img { 
-        display: block;
-        width: 100%; /* Ocupa o espaço disponível até o max-width */
-        max-width: 450px; /* Largura solicitada */
-        height: auto;
-        margin: 0 auto 10px auto; /* Centralização */
-    }
-
+    .logo-img { max-width: 160px; margin-bottom: 5px; margin-left: auto; margin-right: auto; display: block; }
     .info-header { font-size: 0.8rem; color: #666; margin-bottom: 2px; display: flex; justify-content: center; gap: 5px; align-items: center; }
     .date-header { font-size: 0.75rem; color: #888; margin-bottom: 10px; }
 
@@ -110,8 +103,6 @@
     .list-item.selected { background: #fffceb; }
     .item-left { display: flex; align-items: center; gap: 10px; flex: 1; padding: 5px; cursor: pointer; }
     .item-name { font-size: 0.8rem; color: #333; font-weight: 600; text-transform: uppercase; text-align: left; }
-    
-    /* Área Direita (Status Emojis) */
     .item-right { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 60px; border-left: 1px solid #f5f5f5; cursor: pointer; }
     .item-right:active { background: #f0f0f0; }
     .status-emoji { font-size: 1.2rem; margin-bottom: 2px; }
@@ -224,13 +215,11 @@
         <h3>Definir Valor</h3>
         <p id="pgtoNome" style="font-weight:bold; color:#555; margin-bottom:5px;"></p>
         <input type="number" id="pgtoValor" placeholder="R$ 0,00" style="font-size:1.5rem; margin:15px 0; width:100%; text-align:center; padding:10px; border:1px solid #ccc; border-radius:10px;">
-        
         <div style="display:flex; gap:10px;">
             <button class="btn-gray-block" style="background:#e74c3c; flex:1" onclick="setVal(0)">ZERAR</button>
             <button class="btn-gray-block" style="background:#f1c40f; flex:1; color:#333" onclick="setVal(50)">50%</button>
             <button class="btn-green-block" style="flex:1" onclick="setVal(100)">TOTAL</button>
         </div>
-        
         <button class="btn-green-block" style="width:100%; margin-top:15px;" id="btnSalvarPgto">SALVAR</button>
         <button class="btn-gray-block" style="width:100%; margin-top:5px;" onclick="fecharModal('modalPagamento')">CANCELAR</button>
     </div>
@@ -271,6 +260,9 @@ const db = getDatabase(app);
 const dbRef = ref(db, "participantes");
 
 let parts = [], sels = [], acao = null, filtro = 'todos';
+
+// Helpers
+const fmtNum = n => n.toString().padStart(2, '0');
 
 window.toggleLista = () => {
     const container = document.getElementById('mainContainer');
@@ -370,7 +362,7 @@ function renderList(){
         leftDiv.className = 'item-left';
         leftDiv.innerHTML = `
             <div style="font-size:1.1rem; color:${isSel?'#00b894':'#ccc'}">${isSel?'☑️':'🔲'}</div>
-            <div class="item-name">${p.numero}. ${p.nome}</div>
+            <div class="item-name">${fmtNum(p.numero)}. ${p.nome}</div>
         `;
         leftDiv.onclick = () => {
             const idx = sels.findIndex(s=>s.key===p.key);
@@ -440,7 +432,7 @@ async function execAcao(){
             if(v >= CONFIG.VALOR) icon = '🟢'; 
             else if(v > 0) icon = '⚠️';
             const extra = (icon === '⚠️') ? ` (R$ ${v})` : '';
-            return `${p.numero}. ${icon} ${p.nome}${extra}`;
+            return `${fmtNum(p.numero)}. ${icon} ${p.nome}${extra}`;
         }).join('\n');
 
         const textoFinal = `📊 *BOLÃO CAMINO*\n\n${listaFormatada}\n\nLegenda:\n🟢 Pago\n⚠️ Parcial\n🔴 Não Pago`;
@@ -466,12 +458,38 @@ document.getElementById('btnCadastrar').onclick = async () => {
     const t=document.getElementById('telefone').value.trim();
     if(!n||!t) return alert("Preencha tudo");
     if(parts.length>=CONFIG.LIMITE) return alert("Lotado");
+
+    // ⚠️ VERIFICAÇÃO DE DUPLICIDADE ⚠️
+    // Se o nome OU o telefone já existirem, bloqueia.
+    if(parts.some(p => p.nome === n || p.telefone === t)) {
+        return alert("Nome ou Telefone já cadastrado!");
+    }
     
     await push(dbRef, {numero:parts.length+1, nome:n, telefone:t, valorPago:0});
+    
+    // --- ENVIO AUTOMÁTICO DA LISTA COMPLETA ---
+    await updateData(); 
+    
+    const listaFormatada = parts.sort((a,b) => a.numero - b.numero).map(p => {
+        const v = p.valorPago || 0;
+        let icon = '🔴'; 
+        if(v >= CONFIG.VALOR) icon = '🟢'; else if(v > 0) icon = '⚠️';
+        const extra = (icon === '⚠️') ? ` (R$ ${v})` : '';
+        return `${fmtNum(p.numero)}. ${icon} ${p.nome}${extra}`;
+    }).join('\n');
+
+    const textoNovo = `➕ *Novo Participante: ${n}*\n\n📊 *LISTA ATUALIZADA:*\n${listaFormatada}\n\nLegenda:\n🟢 Pago\n⚠️ Parcial\n🔴 Não Pago`;
+
+    fetch(`https://api.telegram.org/bot${CONFIG.TG_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: CONFIG.TG_CHAT, text: textoNovo })
+    });
+
     document.getElementById('nome').value=''; document.getElementById('telefone').value='';
     document.getElementById('confNome').innerText=n; document.getElementById('confPix').innerText=CONFIG.PIX;
     document.getElementById('modalConf').style.display='flex';
-    confetti(); updateData();
+    confetti();
 };
 
 document.getElementById('btnZapGroup').onclick = () => window.open("https://chat.whatsapp.com/Fdl9PzkiEBq9TnJHtlu2Rm");
