@@ -25,24 +25,34 @@
 
     .container {
         background: var(--card-bg);
-        width: 100%; max-width: 420px;
-        height: auto; max-height: 95vh;
+        width: 100%; 
+        /* AJUSTE: Largura aumentada para 450px conforme solicitado */
+        max-width: 450px; 
+        height: auto; 
+        max-height: 95vh; 
         border-radius: 20px; padding: 15px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        text-align: center;
-        display: flex; flex-direction: column;
+        text-align: center; 
+        display: flex;
+        flex-direction: column;
         transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-        overflow: hidden;
+        overflow: hidden; 
     }
 
     .container.expanded { height: 90vh; }
 
     /* --- TOPO --- */
-    .logo-img {
-    max-width: 450px;
-    display: block;      /* Faz a imagem comportar-se como um bloco */
-    margin: 0 auto 5px;  /* 0 (topo), auto (lados), 5px (baixo) */
-}
+    .scrollable-content { overflow-y: auto; scrollbar-width: none; }
+    .scrollable-content::-webkit-scrollbar { display: none; }
+
+    /* AJUSTE: Logo com 450px e centralizada */
+    .logo-img { 
+        display: block;
+        width: 100%;
+        max-width: 450px; 
+        height: auto; 
+        margin: 0 auto 10px auto; 
+    }
 
     .info-header { font-size: 0.8rem; color: #666; margin-bottom: 2px; display: flex; justify-content: center; gap: 5px; align-items: center; }
     .date-header { font-size: 0.75rem; color: #888; margin-bottom: 10px; }
@@ -67,7 +77,6 @@
     .bar-layer-reg { z-index: 1; background: linear-gradient(to bottom, #81ecec, #00cec9, #00b894); }
     .bar-layer-partial { z-index: 2; background: linear-gradient(to bottom, #badc58, #6ab04c, #badc58); }
     .bar-layer-paid { z-index: 3; background: linear-gradient(to bottom, #55efc4, #009432, #006266); border-top-right-radius: 2px; border-bottom-right-radius: 2px; }
-    
     .progress-legend { display: flex; justify-content: space-between; align-items: center; font-size: 0.65rem; font-weight: bold; color: #555; margin-top: 8px; }
     .legend-item { display: flex; align-items: center; gap: 4px; }
     .dot-leg-paid { width: 10px; height: 10px; border-radius: 50%; background: #009432; }
@@ -123,7 +132,7 @@
 <body>
 
 <div class="container" id="mainContainer">
-    <div id="topContent">
+    <div id="topContent" class="scrollable-content">
         <img src="1001859236.png" alt="Logo" class="logo-img">
         <div class="info-header"><span>🎰 60 pessoas</span> • <span>💰 R$ 100,00</span></div>
         <div class="date-header">📅 Pagamento: até 20 de Dezembro</div>
@@ -465,7 +474,6 @@ document.getElementById('btnCadastrar').onclick = async () => {
     if(parts.length>=CONFIG.LIMITE) return alert("Lotado");
 
     // ⚠️ VERIFICAÇÃO DE DUPLICIDADE ⚠️
-    // Se o nome OU o telefone já existirem, bloqueia.
     if(parts.some(p => p.nome === n || p.telefone === t)) {
         return alert("Nome ou Telefone já cadastrado!");
     }
