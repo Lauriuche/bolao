@@ -25,18 +25,14 @@
 
     .container {
         background: var(--card-bg);
-        width: 100%; 
-        /* AJUSTE: Largura aumentada para 450px conforme solicitado */
-        max-width: 450px; 
-        height: auto; 
-        max-height: 95vh; 
+        width: 100%; max-width: 450px;
+        height: auto; max-height: 95vh;
         border-radius: 20px; padding: 15px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        text-align: center; 
-        display: flex;
-        flex-direction: column;
+        text-align: center;
+        display: flex; flex-direction: column;
         transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-        overflow: hidden; 
+        overflow: hidden;
     }
 
     .container.expanded { height: 90vh; }
@@ -45,12 +41,8 @@
     .scrollable-content { overflow-y: auto; scrollbar-width: none; }
     .scrollable-content::-webkit-scrollbar { display: none; }
 
-    /* AJUSTE: Logo com 450px e centralizada */
     .logo-img { 
-        display: block;
-        width: 100%;
-        max-width: 450px; 
-        height: auto; 
+        display: block; width: 100%; max-width: 450px; height: auto;
         margin: 0 auto 10px auto; 
     }
 
@@ -74,9 +66,11 @@
     .progress-area { margin-bottom: 15px; background: #f5f6fa; padding: 15px 10px; border-radius: 10px; }
     .progress-capsule { position: relative; height: 20px; background: #e0e0e0; border: 1px solid #999; border-radius: 10px; overflow: hidden; margin-bottom: 8px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.2); }
     .metallic-bar { position: absolute; top: 0; left: 0; bottom: 0; height: 100%; border-right: 1px solid rgba(255,255,255,0.2); transition: width 1s ease-in-out; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+    
     .bar-layer-reg { z-index: 1; background: linear-gradient(to bottom, #81ecec, #00cec9, #00b894); }
     .bar-layer-partial { z-index: 2; background: linear-gradient(to bottom, #badc58, #6ab04c, #badc58); }
     .bar-layer-paid { z-index: 3; background: linear-gradient(to bottom, #55efc4, #009432, #006266); border-top-right-radius: 2px; border-bottom-right-radius: 2px; }
+
     .progress-legend { display: flex; justify-content: space-between; align-items: center; font-size: 0.65rem; font-weight: bold; color: #555; margin-top: 8px; }
     .legend-item { display: flex; align-items: center; gap: 4px; }
     .dot-leg-paid { width: 10px; height: 10px; border-radius: 50%; background: #009432; }
@@ -117,6 +111,7 @@
     .list-item.selected { background: #fffceb; }
     .item-left { display: flex; align-items: center; gap: 10px; flex: 1; padding: 5px; cursor: pointer; }
     .item-name { font-size: 0.8rem; color: #333; font-weight: 600; text-transform: uppercase; text-align: left; }
+    
     .item-right { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 60px; border-left: 1px solid #f5f5f5; cursor: pointer; }
     .item-right:active { background: #f0f0f0; }
     .status-emoji { font-size: 1.2rem; margin-bottom: 2px; }
@@ -209,6 +204,7 @@
     <div id="msgBox" style="margin-top:10px; height:20px; font-weight:bold;"></div>
 </div>
 
+<!-- MODAIS -->
 <div class="modal-overlay" id="modalSenha">
     <div class="modal-box">
         <h3 style="margin:0 0 10px 0; color:#333;">Senha Admin</h3>
@@ -352,17 +348,30 @@ async function updateData(){
 
 function renderList(){
     const div = document.getElementById('listaDiv'); div.innerHTML='';
-    let list = parts.slice().sort((a,b)=>a.numero-b.numero);
     
-    if(filtro==='pagos') list = list.filter(p=>(p.valorPago||0)>=CONFIG.VALOR);
-    if(filtro==='pendentes') list = list.filter(p=>(p.valorPago||0)==0);
-    if(filtro==='parciais') list = list.filter(p=>(p.valorPago||0)>0 && (p.valorPago||0)<CONFIG.VALOR);
+    // 🔥 CORREÇÃO PRINCIPAL: Ordena sempre por quem entrou primeiro (Data/Chave)
+    // Isso garante que a ordem 1, 2, 3... seja fixa e consistente
+    // parts já vem do firebase, que normalmente traz ordenado por chave (push id)
+    // Se quiser garantir por nome, use .sort((a,b) => a.nome.localeCompare(b.nome));
+    let list = parts.slice(); // Cópia para não estragar o original
     
     const term = document.getElementById('buscar').value.toUpperCase();
-    if(term) list = list.filter(p=>p.nome.includes(term));
-
-    list.forEach(p => {
+    
+    // Gerar HTML de todos, mas só exibir os que batem com filtro
+    // O segredo é usar o índice ORIGINAL da lista completa para o número
+    list.forEach((p, index) => {
         const v = p.valorPago||0;
+        
+        // Lógica de Filtro
+        let show = true;
+        if(filtro==='pagos' && v < CONFIG.VALOR) show = false;
+        if(filtro==='pendentes' && v > 0) show = false;
+        if(filtro==='parciais' && (v == 0 || v >= CONFIG.VALOR)) show = false;
+        if(term && !p.nome.includes(term)) show = false;
+
+        if(!show) return; // Pula se não passar no filtro
+
+        // Ícone Status
         let emojiStatus = '🔴', txtStatus = 'PEND';
         if(v >= CONFIG.VALOR) { emojiStatus='🟢'; txtStatus='PAGO'; }
         else if(v > 0) { emojiStatus='⚠️'; txtStatus='PARCIAL'; }
@@ -376,12 +385,13 @@ function renderList(){
         leftDiv.className = 'item-left';
         leftDiv.innerHTML = `
             <div style="font-size:1.1rem; color:${isSel?'#00b894':'#ccc'}">${isSel?'☑️':'🔲'}</div>
-            <div class="item-name">${fmtNum(p.numero)}. ${p.nome}</div>
+            <!-- Usa index + 1 para numeração sequencial sem buracos -->
+            <div class="item-name">${fmtNum(index + 1)}. ${p.nome}</div>
         `;
         leftDiv.onclick = () => {
             const idx = sels.findIndex(s=>s.key===p.key);
             if(idx>=0) sels.splice(idx,1); else sels.push(p);
-            renderList();
+            renderList(); updateSelectAllIcon();
         };
 
         const rightDiv = document.createElement('div');
@@ -396,6 +406,7 @@ function renderList(){
         el.appendChild(rightDiv);
         div.appendChild(el);
     });
+    updateSelectAllIcon();
 }
 
 document.getElementById('buscar').oninput = () => renderList();
@@ -416,6 +427,18 @@ window.toggleSelectAll = () => {
     }
     renderList();
 };
+
+function updateSelectAllIcon(){
+    let list = parts;
+    if(filtro==='pagos') list = list.filter(p=>(p.valorPago||0)>=CONFIG.VALOR);
+    if(filtro==='pendentes') list = list.filter(p=>(p.valorPago||0)==0);
+    if(filtro==='parciais') list = list.filter(p=>(p.valorPago||0)>0 && (p.valorPago||0)<CONFIG.VALOR);
+    const term = document.getElementById('buscar').value.toUpperCase();
+    if(term) list = list.filter(p=>p.nome.includes(term));
+    
+    const allSel = list.length > 0 && list.every(p=>sels.some(s=>s.key===p.key));
+    document.getElementById('iconSelectAll').innerText = allSel ? '☑️' : '🔲';
+}
 
 async function execAcao(){
     if(acao === 'pagamento'){
@@ -440,13 +463,15 @@ async function execAcao(){
         });
     }
     else if(acao === 'telegram'){
-        const listaFormatada = parts.sort((a,b) => a.numero - b.numero).map(p => {
+        // --- GERAR LISTA REORDENADA E NUMERADA PARA TELEGRAM ---
+        const listaFormatada = parts.map((p, index) => {
             const v = p.valorPago || 0;
             let icon = '🔴'; 
             if(v >= CONFIG.VALOR) icon = '🟢'; 
             else if(v > 0) icon = '⚠️';
             const extra = (icon === '⚠️') ? ` (R$ ${v})` : '';
-            return `${fmtNum(p.numero)}. ${icon} ${p.nome}${extra}`;
+            // Usa index + 1 para numeração correta
+            return `${fmtNum(index + 1)}. ${icon} ${p.nome}${extra}`;
         }).join('\n');
 
         const textoFinal = `📊 *BOLÃO CAMINO*\n\n${listaFormatada}\n\nLegenda:\n🟢 Pago\n⚠️ Parcial\n🔴 Não Pago`;
@@ -478,17 +503,16 @@ document.getElementById('btnCadastrar').onclick = async () => {
         return alert("Nome ou Telefone já cadastrado!");
     }
     
-    await push(dbRef, {numero:parts.length+1, nome:n, telefone:t, valorPago:0});
+    // Salva SEM o campo numero, pois ele é dinâmico agora
+    await push(dbRef, {nome:n, telefone:t, valorPago:0});
     
-    // --- ENVIO AUTOMÁTICO DA LISTA COMPLETA ---
     await updateData(); 
     
-    const listaFormatada = parts.sort((a,b) => a.numero - b.numero).map(p => {
+    // --- LISTA COMPLETA NO TELEGRAM ---
+    const listaFormatada = parts.map((p, index) => {
         const v = p.valorPago || 0;
-        let icon = '🔴'; 
-        if(v >= CONFIG.VALOR) icon = '🟢'; else if(v > 0) icon = '⚠️';
-        const extra = (icon === '⚠️') ? ` (R$ ${v})` : '';
-        return `${fmtNum(p.numero)}. ${icon} ${p.nome}${extra}`;
+        let icon = '🔴'; if(v >= CONFIG.VALOR) icon = '🟢'; else if(v > 0) icon = '⚠️';
+        return `${fmtNum(index + 1)}. ${icon} ${p.nome}`;
     }).join('\n');
 
     const textoNovo = `➕ *Novo Participante: ${n}*\n\n📊 *LISTA ATUALIZADA:*\n${listaFormatada}\n\nLegenda:\n🟢 Pago\n⚠️ Parcial\n🔴 Não Pago`;
