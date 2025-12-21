@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Bolão Colaboradores Camino</title>
 <style>
+    /* CORREÇÃO 1: Garante que padding não aumente a largura dos elementos */
+    * { box-sizing: border-box; }
+
     :root {
         --bg-color: #f0f2f5;
         --card-bg: #ffffff;
@@ -20,7 +23,7 @@
         font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         background: var(--bg-color);
         min-height: 100vh; display: flex; justify-content: center; align-items: center;
-        overflow: hidden;
+        overflow: hidden; /* Mantém o corpo fixo e rola apenas o conteúdo interno */
     }
 
     .container {
@@ -33,12 +36,17 @@
         display: flex; flex-direction: column;
         transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         overflow: hidden;
+        position: relative; /* Para posicionamento correto */
     }
 
     .container.expanded { height: 90vh; }
 
     /* --- TOPO --- */
-    .scrollable-content { overflow-y: auto; scrollbar-width: none; }
+    .scrollable-content { 
+        overflow-y: auto; 
+        scrollbar-width: none; 
+        flex-shrink: 1; /* Permite encolher se necessário */
+    }
     .scrollable-content::-webkit-scrollbar { display: none; }
 
     .logo-img { 
@@ -81,7 +89,7 @@
     /* --- FORMULÁRIO --- */
     .instruction { font-size: 0.8rem; color: #444; margin-bottom: 10px; }
     @keyframes pulse-input { 0% { border-color: #e0e0e0; } 50% { border-color: #badc58; } 100% { border-color: #e0e0e0; } }
-    input.form-input { width: 100%; box-sizing: border-box; padding: 12px; margin-bottom: 8px; border: 1px solid #e0e0e0; border-bottom: 3px solid #badc58; border-radius: 8px; font-size: 0.9rem; text-align: center; outline: none; background: #fff; animation: pulse-input 3s infinite; }
+    input.form-input { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid #e0e0e0; border-bottom: 3px solid #badc58; border-radius: 8px; font-size: 0.9rem; text-align: center; outline: none; background: #fff; animation: pulse-input 3s infinite; }
     input.form-input:focus { border-bottom-color: var(--primary-green); animation: none; }
 
     .action-row { display: grid; grid-template-columns: 1fr 1.5fr; gap: 8px; margin-bottom: 8px; }
@@ -92,7 +100,7 @@
     .btn-list-expand { width: 100%; background: #2ecc71; color: white; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; margin-bottom: 0; }
 
     /* --- LISTA --- */
-    #listaContainer { display: none; flex-direction: column; flex: 1; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px; overflow: hidden; }
+    #listaContainer { display: none; flex-direction: column; flex: 1; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px; overflow: hidden; min-height: 0; /* Correção para flexbox */ }
     .container.expanded #listaContainer { display: flex; animation: fadeIn 0.5s ease; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
@@ -128,12 +136,13 @@
 
 <div class="container" id="mainContainer">
     <div id="topContent" class="scrollable-content">
-        <img src="1001859236.png" alt="Logo" class="logo-img">
+        <img src="1001859236.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
         <div class="info-header"><span>🎰 60 pessoas</span> • <span>💰 R$ 100,00</span></div>
         <div class="date-header">📅 Pagamento: até 20 de Dezembro</div>
 
         <div class="badges-row">
-            <div class="badge-premio">🏆 R$ 1 Bilhão/div>
+            <!-- CORREÇÃO 2: Tag div fechada corretamente aqui -->
+            <div class="badge-premio">🏆 R$ 1 Bilhão</div>
             <button class="btn-regras" onclick="document.getElementById('modalRegras').style.display='flex'">📋 REGRAS</button>
         </div>
 
@@ -349,29 +358,22 @@ async function updateData(){
 function renderList(){
     const div = document.getElementById('listaDiv'); div.innerHTML='';
     
-    // 🔥 CORREÇÃO PRINCIPAL: Ordena sempre por quem entrou primeiro (Data/Chave)
-    // Isso garante que a ordem 1, 2, 3... seja fixa e consistente
-    // parts já vem do firebase, que normalmente traz ordenado por chave (push id)
-    // Se quiser garantir por nome, use .sort((a,b) => a.nome.localeCompare(b.nome));
-    let list = parts.slice(); // Cópia para não estragar o original
+    // Mantém a ordem de inserção do Firebase
+    let list = parts.slice(); 
     
     const term = document.getElementById('buscar').value.toUpperCase();
     
-    // Gerar HTML de todos, mas só exibir os que batem com filtro
-    // O segredo é usar o índice ORIGINAL da lista completa para o número
     list.forEach((p, index) => {
         const v = p.valorPago||0;
         
-        // Lógica de Filtro
         let show = true;
         if(filtro==='pagos' && v < CONFIG.VALOR) show = false;
         if(filtro==='pendentes' && v > 0) show = false;
         if(filtro==='parciais' && (v == 0 || v >= CONFIG.VALOR)) show = false;
         if(term && !p.nome.includes(term)) show = false;
 
-        if(!show) return; // Pula se não passar no filtro
+        if(!show) return; 
 
-        // Ícone Status
         let emojiStatus = '🔴', txtStatus = 'PEND';
         if(v >= CONFIG.VALOR) { emojiStatus='🟢'; txtStatus='PAGO'; }
         else if(v > 0) { emojiStatus='⚠️'; txtStatus='PARCIAL'; }
@@ -385,7 +387,6 @@ function renderList(){
         leftDiv.className = 'item-left';
         leftDiv.innerHTML = `
             <div style="font-size:1.1rem; color:${isSel?'#00b894':'#ccc'}">${isSel?'☑️':'🔲'}</div>
-            <!-- Usa index + 1 para numeração sequencial sem buracos -->
             <div class="item-name">${fmtNum(index + 1)}. ${p.nome}</div>
         `;
         leftDiv.onclick = () => {
@@ -463,14 +464,12 @@ async function execAcao(){
         });
     }
     else if(acao === 'telegram'){
-        // --- GERAR LISTA REORDENADA E NUMERADA PARA TELEGRAM ---
         const listaFormatada = parts.map((p, index) => {
             const v = p.valorPago || 0;
             let icon = '🔴'; 
             if(v >= CONFIG.VALOR) icon = '🟢'; 
             else if(v > 0) icon = '⚠️';
             const extra = (icon === '⚠️') ? ` (R$ ${v})` : '';
-            // Usa index + 1 para numeração correta
             return `${fmtNum(index + 1)}. ${icon} ${p.nome}${extra}`;
         }).join('\n');
 
@@ -498,17 +497,14 @@ document.getElementById('btnCadastrar').onclick = async () => {
     if(!n||!t) return alert("Preencha tudo");
     if(parts.length>=CONFIG.LIMITE) return alert("Lotado");
 
-    // ⚠️ VERIFICAÇÃO DE DUPLICIDADE ⚠️
     if(parts.some(p => p.nome === n || p.telefone === t)) {
         return alert("Nome ou Telefone já cadastrado!");
     }
     
-    // Salva SEM o campo numero, pois ele é dinâmico agora
     await push(dbRef, {nome:n, telefone:t, valorPago:0});
     
     await updateData(); 
     
-    // --- LISTA COMPLETA NO TELEGRAM ---
     const listaFormatada = parts.map((p, index) => {
         const v = p.valorPago || 0;
         let icon = '🔴'; if(v >= CONFIG.VALOR) icon = '🟢'; else if(v > 0) icon = '⚠️';
@@ -547,3 +543,4 @@ updateData();
 </script>
 </body>
 </html>
+
