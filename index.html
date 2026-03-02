@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Bolão Colaboradores Camino</title>
+<!-- Fontes e Ícones -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+    :root {
+        --primary: #00ff88;
+        --primary-glow: rgba(0, 255, 136, 0.4);
+        --bg: #030303;
+        --surface: #0a0a0a;
+        --surface-accent: #151515;
+        --border: rgba(255, 255, 255, 0.08);
+        --text-main: #ffffff;
+        --text-dim: #999999;
+        --red-alert: #ff4d4d;
+        --yellow-warn: #ffcc00;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    body {
+        background-color: var(--bg);
+        color: var(--text-main);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 15px;
+        overflow: hidden;
+        background: radial-gradient(circle at top, rgba(0, 255, 136, 0.05) 0%, transparent 60%);
+    }
+
+    .container {
+        background: var(--surface);
+        width: 100%;
+        max-width: 450px;
+        height: auto;
+        max-height: 95vh;
+        border-radius: 35px;
+        padding: 25px;
+        border: 1px solid var(--border);
+        box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .container.expanded { height: 90vh; }
+
+    .scrollable-content { 
+        overflow-y: auto; 
+        scrollbar-width: none; 
+        flex-shrink: 1;
+    }
+    .scrollable-content::-webkit-scrollbar { display: none; }
+
+    /* Hero elements */
+    .hero-badge { 
+        background: rgba(0, 255, 136, 0.1); 
+        color: var(--primary); 
+        padding: 6px 15px; 
+        border-radius: 100px; 
+        font-size: 0.65rem; 
+        font-weight: 800; 
+        text-transform: uppercase; 
+        letter-spacing: 1.5px; 
+        border: 1px solid rgba(0, 255, 136, 0.2); 
+        margin-bottom: 15px; 
+        display: inline-block; 
+    }
+
+    .logo-img { 
+        display: block; width: 100%; max-width: 180px; height: auto;
+        margin: 0 auto 15px auto; 
+    }
+
+    .info-header { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 5px; font-weight: 600; }
+    .date-header { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 20px; opacity: 0.7; }
+
+    /* --- CONTADOR --- */
+    .countdown-card { 
+        background: var(--surface-accent); 
+        border-radius: 25px; 
+        padding: 15px; 
+        margin-bottom: 20px; 
+        border: 1px solid var(--border);
+    }
+    .countdown-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; color: var(--text-dim); }
+    .timer-grid { display: flex; justify-content: center; gap: 12px; }
+    .time-box { display: flex; flex-direction: column; align-items: center; width: 45px; }
+    .time-val { font-size: 1.4rem; font-weight: 800; color: var(--primary); line-height: 1; text-shadow: 0 0 15px var(--primary-glow); }
+    .time-unit { font-size: 0.55rem; margin-top: 5px; color: var(--text-dim); font-weight: 800; }
+    .time-sep { font-size: 1.2rem; color: var(--border); margin-top: 2px; }
+
+    /* --- PROGRESSO --- */
+    .progress-area { margin-bottom: 25px; background: rgba(255,255,255,0.02); padding: 20px; border-radius: 25px; border: 1px solid var(--border); }
+    .progress-capsule { position: relative; height: 12px; background: rgba(255,255,255,0.05); border-radius: 100px; overflow: hidden; margin-bottom: 15px; }
+    .metallic-bar { position: absolute; top: 0; left: 0; bottom: 0; height: 100%; transition: width 1s ease; border-radius: 100px; }
+    
+    .bar-layer-reg { z-index: 1; background: #333; }
+    .bar-layer-partial { z-index: 2; background: var(--yellow-warn); opacity: 0.6; }
+    .bar-layer-paid { z-index: 3; background: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
+
+    .progress-legend { display: flex; justify-content: space-between; font-size: 0.65rem; font-weight: 800; color: var(--text-dim); }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .progress-money { font-size: 0.8rem; color: var(--primary); margin-top: 10px; font-weight: 800; }
+
+    /* --- FORMULÁRIO --- */
+    input.form-input { 
+        width: 100%; 
+        padding: 16px; 
+        margin-bottom: 12px; 
+        background: rgba(255,255,255,0.03);
+        border: 1px solid var(--border); 
+        border-radius: 18px; 
+        font-size: 0.95rem; 
+        text-align: center; 
+        color: white;
+        outline: none; 
+        transition: 0.3s;
+    }
+    input.form-input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 255, 136, 0.1); background: rgba(255,255,255,0.06); }
+
+    .action-row { display: grid; grid-template-columns: 1fr 1.5fr; gap: 10px; margin-bottom: 10px; }
+    
+    .btn-gray-block { background: var(--surface-accent); color: var(--text-dim); padding: 14px; border-radius: 18px; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; border: 1px solid var(--border); transition: 0.3s; }
+    .btn-green-block { 
+        background: var(--primary); 
+        color: #000; 
+        padding: 14px; 
+        border-radius: 18px; 
+        font-weight: 800; 
+        font-size: 0.85rem; 
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        box-shadow: 0 10px 20px var(--primary-glow);
+        transition: 0.3s;
+    }
+    .btn-green-block:hover { transform: translateY(-3px); box-shadow: 0 15px 30px var(--primary-glow); }
+
+    .btn-list-expand { 
+        width: 100%; 
+        background: transparent; 
+        color: var(--primary); 
+        padding: 15px; 
+        font-weight: 800; 
+        font-size: 0.85rem; 
+        border: 1px dashed var(--primary);
+        border-radius: 20px;
+        margin-top: 10px;
+    }
+
+    /* --- LISTA --- */
+    #listaContainer { display: none; flex-direction: column; flex: 1; margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px; overflow: hidden; }
+    .container.expanded #listaContainer { display: flex; animation: fadeIn 0.4s ease; }
+    
+    .toolbar { display: flex; align-items: center; gap: 8px; padding-bottom: 15px; }
+    .search-input-clean { flex: 1; padding: 12px; border: 1px solid var(--border); border-radius: 14px; font-size: 0.85rem; background: rgba(255,255,255,0.03); color: white; outline: none; }
+    .filter-select { background: var(--surface-accent); border: 1px solid var(--border); color: white; padding: 10px; border-radius: 14px; font-size: 0.75rem; font-weight: 800; }
+    
+    .icon-btn { width: 36px; height: 36px; border-radius: 12px; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
+
+    #listaDiv { flex: 1; overflow-y: auto; padding-bottom: 20px; scrollbar-width: none; }
+    .list-item { background: transparent; border-bottom: 1px solid var(--border); display: flex; align-items: stretch; min-height: 55px; transition: 0.2s; }
+    .list-item.selected { background: rgba(0, 255, 136, 0.05); }
+    .item-left { display: flex; align-items: center; gap: 12px; flex: 1; padding: 10px; }
+    .item-name { font-size: 0.75rem; color: var(--text-main); font-weight: 700; text-transform: uppercase; }
+    
+    .item-right { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 60px; border-left: 1px solid var(--border); }
+    .status-emoji { font-size: 1.1rem; }
+    .status-txt { font-size: 0.5rem; font-weight: 800; color: var(--text-dim); }
+
+    .btn-pay-row { background: var(--primary); color: #000; padding: 6px 10px; border-radius: 8px; font-size: 0.6rem; font-weight: 800; display: flex; align-items: center; gap: 4px; }
+
+    /* MODAIS */
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 3000; backdrop-filter: blur(5px); }
+    .modal-box { background: var(--surface); border: 1px solid var(--border); width: 100%; max-width: 340px; border-radius: 40px; padding: 30px; text-align: center; }
+    .num-btn { background: var(--surface-accent); color: white; padding: 20px; font-size: 1.2rem; border-radius: 15px; border: 1px solid var(--border); font-weight: 800; }
+    .num-btn:active { background: var(--primary); color: #000; }
+
+    .btn-checkout { 
+        background: var(--primary); color: #000; width: 100%; margin-top: 20px; padding: 18px; border-radius: 20px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 10px;
+        box-shadow: 0 10px 30px var(--primary-glow);
+    }
+
+    .spinner { width: 20px; height: 20px; border: 3px solid rgba(0,0,0,0.1); border-top: 3px solid #000; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #000; padding: 15px 30px; border-radius: 100px; font-weight: 800; z-index: 5000; display: none; animation: slideUp 0.5s ease; box-shadow: 0 10px 40px var(--primary-glow); }
+    @keyframes slideUp { from { bottom: -50px; opacity: 0; } to { bottom: 30px; opacity: 1; } }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<div class="container" id="mainContainer">
+    <div id="topContent" class="scrollable-content">
+        <div class="hero-badge">🎰 BOLÃO EXCLUSIVO</div>
+        <img src="1001859236.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+        
+        <div class="info-header">💰 Cota: R$ 1,00 • 👥 Limite: 60</div>
+        <div class="date-header">Pagamento até 20 de Dezembro</div>
+
+        <div class="countdown-card">
+            <div class="countdown-label">Tempo restante para adesão</div>
+            <div class="timer-grid">
+                <div class="time-box"><span class="time-val" id="dias">00</span><span class="time-unit">DIAS</span></div>
+                <div class="time-sep">:</div>
+                <div class="time-box"><span class="time-val" id="horas">00</span><span class="time-unit">HRS</span></div>
+                <div class="time-sep">:</div>
+                <div class="time-box"><span class="time-val" id="minutos">00</span><span class="time-unit">MIN</span></div>
+                <div class="time-sep">:</div>
+                <div class="time-box"><span class="time-val" id="segundos">00</span><span class="time-unit">SEG</span></div>
+            </div>
+        </div>
+
+        <div class="progress-area">
+            <div class="progress-capsule">
+                <div class="metallic-bar bar-layer-reg" id="barReg"></div>
+                <div class="metallic-bar bar-layer-partial" id="barPartial"></div>
+                <div class="metallic-bar bar-layer-paid" id="barPaid"></div>
+            </div>
+            <div class="progress-legend">
+                <div class="legend-item"><span class="dot" style="background:var(--primary)"></span> <span id="txtPaid">0 Pagos</span></div>
+                <div class="legend-item"><span class="dot" style="background:var(--yellow-warn)"></span> <span id="txtPartial">0 Parc</span></div>
+                <div class="legend-item"><span class="dot" style="background:#333"></span> <span id="txtPend">0 Pend</span></div>
+            </div>
+            <div class="progress-money" id="pMoney">ARRECADADO: R$ 0,00</div>
+        </div>
+
+        <input type="text" class="form-input" id="nome" placeholder="NOME COMPLETO">
+        <input type="tel" class="form-input" id="telefone" placeholder="WHATSAPP (COM DDD)">
+
+        <div class="action-row">
+            <button class="btn-gray-block" id="btnZapGroup">Grupo</button>
+            <button class="btn-green-block" id="btnCadastrar">🚀 PARTICIPAR</button>
+        </div>
+    </div>
+
+    <button class="btn-list-expand" id="btnToggleLista" onclick="toggleLista()">VER PARTICIPANTES</button>
+
+    <div id="listaContainer">
+        <div class="toolbar">
+            <input type="text" id="buscar" class="search-inaput-clean" placeholder="🔎 Buscar...">
+            <select id="filtroSelect" class="filter-select" onchange="filtrar(this.value)">
+                <option value="todos">FILTRO</option>
+                <option value="todos">TODOS</option>
+                <option value="pagos">PAGOS</option>
+                <option value="parciais">PARCIAL</option>
+                <option value="pendentes">PENDENTE</option>
+            </select>
+            <div class="icon-group">
+                <button class="icon-btn" style="background:#333" onclick="askPass('pagamento')">💰</button>
+                <button class="icon-btn" style="background:#333" onclick="askPass('excluir')">🗑️</button>
+            </div>
+        </div>
+        <div id="listaDiv"></div>
+    </div>
+</div>
+
+<!-- MODAIS -->
+<div class="modal-overlay" id="modalSenha">
+    <div class="modal-box">
+        <h3 style="margin-bottom:15px; font-weight:800;">ADMIN ACCESS</h3>
+        <div id="senhaDisplay" style="font-size:2rem; letter-spacing:8px; height:45px; color:var(--primary); text-shadow: 0 0 10px var(--primary-glow);"></div>
+        <div class="numpad">
+            <button class="num-btn" onclick="digitar('1')">1</button><button class="num-btn" onclick="digitar('2')">2</button><button class="num-btn" onclick="digitar('3')">3</button>
+            <button class="num-btn" onclick="digitar('4')">4</button><button class="num-btn" onclick="digitar('5')">5</button><button class="num-btn" onclick="digitar('6')">6</button>
+            <button class="num-btn" onclick="digitar('7')">7</button><button class="num-btn" onclick="digitar('8')">8</button><button class="num-btn" onclick="digitar('9')">9</button>
+            <button class="num-btn" style="color:var(--red-alert)" onclick="digitar('C')">C</button>
+            <button class="num-btn" onclick="digitar('0')">0</button>
+            <button class="num-btn" onclick="fecharModal('modalSenha')">✕</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modalConf">
+    <div class="modal-box">
+        <div style="font-size:3.5rem; margin-bottom:10px;">⚡</div>
+        <h2 style="color:var(--primary); font-weight:800; letter-spacing:-1px;">REGISTRO OK!</h2>
+        <p style="color:var(--text-dim); font-size:0.9rem; margin-bottom:20px;">Sua cota foi reservada com sucesso.</p>
+        
+        <button class="btn-checkout" id="btnPagarCheckout">
+            <i data-lucide="credit-card"></i> PAGAR AGORA (R$ 1,00)
+        </button>
+        
+        <div style="margin-top:25px; border-top:1px solid var(--border); padding-top:20px;">
+            <p style="font-size:0.75rem; color:var(--text-dim); margin-bottom:10px;">Ou pague via PIX manual:</p>
+            <p style="font-weight:800; color:var(--primary); font-size:1.1rem;" id="confPix"></p>
+            <button class="btn-gray-block" style="width:100%; margin-top:10px;" id="btnZapConf">ENVIAR COMPROVANTE</button>
+        </div>
+        
+        <button class="btn-gray-block" style="width:100%; margin-top:10px; border:none; background:transparent;" onclick="fecharModal('modalConf')">FECHAR</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modalPagamento">
+    <div class="modal-box">
+        <h3 style="font-weight:800;">BAIXA MANUAL</h3>
+        <p id="pgtoNome" style="color:var(--primary); font-size:0.8rem; margin-top:5px;"></p>
+        <input type="number" id="pgtoValor" placeholder="0.00" style="font-size:2rem; margin:20px 0; width:100%; text-align:center; padding:15px; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:20px; color:white;">
+        <div style="display:flex; gap:10px;">
+            <button class="btn-gray-block" style="flex:1" onclick="setVal(0)">ZERAR</button>
+            <button class="btn-green-block" style="flex:1" onclick="setVal(1)">TOTAL</button>
+        </div>
+        <button class="btn-green-block" style="width:100%; margin-top:15px;" id="btnSalvarPgto">CONFIRMAR</button>
+    </div>
+</div>
+
+<div id="toast" class="toast">✅ PAGAMENTO CONFIRMADO!</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getDatabase, ref, push, get, update, remove } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+const CONFIG = { 
+    LIMITE: 60, 
+    VALOR: 1, 
+    VALOR_CENTAVOS: 100, 
+    PIX: "(99) 9 9102-6112", 
+    SENHA: '6261', 
+    TG_TOKEN: "8307035824:AAFsKe4l1WgbZI1uez-n06Vt-TYiuhZLMt8", 
+    TG_CHAT: "861365063",
+    INFINITE_TAG: "lauriuche",
+    URL_LOGO: "https://play-lh.googleusercontent.com/JCYKHXuu2Q6IzhmkW9N4bDX0S8_3XVYnlPtheNcdwlOaSr0TTKJljm3RVexsXkw3_ec",
+    NOME_PRODUTO: "Cota Bolão Camino",
+    URL_RETORNO_FALLBACK: "https://wa.me/5599991026112" // Link seguro caso o sistema detecte URL inválida
+};
+
+const app = initializeApp({
+  apiKey: "AIzaSyCvXGUdvZkqtSMMn8VmTOXLA9PXqR85gSk", authDomain: "vagner-34d5b.firebaseapp.com", databaseURL: "https://vagner-34d5b.firebaseio.com", projectId: "vagner-34d5b", storageBucket: "vagner-34d5b.firebasestorage.app", messagingSenderId: "711539772164", appId: "1:711539772164:web:e7736325e6ed365c0bde51"
+});
+const db = getDatabase(app);
+const dbRef = ref(db, "participantes");
+
+let parts = [], sels = [], acao = null, filtro = 'todos';
+
+lucide.createIcons();
+
+// --- INTERFACE ---
+window.toggleLista = () => {
+    const container = document.getElementById('mainContainer');
+    const btn = document.getElementById('btnToggleLista');
+    const top = document.getElementById('topContent');
+    if (container.classList.contains('expanded')) {
+        container.classList.remove('expanded');
+        top.style.display = 'block';
+        btn.innerText = "VER PARTICIPANTES ⌄";
+    } else {
+        container.classList.add('expanded');
+        top.style.display = 'none';
+        btn.innerText = "VOLTAR";
+        updateData(); renderList();
+    }
+};
+
+window.fecharModal = (id) => document.getElementById(id).style.display = 'none';
+window.setVal = (v) => document.getElementById('pgtoValor').value = v;
+window.filtrar = (f) => { filtro = f; renderList(); };
+
+window.digitar = (k) => {
+    const d = document.getElementById('senhaDisplay');
+    if(k==='C') d.innerText = '';
+    else if(d.innerText.length < 4) {
+        d.innerText += k;
+        if(d.innerText.length === 4) setTimeout(checkPass, 200);
+    }
+};
+
+window.askPass = (act) => {
+    if(!sels.length && act!=='telegram') return alert("Selecione um item!");
+    acao = act; document.getElementById('senhaDisplay').innerText='';
+    document.getElementById('modalSenha').style.display='flex';
+};
+
+function checkPass(){
+    if(document.getElementById('senhaDisplay').innerText === CONFIG.SENHA){
+        fecharModal('modalSenha'); execAcao();
+    } else { alert("Senha Incorreta"); document.getElementById('senhaDisplay').innerText=''; }
+}
+
+// --- CHECKOUT ---
+async function verificarRetornoPagamento() {
+    const params = new URLSearchParams(window.location.search);
+    const paidKey = params.get('paid_key');
+    if (paidKey) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+        try {
+            await update(ref(db, `participantes/${paidKey}`), { valorPago: CONFIG.VALOR });
+            const toast = document.getElementById('toast');
+            toast.style.display = 'block';
+            confetti({ particleCount: 200, spread: 80, origin: { y: 0.7 } });
+            setTimeout(() => toast.style.display = 'none', 5000);
+            await updateData();
+            renderList();
+        } catch (e) { console.error(e); }
+    }
+}
+
+window.triggerCheckout = async (nome, telefone, btnElement, participantKey) => {
+    const originalContent = btnElement.innerHTML;
+    btnElement.disabled = true;
+    btnElement.innerHTML = `<div class="spinner"></div>`;
+
+    // 1. URL DE RETORNO SEGURA: Resolve o erro de "Invalid params" em ambientes de preview
+    let baseUrl = window.location.origin + window.location.pathname;
+    if (!baseUrl.startsWith('http')) baseUrl = CONFIG.URL_RETORNO_FALLBACK;
+    
+    const returnUrl = baseUrl.includes('?') 
+        ? `${baseUrl}&paid_key=${participantKey}` 
+        : `${baseUrl}?paid_key=${participantKey}`;
+
+    // 2. TELEFONE RIGOROSO: Apenas dígitos, iniciando com 55
+    let cleanPhone = telefone.replace(/\D/g, '');
+    if (cleanPhone.length >= 10 && !cleanPhone.startsWith('55')) cleanPhone = '55' + cleanPhone;
+
+    // 3. SANITIZAÇÃO DE NOME: Remove caracteres especiais que invalidam o JSON
+    const safeName = nome.replace(/[^\w\s]/gi, '').trim().substring(0, 40);
+
+    const payload = {
+        "handle": CONFIG.INFINITE_TAG.trim(),
+        "order_nsu": "B" + Date.now().toString().slice(-9), // NSU curto e alfanumérico
+        "redirect_url": returnUrl,
+        "customer": {
+            "name": safeName,
+            "email": `c${Date.now()}@vagnermagazine.com.br`,
+            "phone_number": cleanPhone
+        },
+        "items": [{
+            "quantity": 1,
+            "price": Math.floor(CONFIG.VALOR_CENTAVOS),
+            "description": CONFIG.NOME_PRODUTO,
+            "image": CONFIG.URL_LOGO
+        }]
+    };
+
+    const targetApi = 'https://api.infinitepay.io/invoices/public/checkout/links';
+    const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(targetApi);
+
+    try {
+        const response = await fetch(proxyUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        
+        const data = await response.json();
+
+        if (!response.ok) {
+            // Se houver erro detalhado da InfinitePay, mostramos no log
+            console.error("Erro API InfinitePay:", data);
+            throw new Error(data.message || "Erro de validação na API.");
+        }
+
+        if (data.url) {
+            window.location.href = data.url;
+        } else {
+            throw new Error("Link não recebido.");
+        }
+    } catch (error) {
+        console.error("Falha no Checkout:", error);
+        alert("Erro no checkout: " + error.message);
+        btnElement.disabled = false;
+        btnElement.innerHTML = originalContent;
+        lucide.createIcons();
+    }
+};
+
+// --- CORE ---
+async function updateData(){
+    const snap = await get(dbRef);
+    parts = snap.exists() ? Object.entries(snap.val()).map(([k,v]) => ({...v, key:k})) : [];
+    
+    const paidCount = parts.filter(p => (p.valorPago||0) >= CONFIG.VALOR).length;
+    const partialCount = parts.filter(p => (p.valorPago||0) > 0 && (p.valorPago||0) < CONFIG.VALOR).length;
+    const pendCount = parts.length - paidCount - partialCount;
+    const totalMoney = parts.reduce((a,b)=>a+(b.valorPago||0),0);
+
+    document.getElementById('barReg').style.width = `${(parts.length / CONFIG.LIMITE) * 100}%`;
+    document.getElementById('barPartial').style.width = `${((paidCount + partialCount) / CONFIG.LIMITE) * 100}%`;
+    document.getElementById('barPaid').style.width = `${(paidCount / CONFIG.LIMITE) * 100}%`;
+    
+    document.getElementById('txtPaid').innerText = `${paidCount} Pagos`;
+    document.getElementById('txtPartial').innerText = `${partialCount} Parc`;
+    document.getElementById('txtPend').innerText = `${pendCount} Pend`;
+    document.getElementById('pMoney').innerText = `ARRECADADO: R$ ${totalMoney.toLocaleString('pt-BR',{minimumFractionDigits:2})}`;
+}
+
+function renderList(){
+    const div = document.getElementById('listaDiv'); div.innerHTML='';
+    const term = document.getElementById('buscar').value.toUpperCase();
+    
+    parts.forEach((p, index) => {
+        const v = p.valorPago||0;
+        let show = true;
+        if(filtro==='pagos' && v < CONFIG.VALOR) show = false;
+        if(filtro==='pendentes' && v > 0) show = false;
+        if(filtro==='parciais' && (v == 0 || v >= CONFIG.VALOR)) show = false;
+        if(term && !p.nome.includes(term)) show = false;
+        if(!show) return;
+
+        let emoji = v >= CONFIG.VALOR ? '🟢' : (v > 0 ? '⚠️' : '🔴');
+        const isSel = sels.some(s=>s.key===p.key);
+        
+        const el = document.createElement('div');
+        el.className = `list-item ${isSel?'selected':''}`;
+        
+        const payButton = (v < CONFIG.VALOR) ? 
+            `<button class="btn-pay-row" onclick="event.stopPropagation(); window.triggerCheckout('${p.nome}', '${p.telefone}', this, '${p.key}')">
+                <i data-lucide="credit-card" style="width:12px;height:12px"></i> PAGAR
+            </button>` : '';
+
+        el.innerHTML = `
+            <div class="item-left">
+                <div style="font-size:1rem; color:${isSel?'var(--primary)':'var(--border)'}">${isSel?'☑️':'🔲'}</div>
+                <div class="item-name">${(index+1).toString().padStart(2,'0')}. ${p.nome}</div>
+                ${payButton}
+            </div>
+            <div class="item-right">
+                <div class="status-emoji">${emoji}</div>
+            </div>
+        `;
+
+        el.querySelector('.item-left').onclick = (e) => {
+            if(e.target.closest('button')) return;
+            const idx = sels.findIndex(s=>s.key===p.key);
+            if(idx>=0) sels.splice(idx,1); else sels.push(p);
+            renderList();
+        };
+        el.querySelector('.item-right').onclick = () => { sels=[p]; askPass('pagamento'); };
+        div.appendChild(el);
+    });
+    lucide.createIcons();
+}
+
+document.getElementById('btnCadastrar').onclick = async () => {
+    const n = document.getElementById('nome').value.toUpperCase().trim();
+    const t = document.getElementById('telefone').value.trim();
+    if(!n || !t) return alert("Preencha Nome e Telefone!");
+    const btn = document.getElementById('btnCadastrar');
+    btn.disabled = true;
+    btn.innerHTML = `<div class="spinner"></div>`;
+
+    try {
+        const novoRef = await push(dbRef, {nome: n, telefone: t, valorPago: 0});
+        const participantKey = novoRef.key;
+        await updateData();
+        document.getElementById('confPix').innerText = CONFIG.PIX;
+        document.getElementById('modalConf').style.display = 'flex';
+        document.getElementById('btnPagarCheckout').onclick = (e) => window.triggerCheckout(n, t, e.currentTarget, participantKey);
+        document.getElementById('btnZapConf').onclick = () => window.open(`https://wa.me/55${CONFIG.PIX.replace(/\D/g,'')}?text=Novo cadastro: ${n}`);
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    } catch (e) { alert("Erro ao cadastrar."); } 
+    finally { btn.disabled = false; btn.innerHTML = `🚀 PARTICIPAR`; }
+};
+
+async function execAcao(){
+    if(acao === 'pagamento'){
+        document.getElementById('pgtoNome').innerText = sels[0].nome;
+        document.getElementById('pgtoValor').value = sels[0].valorPago||'';
+        document.getElementById('modalPagamento').style.display='flex';
+    } else if(acao === 'excluir'){
+        if(confirm(`Excluir selecionados?`)){
+            const u={}; sels.forEach(p=>u[`participantes/${p.key}`]=null);
+            await update(ref(db),u); sels=[]; updateData(); renderList();
+        }
+    }
+}
+
+document.getElementById('btnSalvarPgto').onclick = async () => {
+    const v = parseFloat(document.getElementById('pgtoValor').value) || 0;
+    const u={}; sels.forEach(p=>u[`participantes/${p.key}/valorPago`]=v);
+    await update(ref(db),u);
+    fecharModal('modalPagamento'); sels=[]; updateData(); renderList();
+};
+
+document.getElementById('btnZapGroup').onclick = () => window.open("https://chat.whatsapp.com/Fdl9PzkiEBq9TnJHtlu2Rm");
+document.getElementById('buscar').oninput = () => renderList();
+
+setInterval(()=>{
+    const d=new Date("Dec 20, 2025 23:59:59")-new Date(); if(d<0)return;
+    document.getElementById('dias').innerText=Math.floor(d/864e5).toString().padStart(2,'0');
+    document.getElementById('horas').innerText=Math.floor((d%864e5)/36e5).toString().padStart(2,'0');
+    document.getElementById('minutos').innerText=Math.floor((d%36e5)/6e4).toString().padStart(2,'0');
+    document.getElementById('segundos').innerText=Math.floor((d%6e4)/1e3).toString().padStart(2,'0');
+},1000);
+
+updateData().then(() => verificarRetornoPagamento());
+</script>
+</body>
+</html>
