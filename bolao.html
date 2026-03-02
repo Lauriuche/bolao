@@ -124,12 +124,15 @@
 
     .list-item { display: flex; align-items: center; padding: 14px 10px; border-bottom: 1px solid var(--border); transition: 0.2s; }
     .list-item:hover { background: rgba(255,255,255,0.02); }
-    .item-name { font-size: 0.75rem; font-weight: 700; color: #fff; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
+    .item-name { font-size: 0.75rem; font-weight: 700; color: #fff; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; }
     .item-info { font-size: 0.6rem; color: var(--text-dim); margin-top: 2px; }
     
-    .pay-btn-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
-    .btn-pay-sm { background: var(--primary); color: #000; padding: 8px 14px; border-radius: 10px; font-size: 0.65rem; font-weight: 800; border: none; cursor: pointer; }
-    .status-indicator { width: 10px; height: 10px; border-radius: 50%; margin-left: 5px; }
+    .pay-btn-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+    .btn-pay-sm { background: var(--primary); color: #000; padding: 8px 12px; border-radius: 10px; font-size: 0.65rem; font-weight: 800; border: none; cursor: pointer; }
+    .status-indicator { width: 10px; height: 10px; border-radius: 50%; margin-left: 5px; cursor: pointer; }
+    
+    .btn-edit-sm { background: var(--surface-accent); color: var(--text-dim); padding: 8px; border-radius: 10px; font-size: 0.8rem; border: 1px solid var(--border); cursor: pointer; display: none; }
+    body.admin-mode .btn-edit-sm { display: flex; align-items: center; justify-content: center; }
 
     .admin-footer { display: flex; justify-content: center; gap: 15px; margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--border); }
     .admin-btn { background: transparent; border: none; color: var(--text-dim); font-size: 0.65rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
@@ -142,8 +145,12 @@
     .btn-checkout { background: var(--primary); color: #000; width: 100%; margin-top: 10px; padding: 18px; border-radius: 20px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; border: none; transition: 0.2s; }
     .btn-checkout:hover { transform: scale(0.98); }
     .btn-checkout.secondary { background: var(--surface-accent); color: var(--primary); border: 1px solid var(--primary); }
+    .btn-danger { background: rgba(255, 77, 77, 0.1); color: var(--pending); border: 1px solid rgba(255, 77, 77, 0.3); }
+    
+    /* Estado visual de confirmação do botão */
+    .btn-danger[data-confirming="true"] { background: var(--partial); color: #000; border-color: var(--partial); }
 
-    .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #000; padding: 14px 28px; border-radius: 100px; font-weight: 800; z-index: 9999; display: none; box-shadow: 0 10px 30px var(--primary-glow); font-size: 0.8rem; }
+    .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #000; padding: 14px 28px; border-radius: 100px; font-weight: 800; z-index: 9999; display: none; box-shadow: 0 10px 30px var(--primary-glow); font-size: 0.8rem; white-space: nowrap; }
 
     .spinner { width: 20px; height: 20px; border: 2px solid rgba(0,0,0,0.1); border-top: 2px solid #000; border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; vertical-align: middle; }
     .spinner.light { border-top: 2px solid var(--primary); }
@@ -222,6 +229,7 @@
                 <div id="listaDiv"></div>
                 
                 <div class="admin-footer">
+                    <button class="admin-btn" onclick="askAdmin('unlock')">Modo Admin</button>
                     <button class="admin-btn" onclick="askAdmin('config')">Configurações</button>
                     <button class="admin-btn" onclick="askAdmin('export')">Exportar CSV</button>
                 </div>
@@ -257,6 +265,22 @@
         <input type="number" id="cfg-limite" class="form-input" placeholder="Limite de Pessoas">
         <button class="btn-main" onclick="salvarConfig()">SALVAR</button>
         <button class="admin-btn" style="margin-top:15px; width:100%;" onclick="fecharModal('modalConfig')">CANCELAR</button>
+    </div>
+</div>
+
+<!-- Novo Modal Edição de Participante -->
+<div class="modal-overlay" id="modalEditarParticipante">
+    <div class="modal-box">
+        <h3 style="margin-bottom:20px;">EDITAR PARTICIPANTE</h3>
+        <input type="hidden" id="edit-key">
+        <input type="text" id="edit-nome" class="form-input" placeholder="NOME COMPLETO">
+        <input type="tel" id="edit-telefone" class="form-input" placeholder="WHATSAPP (DDD)">
+        <input type="number" id="edit-cotas" class="form-input" placeholder="QUANTIDADE DE COTAS">
+        
+        <button class="btn-main" style="margin-top: 10px;" onclick="salvarEdicaoParticipante()">SALVAR ALTERAÇÕES</button>
+        <!-- Botão de Exclusão com confirmação em dois cliques -->
+        <button class="btn-checkout btn-danger" id="btn-excluir-part" data-confirming="false" onclick="confirmarExclusao()">🗑️ EXCLUIR PARTICIPANTE</button>
+        <button class="admin-btn" style="margin-top:15px; width:100%;" onclick="fecharModal('modalEditarParticipante')">CANCELAR</button>
     </div>
 </div>
 
@@ -368,7 +392,7 @@ window.toggleLista = () => {
     const isHidden = container.style.display === 'none';
     container.style.display = isHidden ? 'block' : 'none';
     btn.innerText = isHidden ? "OCULTAR LISTA ⌃" : "VER PARTICIPANTES ⌄";
-    if(isHidden) { updateData(); renderList(); }
+    if(isHidden) { updateData().then(renderList); }
 };
 
 window.fecharModal = (id) => document.getElementById(id).style.display = 'none';
@@ -396,8 +420,12 @@ function checkAdminPass() {
         fecharModal('modalSenha');
         if(acaoAdmin === 'config') abrirConfig();
         if(acaoAdmin === 'export') exportarCSV();
+        if(acaoAdmin === 'unlock') {
+            document.body.classList.toggle('admin-mode');
+            showToast(document.body.classList.contains('admin-mode') ? "🔓 MODO ADMIN ATIVO" : "🔒 MODO ADMIN DESATIVADO");
+        }
     } else {
-        alert("Senha Incorreta!");
+        showToast("❌ Senha Incorreta!");
         document.getElementById('senhaDisplay').innerText = '';
     }
 }
@@ -445,10 +473,10 @@ window.triggerCheckout = async (nome, telefone, key, q, valorCobrado, btnElement
     // SANITIZAÇÃO DE DADOS PARA A API INFINITEPAY
     let cleanPhone = telefone.replace(/\D/g, '');
     if (!cleanPhone.startsWith('55')) cleanPhone = '55' + cleanPhone;
-    if (cleanPhone.length < 12 || cleanPhone.length > 13) cleanPhone = '5511999999999'; // Fallback para não dar "Invalid params" se o numero for pequeno
+    if (cleanPhone.length < 12 || cleanPhone.length > 13) cleanPhone = '5511999999999';
 
     let safeName = nome.replace(/[^\w\sÀ-ÿ]/gi, '').trim().substring(0, 40);
-    if (!safeName.includes(' ')) safeName += ' Silva'; // InfinitePay muitas vezes exige Nome + Sobrenome
+    if (!safeName.includes(' ')) safeName += ' Silva'; 
 
     const descTexto = valorCobrado < (qtFinal * CONFIG.VALOR) ? `Bolão Camino - Parcial (${qtFinal} Cotas)` : `Bolão Camino - Total (${qtFinal} Cotas)`;
 
@@ -465,7 +493,7 @@ window.triggerCheckout = async (nome, telefone, key, q, valorCobrado, btnElement
             "quantity": 1, 
             "price": valorCentavos, 
             "description": descTexto, 
-            "image": "https://play-lh.googleusercontent.com/JCYKHXuu2Q6IzhmkW9N4bDX0S8_3XVYnlPtheNcdwlOaSr0TTKJljm3RVexsXkw3_ec" // Imagem segura e sem queries para a API
+            "image": "https://play-lh.googleusercontent.com/JCYKHXuu2Q6IzhmkW9N4bDX0S8_3XVYnlPtheNcdwlOaSr0TTKJljm3RVexsXkw3_ec" 
         }]
     };
 
@@ -484,7 +512,7 @@ window.triggerCheckout = async (nome, telefone, key, q, valorCobrado, btnElement
         
         if (data.url) window.location.href = data.url;
     } catch (error) { 
-        alert("Erro no checkout: " + error.message); 
+        showToast("❌ Erro no checkout.");
         if(btnElement) {
             btnElement.disabled = false;
             btnElement.innerHTML = originalContent;
@@ -492,11 +520,10 @@ window.triggerCheckout = async (nome, telefone, key, q, valorCobrado, btnElement
     }
 };
 
-// CORREÇÃO DO REGISTO FIREBASE (VOLTANDO AO PUSH QUE FUNCIONAVA)
 document.getElementById('btnParticipar').onclick = async () => {
     const n = document.getElementById('nome').value.toUpperCase().trim();
     const t = document.getElementById('telefone').value.trim();
-    if(!n || !t) return alert("Preencha Nome e Telefone!");
+    if(!n || !t) return showToast("⚠️ Preencha Nome e Telefone!");
     const btn = document.getElementById('btnParticipar');
     
     btn.disabled = true;
@@ -504,7 +531,6 @@ document.getElementById('btnParticipar').onclick = async () => {
     btn.innerHTML = `<div class="spinner"></div> AGUARDE...`;
 
     try {
-        // Uso do push simples que respeita as regras padrão de escrita
         const novoRef = await push(dbRef, {
             nome: n, 
             telefone: t, 
@@ -513,15 +539,14 @@ document.getElementById('btnParticipar').onclick = async () => {
             data: Date.now()
         });
         
-        showToast("RESERVADO COM SUCESSO!");
+        showToast("✅ RESERVADO COM SUCESSO!");
         btn.disabled = false;
         btn.innerHTML = originalBtn;
         
-        // Abre o modal para o utilizador escolher como pagar
         abrirPagamento(n, t, novoRef.key, qty, 0, true);
     } catch (e) { 
         console.error("Firebase Auth/Rule Error:", e);
-        alert("Erro ao registar. Verifique a conexão."); 
+        showToast("❌ Erro ao registar."); 
         btn.disabled = false;
         btn.innerHTML = originalBtn;
     }
@@ -572,6 +597,7 @@ window.renderList = () => {
             </div>
             <div class="pay-btn-right">
                 ${!isPago ? `<button class="btn-pay-sm" onclick="abrirPagamento('${p.nome}','${p.telefone}','${p.key}', ${qt}, ${p.valorPago||0}, false)">PAGAR</button>` : ''}
+                <button class="btn-edit-sm" onclick="abrirEdicao('${p.key}')">✏️</button>
                 <div class="status-indicator" style="background:${color}" onclick="sels=['${p.key}']; askAdmin('edit')"></div>
             </div>
         `;
@@ -582,7 +608,7 @@ window.renderList = () => {
 window.consultarParticipante = () => {
     const telInput = document.getElementById('search-phone');
     const tel = telInput ? telInput.value.replace(/\D/g, '') : '';
-    if(!tel) return alert("Digite o número!");
+    if(!tel) return showToast("⚠️ Digite o número!");
     const found = parts.find(p => p.telefone.replace(/\D/g, '').includes(tel));
     const res = document.getElementById('result-consulta');
     if(found) {
@@ -621,20 +647,19 @@ window.salvarConfig = async () => {
     const v = parseFloat(document.getElementById('cfg-valor').value);
     const l = parseInt(document.getElementById('cfg-limite').value);
     
-    // Atualização das variáveis locais para não ser travado pelo Firebase Rules
     CONFIG.VALOR = v;
     CONFIG.LIMITE = l;
     
     try {
         await update(ref(db, "config_bolao"), { valorCota: v, limite: l });
     } catch(e) {
-        console.warn("Sem permissão para alterar config_bolao no Firebase. Alterações ativas apenas localmente.");
+        console.warn("Local config only.");
     }
     
     updateUIConfig();
     updateData();
     fecharModal('modalConfig');
-    showToast("CONFIGURAÇÕES SALVAS!");
+    showToast("✅ CONFIGURAÇÕES SALVAS!");
 };
 
 function exportarCSV() {
@@ -646,15 +671,18 @@ function exportarCSV() {
     a.href = url; a.download = 'lista_bolao.csv'; a.click();
 }
 
+let toastTimeout;
 function showToast(msg) {
     const t = document.getElementById('toast');
     if(t) {
-        t.innerText = msg; t.style.display = 'block';
-        setTimeout(() => t.style.display = 'none', 3000);
+        clearTimeout(toastTimeout);
+        t.innerText = msg; 
+        t.style.display = 'block';
+        toastTimeout = setTimeout(() => t.style.display = 'none', 3000);
     }
 }
 
-// Funções Manuais do Admin
+// Funções Manuais do Admin e Edição
 window.setVal = (v) => {
     const id = sels[0];
     const p = parts.find(x => x.key === id);
@@ -677,7 +705,79 @@ document.getElementById('btnSalvarPgto').onclick = async () => {
     const v = parseFloat(document.getElementById('pgtoValor').value) || 0;
     const u={}; sels.forEach(p=>u[`participantes/${p}/valorPago`]=v); 
     await update(ref(db),u);
-    fecharModal('modalAdminPagamento'); sels=[]; updateData(); renderList();
+    fecharModal('modalAdminPagamento'); sels=[]; 
+    await updateData(); 
+    renderList();
+};
+
+window.abrirEdicao = (key) => {
+    const p = parts.find(x => x.key === key);
+    if (p) {
+        document.getElementById('edit-key').value = key;
+        document.getElementById('edit-nome').value = p.nome;
+        document.getElementById('edit-telefone').value = p.telefone;
+        document.getElementById('edit-cotas').value = p.cotas || 1;
+        
+        // Reset ao botão de excluir sempre que o modal abre
+        const btnExcluir = document.getElementById('btn-excluir-part');
+        btnExcluir.dataset.confirming = "false";
+        btnExcluir.innerHTML = "🗑️ EXCLUIR PARTICIPANTE";
+
+        document.getElementById('modalEditarParticipante').style.display = 'flex';
+    }
+};
+
+window.salvarEdicaoParticipante = async () => {
+    const key = document.getElementById('edit-key').value;
+    const nome = document.getElementById('edit-nome').value.toUpperCase().trim();
+    const telefone = document.getElementById('edit-telefone').value.trim();
+    const cotas = parseInt(document.getElementById('edit-cotas').value) || 1;
+
+    if (!nome || !telefone) return showToast("⚠️ Preencha Nome e Telefone!");
+
+    try {
+        await update(ref(db, `participantes/${key}`), { nome, telefone, cotas });
+        fecharModal('modalEditarParticipante');
+        showToast("✅ PARTICIPANTE ATUALIZADO!");
+        await updateData();
+        renderList();
+    } catch (e) {
+        showToast("❌ Erro ao editar.");
+    }
+};
+
+// Lógica segura de exclusão com Duplo Clique (sem `confirm()`)
+let exclusaoTimeout;
+window.confirmarExclusao = () => {
+    const btn = document.getElementById('btn-excluir-part');
+    if(btn.dataset.confirming === "true") {
+        // Segundo clique: Exclui mesmo
+        clearTimeout(exclusaoTimeout);
+        btn.dataset.confirming = "false";
+        btn.innerHTML = "🗑️ EXCLUIR PARTICIPANTE";
+        excluirParticipanteDefinitivo();
+    } else {
+        // Primeiro clique: Pede confirmação
+        btn.dataset.confirming = "true";
+        btn.innerHTML = "⚠️ CLIQUE NOVAMENTE PARA CONFIRMAR";
+        exclusaoTimeout = setTimeout(() => {
+            btn.dataset.confirming = "false";
+            btn.innerHTML = "🗑️ EXCLUIR PARTICIPANTE";
+        }, 3000);
+    }
+};
+
+window.excluirParticipanteDefinitivo = async () => {
+    const key = document.getElementById('edit-key').value;
+    try {
+        await remove(ref(db, `participantes/${key}`));
+        fecharModal('modalEditarParticipante');
+        showToast("✅ PARTICIPANTE EXCLUÍDO!");
+        await updateData(); // Força a leitura do banco antes de desenhar a lista
+        renderList();
+    } catch (e) {
+        showToast("❌ Erro ao excluir.");
+    }
 };
 
 setInterval(()=>{
@@ -693,7 +793,6 @@ setInterval(()=>{
     if(se) se.innerText = Math.floor((d%6e4)/1e3).toString().padStart(2,'0');
 },1000);
 
-// Lógica de Retorno que calcula o pagamento adicionando o valor da parcela escolhida
 const params = new URLSearchParams(window.location.search);
 if(params.get('paid_key')) {
     const pk = params.get('paid_key');
@@ -703,15 +802,13 @@ if(params.get('paid_key')) {
             const p = s.val();
             const qt = p.cotas || 1;
             
-            // Se existir o parâmetro amount (novo método), adiciona ao valor já pago.
-            // Se não (link antigo), assume pagamento total.
             const amountPaid = paramAmount ? (parseInt(paramAmount) / 100) : (qt * CONFIG.VALOR);
             const currentPaid = p.valorPago || 0;
             const newTotal = currentPaid + amountPaid;
 
             update(ref(db, `participantes/${pk}`), { valorPago: Math.round(newTotal * 100) / 100 });
             window.history.replaceState({}, document.title, window.location.pathname);
-            showToast("PAGAMENTO CONFIRMADO!");
+            showToast("✅ PAGAMENTO CONFIRMADO!");
             confetti();
         }
     });
