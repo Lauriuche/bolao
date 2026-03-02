@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-PT">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -139,9 +139,14 @@
     
     .num-btn { background: var(--surface-accent); color: white; padding: 18px; font-size: 1.2rem; border-radius: 18px; border: 1px solid var(--border); font-weight: 800; cursor: pointer; }
 
+    .btn-checkout { background: var(--primary); color: #000; width: 100%; margin-top: 10px; padding: 18px; border-radius: 20px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; border: none; transition: 0.2s; }
+    .btn-checkout:hover { transform: scale(0.98); }
+    .btn-checkout.secondary { background: var(--surface-accent); color: var(--primary); border: 1px solid var(--primary); }
+
     .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #000; padding: 14px 28px; border-radius: 100px; font-weight: 800; z-index: 9999; display: none; box-shadow: 0 10px 30px var(--primary-glow); font-size: 0.8rem; }
 
     .spinner { width: 20px; height: 20px; border: 2px solid rgba(0,0,0,0.1); border-top: 2px solid #000; border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; vertical-align: middle; }
+    .spinner.light { border-top: 2px solid var(--primary); }
     @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
@@ -153,7 +158,7 @@
             <div class="hero-badge">🎰 BOLÃO EXCLUSIVO 2026</div>
             <img src="https://drive.google.com/thumbnail?id=1q27xBm87ewP3GKczQ8x7iS6fyH4eMQeO&sz=w1000" class="logo-img" alt="Logo Bolão">
             <div id="dynamicInfo" class="info-header">💰 Cota: R$ 1,00 • 👥 Limite: 60</div>
-            <div class="date-header">Encerramento: 25 de Dezembro de 2026</div>
+            <div class="date-header">Encerramento: 31 de Dezembro de 2026</div>
         </div>
 
         <div class="countdown-card">
@@ -180,8 +185,8 @@
         </div>
 
         <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('cadastro', this)">CADASTRO</button>
-            <button class="tab-btn" onclick="switchTab('consulta', this)">MINHA COTA</button>
+            <button class="tab-btn active" onclick="switchTab('cadastro', this)">REGISTO</button>
+            <button class="tab-btn" onclick="switchTab('consulta', this)">A MINHA COTA</button>
             <button class="tab-btn" onclick="switchTab('ranking', this)">🏆 RANKING</button>
         </div>
 
@@ -200,8 +205,8 @@
         </div>
 
         <div id="view-consulta" style="display:none;">
-            <input type="tel" id="search-phone" class="form-input" placeholder="Digite seu telefone...">
-            <button class="btn-main" onclick="consultarParticipante()">VERIFICAR STATUS</button>
+            <input type="tel" id="search-phone" class="form-input" placeholder="Digite o seu telefone...">
+            <button class="btn-main" onclick="consultarParticipante()">VERIFICAR ESTADO</button>
             <div id="result-consulta" style="margin-top:20px;"></div>
         </div>
 
@@ -225,6 +230,26 @@
     </div>
 </div>
 
+<!-- Modal Escolha de Pagamento -->
+<div class="modal-overlay" id="modalOpcoesPagamento">
+    <div class="modal-box">
+        <h2 id="pag-title" style="color:var(--primary); font-weight:800; letter-spacing:-1px;">REGISTO OK!</h2>
+        <p id="pag-desc" style="color:var(--text-dim); font-size:0.85rem; margin-bottom:20px;">Cota reservada. Escolha a sua opção de pagamento:</p>
+        
+        <div id="pag-buttons-container">
+            <!-- Botões dinâmicos (Total / Parcial) injetados aqui via JS -->
+        </div>
+        
+        <div style="margin-top:25px; border-top:1px solid var(--border); padding-top:20px;">
+            <p style="font-size:0.7rem; color:var(--text-dim); margin-bottom:10px;">Opção PIX manual:</p>
+            <p style="font-weight:800; color:var(--primary); font-size:1rem;" id="pag-pix-chave"></p>
+            <button class="admin-btn" style="width:100%; margin-top:10px; padding:12px; font-size:0.7rem; border: 1px solid var(--border); border-radius: 12px;" id="btnZapConfPag">ENVIAR COMPROVATIVO</button>
+        </div>
+        <button class="admin-btn" style="width:100%; margin-top:15px; border:none; background:transparent;" onclick="fecharModal('modalOpcoesPagamento')">FECHAR</button>
+    </div>
+</div>
+
+<!-- Modais Restantes -->
 <div class="modal-overlay" id="modalConfig">
     <div class="modal-box">
         <h3 style="margin-bottom:20px;">AJUSTES DO BOLÃO</h3>
@@ -250,6 +275,20 @@
     </div>
 </div>
 
+<div class="modal-overlay" id="modalAdminPagamento">
+    <div class="modal-box">
+        <h3 style="font-weight:800;">BAIXA MANUAL</h3>
+        <p id="pgtoNome" style="color:var(--primary); font-size:0.8rem; margin:10px 0;"></p>
+        <input type="number" id="pgtoValor" placeholder="0.00" style="font-size:1.8rem; margin:10px 0; width:100%; text-align:center; padding:12px; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:18px; color:white;">
+        <div style="display:flex; gap:10px;">
+            <button class="admin-btn" style="flex:1; border: 1px solid var(--border); padding: 15px; border-radius: 15px;" onclick="setVal(0)">ZERAR</button>
+            <button class="btn-main" style="flex:1; padding: 15px; border-radius: 15px;" onclick="setVal(1)">TOTAL</button>
+        </div>
+        <button class="btn-main" style="width:100%; margin-top:15px;" id="btnSalvarPgto">CONFIRMAR</button>
+        <button class="admin-btn" style="width:100%; margin-top:15px;" onclick="fecharModal('modalAdminPagamento')">CANCELAR</button>
+    </div>
+</div>
+
 <div id="toast" class="toast">SUCESSO!</div>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -271,7 +310,7 @@ let currentConfig = { limite: 60, valorCota: 1, senha: '6261' };
 
 lucide.createIcons();
 
-// --- PWA Service Worker Registration ---
+// PWA Worker
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         const swCode = `
@@ -362,22 +401,50 @@ function checkAdminPass() {
     }
 }
 
-window.triggerCheckout = async (nome, telefone, key, q, btnElement = null) => {
+// LÓGICA DE PAGAMENTO PARCIAL (50%) OU TOTAL (100%)
+window.abrirPagamento = (nome, telefone, key, qt, valorJaPago = 0, isNovo = false) => {
+    const total = qt * currentConfig.valorCota;
+    const restante = total - valorJaPago;
+    const metade = total / 2;
+
+    document.getElementById('pag-title').innerText = isNovo ? "REGISTO OK!" : "PAGAMENTO PENDENTE";
+    document.getElementById('pag-desc').innerText = isNovo ? "Cota reservada. Escolha a sua opção de pagamento:" : "Escolha o valor para liquidar a sua cota:";
+    document.getElementById('pag-pix-chave').innerText = CONFIG.PIX;
+
+    const container = document.getElementById('pag-buttons-container');
+    container.innerHTML = '';
+
+    if (valorJaPago === 0) {
+        container.innerHTML += `<button class="btn-checkout" onclick="triggerCheckout('${nome}', '${telefone}', '${key}', ${qt}, ${total}, this)"><i data-lucide="credit-card"></i> PAGAR TOTAL (R$ ${total.toFixed(2).replace('.',',')})</button>`;
+        container.innerHTML += `<button class="btn-checkout secondary" onclick="triggerCheckout('${nome}', '${telefone}', '${key}', ${qt}, ${metade}, this)"><i data-lucide="credit-card"></i> PAGAR PARCIAL 50% (R$ ${metade.toFixed(2).replace('.',',')})</button>`;
+    } else if (restante > 0) {
+        container.innerHTML += `<button class="btn-checkout" onclick="triggerCheckout('${nome}', '${telefone}', '${key}', ${qt}, ${restante}, this)"><i data-lucide="credit-card"></i> PAGAR RESTANTE (R$ ${restante.toFixed(2).replace('.',',')})</button>`;
+    }
+
+    document.getElementById('btnZapConfPag').onclick = () => window.open(`https://wa.me/55${CONFIG.PIX.replace(/\D/g,'')}?text=Comprovativo do bolão: ${nome}`);
+
+    lucide.createIcons();
+    document.getElementById('modalOpcoesPagamento').style.display = 'flex';
+};
+
+window.triggerCheckout = async (nome, telefone, key, q, valorCobrado, btnElement = null) => {
     const originalContent = btnElement ? btnElement.innerHTML : "";
     if(btnElement) {
         btnElement.disabled = true;
         btnElement.innerHTML = `<div class="spinner"></div>`;
     }
 
-    const qtFinal = q || 1;
-    const valorCentavos = Math.round(qtFinal * currentConfig.valorCota * 100);
+    const valorCentavos = Math.round(valorCobrado * 100);
     
     let baseUrl = window.location.origin + window.location.pathname;
     if (!baseUrl.startsWith('http')) baseUrl = "https://wa.me/5599991026112";
-    const returnUrl = baseUrl + "?paid_key=" + key;
+    // Acrescentamos o "amount" no retorno para saber quanto a pessoa pagou efetivamente
+    const returnUrl = baseUrl + `?paid_key=${key}&amount=${valorCentavos}`;
 
     const cleanPhone = "55" + telefone.replace(/\D/g, '').replace(/^55/, '');
     const safeName = nome.replace(/[^\w\s]/gi, '').trim().substring(0, 40);
+
+    const descTexto = valorCobrado < (q * currentConfig.valorCota) ? `Bolão Camino - Parcial (${q} Cotas)` : `Bolão Camino - Total (${q} Cotas)`;
 
     const payload = {
         "handle": "lauriuche",
@@ -391,7 +458,7 @@ window.triggerCheckout = async (nome, telefone, key, q, btnElement = null) => {
         "items": [{ 
             "quantity": 1, 
             "price": valorCentavos, 
-            "description": `Bolão Camino - ${qtFinal} Cotas`, 
+            "description": descTexto, 
             "image": "https://drive.google.com/thumbnail?id=1q27xBm87ewP3GKczQ8x7iS6fyH4eMQeO&sz=w1000" 
         }]
     };
@@ -429,8 +496,10 @@ document.getElementById('btnParticipar').onclick = async () => {
         await set(ref(db, `participantes/${participantKey}`), {
             nome: n, telefone: t, valorPago: 0, cotas: qty, data: Date.now()
         });
-        showToast("RESERVADO! ABRINDO PAGAMENTO...");
-        await triggerCheckout(n, t, participantKey, qty, btn);
+        showToast("RESERVADO COM SUCESSO!");
+        btn.disabled = false;
+        btn.innerHTML = originalBtn;
+        abrirPagamento(n, t, participantKey, qty, 0, true);
     } catch (e) { 
         alert("Erro ao registar."); 
         btn.disabled = false;
@@ -482,7 +551,7 @@ window.renderList = () => {
                 <div class="item-info">${qt} ${qt > 1 ? 'cotas' : 'cota'} • Pago: R$ ${(p.valorPago||0).toFixed(2)}</div>
             </div>
             <div class="pay-btn-right">
-                ${!isPago ? `<button class="btn-pay-sm" onclick="triggerCheckout('${p.nome}','${p.telefone}','${p.key}', ${qt}, this)">PAGAR</button>` : ''}
+                ${!isPago ? `<button class="btn-pay-sm" onclick="abrirPagamento('${p.nome}','${p.telefone}','${p.key}', ${qt}, ${p.valorPago||0}, false)">PAGAR</button>` : ''}
                 <div class="status-indicator" style="background:${color}" onclick="sels=['${p.key}']; askAdmin('edit')"></div>
             </div>
         `;
@@ -502,8 +571,8 @@ window.consultarParticipante = () => {
         res.innerHTML = `<div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:20px; border:1px solid var(--border); animation: fadeIn 0.4s ease; text-align: center;">
             <p>👤 <b>${found.nome}</b></p>
             <p>🎟️ ${qt} ${qt > 1 ? 'Cotas' : 'Cota'}</p>
-            <p>💰 Status: ${found.valorPago >= total ? '<span style="color:var(--paid)">🟢 PAGO</span>' : '<span style="color:var(--pending)">🔴 PENDENTE</span>'}</p>
-            ${found.valorPago < total ? `<button class="btn-main" style="margin-top:15px" onclick="triggerCheckout('${found.nome}','${found.telefone}','${found.key}', ${qt}, this)">PAGAR AGORA</button>` : ''}
+            <p>💰 Estado: ${found.valorPago >= total ? '<span style="color:var(--paid)">🟢 PAGO</span>' : '<span style="color:var(--pending)">🔴 PENDENTE</span>'}</p>
+            ${found.valorPago < total ? `<button class="btn-main" style="margin-top:15px" onclick="abrirPagamento('${found.nome}','${found.telefone}','${found.key}', ${qt}, ${found.valorPago||0}, false)">PAGAR AGORA</button>` : ''}
         </div>`;
     } else { res.innerHTML = "<p style='color:var(--pending); text-align: center;'>❌ Participante não encontrado.</p>"; }
 };
@@ -553,8 +622,34 @@ function showToast(msg) {
     }
 }
 
+// Funções Manuais do Admin
+window.setVal = (v) => {
+    const id = sels[0];
+    const p = parts.find(x => x.key === id);
+    if(p) {
+        const total = (p.cotas || 1) * currentConfig.valorCota;
+        document.getElementById('pgtoValor').value = v === 1 ? total : 0;
+    }
+};
+
+window.abrirBaixaManual = () => {
+    const p = parts.find(x => x.key === sels[0]);
+    if(p) {
+        document.getElementById('pgtoNome').innerText = p.nome;
+        document.getElementById('pgtoValor').value = p.valorPago || '';
+        document.getElementById('modalAdminPagamento').style.display='flex';
+    }
+};
+
+document.getElementById('btnSalvarPgto').onclick = async () => {
+    const v = parseFloat(document.getElementById('pgtoValor').value) || 0;
+    const u={}; sels.forEach(p=>u[`participantes/${p}/valorPago`]=v); 
+    await update(ref(db),u);
+    fecharModal('modalAdminPagamento'); sels=[]; updateData(); renderList();
+};
+
 setInterval(()=>{
-    const d = new Date("Dec 25, 2026 23:59:59") - new Date();
+    const d = new Date("Dec 31, 2026 23:59:59") - new Date();
     if(d < 0) return;
     const di = document.getElementById('dias');
     const ho = document.getElementById('horas');
@@ -566,14 +661,23 @@ setInterval(()=>{
     if(se) se.innerText = Math.floor((d%6e4)/1e3).toString().padStart(2,'0');
 },1000);
 
+// Lógica de Retorno que calcula o pagamento adicionando o valor da parcela escolhida
 const params = new URLSearchParams(window.location.search);
 if(params.get('paid_key')) {
     const pk = params.get('paid_key');
+    const paramAmount = params.get('amount');
     get(ref(db, `participantes/${pk}`)).then(s => {
         if(s.exists()){
             const p = s.val();
             const qt = p.cotas || 1;
-            update(ref(db, `participantes/${pk}`), { valorPago: Math.round(qt * currentConfig.valorCota * 100) / 100 });
+            
+            // Se existir o parâmetro amount (novo método), adiciona ao valor já pago.
+            // Se não (link antigo), assume pagamento total.
+            const amountPaid = paramAmount ? (parseInt(paramAmount) / 100) : (qt * currentConfig.valorCota);
+            const currentPaid = p.valorPago || 0;
+            const newTotal = currentPaid + amountPaid;
+
+            update(ref(db, `participantes/${pk}`), { valorPago: Math.round(newTotal * 100) / 100 });
             window.history.replaceState({}, document.title, window.location.pathname);
             showToast("PAGAMENTO CONFIRMADO!");
             confetti();
