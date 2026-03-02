@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bolão Master Camino 2026 | Garanta sua Cota</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Bolão Master">
+    <link rel="apple-touch-icon" href="https://drive.google.com/thumbnail?id=1q27xBm87ewP3GKczQ8x7iS6fyH4eMQeO&sz=w512">
+
+    <!-- Web App Manifest (Inline) -->
+    <link rel="manifest" href='data:application/manifest+json,{"name":"Bolão Master Camino 2026","short_name":"Bolão Master","start_url":".","display":"standalone","background_color":"#000000","theme_color":"#00ff88","icons":[{"src":"https://drive.google.com/thumbnail?id=1q27xBm87ewP3GKczQ8x7iS6fyH4eMQeO&sz=w512","sizes":"512x512","type":"image/png"}]}'>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        :root {
+            --primary: #00ff88;
+            --primary-glow: rgba(0, 255, 136, 0.3);
+            --bg: #000000;
+            --surface: rgba(15, 15, 15, 0.9);
+            --border: rgba(255, 255, 255, 0.08);
+            --text-main: #ffffff;
+            --text-dim: #a0a0a0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        body {
+            background: radial-gradient(circle at center, #001a0d 0%, #000000 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Efeito de luz de fundo */
+        .ambient-glow {
+            position: fixed;
+            width: 80vw;
+            height: 80vw;
+            background: var(--primary-glow);
+            filter: blur(150px);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .canvas-card {
+            width: 100%;
+            max-width: 480px;
+            background: var(--surface);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero-badge {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--primary);
+            padding: 8px 18px;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logo-img {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            object-fit: contain;
+            margin-bottom: 0px;
+            filter: drop-shadow(0 0 15px var(--primary-glow));
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+        }
+
+        h1 span {
+            color: var(--primary);
+            text-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .description {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 35px;
+            max-width: 90%;
+        }
+
+        /* Countdown Style */
+        .countdown-container {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 40px;
+        }
+
+        .countdown-label {
+            font-size: 0.65rem;
+            color: var(--text-dim);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .timer-grid {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .time-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            max-width: 70px;
+        }
+
+        .time-val {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1;
+        }
+
+        .time-unit {
+            font-size: 0.6rem;
+            color: var(--primary);
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        /* CTA Button */
+        .btn-cta {
+            width: 100%;
+            padding: 22px;
+            border-radius: 24px;
+            background: var(--primary);
+            color: #000;
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 30px var(--primary-glow);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px var(--primary-glow);
+            filter: brightness(1.1);
+        }
+
+        .btn-cta:active {
+            transform: translateY(-1px);
+        }
+
+        /* Footer info */
+        .footer-info {
+            margin-top: 30px;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            opacity: 0.7;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 400px) {
+            h1 { font-size: 1.8rem; }
+            .time-val { font-size: 1.6rem; }
+            .canvas-card { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-glow"></div>
+
+    <div class="canvas-card">
+        <div class="hero-badge">Oportunidade Única 2026</div>
+
+        <img src="https://drive.google.com/thumbnail?id=1q27xBm87ewP3GKczQ8x7iS6fyH4eMQeO&sz=w1000" class="logo-img" alt="Logo Bolão Master">
+
+        <h1>Vem ai edição 2026<br><span>Bolão Camiño </span></h1>
+
+        <p class="description">
+            A sua chance de transformar <b>R$ 100,00</b> em um prêmio inesquecível. O sorteio oficial ocorre em 31 de Dezembro de 2026. Não fique de fora dessa!
+        </p>
+
+        <div class="countdown-container">
+            <span class="countdown-label">A contagem regressiva começou</span>
+            <div class="timer-grid">
+                <div class="time-box"><span class="time-val" id="dias">00</span><span class="time-unit">Dias</span></div>
+                <div class="time-box"><span class="time-val" id="horas">00</span><span class="time-unit">Horas</span></div>
+                <div class="time-box"><span class="time-val" id="minutos">00</span><span class="time-unit">Min</span></div>
+                <div class="time-box"><span class="time-val" id="segundos">00</span><span class="time-unit">Seg</span></div>
+            </div>
+        </div>
+
+        <a href="bolao.html" class="btn-cta">
+            GARANTIR MINHA COTA
+            <i data-lucide="arrow-right"></i>
+        </a>
+
+        <div class="footer-info">
+            Processamento de pagamento seguro via Pix.
+        </div>
+    </div>
+
+    <script>
+        // Inicializar ícones Lucide
+        lucide.createIcons();
+
+        // Registo do PWA Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                const swCode = `
+                    self.addEventListener('install', e => self.skipWaiting());
+                    self.addEventListener('fetch', e => e.respondWith(fetch(e.request)));
+                `;
+                const blob = new Blob([swCode], {type: 'text/javascript'});
+                navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+            });
+        }
+
+        // Script do Cronómetro
+        function updateCountdown() {
+            const targetDate = new Date("Dec 31, 2026 23:59:59").getTime();
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+
+            if (diff <= 0) {
+                document.querySelector('.countdown-container').innerHTML = "<span class='countdown-label' style='color:var(--primary)'>Inscrições Encerradas!</span>";
+                return;
+            }
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('dias').innerText = d.toString().padStart(2, '0');
+            document.getElementById('horas').innerText = h.toString().padStart(2, '0');
+            document.getElementById('minutos').innerText = m.toString().padStart(2, '0');
+            document.getElementById('segundos').innerText = s.toString().padStart(2, '0');
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
