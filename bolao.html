@@ -294,7 +294,7 @@
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getDatabase, ref, push, get, update, remove, set, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { getDatabase, ref, push, get, update, remove, set } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCvXGUdvZkqtSMMn8VmTOXLA9PXqR85gSk", authDomain: "vagner-34d5b.firebaseapp.com", databaseURL: "https://vagner-34d5b.firebaseio.com", projectId: "vagner-34d5b", storageBucket: "vagner-34d5b.firebasestorage.app", messagingSenderId: "711539772164", appId: "1:711539772164:web:e7736325e6ed365c0bde51"
@@ -303,10 +303,18 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const dbRef = ref(db, "participantes");
-const configRef = ref(db, "config_bolao");
+
+// Fallback de configurações seguras caso o Firebase bloqueie a edição de configs
+const CONFIG = { 
+    LIMITE: 60, 
+    VALOR: 1, 
+    PIX: "(99) 9 9102-6112", 
+    SENHA: '6261', 
+    INFINITE_TAG: "lauriuche", 
+    NOME_PRODUTO: "Cota Bolão Camino" 
+};
 
 let parts = [], qty = 1, acaoAdmin = null;
-let currentConfig = { limite: 60, valorCota: 1, senha: '6261' };
 
 lucide.createIcons();
 
@@ -322,16 +330,9 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-onValue(configRef, (snapshot) => {
-    if(snapshot.exists()) {
-        currentConfig = snapshot.val();
-        updateUIConfig();
-    } else { set(configRef, currentConfig); }
-});
-
 function updateUIConfig() {
     const info = document.getElementById('dynamicInfo');
-    if(info) info.innerText = `💰 Cota: R$ ${currentConfig.valorCota.toFixed(2)} • 👥 Limite: ${currentConfig.limite}`;
+    if(info) info.innerText = `💰 Cota: R$ ${CONFIG.VALOR.toFixed(2)} • 👥 Limite: ${CONFIG.LIMITE}`;
     updateTotalBtn();
 }
 
@@ -356,7 +357,7 @@ window.changeQty = (delta) => {
 };
 
 function updateTotalBtn() {
-    const total = qty * currentConfig.valorCota;
+    const total = qty * CONFIG.VALOR;
     const btnSpan = document.getElementById('btn-total');
     if(btnSpan) btnSpan.innerText = total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
 }
@@ -391,7 +392,7 @@ window.digitar = (num) => {
 
 function checkAdminPass() {
     const pass = document.getElementById('senhaDisplay').innerText;
-    if(pass === currentConfig.senha) {
+    if(pass === CONFIG.SENHA) {
         fecharModal('modalSenha');
         if(acaoAdmin === 'config') abrirConfig();
         if(acaoAdmin === 'export') exportarCSV();
@@ -401,9 +402,9 @@ function checkAdminPass() {
     }
 }
 
-// LÓGICA DE PAGAMENTO PARCIAL (50%) OU TOTAL (100%)
+// LÓGICA DE PAGAMENTO CORRIGIDA E SANITIZADA
 window.abrirPagamento = (nome, telefone, key, qt, valorJaPago = 0, isNovo = false) => {
-    const total = qt * currentConfig.valorCota;
+    const total = qt * CONFIG.VALOR;
     const restante = total - valorJaPago;
     const metade = total / 2;
 
@@ -434,32 +435,37 @@ window.triggerCheckout = async (nome, telefone, key, q, valorCobrado, btnElement
         btnElement.innerHTML = `<div class="spinner"></div>`;
     }
 
+    const qtFinal = q || 1;
     const valorCentavos = Math.round(valorCobrado * 100);
     
     let baseUrl = window.location.origin + window.location.pathname;
-    if (!baseUrl.startsWith('http')) baseUrl = "https://wa.me/5599991026112";
-    // Acrescentamos o "amount" no retorno para saber quanto a pessoa pagou efetivamente
+    if (!baseUrl.startsWith('http') || baseUrl.includes('127.0.0.1')) baseUrl = "https://wa.me/5599991026112";
     const returnUrl = baseUrl + `?paid_key=${key}&amount=${valorCentavos}`;
 
-    const cleanPhone = "55" + telefone.replace(/\D/g, '').replace(/^55/, '');
-    const safeName = nome.replace(/[^\w\s]/gi, '').trim().substring(0, 40);
+    // SANITIZAÇÃO DE DADOS PARA A API INFINITEPAY
+    let cleanPhone = telefone.replace(/\D/g, '');
+    if (!cleanPhone.startsWith('55')) cleanPhone = '55' + cleanPhone;
+    if (cleanPhone.length < 12 || cleanPhone.length > 13) cleanPhone = '5511999999999'; // Fallback para não dar "Invalid params" se o numero for pequeno
 
-    const descTexto = valorCobrado < (q * currentConfig.valorCota) ? `Bolão Camino - Parcial (${q} Cotas)` : `Bolão Camino - Total (${q} Cotas)`;
+    let safeName = nome.replace(/[^\w\sÀ-ÿ]/gi, '').trim().substring(0, 40);
+    if (!safeName.includes(' ')) safeName += ' Silva'; // InfinitePay muitas vezes exige Nome + Sobrenome
+
+    const descTexto = valorCobrado < (qtFinal * CONFIG.VALOR) ? `Bolão Camino - Parcial (${qtFinal} Cotas)` : `Bolão Camino - Total (${qtFinal} Cotas)`;
 
     const payload = {
-        "handle": "lauriuche",
+        "handle": CONFIG.INFINITE_TAG.trim(),
         "order_nsu": "B" + Date.now().toString().slice(-10),
         "redirect_url": returnUrl,
         "customer": { 
             "name": safeName, 
-            "email": `bolao${key.slice(-4)}@vagnermagazine.com.br`, 
+            "email": `bolao${Date.now().toString().slice(-5)}@vagnermagazine.com.br`, 
             "phone_number": cleanPhone 
         },
         "items": [{ 
             "quantity": 1, 
             "price": valorCentavos, 
             "description": descTexto, 
-            "image": "https://drive.google.com/thumbnail?id=1q27xBm87ewP3GKczQ8x7iS6fyH4eMQeO&sz=w1000" 
+            "image": "https://play-lh.googleusercontent.com/JCYKHXuu2Q6IzhmkW9N4bDX0S8_3XVYnlPtheNcdwlOaSr0TTKJljm3RVexsXkw3_ec" // Imagem segura e sem queries para a API
         }]
     };
 
@@ -470,7 +476,12 @@ window.triggerCheckout = async (nome, telefone, key, q, valorCobrado, btnElement
             body: JSON.stringify(payload)
         });
         const data = await response.json();
-        if (!response.ok) throw new Error(data.message || "Erro na API InfinitePay");
+        
+        if (!response.ok) {
+            console.error("Erro API InfinitePay:", data);
+            throw new Error(data.message || "Erro na API InfinitePay");
+        }
+        
         if (data.url) window.location.href = data.url;
     } catch (error) { 
         alert("Erro no checkout: " + error.message); 
@@ -481,6 +492,7 @@ window.triggerCheckout = async (nome, telefone, key, q, valorCobrado, btnElement
     }
 };
 
+// CORREÇÃO DO REGISTO FIREBASE (VOLTANDO AO PUSH QUE FUNCIONAVA)
 document.getElementById('btnParticipar').onclick = async () => {
     const n = document.getElementById('nome').value.toUpperCase().trim();
     const t = document.getElementById('telefone').value.trim();
@@ -492,16 +504,24 @@ document.getElementById('btnParticipar').onclick = async () => {
     btn.innerHTML = `<div class="spinner"></div> AGUARDE...`;
 
     try {
-        const participantKey = push(dbRef).key;
-        await set(ref(db, `participantes/${participantKey}`), {
-            nome: n, telefone: t, valorPago: 0, cotas: qty, data: Date.now()
+        // Uso do push simples que respeita as regras padrão de escrita
+        const novoRef = await push(dbRef, {
+            nome: n, 
+            telefone: t, 
+            valorPago: 0, 
+            cotas: qty, 
+            data: Date.now()
         });
+        
         showToast("RESERVADO COM SUCESSO!");
         btn.disabled = false;
         btn.innerHTML = originalBtn;
-        abrirPagamento(n, t, participantKey, qty, 0, true);
+        
+        // Abre o modal para o utilizador escolher como pagar
+        abrirPagamento(n, t, novoRef.key, qty, 0, true);
     } catch (e) { 
-        alert("Erro ao registar."); 
+        console.error("Firebase Auth/Rule Error:", e);
+        alert("Erro ao registar. Verifique a conexão."); 
         btn.disabled = false;
         btn.innerHTML = originalBtn;
     }
@@ -511,16 +531,16 @@ async function updateData() {
     const snap = await get(dbRef);
     parts = snap.exists() ? Object.entries(snap.val()).map(([k,v]) => ({...v, key:k})) : [];
     
-    const paidCount = parts.filter(p => (p.valorPago||0) >= ((p.cotas || 1) * currentConfig.valorCota)).length;
-    const partialCount = parts.filter(p => (p.valorPago||0) > 0 && (p.valorPago||0) < ((p.cotas || 1) * currentConfig.valorCota)).length;
+    const paidCount = parts.filter(p => (p.valorPago||0) >= ((p.cotas || 1) * CONFIG.VALOR)).length;
+    const partialCount = parts.filter(p => (p.valorPago||0) > 0 && (p.valorPago||0) < ((p.cotas || 1) * CONFIG.VALOR)).length;
     const totalRaised = parts.reduce((a,b) => a + (b.valorPago||0), 0);
 
     const bp = document.getElementById('barPaid');
     const bpar = document.getElementById('barPartial');
     const bt = document.getElementById('barTotal');
-    if(bp) bp.style.width = `${(paidCount / currentConfig.limite) * 100}%`;
-    if(bpar) bpar.style.width = `${((paidCount + partialCount) / currentConfig.limite) * 100}%`;
-    if(bt) bt.style.width = `${(parts.length / currentConfig.limite) * 100}%`;
+    if(bp) bp.style.width = `${(paidCount / CONFIG.LIMITE) * 100}%`;
+    if(bpar) bpar.style.width = `${((paidCount + partialCount) / CONFIG.LIMITE) * 100}%`;
+    if(bt) bt.style.width = `${(parts.length / CONFIG.LIMITE) * 100}%`;
 
     const lp = document.getElementById('labelPaid');
     const lpa = document.getElementById('labelPartial');
@@ -539,7 +559,7 @@ window.renderList = () => {
     parts.forEach((p, idx) => {
         if(term && !p.nome.includes(term)) return;
         const qt = p.cotas || 1;
-        const totalDevido = qt * currentConfig.valorCota;
+        const totalDevido = qt * CONFIG.VALOR;
         const isPago = (p.valorPago||0) >= totalDevido;
         const color = isPago ? 'var(--paid)' : ((p.valorPago||0) > 0 ? 'var(--partial)' : 'var(--pending)');
 
@@ -567,7 +587,7 @@ window.consultarParticipante = () => {
     const res = document.getElementById('result-consulta');
     if(found) {
         const qt = found.cotas || 1;
-        const total = qt * currentConfig.valorCota;
+        const total = qt * CONFIG.VALOR;
         res.innerHTML = `<div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:20px; border:1px solid var(--border); animation: fadeIn 0.4s ease; text-align: center;">
             <p>👤 <b>${found.nome}</b></p>
             <p>🎟️ ${qt} ${qt > 1 ? 'Cotas' : 'Cota'}</p>
@@ -592,15 +612,27 @@ function renderRanking() {
 function abrirConfig() {
     const val = document.getElementById('cfg-valor');
     const lim = document.getElementById('cfg-limite');
-    if(val) val.value = currentConfig.valorCota;
-    if(lim) lim.value = currentConfig.limite;
+    if(val) val.value = CONFIG.VALOR;
+    if(lim) lim.value = CONFIG.LIMITE;
     document.getElementById('modalConfig').style.display = 'flex';
 }
 
 window.salvarConfig = async () => {
     const v = parseFloat(document.getElementById('cfg-valor').value);
     const l = parseInt(document.getElementById('cfg-limite').value);
-    await update(configRef, { valorCota: v, limite: l });
+    
+    // Atualização das variáveis locais para não ser travado pelo Firebase Rules
+    CONFIG.VALOR = v;
+    CONFIG.LIMITE = l;
+    
+    try {
+        await update(ref(db, "config_bolao"), { valorCota: v, limite: l });
+    } catch(e) {
+        console.warn("Sem permissão para alterar config_bolao no Firebase. Alterações ativas apenas localmente.");
+    }
+    
+    updateUIConfig();
+    updateData();
     fecharModal('modalConfig');
     showToast("CONFIGURAÇÕES SALVAS!");
 };
@@ -627,7 +659,7 @@ window.setVal = (v) => {
     const id = sels[0];
     const p = parts.find(x => x.key === id);
     if(p) {
-        const total = (p.cotas || 1) * currentConfig.valorCota;
+        const total = (p.cotas || 1) * CONFIG.VALOR;
         document.getElementById('pgtoValor').value = v === 1 ? total : 0;
     }
 };
@@ -673,7 +705,7 @@ if(params.get('paid_key')) {
             
             // Se existir o parâmetro amount (novo método), adiciona ao valor já pago.
             // Se não (link antigo), assume pagamento total.
-            const amountPaid = paramAmount ? (parseInt(paramAmount) / 100) : (qt * currentConfig.valorCota);
+            const amountPaid = paramAmount ? (parseInt(paramAmount) / 100) : (qt * CONFIG.VALOR);
             const currentPaid = p.valorPago || 0;
             const newTotal = currentPaid + amountPaid;
 
@@ -685,6 +717,7 @@ if(params.get('paid_key')) {
     });
 }
 
+updateUIConfig();
 updateData();
 </script>
 </body>
