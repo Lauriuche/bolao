@@ -3,166 +3,158 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Bolão Colaboradores Camino</title>
-<!-- Fontes e Ícones -->
+<title>Bolão Master Camino</title>
+
+<!-- PWA Meta Tags -->
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bolão Master">
+<link rel="apple-touch-icon" href="https://drive.google.com/thumbnail?id=1q27xBm87ewP3GKczQ8x7iS6fyH4eMQeO&sz=w512">
+
+<!-- Web App Manifest (Inline) -->
+<link rel="manifest" href='data:application/manifest+json,{"name":"Bolão Master Camino","short_name":"Bolão","start_url":".","display":"standalone","background_color":"#000000","theme_color":"#00ff88","icons":[{"src":"https://drive.google.com/thumbnail?id=1q27xBm87ewP3GKczQ8x7iS6fyH4eMQeO&sz=w512","sizes":"512x512","type":"image/png"}]}'>
+
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
     :root {
         --primary: #00ff88;
-        --primary-glow: rgba(0, 255, 136, 0.4);
+        --primary-glow: rgba(0, 255, 136, 0.3);
         --bg: #000000;
-        --surface: #0a0a0a;
-        --surface-accent: #121212;
+        --surface: rgba(15, 15, 15, 0.8);
+        --surface-accent: rgba(25, 25, 25, 0.9);
         --border: rgba(255, 255, 255, 0.08);
         --text-main: #ffffff;
-        --text-dim: #999999;
-        --red-alert: #ff4d4d;
-        --yellow-warn: #ffcc00;
-        --paid-color: #00ff88;
-        --partial-color: #ffcc00;
-        --pending-color: #333333;
+        --text-dim: #a0a0a0;
+        --paid: #00ff88;
+        --partial: #ffcc00;
+        --pending: #ff4d4d;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-
+    
     body {
-        background-color: var(--bg);
+        background: radial-gradient(circle at center, #001a0d 0%, #000000 100%);
         color: var(--text-main);
         min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 10px;
-        overflow: hidden;
-        background: radial-gradient(circle at center, #001a0d 0%, #000000 100%);
+        display: flex; justify-content: center; align-items: center;
+        padding: 15px; overflow: hidden;
     }
 
     .container {
+        width: 100%; max-width: 450px; height: 92vh;
+        border-radius: 40px; padding: 25px;
         background: var(--surface);
-        width: 100%;
-        max-width: 450px;
-        height: auto;
-        max-height: 95vh;
-        border-radius: 35px;
-        padding: 20px;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         border: 1px solid var(--border);
-        box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 20px rgba(0, 255, 136, 0.05);
-        text-align: center;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         display: flex; flex-direction: column;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        position: relative; overflow: hidden;
+        position: relative;
     }
 
-    .container.expanded { height: 90vh; }
-
-    .scrollable-content { 
-        overflow-y: auto; 
-        scrollbar-width: none; 
-        flex-shrink: 1;
-    }
+    .scrollable-content { overflow-y: auto; scrollbar-width: none; flex: 1; }
     .scrollable-content::-webkit-scrollbar { display: none; }
 
+    .text-center { 
+        text-align: center; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+    }
+
     .hero-badge { 
-        background: rgba(0, 255, 136, 0.1); 
-        color: var(--primary); 
-        padding: 6px 15px; 
-        border-radius: 100px; 
-        font-size: 0.65rem; 
-        font-weight: 800; 
-        text-transform: uppercase; 
-        letter-spacing: 1.5px; 
-        border: 1px solid rgba(0, 255, 136, 0.2); 
-        margin-bottom: 12px; 
-        display: inline-block; 
+        background: rgba(0, 255, 136, 0.1); color: var(--primary); 
+        padding: 6px 16px; border-radius: 100px; font-size: 0.65rem; 
+        font-weight: 800; border: 1px solid rgba(0, 255, 136, 0.2); 
+        margin-bottom: 15px; display: inline-block; text-transform: uppercase;
     }
-
+    
     .logo-img { 
-        display: block; width: 100%; max-width: 220px; height: auto; /* Tamanho aumentado de 160px para 220px */
-        margin: 0 auto 15px auto; 
-        border-radius: 15px;
+        display: block; 
+        width: 100%; 
+        max-width: 220px; 
+        height: 130px; 
+        object-fit: cover;
+        margin: 0 auto 15px; 
+        border-radius: 20px;
     }
-
-    .info-header { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 5px; font-weight: 600; }
-    .date-header { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 15px; opacity: 0.7; }
+    
+    .info-header { font-size: 0.85rem; color: var(--text-dim); font-weight: 600; margin-bottom: 4px; text-align: center; width: 100%; }
+    .date-header { font-size: 0.75rem; color: var(--text-dim); opacity: 0.6; margin-bottom: 20px; text-align: center; width: 100%; }
 
     .countdown-card { 
-        background: var(--surface-accent); 
-        border-radius: 20px; 
-        padding: 12px; 
-        margin-bottom: 15px; 
-        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.03); border-radius: 24px; 
+        padding: 15px; margin-bottom: 20px; border: 1px solid var(--border);
     }
-    .timer-grid { display: flex; justify-content: center; gap: 10px; }
-    .time-box { display: flex; flex-direction: column; align-items: center; width: 42px; }
-    .time-val { font-size: 1.2rem; font-weight: 800; color: var(--primary); line-height: 1; text-shadow: 0 0 10px var(--primary-glow); }
-    .time-unit { font-size: 0.5rem; margin-top: 4px; color: var(--text-dim); font-weight: 800; text-transform: uppercase; }
+    .timer-grid { display: flex; justify-content: center; gap: 12px; }
+    .time-box { display: flex; flex-direction: column; align-items: center; min-width: 50px; }
+    .time-val { font-size: 1.4rem; font-weight: 800; color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); }
+    .time-unit { font-size: 0.55rem; color: var(--text-dim); text-transform: uppercase; margin-top: 4px; font-weight: 700; }
 
-    .progress-area { margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 25px; border: 1px solid var(--border); }
-    .progress-capsule { position: relative; height: 10px; background: rgba(255,255,255,0.05); border-radius: 100px; overflow: hidden; margin-bottom: 12px; }
-    .metallic-bar { position: absolute; top: 0; left: 0; bottom: 0; height: 100%; transition: width 1s ease; border-radius: 100px; }
-    .bar-layer-reg { z-index: 1; background: var(--pending-color); }
-    .bar-layer-partial { z-index: 2; background: var(--partial-color); }
-    .bar-layer-paid { z-index: 3; background: var(--paid-color); box-shadow: 0 0 15px var(--primary-glow); }
-    .progress-legend { display: flex; justify-content: space-between; font-size: 0.65rem; font-weight: 800; color: var(--text-dim); }
-    .progress-money { font-size: 0.8rem; color: var(--primary); margin-top: 10px; font-weight: 800; }
+    .progress-area { margin-bottom: 25px; padding: 18px; border-radius: 24px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); }
+    .progress-capsule { height: 8px; background: rgba(255,255,255,0.05); border-radius: 100px; overflow: hidden; position: relative; margin-bottom: 12px; }
+    .bar { position: absolute; height: 100%; transition: 1s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 100px; }
+    .bar-paid { background: var(--paid); z-index: 3; box-shadow: 0 0 12px var(--primary-glow); }
+    .bar-partial { background: var(--partial); z-index: 2; }
+    .bar-total { background: #333; z-index: 1; }
+    
+    .progress-legend { display: flex; justify-content: center; gap: 15px; font-size: 0.65rem; font-weight: 800; color: var(--text-dim); }
+    .progress-money { font-size: 0.85rem; color: var(--primary); margin-top: 10px; font-weight: 800; text-align: center; }
 
-    input.form-input { 
-        width: 100%; padding: 14px; margin-bottom: 10px; 
-        background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 16px; 
-        font-size: 0.9rem; text-align: center; color: white; outline: none; transition: 0.3s;
+    .tabs { display: flex; gap: 6px; margin-bottom: 20px; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 18px; }
+    .tab-btn { flex: 1; padding: 12px; border-radius: 14px; border: none; background: transparent; color: var(--text-dim); font-size: 0.7rem; font-weight: 800; cursor: pointer; transition: 0.3s; }
+    .tab-btn.active { background: var(--surface-accent); color: var(--primary); border: 1px solid var(--border); }
+
+    .form-input { 
+        width: 100%; padding: 16px; border-radius: 18px; border: 1px solid var(--border); 
+        background: rgba(255,255,255,0.04); color: #fff; text-align: center; font-size: 0.95rem; 
+        outline: none; margin-bottom: 12px; transition: 0.3s;
     }
-    input.form-input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 255, 136, 0.1); }
+    .form-input:focus { border-color: var(--primary); background: rgba(255,255,255,0.08); }
+    
+    .cota-picker { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px; padding: 10px; }
+    .btn-qty { width: 44px; height: 44px; border-radius: 15px; background: var(--surface-accent); color: var(--primary); border: 1px solid var(--border); font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+    .btn-qty:active { transform: scale(0.9); }
 
-    .action-row { display: grid; grid-template-columns: 1fr 1.5fr; gap: 8px; margin-bottom: 10px; }
-    .btn-green-block { 
-        background: var(--primary); color: #000; padding: 14px; border-radius: 16px; font-weight: 800; font-size: 0.8rem; 
-        display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 10px 20px var(--primary-glow); transition: 0.3s;
-        border: none; cursor: pointer;
-    }
-    .btn-gray-block { background: var(--surface-accent); color: var(--text-dim); padding: 14px; border-radius: 16px; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; border: 1px solid var(--border); cursor: pointer; }
-    .btn-list-expand { width: 100%; background: transparent; color: var(--primary); padding: 15px; font-weight: 800; font-size: 0.85rem; border: 1px dashed var(--primary); border-radius: 20px; margin-top: 5px; cursor: pointer; }
+    .btn-main { width: 100%; padding: 18px; border-radius: 20px; background: var(--primary); color: #000; font-weight: 800; border: none; cursor: pointer; box-shadow: 0 10px 25px var(--primary-glow); font-size: 1rem; transition: 0.3s; position: relative; }
+    .btn-main:hover { transform: translateY(-2px); box-shadow: 0 15px 30px var(--primary-glow); }
+    .btn-main:disabled { background: #333; color: #666; box-shadow: none; cursor: not-allowed; }
 
-    #listaContainer { display: none; flex-direction: column; flex: 1; margin-top: 15px; border-top: 1px solid var(--border); padding-top: 15px; overflow: hidden; }
-    .container.expanded #listaContainer { display: flex; animation: fadeIn 0.4s ease; }
-    .toolbar { display: flex; flex-direction: column; gap: 12px; padding-bottom: 15px; }
-    .filter-row { display: flex; gap: 8px; }
-    .search-input-clean { flex: 2; padding: 12px 15px; border: 1px solid var(--border); border-radius: 14px; font-size: 0.8rem; background: rgba(255,255,255,0.03); color: white; outline: none; }
-    .filter-select { flex: 1; background: var(--surface-accent); border: 1px solid var(--border); color: white; border-radius: 14px; font-size: 0.75rem; font-weight: 800; cursor: pointer; }
-    .admin-row { display: flex; justify-content: space-between; align-items: center; padding: 0 5px; }
-    .icon-group { display: flex; gap: 8px; }
-    .icon-btn { width: 38px; height: 38px; border-radius: 12px; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid var(--border); background: var(--surface-accent); }
+    .list-item { display: flex; align-items: center; padding: 14px 10px; border-bottom: 1px solid var(--border); transition: 0.2s; }
+    .list-item:hover { background: rgba(255,255,255,0.02); }
+    .item-name { font-size: 0.75rem; font-weight: 700; color: #fff; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
+    .item-info { font-size: 0.6rem; color: var(--text-dim); margin-top: 2px; }
+    
+    .pay-btn-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+    .btn-pay-sm { background: var(--primary); color: #000; padding: 8px 14px; border-radius: 10px; font-size: 0.65rem; font-weight: 800; border: none; cursor: pointer; }
+    .status-indicator { width: 10px; height: 10px; border-radius: 50%; margin-left: 5px; }
 
-    #listaDiv { flex: 1; overflow-y: auto; padding-bottom: 20px; scrollbar-width: none; }
-    .list-item { background: transparent; border-bottom: 1px solid var(--border); display: flex; align-items: center; min-height: 60px; transition: 0.2s; padding: 0 5px; }
-    .list-item.selected { background: rgba(0, 255, 136, 0.05); }
-    .item-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
-    .checkbox-icon { font-size: 1.1rem; color: var(--border); cursor: pointer; flex-shrink: 0; }
-    .item-name { font-size: 0.8rem; color: var(--text-main); font-weight: 700; text-transform: uppercase; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .pay-btn-container { margin-left: auto; display: flex; align-items: center; gap: 10px; flex-shrink: 0; padding-left: 10px; }
-    .btn-pay-row { 
-        background: var(--primary); color: #000; padding: 8px 12px; border-radius: 10px; font-size: 0.65rem; font-weight: 800; 
-        display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(0, 255, 136, 0.2); cursor: pointer; border: none;
-    }
+    .admin-footer { display: flex; justify-content: center; gap: 15px; margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--border); }
+    .admin-btn { background: transparent; border: none; color: var(--text-dim); font-size: 0.65rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
 
-    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 3000; backdrop-filter: blur(8px); }
-    .modal-box { background: var(--surface); border: 1px solid var(--border); width: 100%; max-width: 340px; border-radius: 40px; padding: 25px; text-align: center; }
-    .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 5000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(10px); padding: 20px; }
+    .modal-box { width: 100%; max-width: 380px; border-radius: 35px; padding: 30px; text-align: center; border: 1px solid var(--border); background: var(--surface); }
+    
     .num-btn { background: var(--surface-accent); color: white; padding: 18px; font-size: 1.2rem; border-radius: 18px; border: 1px solid var(--border); font-weight: 800; cursor: pointer; }
-    .btn-checkout { background: var(--primary); color: #000; width: 100%; margin-top: 20px; padding: 18px; border-radius: 20px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; border: none; }
-    .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #000; padding: 12px 25px; border-radius: 100px; font-weight: 800; z-index: 5000; display: none; }
+
+    .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #000; padding: 14px 28px; border-radius: 100px; font-weight: 800; z-index: 9999; display: none; box-shadow: 0 10px 30px var(--primary-glow); font-size: 0.8rem; }
+
+    .spinner { width: 20px; height: 20px; border: 2px solid rgba(0,0,0,0.1); border-top: 2px solid #000; border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
 
 <div class="container" id="mainContainer">
-    <div id="topContent" class="scrollable-content">
-        <div class="hero-badge">🎰 BOLÃO EXCLUSIVO</div>
-        <!-- LOGO COM TAMANHO AUMENTADO -->
-        <img src="https://drive.google.com/thumbnail?id=1q27xBm87ewP3GKczQ8x7iS6fyH4eMQeO&sz=w1000" alt="Logo" class="logo-img">
-        
-        <div class="info-header">💰 Cota: R$ 1,00 • 👥 Limite: 60</div>
-        <div class="date-header">Pagamento até 25 de Dezembro de 2026</div>
+    <div class="scrollable-content">
+        <div class="text-center">
+            <div class="hero-badge">🎰 BOLÃO EXCLUSIVO 2026</div>
+            <img src="https://drive.google.com/thumbnail?id=1q27xBm87ewP3GKczQ8x7iS6fyH4eMQeO&sz=w1000" class="logo-img" alt="Logo Bolão">
+            <div id="dynamicInfo" class="info-header">💰 Cota: R$ 1,00 • 👥 Limite: 60</div>
+            <div class="date-header">Encerramento: 25 de Dezembro de 2026</div>
+        </div>
 
         <div class="countdown-card">
             <div class="timer-grid">
@@ -175,280 +167,421 @@
 
         <div class="progress-area">
             <div class="progress-capsule">
-                <div class="metallic-bar bar-layer-reg" id="barReg"></div>
-                <div class="metallic-bar bar-layer-partial" id="barPartial"></div>
-                <div class="metallic-bar bar-layer-paid" id="barPaid"></div>
+                <div class="bar bar-total" id="barTotal"></div>
+                <div class="bar bar-partial" id="barPartial"></div>
+                <div class="bar bar-paid" id="barPaid"></div>
             </div>
             <div class="progress-legend">
-                <div class="legend-item"><span id="txtPaid">0 Pagos</span></div>
-                <div class="legend-item"><span id="txtPartial">0 Parc</span></div>
-                <div class="legend-item"><span id="txtPend">0 Pend</span></div>
+                <span id="labelPaid">0 Pagos</span>
+                <span id="labelPartial">0 Parciais</span>
+                <span id="labelPending">0 Pendentes</span>
             </div>
-            <div class="progress-money" id="pMoney">ARRECADADO: R$ 0,00</div>
+            <div class="progress-money" id="totalRaised">ARRECADADO: R$ 0,00</div>
         </div>
 
-        <input type="text" class="form-input" id="nome" placeholder="NOME COMPLETO">
-        <input type="tel" class="form-input" id="telefone" placeholder="WHATSAPP (COM DDD)">
-
-        <div class="action-row">
-            <button class="btn-gray-block" id="btnZapGroup">Grupo</button>
-            <button class="btn-green-block" id="btnCadastrar">🚀 PARTICIPAR</button>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('cadastro', this)">CADASTRO</button>
+            <button class="tab-btn" onclick="switchTab('consulta', this)">MINHA COTA</button>
+            <button class="tab-btn" onclick="switchTab('ranking', this)">🏆 RANKING</button>
         </div>
-    </div>
 
-    <button class="btn-list-expand" id="btnToggleLista" onclick="toggleLista()">VER PARTICIPANTES ⌄</button>
-
-    <div id="listaContainer">
-        <div class="toolbar">
-            <div class="filter-row">
-                <input type="text" id="buscar" class="search-input-clean" placeholder="🔎 Nome...">
-                <select id="filtroSelect" class="filter-select" onchange="filtrar(this.value)">
-                    <option value="todos">FILTRO</option>
-                    <option value="todos">TODOS</option>
-                    <option value="pagos">PAGOS</option>
-                    <option value="parciais">PARCIAIS</option>
-                    <option value="pendentes">PENDENTES</option>
-                </select>
+        <div id="view-cadastro">
+            <input type="text" id="nome" class="form-input" placeholder="NOME COMPLETO">
+            <input type="tel" id="telefone" class="form-input" placeholder="WHATSAPP (DDD)">
+            
+            <p style="font-size:0.65rem; color:var(--text-dim); font-weight:800; margin-bottom:5px; text-align:center;">QUANTIDADE DE COTAS:</p>
+            <div class="cota-picker">
+                <button class="btn-qty" onclick="changeQty(-1)">-</button>
+                <span id="qty-val" style="font-size:1.6rem; font-weight:800; min-width:40px; text-align:center;">1</span>
+                <button class="btn-qty" onclick="changeQty(1)">+</button>
             </div>
-            <div class="admin-row">
-                <div style="font-size: 0.6rem; font-weight: 800; color: var(--text-dim); letter-spacing: 1px;">GERENCIAMENTO:</div>
-                <div class="icon-group">
-                    <button class="icon-btn" onclick="askPass('pagamento')">💰</button>
-                    <button class="icon-btn" onclick="askPass('excluir')">🗑️</button>
+
+            <button class="btn-main" id="btnParticipar">🚀 RESERVAR POR R$ <span id="btn-total">1,00</span></button>
+        </div>
+
+        <div id="view-consulta" style="display:none;">
+            <input type="tel" id="search-phone" class="form-input" placeholder="Digite seu telefone...">
+            <button class="btn-main" onclick="consultarParticipante()">VERIFICAR STATUS</button>
+            <div id="result-consulta" style="margin-top:20px;"></div>
+        </div>
+
+        <div id="view-ranking" style="display:none;">
+            <div id="rankingDiv"></div>
+        </div>
+
+        <div style="margin-top:25px;">
+            <button class="admin-btn" style="width:100%; padding:15px; border: 1px dashed var(--border); border-radius:20px;" onclick="toggleLista()" id="btnToggleLista">VER PARTICIPANTES ⌄</button>
+            
+            <div id="listaContainer" style="display:none; margin-top:20px;">
+                <input type="text" id="buscar" class="form-input" placeholder="🔍 Filtrar por nome..." oninput="renderList()">
+                <div id="listaDiv"></div>
+                
+                <div class="admin-footer">
+                    <button class="admin-btn" onclick="askAdmin('config')">Configurações</button>
+                    <button class="admin-btn" onclick="askAdmin('export')">Exportar CSV</button>
                 </div>
             </div>
         </div>
-        <div id="listaDiv"></div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modalConfig">
+    <div class="modal-box">
+        <h3 style="margin-bottom:20px;">AJUSTES DO BOLÃO</h3>
+        <input type="number" id="cfg-valor" class="form-input" placeholder="Valor da Cota">
+        <input type="number" id="cfg-limite" class="form-input" placeholder="Limite de Pessoas">
+        <button class="btn-main" onclick="salvarConfig()">SALVAR</button>
+        <button class="admin-btn" style="margin-top:15px; width:100%;" onclick="fecharModal('modalConfig')">CANCELAR</button>
     </div>
 </div>
 
 <div class="modal-overlay" id="modalSenha">
     <div class="modal-box">
-        <h3 style="margin-bottom:15px; font-weight:800;">ADMIN ACCESS</h3>
-        <div id="senhaDisplay" style="font-size:2rem; letter-spacing:8px; height:45px; color:var(--primary);"></div>
-        <div class="numpad">
+        <h3 style="margin-bottom:15px;">PIN ADMIN</h3>
+        <div id="senhaDisplay" style="font-size:2rem; letter-spacing:10px; height:50px; color:var(--primary);"></div>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:20px;">
             <button class="num-btn" onclick="digitar('1')">1</button><button class="num-btn" onclick="digitar('2')">2</button><button class="num-btn" onclick="digitar('3')">3</button>
             <button class="num-btn" onclick="digitar('4')">4</button><button class="num-btn" onclick="digitar('5')">5</button><button class="num-btn" onclick="digitar('6')">6</button>
             <button class="num-btn" onclick="digitar('7')">7</button><button class="num-btn" onclick="digitar('8')">8</button><button class="num-btn" onclick="digitar('9')">9</button>
-            <button class="num-btn" style="color:var(--red-alert)" onclick="digitar('C')">C</button><button class="num-btn" onclick="digitar('0')">0</button><button class="num-btn" onclick="fecharModal('modalSenha')">✕</button>
+            <button class="num-btn" style="color:var(--pending)" onclick="digitar('C')">C</button>
+            <button class="num-btn" onclick="digitar('0')">0</button>
+            <button class="num-btn" onclick="fecharModal('modalSenha')">✕</button>
         </div>
     </div>
 </div>
 
-<div class="modal-overlay" id="modalConf">
-    <div class="modal-box">
-        <h2 style="color:var(--primary); font-weight:800;">REGISTRO OK!</h2>
-        <p style="color:var(--text-dim); font-size:0.85rem; margin-bottom:20px;">Cota reservada. Pague agora:</p>
-        <button class="btn-checkout" id="btnPagarCheckout"><i data-lucide="credit-card"></i> PAGAR AGORA (R$ 1,00)</button>
-        <p style="font-size:0.7rem; color:var(--text-dim); margin-top:20px;">Ou PIX manual:</p>
-        <p style="font-weight:800; color:var(--primary); font-size:1rem;" id="confPix"></p>
-        <button class="btn-gray-block" style="width:100%; margin-top:10px;" id="btnZapConf">ENVIAR COMPROVANTE</button>
-        <button class="btn-gray-block" style="width:100%; margin-top:10px; border:none; background:transparent;" onclick="fecharModal('modalConf')">FECHAR</button>
-    </div>
-</div>
-
-<div class="modal-overlay" id="modalPagamento">
-    <div class="modal-box">
-        <h3 style="font-weight:800;">BAIXA MANUAL</h3>
-        <p id="pgtoNome" style="color:var(--primary); font-size:0.8rem; margin:10px 0;"></p>
-        <input type="number" id="pgtoValor" placeholder="0.00" style="font-size:1.8rem; margin:10px 0; width:100%; text-align:center; padding:12px; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:18px; color:white;">
-        <div style="display:flex; gap:10px;">
-            <button class="btn-gray-block" style="flex:1" onclick="setVal(0)">ZERAR</button><button class="btn-green-block" style="flex:1" onclick="setVal(1)">TOTAL</button>
-        </div>
-        <button class="btn-green-block" style="width:100%; margin-top:15px;" id="btnSalvarPgto">CONFIRMAR</button>
-    </div>
-</div>
-
-<div id="toast" class="toast">✅ PAGAMENTO CONFIRMADO!</div>
+<div id="toast" class="toast">SUCESSO!</div>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getDatabase, ref, push, get, update, remove } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { getDatabase, ref, push, get, update, remove, set, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-const CONFIG = { 
-    LIMITE: 60, VALOR: 1, VALOR_CENTAVOS: 100, PIX: "(99) 9 9102-6112", SENHA: '6261', 
-    TG_TOKEN: "8307035824:AAFsKe4l1WgbZI1uez-n06Vt-TYiuhZLMt8", TG_CHAT: "861365063",
-    INFINITE_TAG: "lauriuche", URL_LOGO: "https://drive.google.com/thumbnail?id=1q27xBm87ewP3GKczQ8x7iS6fyH4eMQeO&sz=w1000",
-    NOME_PRODUTO: "Cota Bolão Camino", URL_RETORNO_FALLBACK: "https://wa.me/5599991026112"
+const firebaseConfig = {
+  apiKey: "AIzaSyCvXGUdvZkqtSMMn8VmTOXLA9PXqR85gSk", authDomain: "vagner-34d5b.firebaseapp.com", databaseURL: "https://vagner-34d5b.firebaseio.com", projectId: "vagner-34d5b", storageBucket: "vagner-34d5b.firebasestorage.app", messagingSenderId: "711539772164", appId: "1:711539772164:web:e7736325e6ed365c0bde51"
 };
 
-const app = initializeApp({
-  apiKey: "AIzaSyCvXGUdvZkqtSMMn8VmTOXLA9PXqR85gSk", authDomain: "vagner-34d5b.firebaseapp.com", databaseURL: "https://vagner-34d5b.firebaseio.com", projectId: "vagner-34d5b", storageBucket: "vagner-34d5b.firebasestorage.app", messagingSenderId: "711539772164", appId: "1:711539772164:web:e7736325e6ed365c0bde51"
-});
+const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const dbRef = ref(db, "participantes");
+const configRef = ref(db, "config_bolao");
 
-let parts = [], sels = [], acao = null, filtro = 'todos';
+let parts = [], qty = 1, acaoAdmin = null;
+let currentConfig = { limite: 60, valorCota: 1, senha: '6261' };
 
 lucide.createIcons();
 
+// --- PWA Service Worker Registration ---
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        const swCode = `
+            self.addEventListener('install', e => self.skipWaiting());
+            self.addEventListener('fetch', e => e.respondWith(fetch(e.request)));
+        `;
+        const blob = new Blob([swCode], {type: 'text/javascript'});
+        navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+    });
+}
+
+onValue(configRef, (snapshot) => {
+    if(snapshot.exists()) {
+        currentConfig = snapshot.val();
+        updateUIConfig();
+    } else { set(configRef, currentConfig); }
+});
+
+function updateUIConfig() {
+    const info = document.getElementById('dynamicInfo');
+    if(info) info.innerText = `💰 Cota: R$ ${currentConfig.valorCota.toFixed(2)} • 👥 Limite: ${currentConfig.limite}`;
+    updateTotalBtn();
+}
+
+window.switchTab = (tab, btn) => {
+    ['cadastro', 'consulta', 'ranking'].forEach(t => {
+        const el = document.getElementById(`view-${t}`);
+        if(el) el.style.display = 'none';
+    });
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    const target = document.getElementById(`view-${tab}`);
+    if(target) target.style.display = 'block';
+    btn.classList.add('active');
+    if(tab === 'ranking') renderRanking();
+    if(tab === 'cadastro') updateData();
+};
+
+window.changeQty = (delta) => {
+    qty = Math.max(1, qty + delta);
+    const el = document.getElementById('qty-val');
+    if(el) el.innerText = qty;
+    updateTotalBtn();
+};
+
+function updateTotalBtn() {
+    const total = qty * currentConfig.valorCota;
+    const btnSpan = document.getElementById('btn-total');
+    if(btnSpan) btnSpan.innerText = total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+}
+
 window.toggleLista = () => {
-    const container = document.getElementById('mainContainer');
+    const container = document.getElementById('listaContainer');
     const btn = document.getElementById('btnToggleLista');
-    if (container.classList.contains('expanded')) {
-        container.classList.remove('expanded');
-        document.getElementById('topContent').style.display = 'block';
-        btn.innerText = "VER PARTICIPANTES ⌄";
-    } else {
-        container.classList.add('expanded');
-        document.getElementById('topContent').style.display = 'none';
-        btn.innerText = "VOLTAR";
-        updateData(); renderList();
-    }
+    const isHidden = container.style.display === 'none';
+    container.style.display = isHidden ? 'block' : 'none';
+    btn.innerText = isHidden ? "OCULTAR LISTA ⌃" : "VER PARTICIPANTES ⌄";
+    if(isHidden) { updateData(); renderList(); }
 };
 
 window.fecharModal = (id) => document.getElementById(id).style.display = 'none';
-window.setVal = (v) => document.getElementById('pgtoValor').value = v;
-window.filtrar = (f) => { filtro = f; renderList(); };
-window.digitar = (k) => {
-    const d = document.getElementById('senhaDisplay');
-    if(k==='C') d.innerText = '';
-    else if(d.innerText.length < 4) { d.innerText += k; if(d.innerText.length === 4) setTimeout(checkPass, 200); }
-};
-window.askPass = (act) => {
-    if(!sels.length && act!=='telegram') return alert("Selecione um participante!");
-    acao = act; document.getElementById('senhaDisplay').innerText='';
-    document.getElementById('modalSenha').style.display='flex';
-};
-function checkPass(){
-    if(document.getElementById('senhaDisplay').innerText === CONFIG.SENHA){ fecharModal('modalSenha'); execAcao(); } 
-    else { alert("Senha Incorreta"); document.getElementById('senhaDisplay').innerText=''; }
-}
 
-async function verificarRetornoPagamento() {
-    const params = new URLSearchParams(window.location.search);
-    const paidKey = params.get('paid_key');
-    if (paidKey) {
-        window.history.replaceState({}, document.title, window.location.pathname);
-        try {
-            await update(ref(db, `participantes/${paidKey}`), { valorPago: CONFIG.VALOR });
-            document.getElementById('toast').style.display = 'block';
-            confetti({ particleCount: 200, spread: 80, origin: { y: 0.7 } });
-            setTimeout(() => document.getElementById('toast').style.display = 'none', 5000);
-            await updateData(); renderList();
-        } catch (e) { console.error(e); }
+window.askAdmin = (act) => {
+    acaoAdmin = act;
+    const d = document.getElementById('senhaDisplay');
+    if(d) d.innerText = '';
+    document.getElementById('modalSenha').style.display = 'flex';
+};
+
+window.digitar = (num) => {
+    const d = document.getElementById('senhaDisplay');
+    if(!d) return;
+    if(num === 'C') d.innerText = '';
+    else if(d.innerText.length < 4) {
+        d.innerText += num;
+        if(d.innerText.length === 4) setTimeout(checkAdminPass, 300);
+    }
+};
+
+function checkAdminPass() {
+    const pass = document.getElementById('senhaDisplay').innerText;
+    if(pass === currentConfig.senha) {
+        fecharModal('modalSenha');
+        if(acaoAdmin === 'config') abrirConfig();
+        if(acaoAdmin === 'export') exportarCSV();
+    } else {
+        alert("Senha Incorreta!");
+        document.getElementById('senhaDisplay').innerText = '';
     }
 }
 
-window.triggerCheckout = async (nome, telefone, btnElement, participantKey) => {
-    const originalContent = btnElement.innerHTML;
-    btnElement.disabled = true;
-    btnElement.innerHTML = `<div class="spinner"></div>`;
+window.triggerCheckout = async (nome, telefone, key, q, btnElement = null) => {
+    const originalContent = btnElement ? btnElement.innerHTML : "";
+    if(btnElement) {
+        btnElement.disabled = true;
+        btnElement.innerHTML = `<div class="spinner"></div>`;
+    }
+
+    const qtFinal = q || 1;
+    const valorCentavos = Math.round(qtFinal * currentConfig.valorCota * 100);
+    
     let baseUrl = window.location.origin + window.location.pathname;
-    if (!baseUrl.startsWith('http')) baseUrl = CONFIG.URL_RETORNO_FALLBACK;
-    const returnUrl = baseUrl + "?paid_key=" + participantKey;
-    let cleanPhone = telefone.replace(/\D/g, '');
-    if (!cleanPhone.startsWith('55')) cleanPhone = '55' + cleanPhone;
+    if (!baseUrl.startsWith('http')) baseUrl = "https://wa.me/5599991026112";
+    const returnUrl = baseUrl + "?paid_key=" + key;
+
+    const cleanPhone = "55" + telefone.replace(/\D/g, '').replace(/^55/, '');
+    const safeName = nome.replace(/[^\w\s]/gi, '').trim().substring(0, 40);
 
     const payload = {
-        "handle": CONFIG.INFINITE_TAG,
-        "order_nsu": "BOL" + Date.now().toString().slice(-9),
+        "handle": "lauriuche",
+        "order_nsu": "B" + Date.now().toString().slice(-10),
         "redirect_url": returnUrl,
-        "customer": { "name": nome.replace(/[^\w\s]/gi, '').trim().substring(0,40), "email": `c${participantKey.slice(-5)}@vagner.com`, "phone_number": cleanPhone },
-        "items": [{ "quantity": 1, "price": CONFIG.VALOR_CENTAVOS, "description": CONFIG.NOME_PRODUTO, "image": CONFIG.URL_LOGO }]
+        "customer": { 
+            "name": safeName, 
+            "email": `bolao${key.slice(-4)}@vagnermagazine.com.br`, 
+            "phone_number": cleanPhone 
+        },
+        "items": [{ 
+            "quantity": 1, 
+            "price": valorCentavos, 
+            "description": `Bolão Camino - ${qtFinal} Cotas`, 
+            "image": "https://drive.google.com/thumbnail?id=1q27xBm87ewP3GKczQ8x7iS6fyH4eMQeO&sz=w1000" 
+        }]
     };
 
     try {
         const response = await fetch('https://corsproxy.io/?' + encodeURIComponent('https://api.infinitepay.io/invoices/public/checkout/links'), {
-            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' }, 
+            body: JSON.stringify(payload)
         });
         const data = await response.json();
-        if (data.url) window.location.href = data.url; else throw new Error(data.message || "Erro API");
-    } catch (error) { alert("Erro no checkout: " + error.message); btnElement.disabled = false; btnElement.innerHTML = originalContent; lucide.createIcons(); }
+        if (!response.ok) throw new Error(data.message || "Erro na API InfinitePay");
+        if (data.url) window.location.href = data.url;
+    } catch (error) { 
+        alert("Erro no checkout: " + error.message); 
+        if(btnElement) {
+            btnElement.disabled = false;
+            btnElement.innerHTML = originalContent;
+        }
+    }
 };
 
-async function updateData(){
+document.getElementById('btnParticipar').onclick = async () => {
+    const n = document.getElementById('nome').value.toUpperCase().trim();
+    const t = document.getElementById('telefone').value.trim();
+    if(!n || !t) return alert("Preencha Nome e Telefone!");
+    const btn = document.getElementById('btnParticipar');
+    
+    btn.disabled = true;
+    const originalBtn = btn.innerHTML;
+    btn.innerHTML = `<div class="spinner"></div> AGUARDE...`;
+
+    try {
+        const participantKey = push(dbRef).key;
+        await set(ref(db, `participantes/${participantKey}`), {
+            nome: n, telefone: t, valorPago: 0, cotas: qty, data: Date.now()
+        });
+        showToast("RESERVADO! ABRINDO PAGAMENTO...");
+        await triggerCheckout(n, t, participantKey, qty, btn);
+    } catch (e) { 
+        alert("Erro ao registar."); 
+        btn.disabled = false;
+        btn.innerHTML = originalBtn;
+    }
+};
+
+async function updateData() {
     const snap = await get(dbRef);
     parts = snap.exists() ? Object.entries(snap.val()).map(([k,v]) => ({...v, key:k})) : [];
-    const paidCount = parts.filter(p => (p.valorPago||0) >= CONFIG.VALOR).length;
-    const partialCount = parts.filter(p => (p.valorPago||0) > 0 && (p.valorPago||0) < CONFIG.VALOR).length;
-    const totalMoney = parts.reduce((a,b)=>a+(b.valorPago||0),0);
-    document.getElementById('barReg').style.width = `${(parts.length / CONFIG.LIMITE) * 100}%`;
-    document.getElementById('barPartial').style.width = `${((paidCount + partialCount) / CONFIG.LIMITE) * 100}%`;
-    document.getElementById('barPaid').style.width = `${(paidCount / CONFIG.LIMITE) * 100}%`;
-    document.getElementById('txtPaid').innerText = `${paidCount} Pagos`;
-    document.getElementById('txtPartial').innerText = `${partialCount} Parc`;
-    document.getElementById('txtPend').innerText = `${parts.length - paidCount - partialCount} Pend`;
-    document.getElementById('pMoney').innerText = `ARRECADADO: R$ ${totalMoney.toLocaleString('pt-BR',{minimumFractionDigits:2})}`;
+    
+    const paidCount = parts.filter(p => (p.valorPago||0) >= ((p.cotas || 1) * currentConfig.valorCota)).length;
+    const partialCount = parts.filter(p => (p.valorPago||0) > 0 && (p.valorPago||0) < ((p.cotas || 1) * currentConfig.valorCota)).length;
+    const totalRaised = parts.reduce((a,b) => a + (b.valorPago||0), 0);
+
+    const bp = document.getElementById('barPaid');
+    const bpar = document.getElementById('barPartial');
+    const bt = document.getElementById('barTotal');
+    if(bp) bp.style.width = `${(paidCount / currentConfig.limite) * 100}%`;
+    if(bpar) bpar.style.width = `${((paidCount + partialCount) / currentConfig.limite) * 100}%`;
+    if(bt) bt.style.width = `${(parts.length / currentConfig.limite) * 100}%`;
+
+    const lp = document.getElementById('labelPaid');
+    const lpa = document.getElementById('labelPartial');
+    const lpen = document.getElementById('labelPending');
+    const tr = document.getElementById('totalRaised');
+    if(lp) lp.innerText = `${paidCount} Pagos`;
+    if(lpa) lpa.innerText = `${partialCount} Parciais`;
+    if(lpen) lpen.innerText = `${parts.length - paidCount - partialCount} Pendentes`;
+    if(tr) tr.innerText = `ARRECADADO: R$ ${totalRaised.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
 }
 
-function renderList(){
-    const div = document.getElementById('listaDiv'); div.innerHTML='';
+window.renderList = () => {
+    const div = document.getElementById('listaDiv'); div.innerHTML = '';
     const term = document.getElementById('buscar').value.toUpperCase();
-    parts.forEach((p, index) => {
-        const v = p.valorPago||0;
-        if(filtro==='pagos' && v < CONFIG.VALOR) return;
-        if(filtro==='pendentes' && v > 0) return;
-        if(filtro==='parciais' && (v == 0 || v >= CONFIG.VALOR)) return;
+    
+    parts.forEach((p, idx) => {
         if(term && !p.nome.includes(term)) return;
-        const isSel = sels.some(s=>s.key===p.key);
+        const qt = p.cotas || 1;
+        const totalDevido = qt * currentConfig.valorCota;
+        const isPago = (p.valorPago||0) >= totalDevido;
+        const color = isPago ? 'var(--paid)' : ((p.valorPago||0) > 0 ? 'var(--partial)' : 'var(--pending)');
+
         const el = document.createElement('div');
-        el.className = `list-item ${isSel?'selected':''}`;
+        el.className = 'list-item';
         el.innerHTML = `
-            <div class="item-left">
-                <div class="checkbox-icon">${isSel?'☑️':'🔲'}</div>
-                <div class="item-name">${(index+1).toString().padStart(2,'0')}. ${p.nome}</div>
+            <div style="flex:1; min-width:0; text-align: left;">
+                <div class="item-name">${idx+1}. ${p.nome}</div>
+                <div class="item-info">${qt} ${qt > 1 ? 'cotas' : 'cota'} • Pago: R$ ${(p.valorPago||0).toFixed(2)}</div>
             </div>
-            <div class="pay-btn-container">
-                ${v < CONFIG.VALOR ? `<button class="btn-pay-row" onclick="event.stopPropagation(); window.triggerCheckout('${p.nome}', '${p.telefone}', this, '${p.key}')"><i data-lucide="credit-card" style="width:12px"></i> PAGAR</button>` : ''}
+            <div class="pay-btn-right">
+                ${!isPago ? `<button class="btn-pay-sm" onclick="triggerCheckout('${p.nome}','${p.telefone}','${p.key}', ${qt}, this)">PAGAR</button>` : ''}
+                <div class="status-indicator" style="background:${color}" onclick="sels=['${p.key}']; askAdmin('edit')"></div>
             </div>
-            <div class="item-right"><div class="status-emoji">${v >= CONFIG.VALOR ? '🟢' : (v > 0 ? '⚠️' : '🔴')}</div></div>
         `;
-        el.querySelector('.item-left').onclick = () => {
-            const idx = sels.findIndex(s=>s.key===p.key);
-            if(idx>=0) sels.splice(idx,1); else sels.push(p);
-            renderList();
-        };
-        el.querySelector('.item-right').onclick = () => { sels=[p]; askPass('pagamento'); };
         div.appendChild(el);
     });
-    lucide.createIcons();
-}
-
-document.getElementById('btnCadastrar').onclick = async () => {
-    const n = document.getElementById('nome').value.toUpperCase().trim(), t = document.getElementById('telefone').value.trim();
-    if(!n || !t) return alert("Preencha Nome e Telefone!");
-    const btn = document.getElementById('btnCadastrar'); btn.disabled = true; btn.innerHTML = `<div class="spinner"></div>`;
-    try {
-        const novoRef = await push(dbRef, {nome: n, telefone: t, valorPago: 0});
-        await updateData();
-        document.getElementById('confPix').innerText = CONFIG.PIX; document.getElementById('modalConf').style.display = 'flex';
-        document.getElementById('btnPagarCheckout').onclick = (e) => window.triggerCheckout(n, t, e.currentTarget, novoRef.key);
-        document.getElementById('btnZapConf').onclick = () => window.open(`https://wa.me/55${CONFIG.PIX.replace(/\D/g,'')}?text=Novo cadastro: ${n}`);
-        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-    } catch (e) { alert("Erro ao cadastrar."); } finally { btn.disabled = false; btn.innerHTML = `🚀 PARTICIPAR`; }
 };
 
-async function execAcao(){
-    if(acao === 'pagamento'){
-        document.getElementById('pgtoNome').innerText = sels[0].nome;
-        document.getElementById('pgtoValor').value = sels[0].valorPago||'';
-        document.getElementById('modalPagamento').style.display='flex';
-    } else if(acao === 'excluir' && confirm(`Excluir selecionados?`)){
-        const u={}; sels.forEach(p=>u[`participantes/${p.key}`]=null); await update(ref(db),u); sels=[]; updateData(); renderList();
+window.consultarParticipante = () => {
+    const telInput = document.getElementById('search-phone');
+    const tel = telInput ? telInput.value.replace(/\D/g, '') : '';
+    if(!tel) return alert("Digite o número!");
+    const found = parts.find(p => p.telefone.replace(/\D/g, '').includes(tel));
+    const res = document.getElementById('result-consulta');
+    if(found) {
+        const qt = found.cotas || 1;
+        const total = qt * currentConfig.valorCota;
+        res.innerHTML = `<div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:20px; border:1px solid var(--border); animation: fadeIn 0.4s ease; text-align: center;">
+            <p>👤 <b>${found.nome}</b></p>
+            <p>🎟️ ${qt} ${qt > 1 ? 'Cotas' : 'Cota'}</p>
+            <p>💰 Status: ${found.valorPago >= total ? '<span style="color:var(--paid)">🟢 PAGO</span>' : '<span style="color:var(--pending)">🔴 PENDENTE</span>'}</p>
+            ${found.valorPago < total ? `<button class="btn-main" style="margin-top:15px" onclick="triggerCheckout('${found.nome}','${found.telefone}','${found.key}', ${qt}, this)">PAGAR AGORA</button>` : ''}
+        </div>`;
+    } else { res.innerHTML = "<p style='color:var(--pending); text-align: center;'>❌ Participante não encontrado.</p>"; }
+};
+
+function renderRanking() {
+    const div = document.getElementById('rankingDiv'); div.innerHTML = '';
+    const sorted = [...parts].sort((a,b) => (b.cotas || 1) - (a.cotas || 1)).slice(0, 10);
+    sorted.forEach((p, i) => {
+        const qt = p.cotas || 1;
+        div.innerHTML += `<div style="display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid var(--border);">
+            <span style="font-size:0.8rem;">${i+1}º ${p.nome}</span>
+            <span style="color:var(--primary); font-weight:800;">${qt} ${qt > 1 ? 'cotas' : 'cota'}</span>
+        </div>`;
+    });
+}
+
+function abrirConfig() {
+    const val = document.getElementById('cfg-valor');
+    const lim = document.getElementById('cfg-limite');
+    if(val) val.value = currentConfig.valorCota;
+    if(lim) lim.value = currentConfig.limite;
+    document.getElementById('modalConfig').style.display = 'flex';
+}
+
+window.salvarConfig = async () => {
+    const v = parseFloat(document.getElementById('cfg-valor').value);
+    const l = parseInt(document.getElementById('cfg-limite').value);
+    await update(configRef, { valorCota: v, limite: l });
+    fecharModal('modalConfig');
+    showToast("CONFIGURAÇÕES SALVAS!");
+};
+
+function exportarCSV() {
+    let csv = "Nome;Telefone;Cotas;ValorPago\n";
+    parts.forEach(p => csv += `${p.nome};${p.telefone};${p.cotas || 1};${p.valorPago}\n`);
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'lista_bolao.csv'; a.click();
+}
+
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    if(t) {
+        t.innerText = msg; t.style.display = 'block';
+        setTimeout(() => t.style.display = 'none', 3000);
     }
 }
 
-document.getElementById('btnSalvarPgto').onclick = async () => {
-    const v = parseFloat(document.getElementById('pgtoValor').value) || 0;
-    const u={}; sels.forEach(p=>u[`participantes/${p.key}/valorPago`]=v); await update(ref(db),u);
-    fecharModal('modalPagamento'); sels=[]; updateData(); renderList();
-};
-
-document.getElementById('btnZapGroup').onclick = () => window.open("https://chat.whatsapp.com/Fdl9PzkiEBq9TnJHtlu2Rm");
-document.getElementById('buscar').oninput = () => renderList();
-
 setInterval(()=>{
-    const d=new Date("Dec 25, 2026 23:59:59")-new Date(); if(d<0)return;
-    document.getElementById('dias').innerText=Math.floor(d/864e5).toString().padStart(2,'0');
-    document.getElementById('horas').innerText=Math.floor((d%864e5)/36e5).toString().padStart(2,'0');
-    document.getElementById('minutos').innerText=Math.floor((d%36e5)/6e4).toString().padStart(2,'0');
-    document.getElementById('segundos').innerText=Math.floor((d%6e4)/1e3).toString().padStart(2,'0');
+    const d = new Date("Dec 25, 2026 23:59:59") - new Date();
+    if(d < 0) return;
+    const di = document.getElementById('dias');
+    const ho = document.getElementById('horas');
+    const mi = document.getElementById('minutos');
+    const se = document.getElementById('segundos');
+    if(di) di.innerText = Math.floor(d/864e5).toString().padStart(2,'0');
+    if(ho) ho.innerText = Math.floor((d%864e5)/36e5).toString().padStart(2,'0');
+    if(mi) mi.innerText = Math.floor((d%36e5)/6e4).toString().padStart(2,'0');
+    if(se) se.innerText = Math.floor((d%6e4)/1e3).toString().padStart(2,'0');
 },1000);
 
-updateData().then(() => verificarRetornoPagamento());
+const params = new URLSearchParams(window.location.search);
+if(params.get('paid_key')) {
+    const pk = params.get('paid_key');
+    get(ref(db, `participantes/${pk}`)).then(s => {
+        if(s.exists()){
+            const p = s.val();
+            const qt = p.cotas || 1;
+            update(ref(db, `participantes/${pk}`), { valorPago: Math.round(qt * currentConfig.valorCota * 100) / 100 });
+            window.history.replaceState({}, document.title, window.location.pathname);
+            showToast("PAGAMENTO CONFIRMADO!");
+            confetti();
+        }
+    });
+}
+
+updateData();
 </script>
 </body>
 </html>
-
