@@ -104,6 +104,56 @@
     .info-header { font-size: 0.85rem; color: var(--text-dim); font-weight: 600; margin-bottom: 4px; text-align: center; width: 100%; }
     .date-header { font-size: 0.75rem; color: var(--text-dim); opacity: 0.6; margin-bottom: 20px; text-align: center; width: 100%; }
 
+    /* Estilização da Legenda Informativa */
+    .rules-card {
+        width: 100%;
+        background: rgba(0, 255, 136, 0.03);
+        border-radius: 24px;
+        padding: 20px;
+        margin-bottom: 15px;
+        border: 1px solid rgba(0, 255, 136, 0.15);
+        text-align: left;
+    }
+    .rules-card h4 {
+        color: var(--primary);
+        font-size: 0.75rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .rules-card p {
+        font-size: 0.7rem;
+        color: var(--text-dim);
+        line-height: 1.4;
+        margin-bottom: 8px;
+    }
+    .rules-card p strong {
+        color: #fff;
+    }
+    .rules-list {
+        list-style: none;
+        padding-left: 0;
+        margin-top: 8px;
+    }
+    .rules-list li {
+        font-size: 0.68rem;
+        color: var(--text-dim);
+        line-height: 1.3;
+        margin-bottom: 4px;
+        padding-left: 10px;
+        position: relative;
+    }
+    .rules-list li::before {
+        content: "•";
+        color: var(--primary);
+        position: absolute;
+        left: 0;
+    }
+
     .countdown-card { 
         width: 100%;
         background: rgba(255, 255, 255, 0.03); border-radius: 24px; 
@@ -203,6 +253,19 @@
             <div class="date-header">Encerramento: 31 de Dezembro de 2026</div>
         </div>
 
+        <!-- Seção de Legenda Informativa Adicionada -->
+        <div class="rules-card">
+            <h4><i data-lucide="info" style="width: 14px; height: 14px;"></i> Informações &amp; Regulamento</h4>
+            <p>⏱️ <strong>Pagamento Limite:</strong> <span style="color: var(--partial); font-weight: 800;">10/12/2026</span>. Reservas não quitadas até esta data serão automaticamente excluídas.</p>
+            <p>🍀 <strong>Mega da Virada (Caixa):</strong> O prêmio principal <strong>NÃO ACUMULA</strong>. Caso ninguém acerte as 6 dezenas, o montante total é destinado para quem acertar 5 dezenas (Quina), garantindo o rateio bilionário no dia 31/12.</p>
+            <ul class="rules-list">
+                <li>Todo o valor arrecadado será revertido em jogos oficiais da Caixa.</li>
+                <li>O prêmio total obtido será dividido de forma estritamente proporcional ao número de cotas pagas por cada participante.</li>
+                <li>Os comprovantes de registro das apostas serão publicados em nosso grupo oficial de participantes antes da realização do sorteio.</li>
+                <li>Qualquer prêmio será repassado em até 48h úteis após o resgate e liberação oficial pela Caixa Econômica Federal.</li>
+            </ul>
+        </div>
+
         <div class="countdown-card">
             <div class="timer-grid">
                 <div class="time-box"><span class="time-val" id="dias">00</span><span class="time-unit">DIAS</span></div>
@@ -235,15 +298,8 @@
         <div id="view-cadastro">
             <input type="text" id="nome" class="form-input" placeholder="NOME COMPLETO">
             <input type="tel" id="telefone" class="form-input" placeholder="WHATSAPP (DDD)">
-            
-            <p style="font-size:0.65rem; color:var(--text-dim); font-weight:800; margin-bottom:5px; text-align:center;">QUANTIDADE DE COTAS:</p>
-            <div class="cota-picker">
-                <button class="btn-qty" onclick="changeQty(-1)">-</button>
-                <span id="qty-val" style="font-size:1.6rem; font-weight:800; min-width:40px; text-align:center;">1</span>
-                <button class="btn-qty" onclick="changeQty(1)">+</button>
-            </div>
 
-            <button class="btn-main" id="btnParticipar">🚀 RESERVAR POR R$ <span id="btn-total">1,00</span></button>
+            <button class="btn-main" id="btnParticipar">🚀 RESERVAR VAGA</button>
         </div>
 
         <div id="view-consulta" style="display:none;">
@@ -263,10 +319,8 @@
                 <input type="text" id="buscar" class="form-input" placeholder="🔍 Filtrar por nome..." oninput="renderList()">
                 <div id="listaDiv"></div>
                 
-                <div class="admin-footer">
-                    <button class="admin-btn" onclick="askAdmin('unlock')">Modo Admin</button>
-                    <button class="admin-btn" onclick="askAdmin('config')">Configurações</button>
-                    <button class="admin-btn" onclick="askAdmin('export')">Exportar CSV</button>
+                <div class="admin-footer" style="margin-top: 25px;">
+                    <button class="admin-btn" style="font-size: 1.5rem; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: var(--surface-accent); border: 1px solid var(--border); margin: 0 auto; box-shadow: 0 4px 15px rgba(0,255,136,0.1); transition: 0.3s;" onclick="askAdmin('config')" title="Configurações">⚙️</button>
                 </div>
             </div>
         </div>
@@ -292,14 +346,40 @@
     </div>
 </div>
 
+<!-- Modal Confirmação Compra Repetida -->
+<div class="modal-overlay" id="modalConfirmacaoCompra">
+    <div class="modal-box">
+        <h2 style="color:var(--primary); font-weight:800; letter-spacing:-1px; margin-bottom: 15px;">COMPRA REPETIDA</h2>
+        <p id="confirmacao-texto" style="color:var(--text-main); font-size:0.9rem; line-height: 1.5; margin-bottom:25px;"></p>
+        
+        <button class="btn-main" id="btnConfirmarCompraRepetida">🚀 SIM, COMPRAR NOVAMENTE</button>
+        <button class="btn-checkout secondary" style="margin-top: 12px;" onclick="fecharModal('modalConfirmacaoCompra')">CANCELAR</button>
+    </div>
+</div>
+
 <!-- Modais Restantes -->
 <div class="modal-overlay" id="modalConfig">
-    <div class="modal-box">
-        <h3 style="margin-bottom:20px;">AJUSTES DO BOLÃO</h3>
-        <input type="number" id="cfg-valor" class="form-input" placeholder="Valor da Cota">
-        <input type="number" id="cfg-limite" class="form-input" placeholder="Limite de Pessoas">
-        <button class="btn-main" onclick="salvarConfig()">SALVAR</button>
-        <button class="admin-btn" style="margin-top:15px; width:100%;" onclick="fecharModal('modalConfig')">CANCELAR</button>
+    <div class="modal-box" style="max-width: 400px; padding: 35px 25px;">
+        <h3 style="margin-bottom:25px; color: var(--primary); font-weight: 800; letter-spacing: -0.5px; display: flex; align-items: center; justify-content: center; gap: 8px;">⚙️ CONFIGURAÇÕES</h3>
+        
+        <div style="text-align: left; margin-bottom: 15px;">
+            <label style="font-size:0.75rem; color:var(--text-dim); font-weight:800; margin-bottom:8px; display: block; text-transform: uppercase;">Valor da Cota (R$)</label>
+            <input type="number" id="cfg-valor" class="form-input" placeholder="Valor da Cota" step="0.01">
+        </div>
+        
+        <div style="text-align: left; margin-bottom: 25px;">
+            <label style="font-size:0.75rem; color:var(--text-dim); font-weight:800; margin-bottom:8px; display: block; text-transform: uppercase;">Limite de Cotas</label>
+            <input type="number" id="cfg-limite" class="form-input" placeholder="Limite de Pessoas">
+        </div>
+        
+        <button class="btn-main" onclick="salvarConfig()" style="margin-bottom: 15px;">💾 SALVAR CONFIGURAÇÕES</button>
+        
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:20px; padding-top:20px; border-top:1px solid var(--border);">
+            <button class="btn-checkout secondary" id="cfgBtnModoAdmin" style="margin-top: 0; padding: 12px; font-size: 0.75rem; border-radius: 16px;">🔓 MODO ADMIN</button>
+            <button class="btn-checkout secondary" id="cfgBtnExportar" style="margin-top: 0; padding: 12px; font-size: 0.75rem; border-radius: 16px;">📥 EXPORTAR CSV</button>
+        </div>
+        
+        <button class="admin-btn" style="margin-top:25px; width:100%; border: 1px solid var(--border); padding: 12px; border-radius: 16px;" onclick="fecharModal('modalConfig')">FECHAR</button>
     </div>
 </div>
 
@@ -373,7 +453,8 @@ const CONFIG = {
     NOME_PRODUTO: "Cota Bolão Camino" 
 };
 
-let parts = [], qty = 1, acaoAdmin = null;
+let parts = [], qty = 1, acaoAdmin = null, sels = [];
+window.sels = sels;
 
 lucide.createIcons();
 
@@ -423,13 +504,6 @@ window.switchTab = (tab, btn) => {
     if(tab === 'cadastro') updateData();
 };
 
-window.changeQty = (delta) => {
-    qty = Math.max(1, qty + delta);
-    const el = document.getElementById('qty-val');
-    if(el) el.innerText = qty;
-    updateTotalBtn();
-};
-
 function updateTotalBtn() {
     const total = qty * CONFIG.VALOR;
     const btnSpan = document.getElementById('btn-total');
@@ -470,6 +544,7 @@ function checkAdminPass() {
         fecharModal('modalSenha');
         if(acaoAdmin === 'config') abrirConfig();
         if(acaoAdmin === 'export') exportarCSV();
+        if(acaoAdmin === 'edit') abrirBaixaManual();
         if(acaoAdmin === 'unlock') {
             document.body.classList.toggle('admin-mode');
             showToast(document.body.classList.contains('admin-mode') ? "🔓 MODO ADMIN ATIVO" : "🔒 MODO ADMIN DESATIVADO");
@@ -572,8 +647,50 @@ document.getElementById('btnParticipar').onclick = async () => {
     const n = document.getElementById('nome').value.toUpperCase().trim();
     const t = document.getElementById('telefone').value.trim();
     if(!n || !t) return showToast("⚠️ Preencha Nome e Telefone!");
-    const btn = document.getElementById('btnParticipar');
     
+    // Validar se o comprador já existe no sistema com o mesmo número
+    const cleanPhone = t.replace(/\D/g, '');
+    const existing = parts.find(p => p.telefone.replace(/\D/g, '') === cleanPhone);
+
+    if (existing) {
+        const currentCotas = existing.cotas || 1;
+        document.getElementById('confirmacao-texto').innerHTML = `Olá, <b>${existing.nome}</b>!<br>Você já possui <b>${currentCotas} ${currentCotas > 1 ? 'cotas' : 'cota'}</b> reservada(s).<br><br>Deseja comprar mais uma cota?`;
+        document.getElementById('modalConfirmacaoCompra').style.display = 'flex';
+        
+        // Define o evento do botão de confirmar no modal para acumular e unificar
+        document.getElementById('btnConfirmarCompraRepetida').onclick = async () => {
+            fecharModal('modalConfirmacaoCompra');
+            const btn = document.getElementById('btnParticipar');
+            btn.disabled = true;
+            const originalBtn = btn.innerHTML;
+            btn.innerHTML = `<div class="spinner"></div> PROCESSANDO...`;
+            
+            try {
+                const novasCotas = currentCotas + 1;
+                await update(ref(db, `participantes/${existing.key}`), {
+                    cotas: novasCotas
+                });
+                
+                showToast("✅ MAIS UMA COTA ADICIONADA!");
+                btn.disabled = false;
+                btn.innerHTML = originalBtn;
+                
+                document.getElementById('nome').value = '';
+                document.getElementById('telefone').value = '';
+                
+                await updateData();
+                abrirPagamento(existing.nome, existing.telefone, existing.key, novasCotas, existing.valorPago || 0, true);
+            } catch (e) {
+                console.error(e);
+                showToast("❌ Erro ao atualizar.");
+                btn.disabled = false;
+                btn.innerHTML = originalBtn;
+            }
+        };
+        return;
+    }
+
+    const btn = document.getElementById('btnParticipar');
     btn.disabled = true;
     const originalBtn = btn.innerHTML;
     btn.innerHTML = `<div class="spinner"></div> AGUARDE...`;
@@ -583,7 +700,7 @@ document.getElementById('btnParticipar').onclick = async () => {
             nome: n, 
             telefone: t, 
             valorPago: 0, 
-            cotas: qty, 
+            cotas: 1, 
             data: Date.now()
         });
         
@@ -591,7 +708,11 @@ document.getElementById('btnParticipar').onclick = async () => {
         btn.disabled = false;
         btn.innerHTML = originalBtn;
         
-        abrirPagamento(n, t, novoRef.key, qty, 0, true);
+        document.getElementById('nome').value = '';
+        document.getElementById('telefone').value = '';
+        
+        await updateData();
+        abrirPagamento(n, t, novoRef.key, 1, 0, true);
     } catch (e) { 
         console.error("Firebase Auth/Rule Error:", e);
         showToast("❌ Erro ao registar."); 
@@ -646,7 +767,7 @@ window.renderList = () => {
             <div class="pay-btn-right">
                 ${!isPago ? `<button class="btn-pay-sm" onclick="abrirPagamento('${p.nome}','${p.telefone}','${p.key}', ${qt}, ${p.valorPago||0}, false)">PAGAR</button>` : ''}
                 <button class="btn-edit-sm" onclick="abrirEdicao('${p.key}')">✏️</button>
-                <div class="status-indicator" style="background:${color}" onclick="sels=['${p.key}']; askAdmin('edit')"></div>
+                <div class="status-indicator" style="background:${color}" onclick="window.sels=['${p.key}']; askAdmin('edit')"></div>
             </div>
         `;
         div.appendChild(el);
@@ -688,6 +809,12 @@ function abrirConfig() {
     const lim = document.getElementById('cfg-limite');
     if(val) val.value = CONFIG.VALOR;
     if(lim) lim.value = CONFIG.LIMITE;
+    
+    const btnAdmin = document.getElementById('cfgBtnModoAdmin');
+    if (btnAdmin) {
+        const isActive = document.body.classList.contains('admin-mode');
+        btnAdmin.innerText = isActive ? "🔒 FECHAR ADMIN" : "🔓 MODO ADMIN";
+    }
     document.getElementById('modalConfig').style.display = 'flex';
 }
 
@@ -727,7 +854,7 @@ function showToast(msg) {
 }
 
 window.setVal = (v) => {
-    const id = sels[0];
+    const id = window.sels[0];
     const p = parts.find(x => x.key === id);
     if(p) {
         const total = (p.cotas || 1) * CONFIG.VALOR;
@@ -736,7 +863,7 @@ window.setVal = (v) => {
 };
 
 window.abrirBaixaManual = () => {
-    const p = parts.find(x => x.key === sels[0]);
+    const p = parts.find(x => x.key === window.sels[0]);
     if(p) {
         document.getElementById('pgtoNome').innerText = p.nome;
         document.getElementById('pgtoValor').value = p.valorPago || '';
@@ -746,9 +873,9 @@ window.abrirBaixaManual = () => {
 
 document.getElementById('btnSalvarPgto').onclick = async () => {
     const v = parseFloat(document.getElementById('pgtoValor').value) || 0;
-    const u={}; sels.forEach(p=>u[`participantes/${p}/valorPago`]=v); 
+    const u={}; window.sels.forEach(p=>u[`participantes/${p}/valorPago`]=v); 
     await update(ref(db),u);
-    fecharModal('modalAdminPagamento'); sels=[]; 
+    fecharModal('modalAdminPagamento'); window.sels=[]; 
     await updateData(); 
     renderList();
 };
@@ -817,6 +944,19 @@ window.excluirParticipanteDefinitivo = async () => {
     } catch (e) {
         showToast("❌ Erro ao excluir.");
     }
+};
+
+// Configura os botões dentro do modal de ajustes
+document.getElementById('cfgBtnModoAdmin').onclick = () => {
+    document.body.classList.toggle('admin-mode');
+    const isActive = document.body.classList.contains('admin-mode');
+    document.getElementById('cfgBtnModoAdmin').innerText = isActive ? "🔒 FECHAR ADMIN" : "🔓 MODO ADMIN";
+    showToast(isActive ? "🔓 MODO ADMIN ATIVO" : "🔒 MODO ADMIN DESATIVADO");
+    renderList();
+};
+
+document.getElementById('cfgBtnExportar').onclick = () => {
+    exportarCSV();
 };
 
 setInterval(()=>{
