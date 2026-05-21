@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Bolão Master Camino</title>
 
+<!-- Favicon Oficial -->
+<link rel="shortcut icon" href="https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_" type="image/png">
+<link rel="icon" href="https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_" type="image/png">
+
 <!-- PWA Meta Tags -->
 <meta name="theme-color" content="#030a06">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -43,20 +47,13 @@
         -webkit-tap-highlight-color: transparent;
     }
 
-    /* Scrollbar minimalista */
-    ::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
+    /* Ocultar barra de rolagem (scroll) em todos os navegadores e elementos */
+    * {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
     }
-    ::-webkit-scrollbar-track {
-        background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 10px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-        background: var(--primary);
+    *::-webkit-scrollbar {
+        display: none; /* Chrome, Safari e Opera */
     }
 
     body {
@@ -132,28 +129,31 @@
         letter-spacing: 1.5px;
     }
 
-    /* PWA Install Button Header */
+    /* PWA Install Button Header - Discreto e Elegante */
     .pwa-badge {
-        display: none; /* Inicialmente oculto, aparece dinamicamente */
-        background: linear-gradient(135deg, #00ff88 0%, #009955 100%);
-        color: #010502;
+        display: none; /* Ativado via JS se puder ser instalado */
+        background: rgba(0, 255, 136, 0.07);
+        color: var(--primary);
+        border: 1px solid rgba(0, 255, 136, 0.25);
         padding: 8px 16px;
         border-radius: 100px;
         font-size: 0.7rem;
-        font-weight: 800;
+        font-weight: 700;
         align-items: center;
         gap: 6px;
         cursor: pointer;
         margin-bottom: 15px;
-        box-shadow: 0 4px 15px rgba(0, 255, 136, 0.4);
-        border: none;
-        animation: pulseInstall 2s infinite;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    
-    @keyframes pulseInstall {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.04); box-shadow: 0 6px 20px rgba(0, 255, 136, 0.6); }
-        100% { transform: scale(1); }
+    .pwa-badge:hover {
+        background: rgba(0, 255, 136, 0.15);
+        border-color: var(--primary);
+        box-shadow: 0 6px 18px rgba(0, 255, 136, 0.15);
+        transform: translateY(-1px);
+    }
+    .pwa-badge:active {
+        transform: translateY(0);
     }
 
     .logo-container {
@@ -676,10 +676,10 @@
 <div class="container" id="mainContainer">
     <div class="scrollable-content">
         <div class="text-center">
-            <!-- PWA Native Install Banner -->
+            <!-- PWA Native Install Banner (Discreto e Elegante) -->
             <button id="pwaInstallBtn" class="pwa-badge">
                 <i data-lucide="download" style="width: 14px; height: 14px;"></i>
-                INSTALAR APLICATIVO 📲
+                Instalar Aplicativo 📲
             </button>
 
             <div class="hero-badge">
@@ -1451,7 +1451,7 @@ window.consultarParticipante = () => {
             <p style="font-size:0.95rem; margin-bottom:8px;">👤 <b>${found.nome}</b></p>
             <p style="font-size:0.85rem; color:var(--text-dim); margin-bottom:8px;">🎟️ ${qt} ${qt > 1 ? 'Cotas Adquiridas' : 'Cota Adquirida'}</p>
             <p style="font-size:0.85rem; margin-bottom:12px;">💰 Estado: ${found.valor >= total ? '<span style="color:var(--paid); font-weight:800;">🟢 PAGO</span>' : (found.valor > 0 ? '<span style="color:var(--partial); font-weight:800;">🟡 PARCIAL</span>' : '<span style="color:var(--pending); font-weight:800;">🔴 PENDENTE</span>')}</p>
-            ${found.valor < total ? `<button class="btn-main" style="margin-bottom:15px; font-size:0.8rem; padding:12px;" onclick="abrirPagamento('${found.nome}','${found.contato}','${found.key}', ${qt}, ${found.valor||0}, false)">PAGAR VALOR PENDENTE</button>` : ''}
+            ${found.valor < total ? `<button class="btn-main" style="margin-top:15px; font-size:0.8rem; padding:12px;" onclick="abrirPagamento('${found.nome}','${found.contato}','${found.key}', ${qt}, ${found.valor||0}, false)">PAGAR VALOR PENDENTE</button>` : ''}
         </div>
         
         <div style="background:rgba(255,255,255,0.01); padding:18px; border-radius:20px; border:1px solid var(--border);">
