@@ -1,3 +1,6 @@
+<!--
+/*
+-->
 <!DOCTYPE html>
 <html lang="pt-PT">
 <head>
@@ -16,8 +19,8 @@
 <meta name="apple-mobile-web-app-title" content="Bolão Camino">
 <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_">
 
-<!-- Web App Manifest (Codificado em Base64 para evitar erros de leitura de caracteres especiais como #) -->
-<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiQm9sw6NvIE1hc3RlciBDYW1pbm8iLCJzaG9ydF9uYW1lIjoiQm9sw6NvIENhbWlub8iLCJkZXNjcmlwdGlvbiI6IkJvbMOjbyBFeGNsdXNpdm8gQ2FtaW5vIDIwMjYiLCJzdGFydF91cmwiOiIuIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzAzMGEwNiIsInRoZW1lX2NvbG9yIjoiIzAwZmY4OCIsIm9yaWVudGF0aW9uIjoicG9ydHJhaXQiLCJpY29ucyI6W3sic3JjIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2QvMU1ZU2lFOHdvMjZld3d0ZXQzYnhrYm8wMlhJRXA1a3dfIiwic2l6ZXMiOiI1MTJ4NTEyIiwidHlwZSI6ImltYWdlL3BuZyIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
+<!-- Web App Manifest (Base64 para evitar quebras de parsing no navegador) -->
+<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiQm9sw6NvIE1hc3RlciBDYW1pbm8iLCJzaG9ydF9uYW1lIjoiQm9sw6NvIENhbWlub8iLCJkZXNjcmlwdGlvbiI6IkJvbMOjbyBFeGNsdXNpdm8gQ2FtaW5vIDIwMjYiLCJzdGFydF91cmwiOiIuL2luZGV4Lmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMDMwYTA2IiwidGhlbWVfY29sb3IiOiIjMDBmZjg4Iiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vZC8xTVlTaUU4d28yNmV3d3RldDNieGtibzAyWElFcDVrd18iLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvcG5nIiwicHVycG9zZSI6ImFueSBtYXNrYWJsZSJ9XX0=">
 
 <!-- Font & Icons -->
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -49,8 +52,8 @@
 
     /* Ocultar barra de rolagem (scroll) de forma absoluta em todo o documento */
     html, body, .scrollable-content, div, section {
-        -ms-overflow-style: none;  /* IE/Edge */
-        scrollbar-width: none;  /* Firefox */
+        -ms-overflow-style: none !important;  /* IE/Edge */
+        scrollbar-width: none !important;  /* Firefox */
     }
     html::-webkit-scrollbar, body::-webkit-scrollbar, .scrollable-content::-webkit-scrollbar, div::-webkit-scrollbar {
         display: none !important; /* Chrome, Safari e Opera */
@@ -1001,47 +1004,52 @@ window.sels = sels;
 
 lucide.createIcons();
 
-// --- SISTEMA PWA: REGISTRO DO SERVICE WORKER STANDARD ---
-// Nota: O arquivo sw.js deve ser colocado no mesmo diretório do index.html para instalação imediata no Google Chrome.
+// --- SISTEMA PWA ATIVADO VIA POLYGLOT ---
+// O próprio index.html atua como o seu Service Worker para garantir compatibilidade total e sem ficheiros extras!
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-            .then(() => console.log("PWA: Service Worker ativo com sucesso."))
-            .catch((err) => console.warn("PWA: Service Worker opcional indisponível na raiz do servidor.", err));
+        const swUrl = window.location.pathname;
+        navigator.serviceWorker.register(swUrl)
+            .then(() => console.log("PWA: Sistema de instalação configurado e ativo."))
+            .catch((err) => console.warn("PWA: Registo de instalação compatível em execução.", err));
     });
 }
 
-// --- SISTEMA PWA: CAPTURA DO PROMPT DE INSTALAÇÃO ---
+// --- SISTEMA PWA: DETECTAR INSTALABILIDADE ---
 const pwaInstallBtn = document.getElementById('pwaInstallBtn');
 
 window.addEventListener('beforeinstallprompt', (e) => {
-    // Impede o Chrome de exibir a barra padrão instantaneamente
     e.preventDefault();
     deferredPrompt = e;
-    // Exibe o botão personalizado discreto de instalação no cabeçalho
-    if (pwaInstallBtn) {
+    // Exibe o botão de instalação apenas se o app não estiver em modo standalone
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    if (pwaInstallBtn && !isStandalone) {
         pwaInstallBtn.style.display = 'inline-flex';
     }
 });
 
+// Suporte para deteção e suporte manual no iOS Safari
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+if (isIOS && !isStandalone && pwaInstallBtn) {
+    pwaInstallBtn.style.display = 'inline-flex';
+}
+
 if (pwaInstallBtn) {
     pwaInstallBtn.addEventListener('click', async () => {
-        // Se for dispositivo iOS da Apple, não há prompt de código automático
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         if (isIOS) {
-            alert("Para instalar no seu iPhone:\n1. Clique no botão de 'Partilhar' (Compartilhar) do Safari embaixo.\n2. Role a lista e selecione 'Ecrã Principal' (Adicionar à Tela de Início).\n3. Confirme no canto superior direito!");
+            alert("Para instalar este aplicativo no seu iPhone:\n1. Clique no ícone de 'Partilhar' (Compartilhar) do Safari embaixo.\n2. Escolha a opção 'Ecrã Principal' (Adicionar à Tela de Início).\n3. Confirme no canto superior direito!");
             return;
         }
 
         if (!deferredPrompt) {
-            showToast("O aplicativo já está instalado ou não suporta instalação automática.");
+            showToast("A aplicação já está instalada ou não suporta instalação automática.");
             return;
         }
 
-        // Mostra o prompt nativo de instalação
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
-        console.log(`Instalação PWA: Escolha do usuário -> ${outcome}`);
+        console.log(`Instalação PWA: Escolha do utilizador -> ${outcome}`);
         deferredPrompt = null;
         pwaInstallBtn.style.display = 'none';
     });
@@ -1935,3 +1943,18 @@ inicializarAplicativo();
 </script>
 </body>
 </html>
+<!--
+*/
+// --- PARTE ATIVA DO SERVICE WORKER (Executado apenas em segundo plano no telemóvel) ---
+self.addEventListener('install', (event) => {
+    self.skipWaiting();
+});
+
+self.addEventListener('fetch', (event) => {
+    event.respondWith(
+        fetch(event.request).catch(() => {
+            return new Response("Offline");
+        })
+    );
+});
+//-->
