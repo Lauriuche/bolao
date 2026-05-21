@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Bolão Master Camino</title>
 
-<!-- Favicon Oficial -->
+<!-- Favicon Oficial do Bolão -->
 <link rel="shortcut icon" href="https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_" type="image/png">
 <link rel="icon" href="https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_" type="image/png">
 
@@ -13,11 +13,11 @@
 <meta name="theme-color" content="#030a06">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Bolão Master">
+<meta name="apple-mobile-web-app-title" content="Bolão Camino">
 <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_">
 
-<!-- Web App Manifest (Inline & Fully PWA Compliant) -->
-<link rel="manifest" href='data:application/manifest+json,{"name":"Bolão Master Camino","short_name":"Bolão Camino","start_url":".","display":"standalone","background_color":"#030a06","theme_color":"#00ff88","orientation":"portrait","icons":[{"src":"https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}'>
+<!-- Web App Manifest (Codificado em Base64 para evitar erros de leitura de caracteres especiais como #) -->
+<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiQm9sw6NvIE1hc3RlciBDYW1pbm8iLCJzaG9ydF9uYW1lIjoiQm9sw6NvIENhbWlub8iLCJkZXNjcmlwdGlvbiI6IkJvbMOjbyBFeGNsdXNpdm8gQ2FtaW5vIDIwMjYiLCJzdGFydF91cmwiOiIuIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzAzMGEwNiIsInRoZW1lX2NvbG9yIjoiIzAwZmY4OCIsIm9yaWVudGF0aW9uIjoicG9ydHJhaXQiLCJpY29ucyI6W3sic3JjIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2QvMU1ZU2lFOHdvMjZld3d0ZXQzYnhrYm8wMlhJRXA1a3dfIiwic2l6ZXMiOiI1MTJ4NTEyIiwidHlwZSI6ImltYWdlL3BuZyIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
 
 <!-- Font & Icons -->
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -47,13 +47,15 @@
         -webkit-tap-highlight-color: transparent;
     }
 
-    /* Ocultar barra de rolagem (scroll) em todos os navegadores e elementos */
-    * {
-        -ms-overflow-style: none;  /* IE and Edge */
+    /* Ocultar barra de rolagem (scroll) de forma absoluta em todo o documento */
+    html, body, .scrollable-content, div, section {
+        -ms-overflow-style: none;  /* IE/Edge */
         scrollbar-width: none;  /* Firefox */
     }
-    *::-webkit-scrollbar {
-        display: none; /* Chrome, Safari e Opera */
+    html::-webkit-scrollbar, body::-webkit-scrollbar, .scrollable-content::-webkit-scrollbar, div::-webkit-scrollbar {
+        display: none !important; /* Chrome, Safari e Opera */
+        width: 0 !important;
+        height: 0 !important;
     }
 
     body {
@@ -103,7 +105,8 @@
     .scrollable-content { 
         overflow-y: auto; 
         flex: 1; 
-        padding-right: 4px;
+        padding-right: 0px;
+        -webkit-overflow-scrolling: touch; /* Rolagem por toque super fluida no iOS */
     }
 
     .text-center { 
@@ -129,27 +132,29 @@
         letter-spacing: 1.5px;
     }
 
-    /* PWA Install Button Header - Discreto e Elegante */
+    /* PWA Install Button Header - Discreto, elegante e translúcido */
     .pwa-badge {
-        display: none; /* Ativado via JS se puder ser instalado */
-        background: rgba(0, 255, 136, 0.07);
+        display: none; /* Ativado via JS caso o app seja instalável */
+        background: rgba(255, 255, 255, 0.03);
         color: var(--primary);
-        border: 1px solid rgba(0, 255, 136, 0.25);
-        padding: 8px 16px;
+        border: 1px solid var(--border-active);
+        padding: 8px 18px;
         border-radius: 100px;
-        font-size: 0.7rem;
+        font-size: 0.72rem;
         font-weight: 700;
         align-items: center;
-        gap: 6px;
+        justify-content: center;
+        gap: 8px;
         cursor: pointer;
-        margin-bottom: 15px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .pwa-badge:hover {
-        background: rgba(0, 255, 136, 0.15);
+        background: rgba(0, 255, 136, 0.1);
         border-color: var(--primary);
-        box-shadow: 0 6px 18px rgba(0, 255, 136, 0.15);
         transform: translateY(-1px);
     }
     .pwa-badge:active {
@@ -172,7 +177,7 @@
         object-fit: contain; /* Mantém a proporção e evita cortes na imagem transparente */
         object-position: center; 
         filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.7)) 
-                drop-shadow(0 0 15px rgba(0, 255, 136, 0.55)); /* Brilho e Sombra dinâmicos */
+                drop-shadow(0 0 15px rgba(0, 255, 136, 0.55)); /* Sombra neon dinâmica integrada */
     }
 
     .info-header { 
@@ -361,7 +366,7 @@
     select.form-input {
         appearance: none;
         -webkit-appearance: none;
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2300ff88' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 24' fill='none' stroke='%2300ff88' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
         background-repeat: no-repeat;
         background-position: right 14px center;
         background-size: 16px;
@@ -535,7 +540,7 @@
         box-shadow: 0 8px 20px var(--primary-glow); 
     }
     .btn-checkout.secondary { 
-        background: rgba(255,255,255,0.03); 
+        background: rgba(255, 255, 255, 0.03); 
         color: var(--primary); 
         border: 1px solid var(--border-active); 
         box-shadow: none; 
@@ -676,7 +681,7 @@
 <div class="container" id="mainContainer">
     <div class="scrollable-content">
         <div class="text-center">
-            <!-- PWA Native Install Banner (Discreto e Elegante) -->
+            <!-- PWA Native Install Banner (Elegante, discreto e integrado) -->
             <button id="pwaInstallBtn" class="pwa-badge">
                 <i data-lucide="download" style="width: 14px; height: 14px;"></i>
                 Instalar Aplicativo 📲
@@ -996,17 +1001,13 @@ window.sels = sels;
 
 lucide.createIcons();
 
-// --- SISTEMA PWA: REGISTRO DE SERVICE WORKER ---
+// --- SISTEMA PWA: REGISTRO DO SERVICE WORKER STANDARD ---
+// Nota: O arquivo sw.js deve ser colocado no mesmo diretório do index.html para instalação imediata no Google Chrome.
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        const swCode = `
-            self.addEventListener('install', e => self.skipWaiting());
-            self.addEventListener('fetch', e => e.respondWith(fetch(e.request)));
-        `;
-        const blob = new Blob([swCode], {type: 'text/javascript'});
-        navigator.serviceWorker.register(URL.createObjectURL(blob))
+        navigator.serviceWorker.register('sw.js')
             .then(() => console.log("PWA: Service Worker ativo com sucesso."))
-            .catch((err) => console.warn("PWA: Falha ao ativar Service Worker.", err));
+            .catch((err) => console.warn("PWA: Service Worker opcional indisponível na raiz do servidor.", err));
     });
 }
 
@@ -1014,11 +1015,10 @@ if ('serviceWorker' in navigator) {
 const pwaInstallBtn = document.getElementById('pwaInstallBtn');
 
 window.addEventListener('beforeinstallprompt', (e) => {
-    // Impede o Chrome de exibir a barra padrão
+    // Impede o Chrome de exibir a barra padrão instantaneamente
     e.preventDefault();
-    // Salva o evento para uso posterior
     deferredPrompt = e;
-    // Exibe o botão personalizado de instalação no cabeçalho
+    // Exibe o botão personalizado discreto de instalação no cabeçalho
     if (pwaInstallBtn) {
         pwaInstallBtn.style.display = 'inline-flex';
     }
@@ -1026,26 +1026,23 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
 if (pwaInstallBtn) {
     pwaInstallBtn.addEventListener('click', async () => {
-        // Se for dispositivo iOS da Apple, não há prompt automático
+        // Se for dispositivo iOS da Apple, não há prompt de código automático
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         if (isIOS) {
-            alert("Para instalar no seu iPhone:\n1. Clique no botão de 'Partilhar' (Compartilhar) do Safari embaixo.\n2. Role a lista e selecione 'Ecrã Principal' (Adicionar à Tela de Início).\n3. Confirme!");
+            alert("Para instalar no seu iPhone:\n1. Clique no botão de 'Partilhar' (Compartilhar) do Safari embaixo.\n2. Role a lista e selecione 'Ecrã Principal' (Adicionar à Tela de Início).\n3. Confirme no canto superior direito!");
             return;
         }
 
         if (!deferredPrompt) {
-            showToast("O aplicativo já está instalado ou não suporta instalação.");
+            showToast("O aplicativo já está instalado ou não suporta instalação automática.");
             return;
         }
 
         // Mostra o prompt nativo de instalação
         deferredPrompt.prompt();
-        // Aguarda a resposta do usuário
         const { outcome } = await deferredPrompt.userChoice;
         console.log(`Instalação PWA: Escolha do usuário -> ${outcome}`);
-        // Limpa o prompt
         deferredPrompt = null;
-        // Oculta o botão
         pwaInstallBtn.style.display = 'none';
     });
 }
