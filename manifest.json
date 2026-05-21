@@ -16,35 +16,3 @@
     }
   ]
 }
-
-#### 2. Crie um arquivo com o nome `sw.js`:
-Este é o Service Worker padrão que garante a instalação. Coloque exatamente este código lá dentro:
-```javascript
-const CACHE_NAME = 'bolao-camino-v1';
-const ASSETS = [
-  'index.html',
-  'manifest.json'
-];
-
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
-    })
-  );
-  self.skipWaiting();
-});
-
-self.addEventListener('activate', (event) => {
-  event.waitUntil(self.clients.claim());
-});
-
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    fetch(event.request).catch(() => {
-      return caches.match(event.request);
-    })
-  );
-});
-
-*Nota: Após criar estes ficheiros, publique o projeto no seu Firebase Hosting (`firebase deploy`). Abra o site diretamente do telemóvel (fora da ferramenta de edição) e verá o botão discreto **"Instalar Aplicativo 📲"** aparecer de imediato!*
