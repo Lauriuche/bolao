@@ -1,6 +1,3 @@
-<!--
-/*
--->
 <!DOCTYPE html>
 <html lang="pt-PT">
 <head>
@@ -8,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Bolão Master Camino</title>
 
-<!-- Favicon Oficial do Bolão -->
+<!-- Favicon Oficial do Bolão (Transparente) -->
 <link rel="shortcut icon" href="https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_" type="image/png">
 <link rel="icon" href="https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_" type="image/png">
 
@@ -19,8 +16,8 @@
 <meta name="apple-mobile-web-app-title" content="Bolão Camino">
 <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_">
 
-<!-- Web App Manifest (Base64 para evitar quebras de parsing no navegador) -->
-<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiQm9sw6NvIE1hc3RlciBDYW1pbm8iLCJzaG9ydF9uYW1lIjoiQm9sw6NvIENhbWlub8iLCJkZXNjcmlwdGlvbiI6IkJvbMOjbyBFeGNsdXNpdm8gQ2FtaW5vIDIwMjYiLCJzdGFydF91cmwiOiIuL2luZGV4Lmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMDMwYTA2IiwidGhlbWVfY29sb3IiOiIjMDBmZjg4Iiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vZC8xTVlTaUU4d28yNmV3d3RldDNieGtibzAyWElFcDVrd18iLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvcG5nIiwicHVycG9zZSI6ImFueSBtYXNrYWJsZSJ9XX0=">
+<!-- Web App Manifest Físico (Padrão ouro para compatibilidade total em Android e iOS) -->
+<link rel="manifest" href="manifest.json">
 
 <!-- Font & Icons -->
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -369,7 +366,7 @@
     select.form-input {
         appearance: none;
         -webkit-appearance: none;
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 24' fill='none' stroke='%2300ff88' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2300ff88' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
         background-repeat: no-repeat;
         background-position: right 14px center;
         background-size: 16px;
@@ -684,7 +681,7 @@
 <div class="container" id="mainContainer">
     <div class="scrollable-content">
         <div class="text-center">
-            <!-- PWA Native Install Banner (Elegante, discreto e integrado) -->
+            <!-- PWA Native Install Banner (Discreto e Elegante) -->
             <button id="pwaInstallBtn" class="pwa-badge">
                 <i data-lucide="download" style="width: 14px; height: 14px;"></i>
                 Instalar Aplicativo 📲
@@ -1004,14 +1001,12 @@ window.sels = sels;
 
 lucide.createIcons();
 
-// --- SISTEMA PWA ATIVADO VIA POLYGLOT ---
-// O próprio index.html atua como o seu Service Worker para garantir compatibilidade total e sem ficheiros extras!
+// --- REGISTO PADRÃO DO SERVICE WORKER (Sem truques de Polyglot para evitar erros MIME) ---
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        const swUrl = window.location.pathname;
-        navigator.serviceWorker.register(swUrl)
-            .then(() => console.log("PWA: Sistema de instalação configurado e ativo."))
-            .catch((err) => console.warn("PWA: Registo de instalação compatível em execução.", err));
+        navigator.serviceWorker.register('sw.js')
+            .then((reg) => console.log("PWA: Service Worker registado com sucesso com escopo: ", reg.scope))
+            .catch((err) => console.warn("PWA: Registo de sw.js falhou. Certifique-se de que o ficheiro sw.js existe na raiz do seu projeto.", err));
     });
 }
 
@@ -1021,7 +1016,7 @@ const pwaInstallBtn = document.getElementById('pwaInstallBtn');
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    // Exibe o botão de instalação apenas se o app não estiver em modo standalone
+    // Exibe o botão de instalação discreto apenas se o app não estiver em modo standalone (já instalado)
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
     if (pwaInstallBtn && !isStandalone) {
         pwaInstallBtn.style.display = 'inline-flex';
@@ -1043,7 +1038,7 @@ if (pwaInstallBtn) {
         }
 
         if (!deferredPrompt) {
-            showToast("A aplicação já está instalada ou não suporta instalação automática.");
+            showToast("A aplicação já está instalada ou não suporta instalação automática neste navegador.");
             return;
         }
 
@@ -1943,18 +1938,3 @@ inicializarAplicativo();
 </script>
 </body>
 </html>
-<!--
-*/
-// --- PARTE ATIVA DO SERVICE WORKER (Executado apenas em segundo plano no telemóvel) ---
-self.addEventListener('install', (event) => {
-    self.skipWaiting();
-});
-
-self.addEventListener('fetch', (event) => {
-    event.respondWith(
-        fetch(event.request).catch(() => {
-            return new Response("Offline");
-        })
-    );
-});
-//-->
