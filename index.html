@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Bolão Master Camino</title>
+<title>Bolão Master</title>
 
 <!-- Favicon Oficial do Bolão (Transparente) -->
 <link rel="shortcut icon" href="https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_" type="image/png">
@@ -13,7 +13,7 @@
 <meta name="theme-color" content="#030a06">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Bolão Camino">
+<meta name="apple-mobile-web-app-title" content="Bolão Master">
 <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_">
 
 <!-- Web App Manifest Físico (Padrão ouro para compatibilidade total em Android e iOS) -->
@@ -573,41 +573,6 @@
         border-color: var(--partial); 
     }
 
-    .toast { 
-        position: fixed; 
-        bottom: 30px; 
-        left: 50%; 
-        transform: translateX(-50%); 
-        background: var(--primary); 
-        color: #000; 
-        padding: 12px 24px; 
-        border-radius: 100px; 
-        font-weight: 800; 
-        z-index: 9999; 
-        display: none; 
-        box-shadow: 0 8px 24px var(--primary-glow); 
-        font-size: 0.75rem; 
-        white-space: nowrap; 
-    }
-
-    .spinner { 
-        width: 18px; 
-        height: 18px; 
-        border: 2px solid rgba(0,0,0,0.1); 
-        border-top: 2px solid #000; 
-        border-radius: 50%; 
-        animation: spin 0.8s linear infinite; 
-        display: inline-block; 
-        vertical-align: middle; 
-    }
-    .spinner.light { border-top: 2px solid var(--primary); }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
     /* Estilos das bolas de dezenas */
     .guess-ball-row {
         display: flex;
@@ -986,7 +951,7 @@ const CONFIG = {
     PIX: "(99) 9 9102-6112", 
     SENHA: '6261', 
     INFINITE_TAG: "lauriuche", 
-    NOME_PRODUTO: "Cota Bolão Camino",
+    NOME_PRODUTO: "Cota Bolão Master",
     DEZENAS: 6 // Adicionado parâmetro para armazenar a quantidade de números jogados
 };
 
@@ -1001,12 +966,12 @@ window.sels = sels;
 
 lucide.createIcons();
 
-// --- REGISTO PADRÃO DO SERVICE WORKER (Sem truques de Polyglot para evitar erros MIME) ---
+// --- REGISTO PADRÃO DO SERVICE WORKER ---
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js')
             .then((reg) => console.log("PWA: Service Worker registado com sucesso com escopo: ", reg.scope))
-            .catch((err) => console.warn("PWA: Registo de sw.js falhou. Certifique-se de que o ficheiro sw.js existe na raiz do seu projeto.", err));
+            .catch((err) => console.warn("PWA: Registo de sw.js falhou.", err));
     });
 }
 
@@ -1051,7 +1016,7 @@ if (pwaInstallBtn) {
 }
 
 window.addEventListener('appinstalled', () => {
-    showToast("🎉 Bolão Camino instalado com sucesso!");
+    showToast("🎉 Bolão Master instalado com sucesso!");
     if (pwaInstallBtn) pwaInstallBtn.style.display = 'none';
 });
 
@@ -1208,7 +1173,7 @@ window.triggerCheckout = async (nome, contato, key, q, valorCobrado, btnElement 
     let safeName = nome.replace(/[^\w\sÀ-ÿ]/gi, '').trim().substring(0, 40);
     if (!safeName.includes(' ')) safeName += ' Silva'; 
 
-    const descTexto = valorCobrado < (qtFinal * CONFIG.VALOR) ? `Bolão Camino - Parcial (${qtFinal} Cotas)` : `Bolão Camino - Total (${qtFinal} Cotas)`;
+    const descTexto = valorCobrado < (qtFinal * CONFIG.VALOR) ? `Bolão Master - Parcial (${qtFinal} Cotas)` : `Bolão Master - Total (${qtFinal} Cotas)`;
 
     const payload = {
         "handle": CONFIG.INFINITE_TAG.trim(),
