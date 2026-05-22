@@ -1,9 +1,9 @@
 // --- CONTROLE DE VERSÕES DO SEU BOLÃO ---
 // Altere este valor sempre que fizer alterações no seu "index.html".
 // Exemplo: mude para 'v1.0.1' no próximo upgrade para forçar a atualização nos telemóveis.
-const CACHE_VERSION = 'v1.0.2';
+const CACHE_VERSION = 'v1.0.0';
 const CACHE_NAME = `bolao-master-cache-${CACHE_VERSION}`;
-Q
+
 // Lista de arquivos estáticos para salvar em cache local (modo offline)
 const ASSETS_TO_CACHE = [
   './',
