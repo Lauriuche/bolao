@@ -1,9 +1,9 @@
 // --- CONTROLE DE VERSÕES DO SEU BOLÃO ---
 // Altere este valor sempre que fizer alterações no seu "index.html".
 // Exemplo: mude para 'v1.0.1' no próximo upgrade para forçar a atualização nos telemóveis.
-const CACHE_VERSION = 'v1.0.1';
-const CACHE_NAME = `bolao-camino-cache-${CACHE_VERSION}`;
-
+const CACHE_VERSION = 'v1.0.2';
+const CACHE_NAME = `bolao-master-cache-${CACHE_VERSION}`;
+Q
 // Lista de arquivos estáticos para salvar em cache local (modo offline)
 const ASSETS_TO_CACHE = [
   './',
@@ -30,7 +30,7 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheName.startsWith('bolao-camino-cache-') && cacheName !== CACHE_NAME) {
+          if (cacheName.startsWith('bolao-master-cache-') && cacheName !== CACHE_NAME) {
             console.log(`[Service Worker] Removendo cache desatualizado: ${cacheName}`);
             return caches.delete(cacheName);
           }
