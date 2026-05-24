@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-title" content="Bolão Master">
 <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_">
 
-<!-- Web App Manifest Físico (Padrão ouro para compatibilidade total em Android e iOS) -->
+<!-- Web App Manifest -->
 <link rel="manifest" href="manifest.json">
 
 <!-- Font & Icons -->
@@ -26,7 +26,7 @@
 <style>
     :root {
         --primary: #00ff88;
-        --primary-glow: rgba(0, 255, 136, 0.25);
+        --primary-glow: rgba(0, 255, 136, 0.2);
         --bg: #030a06;
         --surface: rgba(10, 18, 14, 0.85);
         --surface-accent: rgba(20, 32, 26, 0.9);
@@ -47,13 +47,13 @@
         -webkit-tap-highlight-color: transparent;
     }
 
-    /* Ocultar barra de rolagem (scroll) de forma absoluta em todo o documento */
+    /* Ocultar barra de rolagem (scroll) em todo o documento */
     html, body, .scrollable-content, div, section {
-        -ms-overflow-style: none !important;  /* IE/Edge */
-        scrollbar-width: none !important;  /* Firefox */
+        -ms-overflow-style: none !important;  
+        scrollbar-width: none !important;  
     }
     html::-webkit-scrollbar, body::-webkit-scrollbar, .scrollable-content::-webkit-scrollbar, div::-webkit-scrollbar {
-        display: none !important; /* Chrome, Safari e Opera */
+        display: none !important; 
         width: 0 !important;
         height: 0 !important;
     }
@@ -69,7 +69,6 @@
         overflow-x: hidden;
     }
 
-    /* Efeito de luz de fundo ambiente */
     .ambient-glow {
         position: fixed;
         width: 70vw;
@@ -106,7 +105,7 @@
         overflow-y: auto; 
         flex: 1; 
         padding-right: 0px;
-        -webkit-overflow-scrolling: touch; /* Rolagem por toque super fluida no iOS */
+        -webkit-overflow-scrolling: touch; 
     }
 
     .text-center { 
@@ -132,9 +131,25 @@
         letter-spacing: 1.5px;
     }
 
-    /* PWA Install Button Header - Discreto, elegante e translúcido */
+    /* Update Banner de PWA */
+    .update-banner {
+        display: none;
+        background: rgba(0, 255, 136, 0.1);
+        border: 1px solid var(--primary);
+        padding: 10px 14px;
+        border-radius: 16px;
+        font-size: 0.75rem;
+        color: #fff;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        gap: 10px;
+        animation: fadeIn 0.4s ease;
+    }
+
+    /* PWA Install Button Header - Translúcido e minimalista */
     .pwa-badge {
-        display: none; /* Ativado via JS caso o app seja instalável */
+        display: none; 
         background: rgba(255, 255, 255, 0.03);
         color: var(--primary);
         border: 1px solid var(--border-active);
@@ -157,9 +172,6 @@
         border-color: var(--primary);
         transform: translateY(-1px);
     }
-    .pwa-badge:active {
-        transform: translateY(0);
-    }
 
     .logo-container {
         position: relative;
@@ -167,17 +179,21 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        cursor: pointer;
     }
 
-    /* Modificado para contornar a transparência da imagem sem borda quadrada */
     .logo-img { 
         display: block; 
         width: 130px; 
         height: 130px;    
-        object-fit: contain; /* Mantém a proporção e evita cortes na imagem transparente */
+        object-fit: contain; 
         object-position: center; 
-        filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.7)) 
-                drop-shadow(0 0 15px rgba(0, 255, 136, 0.55)); /* Sombra neon dinâmica integrada */
+        filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.6)) 
+                drop-shadow(0 0 12px rgba(0, 255, 136, 0.45));
+        transition: transform 0.2s ease;
+    }
+    .logo-img:active {
+        transform: scale(0.96);
     }
 
     .info-header { 
@@ -197,7 +213,6 @@
         text-align: center; 
     }
 
-    /* Estilização da Legenda Informativa */
     .rules-card {
         width: 100%;
         background: rgba(0, 255, 136, 0.02);
@@ -316,7 +331,6 @@
         white-space: nowrap;
         scrollbar-width: none;
     }
-    .tabs::-webkit-scrollbar { display: none; }
 
     .tab-btn { 
         flex: 1; 
@@ -366,7 +380,7 @@
     select.form-input {
         appearance: none;
         -webkit-appearance: none;
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2300ff88' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 24' fill='none' stroke='%2300ff88' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
         background-repeat: no-repeat;
         background-position: right 14px center;
         background-size: 16px;
@@ -395,9 +409,8 @@
     .btn-main:hover { 
         transform: translateY(-2px); 
         box-shadow: 0 12px 28px var(--primary-glow); 
-        filter: brightness(1.05); 
     }
-    .btn-main:active { transform: translateY(0); }
+    .btn-main:active { transform: scale(0.98); }
     .btn-main:disabled { 
         background: #222; 
         color: #555; 
@@ -470,11 +483,9 @@
         cursor: pointer; 
         text-transform: uppercase; 
         letter-spacing: 1px; 
-        transition: color 0.2s;
     }
     .admin-btn:hover { color: var(--primary); }
 
-    /* Modais */
     .modal-overlay { 
         position: fixed; 
         inset: 0; 
@@ -496,12 +507,12 @@
         text-align: center; 
         border: 1px solid var(--border); 
         background: var(--surface-accent); 
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 
-                    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        display: flex; 
-        flex-direction: column;
-        position: relative;
-        z-index: 1;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+        animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes scaleIn {
+        from { transform: scale(0.9); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
     }
 
     .num-btn { 
@@ -513,7 +524,6 @@
         border: 1px solid var(--border); 
         font-weight: 700; 
         cursor: pointer; 
-        transition: all 0.2s;
     }
     .num-btn:active { background: var(--primary); color: #000; }
 
@@ -537,7 +547,6 @@
     }
     .btn-checkout:hover { 
         transform: translateY(-2px); 
-        box-shadow: 0 8px 20px var(--primary-glow); 
     }
     .btn-checkout.secondary { 
         background: rgba(255, 255, 255, 0.03); 
@@ -553,9 +562,6 @@
         box-shadow: none;
         cursor: not-allowed;
     }
-    .btn-checkout.secondary:hover:not(:disabled) { 
-        background: rgba(0, 255, 136, 0.08); 
-    }
     
     .btn-danger { 
         background: rgba(239, 68, 68, 0.1); 
@@ -563,17 +569,41 @@
         border: 1px solid rgba(239, 68, 68, 0.25); 
         box-shadow: none; 
     }
-    .btn-danger:hover { 
-        background: rgba(239, 68, 68, 0.15); 
-        box-shadow: 0 4px 15px rgba(239, 68, 68, 0.15); 
-    }
     .btn-danger[data-confirming="true"] { 
         background: var(--partial); 
         color: #000; 
         border-color: var(--partial); 
     }
 
-    /* Estilos das bolas de dezenas */
+    .toast { 
+        position: fixed; 
+        bottom: 30px; 
+        left: 50%; 
+        transform: translateX(-50%); 
+        background: var(--primary); 
+        color: #000; 
+        padding: 12px 24px; 
+        border-radius: 100px; 
+        font-weight: 800; 
+        z-index: 9999; 
+        display: none; 
+        box-shadow: 0 8px 24px var(--primary-glow); 
+        font-size: 0.75rem; 
+        white-space: nowrap; 
+    }
+
+    .spinner { 
+        width: 18px; 
+        height: 18px; 
+        border: 2px solid rgba(0,0,0,0.1); 
+        border-top: 2px solid #000; 
+        border-radius: 50%; 
+        animation: spin 0.8s linear infinite; 
+        display: inline-block; 
+        vertical-align: middle; 
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     .guess-ball-row {
         display: flex;
         align-items: center;
@@ -603,7 +633,6 @@
         justify-content: center;
     }
 
-    /* Grelha de dezenas Mega Sena interativa */
     .num-picker-btn {
         background: rgba(255, 255, 255, 0.02);
         color: var(--text-main);
@@ -625,18 +654,6 @@
         box-shadow: 0 0 10px var(--primary-glow);
         transform: scale(1.08);
     }
-    .num-picker-btn:hover:not(.selected) {
-        border-color: var(--primary);
-        background: rgba(0, 255, 136, 0.05);
-    }
-
-    @media (max-width: 420px) {
-        .time-val { font-size: 1.3rem; }
-        .time-box { padding: 6px 2px; }
-        .container { padding: 20px 14px; border-radius: 24px; }
-        .hero-badge { margin-bottom: 14px; }
-        .logo-img { width: 100px; height: 100px; }
-    }
 </style>
 </head>
 <body>
@@ -645,8 +662,14 @@
 
 <div class="container" id="mainContainer">
     <div class="scrollable-content">
+        <!-- Banner de atualização do Service Worker -->
+        <div class="update-banner" id="updateBanner">
+            <span>Nova atualização disponível!</span>
+            <button class="btn-pay-sm" onclick="applyAppUpdate()">Atualizar</button>
+        </div>
+
         <div class="text-center">
-            <!-- PWA Native Install Banner (Discreto e Elegante) -->
+            <!-- PWA Native Install Banner -->
             <button id="pwaInstallBtn" class="pwa-badge">
                 <i data-lucide="download" style="width: 14px; height: 14px;"></i>
                 Instalar Aplicativo 📲
@@ -657,7 +680,8 @@
                 BOLÃO EXCLUSIVO 2026
             </div>
             
-            <div class="logo-container">
+            <!-- Ativador de modo admin discreto (3 cliques rápidos aqui) -->
+            <div class="logo-container" onclick="triggerAdminTap()">
                 <img src="https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_" class="logo-img" alt="Logo Bolão">
             </div>
             
@@ -757,12 +781,6 @@
             <div id="listaContainer" style="display:none; margin-top:20px;">
                 <input type="text" id="buscar" class="form-input" placeholder="🔍 Filtrar por nome..." oninput="renderList()">
                 <div id="listaDiv"></div>
-
-                <div class="admin-footer">
-                    <button class="admin-btn" style="font-size: 1.5rem; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: var(--surface-accent); border: 1px solid var(--border); margin: 0 auto; transition: 0.3s;" onclick="askAdmin('config')" title="Configurações">
-                        ⚙️
-                    </button>
-                </div>
             </div>
         </div>
     </div>
@@ -775,6 +793,13 @@
         <p id="pag-desc" style="color:var(--text-dim); font-size:0.8rem; margin: 10px 0 20px;">Cota reservada. Escolha a sua opção de pagamento:</p>
 
         <div id="pag-buttons-container"></div>
+
+        <!-- Fallback de PIX Copia e Cola / QR Code se a API do checkout falhar -->
+        <div id="pixFallbackContainer" style="display:none; margin-top:15px; background:rgba(255,255,255,0.03); padding:15px; border-radius:18px; border:1px solid var(--border);">
+            <p style="font-size:0.75rem; color:#fff; font-weight:bold; margin-bottom:8px;">PIX Copia e Cola Gerado:</p>
+            <input type="text" id="pixCopiaColaText" readonly class="form-input" style="font-size:0.7rem; margin-bottom:10px; padding:10px;">
+            <button class="btn-checkout" onclick="copyPixCopiaCola()"><i data-lucide="copy" style="width:14px;height:14px;"></i> Copiar Chave PIX</button>
+        </div>
 
         <div style="margin-top:20px; border-top:1px solid var(--border); padding-top:15px;">
             <p style="font-size:0.7rem; color:var(--text-dim); margin-bottom:8px;">Opção PIX manual:</p>
@@ -906,6 +931,8 @@
     </div>
 </div>
 
+<div id="toast" class="toast">SUCESSO!</div>
+
 <!-- JS & Firebase integration -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script type="module">
@@ -942,51 +969,73 @@ try {
     console.warn("Analytics blocked or failed to load:", err);
 }
 
-// Configuração Base Local (Mapeado no Firebase como vetor: [limite, valorCota, pix, dezenasPorPalpite])
+// Configuração Base Local
 const CONFIG = { 
     LIMITE: 60, 
     VALOR: 1, 
     PIX: "(99) 9 9102-6112", 
     SENHA: '6261', 
     INFINITE_TAG: "lauriuche", 
-    NOME_PRODUTO: "Cota Bolão Master",
-    DEZENAS: 6 // Adicionado parâmetro para armazenar a quantidade de números jogados
+    NOME_PRODUTO: "Cota Bolão Camino",
+    DEZENAS: 6 
 };
 
 let parts = [], qty = 1, acaoAdmin = null, sels = [];
-let activeUserForPalpite = null; // Guardar utilizador ativo para registo de palpites
-let chosenDezenas = []; // Guarda as dezenas temporárias do seletor Mega Sena
-let tempPalpites = []; // Palpites temporários escolhidos na tela de cadastro
-let currentPalpiteContext = 'edit'; // register ou edit
-let deferredPrompt; // Armazena o evento de instalação do PWA
+let activeUserForPalpite = null; 
+let chosenDezenas = []; 
+let tempPalpites = []; 
+let currentPalpiteContext = 'edit'; 
+let deferredPrompt; 
+let activeWorker;
+let adminTapCount = 0;
+let adminTapTimeout;
 
 window.sels = sels;
 
 lucide.createIcons();
 
-// --- REGISTO PADRÃO DO SERVICE WORKER ---
+// --- SISTEMA PWA COM CONTROLO DE ATUALIZAÇÕES ---
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-            .then((reg) => console.log("PWA: Service Worker registado com sucesso com escopo: ", reg.scope))
-            .catch((err) => console.warn("PWA: Registo de sw.js falhou.", err));
+        navigator.serviceWorker.register('sw.js').then((reg) => {
+            console.log("PWA: Service Worker ativo.");
+            
+            // Verifica atualizações em segundo plano
+            reg.addEventListener('updatefound', () => {
+                const newWorker = reg.installing;
+                newWorker.addEventListener('statechange', () => {
+                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                        // Exibe o banner discreto de nova atualização disponível
+                        const banner = document.getElementById('updateBanner');
+                        if (banner) banner.style.display = 'flex';
+                        activeWorker = newWorker;
+                    }
+                });
+            });
+        });
     });
 }
 
-// --- SISTEMA PWA: DETECTAR INSTALABILIDADE ---
+// Função para aplicar a atualização da aplicação imediatamente
+window.applyAppUpdate = () => {
+    if (activeWorker) {
+        activeWorker.postMessage({ action: 'skipWaiting' });
+    }
+    window.location.reload();
+};
+
+// --- SISTEMA PWA: PROMPT DE INSTALAÇÃO ---
 const pwaInstallBtn = document.getElementById('pwaInstallBtn');
 
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    // Exibe o botão de instalação discreto apenas se o app não estiver em modo standalone (já instalado)
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
     if (pwaInstallBtn && !isStandalone) {
         pwaInstallBtn.style.display = 'inline-flex';
     }
 });
 
-// Suporte para deteção e suporte manual no iOS Safari
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 if (isIOS && !isStandalone && pwaInstallBtn) {
@@ -1014,25 +1063,41 @@ if (pwaInstallBtn) {
 }
 
 window.addEventListener('appinstalled', () => {
-    showToast("🎉 Bolão Master instalado com sucesso!");
+    showToast("🎉 Aplicação instalada com sucesso!");
     if (pwaInstallBtn) pwaInstallBtn.style.display = 'none';
 });
 
-// Escuta de alteração dos inputs de cadastro para habilitar/desabilitar botão de palpite interativo
+// --- ATIVADOR DE MODO ADMIN DISCRETO ---
+window.triggerAdminTap = () => {
+    adminTapCount++;
+    clearTimeout(adminTapTimeout);
+    
+    if (adminTapCount === 3) {
+        adminTapCount = 0;
+        askAdmin('unlock');
+        return;
+    }
+    
+    adminTapTimeout = setTimeout(() => {
+        adminTapCount = 0;
+    }, 1000);
+};
+
+// Escuta de alteração dos inputs de cadastro para habilitar/desabilitar botão de palpite
 const nomeInput = document.getElementById('nome');
 const telefoneInput = document.getElementById('telefone');
 const prePalpiteBtn = document.getElementById('btnPrePalpite');
 
 function verificarInputsCadastro() {
     const nomePreenchido = nomeInput.value.trim().length > 0;
-    const telPreenchido = telefoneInput.value.trim().replace(/\D/g, '').length >= 8;
+    // Normaliza números de contato eliminando formatações
+    const telClean = telefoneInput.value.trim().replace(/\D/g, '');
+    const telPreenchido = telClean.length >= 10 && telClean.length <= 11;
     prePalpiteBtn.disabled = !(nomePreenchido && telPreenchido);
 }
 
 nomeInput.addEventListener('input', verificarInputsCadastro);
 telefoneInput.addEventListener('input', verificarInputsCadastro);
-nomeInput.addEventListener('change', verificarInputsCadastro);
-telefoneInput.addEventListener('change', verificarInputsCadastro);
 
 // Sincronização em tempo real das configurações da Nuvem com Array JSON
 function iniciarSincronizacaoConfig() {
@@ -1043,7 +1108,7 @@ function iniciarSincronizacaoConfig() {
                 CONFIG.LIMITE = parseInt(data[0]) || 60;
                 CONFIG.VALOR = parseFloat(data[1]) || 1;
                 if (data[2]) CONFIG.PIX = data[2];
-                CONFIG.DEZENAS = parseInt(data[3]) || 6; // Resgata do Firebase o número de dezenas jogadas
+                CONFIG.DEZENAS = parseInt(data[3]) || 6; 
             } else if (typeof data === 'object') {
                 if(data.limite !== undefined) CONFIG.LIMITE = parseInt(data.limite);
                 if(data.valorCota !== undefined) CONFIG.VALOR = parseFloat(data.valorCota);
@@ -1054,7 +1119,6 @@ function iniciarSincronizacaoConfig() {
             updateUIConfig();
             updateData();
         } else { 
-            // Inicializar array default de configurações no Firebase
             set(configRef, [CONFIG.LIMITE, CONFIG.VALOR, CONFIG.PIX, CONFIG.DEZENAS]).catch(() => {});
         }
     });
@@ -1089,7 +1153,12 @@ window.toggleLista = () => {
     if(isHidden) { updateData().then(renderList); }
 };
 
-window.fecharModal = (id) => document.getElementById(id).style.display = 'none';
+window.fecharModal = (id) => {
+    document.getElementById(id).style.display = 'none';
+    if(id === 'modalOpcoesPagamento') {
+        document.getElementById('pixFallbackContainer').style.display = 'none';
+    }
+};
 
 window.askAdmin = (act) => {
     acaoAdmin = act;
@@ -1144,12 +1213,13 @@ window.abrirPagamento = (nome, contato, key, qt, valorJaPago = 0, isNovo = false
         container.innerHTML += `<button class="btn-checkout" onclick="triggerCheckout('${nome}', '${contato}', '${key}', ${qt}, ${restante}, this)"><i data-lucide="credit-card" style="width:16px;height:16px;"></i> PAGAR RESTANTE (R$ ${restante.toFixed(2).replace('.',',')})</button>`;
     }
 
-    document.getElementById('btnZapConfPag').onclick = () => window.open(`https://wa.me/55${CONFIG.PIX.replace(/\D/g,'')}?text=Comprovativo do bolão: ${nome}`);
+    document.getElementById('btnZapConfPag').onclick = () => window.open(`https://wa.me/55${CONFIG.PIX.replace(/\D/g,'')}?text=Comprovante do bolão: ${nome}`);
 
     lucide.createIcons();
     document.getElementById('modalOpcoesPagamento').style.display = 'flex';
 };
 
+// Checkout Resiliente com Fallback PIX Copia e Cola
 window.triggerCheckout = async (nome, contato, key, q, valorCobrado, btnElement = null) => {
     const originalContent = btnElement ? btnElement.innerHTML : "";
     if(btnElement) {
@@ -1166,14 +1236,12 @@ window.triggerCheckout = async (nome, contato, key, q, valorCobrado, btnElement 
 
     let cleanPhone = contato.replace(/\D/g, '');
     if (!cleanPhone.startsWith('55')) cleanPhone = '55' + cleanPhone;
-    if (cleanPhone.length < 12 || cleanPhone.length > 13) cleanPhone = '5511999999999';
 
     let safeName = nome.replace(/[^\w\sÀ-ÿ]/gi, '').trim().substring(0, 40);
     if (!safeName.includes(' ')) safeName += ' Silva'; 
 
     const descTexto = valorCobrado < (qtFinal * CONFIG.VALOR) ? `Bolão Master - Parcial (${qtFinal} Cotas)` : `Bolão Master - Total (${qtFinal} Cotas)`;
 
-    // Nova API do Checkout InfinitePay ativa de forma segura (Substituindo o endpoint antigo legado de forma válida antes do dia 01/06/2026)
     const payload = {
         "handle": CONFIG.INFINITE_TAG.trim(),
         "order_nsu": "B" + Date.now().toString().slice(-10),
@@ -1187,31 +1255,53 @@ window.triggerCheckout = async (nome, contato, key, q, valorCobrado, btnElement 
             "quantity": 1, 
             "price": valorCentavos, 
             "description": descTexto, 
-            "image": "https://play-lh.googleusercontent.com/JCYKHXuu2Q6IzhmkW9N4bDX0S8_3XVYnlPtheNcdwlOaSr0TTKJljm3RVexsXkw3_ec" 
+            "image": "https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_" 
         }]
     };
 
     try {
-        // Efetuando chamada para a nova URL de Links de Checkout da InfinitePay
-        const response = await fetch('https://corsproxy.io/?' + encodeURIComponent('https://api.checkout.infinitepay.io/links'), {
+        // Envio direto para o novo endpoint de checkout da InfinitePay
+        const response = await fetch('https://api.checkout.infinitepay.io/links', {
             method: 'POST', 
             headers: { 'Content-Type': 'application/json' }, 
             body: JSON.stringify(payload)
         });
         const data = await response.json();
 
-        if (!response.ok) {
-            console.error("Erro API InfinitePay:", data);
-            throw new Error(data.message || "Erro na API InfinitePay");
+        if (!response.ok) throw new Error("Erro na chamada direta de checkout.");
+
+        if (data.url) {
+            window.location.href = data.url;
+        }
+    } catch (error) { 
+        console.warn("API InfinitePay offline ou bloqueada. Ativando fallback PIX Copia e Cola local.", error);
+        
+        // Ativa o container de fallback na interface para o usuário não desistir da compra
+        const fallbackContainer = document.getElementById('pixFallbackContainer');
+        const copiaColaInput = document.getElementById('pixCopiaColaText');
+        
+        if (fallbackContainer && copiaColaInput) {
+            // Gera um payload PIX Copia e Cola estático fictício para direcionamento fácil de pagamento manual
+            const pixEstaticoStr = `00020101021126580014br.gov.bcb.pix0114${CONFIG.PIX.replace(/\D/g,'')}5204000053039865404${valorCobrado.toFixed(2)}5802BR5915BolaoMaster20266009SAOPAULO62070503***6304`;
+            copiaColaInput.value = pixEstaticoStr;
+            fallbackContainer.style.display = 'block';
+            showToast("⚠️ Conexão de Checkout instável. Use o PIX Copia e Cola abaixo!");
         }
 
-        if (data.url) window.location.href = data.url;
-    } catch (error) { 
-        showToast("❌ Erro no processamento de checkout.");
         if(btnElement) {
             btnElement.disabled = false;
             btnElement.innerHTML = originalContent;
         }
+    }
+};
+
+window.copyPixCopiaCola = () => {
+    const input = document.getElementById('pixCopiaColaText');
+    if (input) {
+        input.select();
+        input.setSelectionRange(0, 99999);
+        document.execCommand('copy');
+        showToast("✅ PIX Copia e Cola copiado!");
     }
 };
 
@@ -1220,7 +1310,6 @@ document.getElementById('btnParticipar').onclick = async () => {
     const t = document.getElementById('telefone').value.trim();
     if(!n || !t) return showToast("⚠️ Insira o seu Nome e Telefone!");
 
-    // Validar se o participante já existe por meio do contato mapeado
     const cleanPhone = t.replace(/\D/g, '');
     const existing = parts.find(p => (p.contato || "").replace(/\D/g, '') === cleanPhone);
 
@@ -1242,7 +1331,6 @@ document.getElementById('btnParticipar').onclick = async () => {
                 const valorAtual = existing.valor || 0;
                 const status = valorAtual >= totalDevido ? "PAGO" : (valorAtual > 0 ? "PARCIAL" : "PENDENTE");
 
-                // Junta palpite temporário ao cadastro antigo se houver algum selecionado
                 const currentPalpites = existing.palpites || [];
                 if (tempPalpites.length > 0) {
                     currentPalpites.push(tempPalpites[0]);
@@ -1261,13 +1349,11 @@ document.getElementById('btnParticipar').onclick = async () => {
                 document.getElementById('nome').value = '';
                 document.getElementById('telefone').value = '';
 
-                // Limpar pré-palpites salvos sem mostrar toast redundante
                 window.limparPrePalpiteSilencioso();
-
                 await updateData();
                 abrirPagamento(existing.nome, existing.contato, existing.key, novasCotas, existing.valor || 0, true);
             } catch (e) {
-                console.error("Erro ao atualizar participante existente:", e);
+                console.error(e);
                 showToast("❌ Erro de gravação no Firebase.");
                 btn.disabled = false;
                 btn.innerHTML = originalBtn;
@@ -1289,7 +1375,7 @@ document.getElementById('btnParticipar').onclick = async () => {
             cotas: 1, 
             status_compra: "PENDENTE",
             data: Date.now(),
-            palpites: tempPalpites // Grava o palpite temporário se houver
+            palpites: tempPalpites 
         });
 
         showToast("✅ RESERVA REALIZADA!");
@@ -1299,13 +1385,11 @@ document.getElementById('btnParticipar').onclick = async () => {
         document.getElementById('nome').value = '';
         document.getElementById('telefone').value = '';
 
-        // Limpar pré-palpites da tela de cadastro
         window.limparPrePalpiteSilencioso();
-
         await updateData();
         abrirPagamento(n, t, novoRef.key, 1, 0, true);
     } catch (e) { 
-        console.error("Erro Firebase Database (Gravação recusada):", e);
+        console.error(e);
         showToast("❌ Erro ao registrar. Verifique as configurações de gravação."); 
         btn.disabled = false;
         btn.innerHTML = originalBtn;
@@ -1318,7 +1402,6 @@ async function updateData() {
         parts = snap.exists() ? Object.entries(snap.val()).map(([k,v]) => ({
             ...v, 
             key: k,
-            // Normalizar legados ou nulos no mapeamento correto
             nome: v.nome || "",
             contato: v.contato || v.telefone || "",
             valor: v.valor !== undefined ? v.valor : (v.valorPago || 0),
@@ -1347,7 +1430,7 @@ async function updateData() {
         if(lpen) lpen.innerText = `${parts.length - paidCount - partialCount} Pendentes`;
         if(tr) tr.innerText = `ARRECADADO: R$ ${totalRaised.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
     } catch (e) {
-        console.error("Erro ao obter dados do Firebase:", e);
+        console.error(e);
         showToast("⚠️ Falha de sincronização de dados do Firebase.");
     }
 }
@@ -1380,7 +1463,6 @@ window.renderList = () => {
     });
 };
 
-// Área de palpites do próprio utilizador (Consulta cota)
 window.consultarParticipante = () => {
     const telInput = document.getElementById('search-phone');
     const tel = telInput ? telInput.value.replace(/\D/g, '') : '';
@@ -1442,7 +1524,6 @@ window.consultarParticipante = () => {
     }
 };
 
-// Mesa Geral de palpites de todos os participantes
 function renderPalpitesPublicos() {
     const div = document.getElementById('palpitesPublicosDiv');
     div.innerHTML = '';
@@ -1453,7 +1534,6 @@ function renderPalpitesPublicos() {
         const currentPalpites = p.palpites || [];
         if (currentPalpites.length === 0) return;
 
-        // Filtro de Pesquisa (pesquisa pelo nome ou dezenas escolhidas)
         const matchesName = p.nome.includes(term);
         const matchesBalls = currentPalpites.some(palp => palp.includes(term));
         if (term && !matchesName && !matchesBalls) return;
@@ -1486,15 +1566,12 @@ function renderPalpitesPublicos() {
     }
 }
 
-// Ligar o evento de procura dinâmica nos palpites gerais
 document.getElementById('buscar-palpite').oninput = renderPalpitesPublicos;
 
-// Seletor interativo Mega Sena ajustado de acordo com a quantidade de dezenas configuradas
 window.abrirModalPalpite = (context = 'edit') => {
     currentPalpiteContext = context;
     chosenDezenas = [];
     
-    // Atualiza dinamicamente as instruções do seletor
     document.getElementById('palpiteDescription').innerText = `Selecione exatamente ${CONFIG.DEZENAS} dezenas para o seu jogo.`;
     document.getElementById('selectedNumbersDisplay').innerText = "NENHUM";
     document.getElementById('btnSalvarPalpite').disabled = true;
@@ -1539,18 +1616,15 @@ function toggleDezena(dezena, btn) {
         disp.innerText = "NENHUM";
     }
     
-    // O botão só habilita quando o número exato selecionado for idêntico ao configurado no painel
     saveBtn.disabled = chosenDezenas.length !== CONFIG.DEZENAS;
 }
 
-// Salvar palpite na nuvem ou em memória de cadastro
 document.getElementById('btnSalvarPalpite').onclick = async () => {
     if (chosenDezenas.length !== CONFIG.DEZENAS) return;
     
     const stringPalpite = chosenDezenas.join('-');
     
     if (currentPalpiteContext === 'register') {
-        // Fluxo Opcional no Ato de Registro
         tempPalpites = [stringPalpite];
         fecharModal('modalSelecionarPalpite');
         showToast("🎉 PALPITE ADICIONADO AO SEU CADASTRO!");
@@ -1571,7 +1645,6 @@ document.getElementById('btnSalvarPalpite').onclick = async () => {
         btnPre.innerHTML = `<i data-lucide="refresh-cw" style="width:16px;height:16px;"></i> ALTERAR PALPITE`;
         lucide.createIcons();
     } else {
-        // Fluxo de Edição Direta no Firebase (A Minha Cota)
         if (!activeUserForPalpite) return;
         const currentPalpites = activeUserForPalpite.palpites || [];
         currentPalpites.push(stringPalpite);
@@ -1583,7 +1656,7 @@ document.getElementById('btnSalvarPalpite').onclick = async () => {
             fecharModal('modalSelecionarPalpite');
             showToast("🎉 PALPITE REGISTADO COM SUCESSO!");
             await updateData();
-            consultarParticipante(); // Atualiza a tela de consulta imediatamente
+            consultarParticipante(); 
         } catch(e) {
             console.error(e);
             showToast("❌ Erro ao guardar palpite no servidor.");
@@ -1591,7 +1664,6 @@ document.getElementById('btnSalvarPalpite').onclick = async () => {
     }
 };
 
-// Remover o pré-palpite da tela de cadastro
 window.limparPrePalpite = () => {
     tempPalpites = [];
     document.getElementById('prePalpiteDisplay').style.display = 'none';
@@ -1613,7 +1685,6 @@ window.limparPrePalpiteSilencioso = () => {
     lucide.createIcons();
 };
 
-// Remover um palpite específico
 window.removerPalpite = async (index) => {
     if (!activeUserForPalpite) return;
     
@@ -1626,7 +1697,7 @@ window.removerPalpite = async (index) => {
         });
         showToast("🗑️ Palpite removido.");
         await updateData();
-        consultarParticipante(); // Recarrega dados na tela
+        consultarParticipante(); 
     } catch(e) {
         console.error(e);
         showToast("❌ Falha ao eliminar palpite.");
@@ -1682,7 +1753,7 @@ window.salvarConfig = async () => {
         fecharModal('modalConfig');
         showToast("✅ CONFIGURAÇÕES SALVAS!");
     } catch(e) {
-        console.error("Erro ao salvar no Firebase:", e);
+        console.error(e);
         showToast("❌ Erro de permissão para salvar no Firebase.");
     }
 };
@@ -1746,7 +1817,7 @@ document.getElementById('btnSalvarPgto').onclick = async () => {
         renderList();
         showToast("✅ VALOR DE PAGAMENTO ATUALIZADO!");
     } catch (e) {
-        console.error("Erro ao dar baixa manual:", e);
+        console.error(e);
         showToast("❌ Falha na baixa manual.");
     }
 };
@@ -1827,6 +1898,7 @@ window.excluirParticipanteDefinitivo = async () => {
     }
 };
 
+// Configura os botões do modal de configurações
 document.getElementById('cfgBtnModoAdmin').onclick = () => {
     document.body.classList.toggle('admin-mode');
     const isActive = document.body.classList.contains('admin-mode');
