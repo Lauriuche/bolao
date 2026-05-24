@@ -1,67 +1,19 @@
+
 {
-"id": "/bolao-master/",
-"name": "Bolão Master 2026",
-"short_name": "Bolão Master",
-"description": "Plataforma premium de bolões e apostas coletivas 2026. Registre suas cotas, defina seus palpites da Mega-Sena e acompanhe o ranking em tempo real com agilidade.",
-"start_url": "index.html",
-"display": "standalone",
-"background_color": "#030a06",
-"theme_color": "#00ff88",
-"orientation": "portrait",
-"categories": ["sports", "utilities"],
-"lang": "pt-PT",
-"dir": "ltr",
-"icons": [
-{
-"src": "https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_",
-"sizes": "512x512",
-"type": "image/png",
-"purpose": "any maskable"
-},
-{
-"src": "https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_",
-"sizes": "192x192",
-"type": "image/png",
-"purpose": "any"
-}
-],
-"shortcuts": [
-{
-"name": "Registrar Nova Cota",
-"short_name": "Registar",
-"description": "Adquira cotas e registre palpites para o próximo sorteio.",
-"url": "index.html",
-"icons": [{"src": "https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_", "sizes": "192x192"}]
-},
-{
-"name": "Consultar Minha Cota",
-"short_name": "Minha Cota",
-"description": "Consulte pagamentos e gerencie palpites ativos.",
-"url": "index.html",
-"icons": [{"src": "https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_", "sizes": "192x192"}]
-},
-{
-"name": "Ver Palpites Gerais",
-"short_name": "Palpites",
-"description": "Veja o mural com os palpites de todos os participantes.",
-"url": "index.html",
-"icons": [{"src": "https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_", "sizes": "192x192"}]
-}
-],
-"screenshots": [
-{
-"src": "https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_",
-"sizes": "1080x1920",
-"type": "image/png",
-"form_factor": "narrow",
-"label": "Cadastro e Reserva do Bolão"
-},
-{
-"src": "https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_",
-"sizes": "1920x1080",
-"type": "image/png",
-"form_factor": "wide",
-"label": "Painel Principal do Bolão"
-}
-]
+  "name": "Bolão Master",
+  "short_name": "Bolão Master",
+  "description": "Bolão de Apostas Coletivas Mega-Sena 2026",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#030a06",
+  "theme_color": "#00ff88",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }
