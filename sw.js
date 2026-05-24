@@ -1,5 +1,6 @@
-// --- CONTROLE DE VERSÕES DO SEU BOLÃO ---
-// Atualizado para v1.0.1 para forçar a atualização imediata do novo endpoint da InfinitePay nos telemóveis.
+// --- CONTROLE DE VERSÕES DO SEU BOLÃO MASTER ---
+// Altere este valor sempre que fizer alterações no seu "index.html".
+// Exemplo: mude para 'v1.0.2' no próximo upgrade para forçar a atualização nos telemóveis.
 const CACHE_VERSION = 'v1.0.1';
 const CACHE_NAME = `bolao-master-cache-${CACHE_VERSION}`;
 
@@ -40,6 +41,13 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+// Comunicação para forçar o recarregamento imediato
+self.addEventListener('message', (event) => {
+  if (event.data.action === 'skipWaiting') {
+    self.skipWaiting();
+  }
+});
+
 // Intercetação de requisições de rede com estratégia Network-First
 self.addEventListener('fetch', (event) => {
   // Ignora requisições de bancos de dados Firebase e integrações externas dinâmicas
@@ -47,6 +55,7 @@ self.addEventListener('fetch', (event) => {
     event.request.url.includes('firebaseio.com') ||
     event.request.url.includes('googleapis.com') ||
     event.request.url.includes('infinitepay.io') ||
+    event.request.url.includes('checkout.infinitepay.io') ||
     event.request.url.includes('corsproxy.io')
   ) {
     return;
