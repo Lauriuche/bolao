@@ -1304,24 +1304,34 @@ window.sels = sels;
 lucide.createIcons();
 
 // --- SISTEMA PWA COM CONTROLO DE ATUALIZAÇÕES ---
+// Só registra se estiver em HTTPS (ou localhost) e se sw.js existir de verdade
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').then((reg) => {
-            console.log("PWA: Service Worker ativo.");
-            
-            // Verifica atualizações em segundo plano
-            reg.addEventListener('updatefound', () => {
-                const newWorker = reg.installing;
-                newWorker.addEventListener('statechange', () => {
-                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                        // Exibe o banner discreto de nova atualização disponível
-                        const banner = document.getElementById('updateBanner');
-                        if (banner) banner.style.display = 'flex';
-                        activeWorker = newWorker;
-                    }
+        const isSecure = location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+        if (!isSecure) {
+            console.info('PWA: Service Worker ignorado (precisa HTTPS ou localhost).');
+            return;
+        }
+
+        navigator.serviceWorker.register('./sw.js', { scope: './' })
+            .then((reg) => {
+                console.log('PWA: Service Worker ativo.');
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    if (!newWorker) return;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            const banner = document.getElementById('updateBanner');
+                            if (banner) banner.style.display = 'flex';
+                            activeWorker = newWorker;
+                        }
+                    });
                 });
+            })
+            .catch((err) => {
+                // MIME text/html = sw.js ausente ou servidor devolveu 404 em HTML
+                console.info('PWA: Service Worker não registrado (sw.js ausente ou MIME inválido). App funciona normalmente.', err?.message || err);
             });
-        });
     });
 }
 
@@ -1335,103 +1345,200 @@ window.applyAppUpdate = () => {
 
 // --- SISTEMA PWA: PROMPT DE INSTALAÇÃO ---
 const pwaInstallBtn = document.getElementById('pwaInstallBtn');
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+const isStandalone = () =>
+    window.matchMedia('(display-mode: standalone)').matches ||
+    window.navigator.standalone === true ||
+    document.referrer.includes('android-app://');
 
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-    if (pwaInstallBtn && !isStandalone) {
+    if (pwaInstallBtn && !isStandalone()) {
         pwaInstallBtn.style.display = 'inline-flex';
+        pwaInstallBtn.innerHTML = `<i data-lucide="download" style="width: 14px; height: 14px;"></i> Instalar Aplicativo 📲`;
+        try { lucide.createIcons(); } catch (_) {}
     }
 });
 
-const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-if (isIOS && !isStandalone && pwaInstallBtn) {
+// iOS não tem beforeinstallprompt — mostra botão com instruções
+if (isIOS && !isStandalone() && pwaInstallBtn) {
     pwaInstallBtn.style.display = 'inline-flex';
+}
+
+// Android/Chrome: se o prompt ainda não veio, mostra botão mesmo assim com orientação
+if (!isIOS && !isStandalone() && pwaInstallBtn) {
+    setTimeout(() => {
+        if (!deferredPrompt && pwaInstallBtn.style.display === 'none') {
+            // Mantém oculto até o browser liberar o prompt (critérios PWA)
+        } else if (deferredPrompt) {
+            pwaInstallBtn.style.display = 'inline-flex';
+        }
+    }, 1500);
 }
 
 if (pwaInstallBtn) {
     pwaInstallBtn.addEventListener('click', async () => {
+        if (isStandalone()) {
+            showToast('✅ App já está instalado!');
+            pwaInstallBtn.style.display = 'none';
+            return;
+        }
+
         if (isIOS) {
-            alert("Para instalar este aplicativo no seu iPhone:\n1. Clique no ícone de 'Partilhar' (Compartilhar) do Safari embaixo.\n2. Escolha a opção 'Ecrã Principal' (Adicionar à Tela de Início).\n3. Confirme no canto superior direito!");
+            alert("Para instalar no iPhone/iPad:\n\n1. Toque em Compartilhar (□↑) no Safari\n2. Role e toque em \"Adicionar à Tela de Início\"\n3. Confirme em \"Adicionar\"");
             return;
         }
 
         if (!deferredPrompt) {
-            showToast("A aplicação já está instalada ou não suporta instalação automática neste navegador.");
+            // Critérios Chrome: HTTPS + manifest.json + service worker + engajamento
+            alert(
+                "Instalação automática indisponível neste momento.\n\n" +
+                "No Chrome Android:\n" +
+                "• Menu (⋮) → \"Instalar app\" ou \"Adicionar à tela inicial\"\n\n" +
+                "Confirme no servidor:\n" +
+                "1. manifest.json na mesma pasta do site\n" +
+                "2. sw.js na mesma pasta\n" +
+                "3. Site em HTTPS"
+            );
             return;
         }
 
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        console.log(`Instalação PWA: Escolha do utilizador -> ${outcome}`);
+        try {
+            deferredPrompt.prompt();
+            const choice = await deferredPrompt.userChoice;
+            console.log('PWA install outcome:', choice.outcome);
+            if (choice.outcome === 'accepted') {
+                showToast('🎉 Instalando aplicativo...');
+                pwaInstallBtn.style.display = 'none';
+            } else {
+                showToast('Instalação cancelada');
+            }
+        } catch (err) {
+            console.warn('prompt() falhou:', err);
+            showToast('⚠️ Use o menu do navegador → Instalar app');
+        }
         deferredPrompt = null;
-        pwaInstallBtn.style.display = 'none';
     });
 }
 
 window.addEventListener('appinstalled', () => {
-    showToast("🎉 Aplicação instalada com sucesso!");
+    showToast('🎉 Aplicativo instalado com sucesso!');
+    deferredPrompt = null;
     if (pwaInstallBtn) pwaInstallBtn.style.display = 'none';
 });
 
-// --- ATIVADOR DE CONFIGURAÇÕES: pressão longa de 2 segundos na logo ---
-(function initLogoLongPress() {
+// --- ATIVADOR DE CONFIGURAÇÕES: pressão longa (1.5s) ou 5 toques rápidos na logo ---
+(function initLogoAdminAccess() {
     const logoEl = document.getElementById('logoAdminTrigger');
     if (!logoEl) return;
 
-    // Anel de progresso visual durante a pressão
     let ring = logoEl.querySelector('.admin-press-ring');
     if (!ring) {
         ring = document.createElement('div');
         ring.className = 'admin-press-ring';
-        ring.style.cssText = 'position:absolute;inset:-6px;border-radius:50%;border:2.5px solid transparent;border-top-color:var(--primary);opacity:0;pointer-events:none;transition:opacity 0.15s;';
+        ring.style.cssText = 'position:absolute;inset:-8px;border-radius:50%;border:2.5px solid transparent;border-top-color:var(--primary);opacity:0;pointer-events:none;z-index:2;';
         logoEl.style.position = 'relative';
         logoEl.appendChild(ring);
     }
 
+    let startX = 0, startY = 0;
+    let tapCount = 0;
+    let tapTimer = null;
+    const HOLD_MS = 1500;
+    const MOVE_TOLERANCE = 18; // px — micro movimento não cancela
+
+    const openAdminPin = () => {
+        try {
+            if (navigator.vibrate) navigator.vibrate([30, 40, 30]);
+            // IMPORTANTE: script type=module — usar sempre window.
+            if (typeof window.askAdmin === 'function') {
+                window.askAdmin('config');
+            } else {
+                // Fallback direto se askAdmin ainda não existir
+                const modal = document.getElementById('modalSenha');
+                if (modal) {
+                    window.acaoAdmin = 'config';
+                    const d = document.getElementById('senhaDisplay');
+                    if (d) d.innerText = '';
+                    modal.style.display = 'flex';
+                } else {
+                    alert('PIN: use o teclado. Modal não encontrado.');
+                }
+            }
+        } catch (err) {
+            console.error('Erro ao abrir PIN admin:', err);
+            showToast('❌ Erro ao abrir acesso admin');
+        }
+    };
+
     const startPress = (e) => {
-        if (e.cancelable) e.preventDefault();
+        // Não preventDefault no touchstart logo no início — evita quebrar scroll/clique em alguns browsers
         longPressTriggered = false;
         clearTimeout(longPressTimer);
 
-        // Feedback visual de carregamento
+        const point = e.touches ? e.touches[0] : e;
+        startX = point.clientX;
+        startY = point.clientY;
+
         ring.style.opacity = '1';
-        ring.style.animation = 'adminSpin 2s linear forwards';
+        ring.style.animation = `adminSpin ${HOLD_MS}ms linear forwards`;
 
         longPressTimer = setTimeout(() => {
             longPressTriggered = true;
             ring.style.opacity = '0';
             ring.style.animation = '';
-            logoEl.style.transform = 'scale(0.92)';
-            setTimeout(() => { logoEl.style.transform = ''; }, 180);
+            logoEl.style.transform = 'scale(0.94)';
+            setTimeout(() => { logoEl.style.transform = ''; }, 160);
+            openAdminPin();
+        }, HOLD_MS);
+    };
 
-            // Vibração se disponível (mobile)
-            if (navigator.vibrate) navigator.vibrate(40);
-
-            askAdmin('config');
-        }, 2000);
+    const movePress = (e) => {
+        if (!longPressTimer) return;
+        const point = e.touches ? e.touches[0] : e;
+        const dx = Math.abs(point.clientX - startX);
+        const dy = Math.abs(point.clientY - startY);
+        // Só cancela se o dedo andou de verdade (scroll)
+        if (dx > MOVE_TOLERANCE || dy > MOVE_TOLERANCE) {
+            clearTimeout(longPressTimer);
+            longPressTimer = null;
+            ring.style.opacity = '0';
+            ring.style.animation = '';
+        }
     };
 
     const endPress = () => {
-        clearTimeout(longPressTimer);
-        longPressTimer = null;
+        if (longPressTimer) {
+            clearTimeout(longPressTimer);
+            longPressTimer = null;
+        }
         ring.style.opacity = '0';
         ring.style.animation = '';
+
+        // Fallback: 5 toques rápidos na logo também abre o PIN
+        if (!longPressTriggered) {
+            tapCount++;
+            clearTimeout(tapTimer);
+            tapTimer = setTimeout(() => { tapCount = 0; }, 900);
+            if (tapCount >= 5) {
+                tapCount = 0;
+                openAdminPin();
+            }
+        }
     };
 
-    logoEl.addEventListener('touchstart', startPress, { passive: false });
+    logoEl.addEventListener('touchstart', startPress, { passive: true });
+    logoEl.addEventListener('touchmove', movePress, { passive: true });
     logoEl.addEventListener('touchend', endPress);
     logoEl.addEventListener('touchcancel', endPress);
-    logoEl.addEventListener('touchmove', endPress);
     logoEl.addEventListener('mousedown', startPress);
+    logoEl.addEventListener('mousemove', movePress);
     logoEl.addEventListener('mouseup', endPress);
     logoEl.addEventListener('mouseleave', endPress);
     logoEl.addEventListener('contextmenu', (e) => e.preventDefault());
 })();
 
-// CSS keyframes para o anel (injetado uma vez)
 (function() {
     if (document.getElementById('adminSpinStyle')) return;
     const s = document.createElement('style');
@@ -1643,32 +1750,38 @@ window.fecharModal = (id) => {
 };
 
 window.askAdmin = (act) => {
-    // Se já está em modo admin na sessão, pula o PIN para ações de edição/export
-    const sessionAdmin = sessionStorage.getItem('bolao_admin') === '1';
-    if (sessionAdmin && (act === 'edit' || act === 'export' || act === 'unlock')) {
-        document.body.classList.add('admin-mode');
-        if (act === 'edit') return abrirBaixaManual();
-        if (act === 'export') return exportarCSV();
-        if (act === 'unlock') {
-            // Toggle: se já admin, desativa
-            if (document.body.classList.contains('admin-mode') && sessionStorage.getItem('bolao_admin') === '1') {
-                // Já está ativo — permite desativar com PIN ainda
-            }
+    try {
+        // Se já está em modo admin na sessão, pula o PIN para ações de edição/export
+        const sessionAdmin = sessionStorage.getItem('bolao_admin') === '1';
+        if (sessionAdmin && (act === 'edit' || act === 'export')) {
+            document.body.classList.add('admin-mode');
+            if (act === 'edit') return abrirBaixaManual();
+            if (act === 'export') return exportarCSV();
         }
-    }
 
-    acaoAdmin = act;
-    const d = document.getElementById('senhaDisplay');
-    if(d) d.innerText = '';
-    const hint = document.getElementById('senhaHint');
-    if (hint) {
-        if (act === 'config') hint.innerText = 'Acesso às configurações do bolão';
-        else if (act === 'edit') hint.innerText = 'Baixa manual de pagamento';
-        else if (act === 'export') hint.innerText = 'Exportar lista de participantes';
-        else hint.innerText = 'Ativar / desativar modo administrador';
+        window.acaoAdmin = act;
+        acaoAdmin = act;
+        const d = document.getElementById('senhaDisplay');
+        if (d) d.innerText = '';
+        const hint = document.getElementById('senhaHint');
+        if (hint) {
+            if (act === 'config') hint.innerText = 'Acesso às configurações do bolão';
+            else if (act === 'edit') hint.innerText = 'Baixa manual de pagamento';
+            else if (act === 'export') hint.innerText = 'Exportar lista de participantes';
+            else hint.innerText = 'Ativar / desativar modo administrador';
+        }
+        const modal = document.getElementById('modalSenha');
+        if (!modal) {
+            showToast('❌ Modal de PIN não encontrado');
+            return;
+        }
+        modal.style.display = 'flex';
+        modal.style.zIndex = '9999';
+        try { lucide.createIcons(); } catch (_) {}
+    } catch (err) {
+        console.error('askAdmin error:', err);
+        showToast('❌ Erro ao abrir PIN');
     }
-    document.getElementById('modalSenha').style.display = 'flex';
-    lucide.createIcons();
 };
 
 window.digitar = (num) => {
@@ -2767,13 +2880,22 @@ function showPaymentSuccessModal(nome, valorTotal, status, isFullPaid, amountPai
     showToast(isFullPaid ? "✅ PAGAMENTO TOTAL CONFIRMADO!" : "✅ PAGAMENTO PARCIAL REGISTRADO!");
 }
 
-// Inicializações do Aplicativo com Fluxo de Autenticação Primeiro
+// Inicializações do Aplicativo
+// Auth anônimo é opcional: se não estiver ativo no Console do Firebase, o app
+// continua (desde que as regras do Realtime Database permitam leitura/escrita).
 async function inicializarAplicativo() {
     try {
         await signInAnonymously(auth);
-        console.log("Firebase Auth: Autenticado anonimamente.");
+        console.log('Firebase Auth: autenticado anonimamente.');
     } catch (e) {
-        console.warn("Firebase Auth: Login anônimo indisponível.", e);
+        const code = e?.code || '';
+        if (code === 'auth/configuration-not-found' || code === 'auth/operation-not-allowed') {
+            console.info(
+                'Firebase Auth anônimo desativado. Ative em: Console Firebase → Authentication → Sign-in method → Anonymous. O app segue sem auth.'
+            );
+        } else {
+            console.info('Firebase Auth: login anônimo indisponível.', code || e?.message || e);
+        }
     }
 
     // Restaura modo admin da sessão (sem pedir PIN de novo no mesmo navegador)
