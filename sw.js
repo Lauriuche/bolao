@@ -1,86 +1,67 @@
-// --- CONTROLE DE VERSÕES DO SEU BOLÃO MASTER ---
-// Altere este valor sempre que fizer alterações no seu "index.html".
-// Exemplo: mude para 'v1.0.2' no próximo upgrade para forçar a atualização nos telemóveis.
-const CACHE_VERSION = 'v1.0.1';
-const CACHE_NAME = `bolao-master-cache-${CACHE_VERSION}`;
-
-// Lista de arquivos estáticos para salvar em cache local (modo offline)
-const ASSETS_TO_CACHE = [
+/* Bolão Master – Service Worker mínimo
+   Cache de shell + atualização controlada via skipWaiting
+*/
+const CACHE = 'bolao-master-v1';
+const PRECACHE = [
   './',
-  './index.html',
-  './manifest.json',
-  'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
-  'https://unpkg.com/lucide@latest'
+  './index.html'
 ];
 
-// Instalação do Service Worker
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log(`[Service Worker] Criando cache de versão: ${CACHE_VERSION}`);
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
+    caches.open(CACHE)
+      .then((cache) => cache.addAll(PRECACHE).catch(() => {}))
+      .then(() => self.skipWaiting())
   );
-  self.skipWaiting();
 });
 
-// Ativação e limpeza automática de versões antigas de cache
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName.startsWith('bolao-master-cache-') && cacheName !== CACHE_NAME) {
-            console.log(`[Service Worker] Removendo cache desatualizado: ${cacheName}`);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
+    caches.keys().then((keys) =>
+      Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
+    ).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
-// Comunicação para forçar o recarregamento imediato
 self.addEventListener('message', (event) => {
-  if (event.data.action === 'skipWaiting') {
+  if (event.data && event.data.action === 'skipWaiting') {
     self.skipWaiting();
   }
 });
 
-// Intercetação de requisições de rede com estratégia Network-First
+// Network-first para HTML; cache-first para o resto da mesma origem
 self.addEventListener('fetch', (event) => {
-  // Ignora requisições de bancos de dados Firebase e integrações externas dinâmicas
-  if (
-    event.request.url.includes('firebaseio.com') ||
-    event.request.url.includes('googleapis.com') ||
-    event.request.url.includes('infinitepay.io') ||
-    event.request.url.includes('checkout.infinitepay.io') ||
-    event.request.url.includes('corsproxy.io')
-  ) {
+  const req = event.request;
+  if (req.method !== 'GET') return;
+
+  const url = new URL(req.url);
+  if (url.origin !== self.location.origin) return;
+
+  if (req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html')) {
+    event.respondWith(
+      fetch(req)
+        .then((res) => {
+          const copy = res.clone();
+          caches.open(CACHE).then((c) => c.put(req, copy)).catch(() => {});
+          return res;
+        })
+        .catch(() => caches.match(req).then((r) => r || caches.match('./')))
+    );
     return;
   }
 
   event.respondWith(
-    fetch(event.request)
-      .then((networkResponse) => {
-        if (networkResponse && networkResponse.status === 200) {
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
-        }
-        return networkResponse;
-      })
-      .catch(() => {
-        return caches.match(event.request).then((cachedResponse) => {
-          if (cachedResponse) {
-            return cachedResponse;
+    caches.match(req).then((cached) => {
+      const fetched = fetch(req)
+        .then((res) => {
+          if (res && res.ok) {
+            const copy = res.clone();
+            caches.open(CACHE).then((c) => c.put(req, copy)).catch(() => {});
           }
-          if (event.request.mode === 'navigate') {
-            return caches.match('./index.html');
-          }
-        });
-      })
+          return res;
+        })
+        .catch(() => cached);
+      return cached || fetched;
+    })
   );
 });
