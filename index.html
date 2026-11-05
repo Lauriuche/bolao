@@ -59,7 +59,7 @@
     }
 
     body {
-        background: radial-gradient(circle at center, #001f10 0%, #010502 100%);
+        background: #010502;
         color: var(--text-main);
         min-height: 100vh;
         display: flex; 
@@ -67,6 +67,31 @@
         align-items: center;
         padding: 12px;
         overflow-x: hidden;
+        position: relative;
+    }
+
+    /* Fundo Mega da Virada — página completa, translúcido, atrás de tudo */
+    .bg-mega {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background-color: #010502;
+        background-image: url('mega-virada-bg-final.jpg');
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+    }
+    .bg-mega::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            180deg,
+            rgba(1, 5, 2, 0.72) 0%,
+            rgba(0, 20, 10, 0.78) 45%,
+            rgba(1, 5, 2, 0.88) 100%
+        );
     }
 
     .ambient-glow {
@@ -81,6 +106,7 @@
         transform: translate(-50%, -50%);
         z-index: 0;
         pointer-events: none;
+        opacity: 0.4;
     }
 
     .container {
@@ -180,6 +206,10 @@
         justify-content: center;
         align-items: center;
         cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        transition: transform 0.2s ease;
     }
 
     .logo-img { 
@@ -191,8 +221,9 @@
         filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.6)) 
                 drop-shadow(0 0 12px rgba(0, 255, 136, 0.45));
         transition: transform 0.2s ease;
+        pointer-events: none; /* o container captura o long-press */
     }
-    .logo-img:active {
+    .logo-container:active .logo-img {
         transform: scale(0.96);
     }
 
@@ -209,8 +240,68 @@
         font-size: 0.75rem; 
         color: var(--text-dim); 
         opacity: 0.8; 
-        margin-bottom: 24px; 
+        margin-bottom: 14px; 
         text-align: center; 
+    }
+
+    /* Card de prêmio / valores em destaque */
+    .prize-card {
+        width: 100%;
+        background: linear-gradient(145deg, rgba(0, 255, 136, 0.12) 0%, rgba(0, 40, 20, 0.4) 100%);
+        border: 1.5px solid rgba(0, 255, 136, 0.35);
+        border-radius: 22px;
+        padding: 16px 14px;
+        margin-bottom: 14px;
+        box-shadow: 0 0 28px rgba(0, 255, 136, 0.12), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .prize-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 8px;
+        text-align: center;
+    }
+    .prize-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        padding: 10px 4px;
+        border-radius: 14px;
+        background: rgba(0,0,0,0.25);
+        border: 1px solid rgba(255,255,255,0.04);
+    }
+    .prize-item.highlight {
+        background: rgba(0, 255, 136, 0.15);
+        border-color: rgba(0, 255, 136, 0.45);
+    }
+    .prize-label {
+        font-size: 0.58rem;
+        font-weight: 800;
+        color: var(--text-dim);
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+    }
+    .prize-value {
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: #fff;
+        line-height: 1.15;
+    }
+    .prize-value.primary {
+        color: var(--primary);
+        font-size: 1.25rem;
+        text-shadow: 0 0 14px rgba(0, 255, 136, 0.45);
+    }
+    .prize-sub {
+        font-size: 0.65rem;
+        color: var(--text-dim);
+        margin-top: 12px;
+        text-align: center;
+        line-height: 1.45;
+        padding: 0 2px;
+    }
+    .prize-sub strong {
+        color: var(--primary);
     }
 
     .rules-card {
@@ -353,34 +444,57 @@
         box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
+    /* Campos de preenchimento destacados */
+    .form-group {
+        position: relative;
+        margin-bottom: 14px;
+        width: 100%;
+    }
+    .form-group label {
+        display: block;
+        font-size: 0.68rem;
+        font-weight: 800;
+        color: var(--primary);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 6px;
+        padding-left: 2px;
+    }
     .form-input { 
         width: 100%; 
-        padding: 14px; 
+        padding: 15px 16px; 
         border-radius: 14px; 
-        border: 1px solid var(--border); 
-        background: rgba(0,0,0,0.25); 
+        border: 1.5px solid rgba(0, 255, 136, 0.18); 
+        background: rgba(0,0,0,0.35); 
         color: #fff; 
         text-align: center; 
-        font-size: 0.85rem; 
-        font-weight: 500;
+        font-size: 0.9rem; 
+        font-weight: 600;
         outline: none; 
-        margin-bottom: 12px; 
-        transition: all 0.3s ease;
+        margin-bottom: 0; 
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 0 0 0 rgba(0, 255, 136, 0);
     }
     .form-input:focus { 
         border-color: var(--primary); 
-        background: rgba(0,0,0,0.4); 
-        box-shadow: 0 0 10px rgba(0, 255, 136, 0.15);
+        background: rgba(0, 20, 12, 0.7); 
+        box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.18), 0 0 18px rgba(0, 255, 136, 0.12);
+        transform: translateY(-1px);
+    }
+    .form-input:not(:placeholder-shown) {
+        border-color: rgba(0, 255, 136, 0.45);
+        background: rgba(0, 15, 10, 0.55);
     }
     .form-input::placeholder {
-        color: rgba(255, 255, 255, 0.35);
-        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.32);
+        font-size: 0.82rem;
+        font-weight: 500;
     }
     
     select.form-input {
         appearance: none;
         -webkit-appearance: none;
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 24' fill='none' stroke='%2300ff88' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2300ff88' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
         background-repeat: no-repeat;
         background-position: right 14px center;
         background-size: 16px;
@@ -497,6 +611,13 @@
         backdrop-filter: blur(8px); 
         -webkit-backdrop-filter: blur(8px); 
         padding: 16px; 
+    }
+
+    /* Overlay específico para seletor de palpite em tela cheia */
+    #modalSelecionarPalpite.modal-overlay {
+        align-items: flex-end;
+        padding: 0;
+        background: rgba(0,0,0,0.92);
     }
     
     .modal-box { 
@@ -634,30 +755,87 @@
     }
 
     .num-picker-btn {
-        background: rgba(255, 255, 255, 0.02);
+        background: rgba(255, 255, 255, 0.04);
         color: var(--text-main);
-        border: 1px solid var(--border);
-        border-radius: 50%;
+        border: 1.5px solid rgba(255,255,255,0.08);
+        border-radius: 14px;
         aspect-ratio: 1;
-        font-size: 0.75rem;
-        font-weight: 700;
+        font-size: 0.95rem;
+        font-weight: 800;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.2s ease;
+        transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+        min-height: 48px;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+    .num-picker-btn:active {
+        transform: scale(0.94);
     }
     .num-picker-btn.selected {
         background: var(--primary);
         color: #000;
         border-color: var(--primary);
-        box-shadow: 0 0 10px var(--primary-glow);
-        transform: scale(1.08);
+        box-shadow: 0 0 16px var(--primary-glow), 0 4px 12px rgba(0,255,136,0.25);
+        transform: scale(1.06);
+    }
+
+    /* Modal Palpite Full Screen */
+    #modalSelecionarPalpite .modal-box {
+        max-width: 100%;
+        width: 100%;
+        height: 96vh;
+        max-height: 96vh;
+        border-radius: 24px 24px 0 0;
+        padding: 18px 14px 20px;
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        animation: slideUp 0.35s cubic-bezier(0.34, 1.2, 0.64, 1);
+    }
+    @keyframes slideUp {
+        from { transform: translateY(40px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+    #palpiteGrid {
+        display: grid !important;
+        grid-template-columns: repeat(6, 1fr) !important;
+        gap: 8px !important;
+        flex: 1;
+        overflow-y: auto;
+        max-height: none !important;
+        padding: 4px 2px 12px !important;
+        -webkit-overflow-scrolling: touch;
+    }
+    .palpite-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    .palpite-selected-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(0,0,0,0.4);
+        padding: 12px 14px;
+        border-radius: 14px;
+        margin: 10px 0 14px;
+        border: 1px solid var(--border-active);
+        min-height: 52px;
     }
 </style>
 </head>
 <body>
 
+<!-- Fundo Mega da Virada (página completa, atrás de tudo) -->
+<div class="bg-mega" id="bgMega" aria-hidden="true"></div>
 <div class="ambient-glow"></div>
 
 <div class="container" id="mainContainer">
@@ -680,25 +858,38 @@
                 BOLÃO EXCLUSIVO 2026
             </div>
             
-            <!-- Ativador de modo admin discreto (3 cliques rápidos aqui) -->
-            <div class="logo-container" onclick="triggerAdminTap()">
+            <!-- Ativador de configurações: pressione a imagem por 2 segundos -->
+            <div class="logo-container" id="logoAdminTrigger">
                 <img src="https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_" class="logo-img" alt="Logo Bolão">
             </div>
             
-            <div id="dynamicInfo" class="info-header">💰 Cota: R$ 1,00 • 👥 Limite: 60</div>
             <div class="date-header">Encerramento: 31 de Dezembro de 2026</div>
         </div>
 
-        <!-- Regulamento / Legenda -->
-        <div class="rules-card">
-            <h4><i data-lucide="info" style="width: 14px; height: 14px;"></i> Informações &amp; Regulamento</h4>
-            <p>⏱️ <strong>Pagamento Limite:</strong> <span style="color: var(--partial); font-weight: 800;">10/12/2026</span>. Reservas não pagas até esta data serão automaticamente liberadas.</p>
-            <p>🍀 <strong>Mega da Virada (Caixa):</strong> O prêmio principal <strong>NÃO ACUMULA</strong>. Caso ninguém acerte as 6 dezenas, o prêmio é destinado a quem acertar 5 dezenas (Quina), garantindo ganhadores.</p>
-            <ul class="rules-list">
-                <li>Todo o valor arrecadado será revertido em jogos oficiais da Caixa.</li>
-                <li>O prêmio total obtido será dividido proporcionalmente ao número de cotas pagas por cada participante.</li>
-                <li>Os comprovantes de registro serão compartilhados no grupo oficial de participantes antes do sorteio.</li>
-            </ul>
+        <!-- Card de Valores / Prêmio em destaque -->
+        <div class="prize-card">
+            <div style="text-align:center; margin-bottom:12px;">
+                <div class="prize-label" style="margin-bottom:4px;">🏆 Prêmio Estimado · Mega da Virada 2026</div>
+                <div id="prizePremioValor" style="font-size:1.55rem; font-weight:800; color:var(--primary); text-shadow:0 0 18px rgba(0,255,136,0.45); letter-spacing:-0.5px;">R$ 1 Bilhão</div>
+            </div>
+            <div class="prize-grid">
+                <div class="prize-item highlight">
+                    <span class="prize-label">Valor da Cota</span>
+                    <span class="prize-value primary" id="prizeCotaValor">R$ 1,00</span>
+                </div>
+                <div class="prize-item">
+                    <span class="prize-label">Pote Atual</span>
+                    <span class="prize-value" id="prizePote">R$ 0,00</span>
+                </div>
+                <div class="prize-item">
+                    <span class="prize-label">Vagas</span>
+                    <span class="prize-value" id="prizeVagas">60</span>
+                </div>
+            </div>
+            <p class="prize-sub" id="prizePremioSub">
+                🏆 Prêmio estimado <strong>R$ 1 Bilhão</strong> (Mega da Virada 2026).<br>
+                Dividido <strong>proporcionalmente</strong> pelas cotas pagas.
+            </p>
         </div>
 
         <!-- Countdown -->
@@ -723,7 +914,19 @@
                 <span class="legend-item"><span class="legend-dot" style="background: var(--partial)"></span> <span id="labelPartial">0 Parciais</span></span>
                 <span class="legend-item"><span class="legend-dot" style="background: var(--pending)"></span> <span id="labelPending">0 Pendentes</span></span>
             </div>
-            <div class="progress-money" id="totalRaised">ARRECADADO: R$ 0,00</div>
+            <div class="progress-money" id="totalRaised">POTE: R$ 0,00</div>
+        </div>
+
+        <!-- Regulamento resumido -->
+        <div class="rules-card">
+            <h4><i data-lucide="info" style="width: 14px; height: 14px;"></i> Como funciona o prêmio</h4>
+            <p>🍀 <strong>Mega da Virada:</strong> o prêmio principal <strong>NÃO ACUMULA</strong>. Se ninguém acertar as 6 dezenas, vai para quem acertar 5 (Quina).</p>
+            <p>⏱️ <strong>Pagamento até:</strong> <span style="color: var(--partial); font-weight: 800;">10/12/2026</span> — reservas não pagas são liberadas.</p>
+            <ul class="rules-list">
+                <li>Todo o valor arrecadado vira jogos oficiais da Caixa.</li>
+                <li>O prêmio é dividido de acordo com a quantidade de cotas <strong>pagas</strong> de cada um.</li>
+                <li>Comprovantes dos jogos são enviados no grupo antes do sorteio.</li>
+            </ul>
         </div>
 
         <!-- Tabs -->
@@ -736,11 +939,17 @@
 
         <!-- View Cadastro -->
         <div id="view-cadastro" style="animation: fadeIn 0.4s ease;">
-            <input type="text" id="nome" class="form-input" placeholder="NOME COMPLETO">
-            <input type="tel" id="telefone" class="form-input" placeholder="WHATSAPP (DDD)">
+            <div class="form-group">
+                <label for="nome">👤 Nome completo</label>
+                <input type="text" id="nome" class="form-input" placeholder="Digite seu nome completo" autocomplete="name">
+            </div>
+            <div class="form-group">
+                <label for="telefone">📱 WhatsApp (com DDD)</label>
+                <input type="tel" id="telefone" class="form-input" placeholder="Ex: 99 99102-6112" inputmode="numeric" autocomplete="tel">
+            </div>
             
             <!-- Botão de palpite interativo de cadastro opcional -->
-            <button id="btnPrePalpite" class="btn-checkout secondary" style="margin-top: 5px; margin-bottom: 12px;" onclick="abrirModalPalpite('register')" disabled>
+            <button id="btnPrePalpite" class="btn-checkout secondary" style="margin-top: 4px; margin-bottom: 12px;" onclick="abrirModalPalpite('register')" disabled>
                 <i data-lucide="plus-circle" style="width:16px;height:16px;"></i> ADICIONAR PALPITE (OPCIONAL)
             </button>
             <div id="prePalpiteDisplay" style="display:none; text-align:center; font-size:0.8rem; color:var(--primary); font-weight:800; margin-bottom:12px; letter-spacing:1px; background: rgba(0,255,136,0.05); padding: 12px; border-radius:14px; border: 1px solid var(--border-active);"></div>
@@ -753,7 +962,10 @@
 
         <!-- View Consulta -->
         <div id="view-consulta" style="display:none; animation: fadeIn 0.4s ease;">
-            <input type="tel" id="search-phone" class="form-input" placeholder="DIGITE O SEU TELEFONE...">
+            <div class="form-group">
+                <label for="search-phone">📱 Digite seu WhatsApp</label>
+                <input type="tel" id="search-phone" class="form-input" placeholder="Ex: 99 99102-6112" inputmode="numeric">
+            </div>
             <button class="btn-main" onclick="consultarParticipante()">
                 <i data-lucide="search"></i>
                 VERIFICAR ESTADO
@@ -823,23 +1035,29 @@
     </div>
 </div>
 
-<!-- Modal Selecionar Palpite -->
+<!-- Modal Selecionar Palpite - Tela Cheia -->
 <div class="modal-overlay" id="modalSelecionarPalpite">
-    <div class="modal-box" style="max-width: 400px; padding: 22px;">
-        <h3 style="color: var(--primary); font-weight: 800; font-size: 1.15rem; margin-bottom: 4px;">🍀 Palpite Interativo</h3>
-        <p id="palpiteDescription" style="font-size: 0.72rem; color: var(--text-dim); margin-bottom: 16px;">Selecione exatamente 6 dezenas para o seu jogo.</p>
+    <div class="modal-box">
+        <div class="palpite-header">
+            <div>
+                <h3 style="color: var(--primary); font-weight: 800; font-size: 1.2rem; margin-bottom: 2px;">🍀 Palpite Interativo</h3>
+                <p id="palpiteDescription" style="font-size: 0.72rem; color: var(--text-dim); margin: 0;">Selecione exatamente 6 dezenas</p>
+            </div>
+            <button class="admin-btn" style="font-size: 0.8rem; padding: 8px 12px; border: 1px solid var(--border); border-radius: 10px;" onclick="fecharModal('modalSelecionarPalpite')">✕</button>
+        </div>
         
-        <div id="palpiteGrid" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-bottom: 18px; max-height: 240px; overflow-y: auto; padding-right: 2px;">
+        <div class="palpite-selected-bar">
+            <span style="font-size: 0.7rem; color: var(--text-dim); font-weight: 700;">Escolhidos:</span>
+            <span id="selectedNumbersDisplay" style="color: var(--primary); font-weight: 800; font-size: 0.9rem; letter-spacing: 1.2px; text-align: right; line-height: 1.3;">NENHUM</span>
+        </div>
+        
+        <div id="palpiteGrid">
             <!-- Gerado via JS de 01 a 60 -->
         </div>
         
-        <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 10px 14px; border-radius: 12px; margin-bottom: 16px; border: 1px solid var(--border);">
-            <span style="font-size: 0.72rem; color: var(--text-dim);">Escolhidos:</span>
-            <span id="selectedNumbersDisplay" style="color: var(--primary); font-weight: 800; font-size: 0.85rem; letter-spacing: 1px;">NENHUM</span>
-        </div>
-        
-        <button class="btn-main" id="btnSalvarPalpite" disabled style="padding: 12px; font-size: 0.85rem;">CONFIRMAR PALPITE</button>
-        <button class="admin-btn" style="width:100%; margin-top:12px; font-size: 0.75rem;" onclick="fecharModal('modalSelecionarPalpite')">CANCELAR</button>
+        <button class="btn-main" id="btnSalvarPalpite" disabled style="padding: 15px; font-size: 0.95rem; margin-top: 8px; flex-shrink: 0;">
+            CONFIRMAR PALPITE
+        </button>
     </div>
 </div>
 
@@ -858,7 +1076,7 @@
             <input type="number" id="cfg-limite" class="form-input" placeholder="Limite de Pessoas">
         </div>
 
-        <div style="text-align: left; margin-bottom: 20px;">
+        <div style="text-align: left; margin-bottom: 12px;">
             <label style="font-size:0.7rem; color:var(--text-dim); font-weight:800; margin-bottom:6px; display: block; text-transform: uppercase;">Dezenas por palpite (Mega-Sena)</label>
             <select id="cfg-dezenas" class="form-input">
                 <option value="6">6 Dezenas (Padrão)</option>
@@ -872,6 +1090,17 @@
                 <option value="14">14 Dezenas</option>
                 <option value="15">15 Dezenas</option>
             </select>
+        </div>
+
+        <div style="text-align: left; margin-bottom: 12px;">
+            <label style="font-size:0.7rem; color:var(--primary); font-weight:800; margin-bottom:6px; display: block; text-transform: uppercase;">🏆 Prêmio Estimado (texto)</label>
+            <input type="text" id="cfg-premio" class="form-input" placeholder="Ex: R$ 1 Bilhão">
+        </div>
+
+        <div style="text-align: left; margin-bottom: 20px;">
+            <label style="font-size:0.7rem; color:var(--primary); font-weight:800; margin-bottom:6px; display: block; text-transform: uppercase;">🖼️ URL da Imagem de Fundo</label>
+            <input type="url" id="cfg-bg-url" class="form-input" placeholder="https://... ou nome-do-arquivo.jpg" style="font-size:0.75rem; text-align:left;">
+            <p style="font-size:0.62rem; color:var(--text-dim); margin-top:6px; line-height:1.35;">Cole o link da imagem (Google Drive, Imgur, etc.) ou o nome do arquivo na mesma pasta do site.</p>
         </div>
 
         <button class="btn-main" onclick="salvarConfig()" style="margin-bottom: 12px; font-size:0.85rem;">💾 SALVAR CONFIGURAÇÕES</button>
@@ -977,7 +1206,9 @@ const CONFIG = {
     SENHA: '6261', 
     INFINITE_TAG: "lauriuche", 
     NOME_PRODUTO: "Cota Bolão Camino",
-    DEZENAS: 6 
+    DEZENAS: 6,
+    PREMIO: "R$ 1 Bilhão",
+    BG_URL: "mega-virada-bg-final.jpg"
 };
 
 let parts = [], qty = 1, acaoAdmin = null, sels = [];
@@ -987,8 +1218,8 @@ let tempPalpites = [];
 let currentPalpiteContext = 'edit'; 
 let deferredPrompt; 
 let activeWorker;
-let adminTapCount = 0;
-let adminTapTimeout;
+let longPressTimer = null;
+let longPressTriggered = false;
 
 window.sels = sels;
 
@@ -1067,21 +1298,47 @@ window.addEventListener('appinstalled', () => {
     if (pwaInstallBtn) pwaInstallBtn.style.display = 'none';
 });
 
-// --- ATIVADOR DE MODO ADMIN DISCRETO ---
-window.triggerAdminTap = () => {
-    adminTapCount++;
-    clearTimeout(adminTapTimeout);
-    
-    if (adminTapCount === 3) {
-        adminTapCount = 0;
-        askAdmin('unlock');
-        return;
-    }
-    
-    adminTapTimeout = setTimeout(() => {
-        adminTapCount = 0;
-    }, 1000);
-};
+// --- ATIVADOR DE CONFIGURAÇÕES: pressão longa de 2 segundos na logo ---
+(function initLogoLongPress() {
+    const logoEl = document.getElementById('logoAdminTrigger');
+    if (!logoEl) return;
+
+    const startPress = (e) => {
+        // Evita seleção de texto / zoom no mobile
+        if (e.cancelable) e.preventDefault();
+        longPressTriggered = false;
+        clearTimeout(longPressTimer);
+
+        longPressTimer = setTimeout(() => {
+            longPressTriggered = true;
+            // Feedback visual sutil
+            logoEl.style.transform = 'scale(0.92)';
+            setTimeout(() => { logoEl.style.transform = ''; }, 180);
+
+            // Abre PIN → Configurações
+            askAdmin('config');
+        }, 2000); // 2 segundos
+    };
+
+    const endPress = () => {
+        clearTimeout(longPressTimer);
+        longPressTimer = null;
+    };
+
+    // Touch (mobile)
+    logoEl.addEventListener('touchstart', startPress, { passive: false });
+    logoEl.addEventListener('touchend', endPress);
+    logoEl.addEventListener('touchcancel', endPress);
+    logoEl.addEventListener('touchmove', endPress);
+
+    // Mouse (desktop)
+    logoEl.addEventListener('mousedown', startPress);
+    logoEl.addEventListener('mouseup', endPress);
+    logoEl.addEventListener('mouseleave', endPress);
+
+    // Impede o menu de contexto no long-press
+    logoEl.addEventListener('contextmenu', (e) => e.preventDefault());
+})();
 
 // Escuta de alteração dos inputs de cadastro para habilitar/desabilitar botão de palpite
 const nomeInput = document.getElementById('nome');
@@ -1099,7 +1356,7 @@ function verificarInputsCadastro() {
 nomeInput.addEventListener('input', verificarInputsCadastro);
 telefoneInput.addEventListener('input', verificarInputsCadastro);
 
-// Sincronização em tempo real das configurações da Nuvem com Array JSON
+// Sincronização em tempo real das configurações da Nuvem
 function iniciarSincronizacaoConfig() {
     onValue(configRef, (snapshot) => {
         if(snapshot.exists()) {
@@ -1108,25 +1365,50 @@ function iniciarSincronizacaoConfig() {
                 CONFIG.LIMITE = parseInt(data[0]) || 60;
                 CONFIG.VALOR = parseFloat(data[1]) || 1;
                 if (data[2]) CONFIG.PIX = data[2];
-                CONFIG.DEZENAS = parseInt(data[3]) || 6; 
+                CONFIG.DEZENAS = parseInt(data[3]) || 6;
+                if (data[4]) CONFIG.PREMIO = data[4];
             } else if (typeof data === 'object') {
                 if(data.limite !== undefined) CONFIG.LIMITE = parseInt(data.limite);
                 if(data.valorCota !== undefined) CONFIG.VALOR = parseFloat(data.valorCota);
                 if(data.pix !== undefined) CONFIG.PIX = data.pix;
                 if(data.dezenas !== undefined) CONFIG.DEZENAS = parseInt(data.dezenas);
+                if(data.premio !== undefined) CONFIG.PREMIO = data.premio;
+                if(data.bgUrl !== undefined) CONFIG.BG_URL = data.bgUrl;
             }
 
             updateUIConfig();
             updateData();
         } else { 
-            set(configRef, [CONFIG.LIMITE, CONFIG.VALOR, CONFIG.PIX, CONFIG.DEZENAS]).catch(() => {});
+            set(configRef, {
+                limite: CONFIG.LIMITE,
+                valorCota: CONFIG.VALOR,
+                pix: CONFIG.PIX,
+                dezenas: CONFIG.DEZENAS,
+                premio: CONFIG.PREMIO,
+                bgUrl: CONFIG.BG_URL
+            }).catch(() => {});
         }
     });
 }
 
 function updateUIConfig() {
-    const info = document.getElementById('dynamicInfo');
-    if(info) info.innerText = `💰 Cota: R$ ${CONFIG.VALOR.toFixed(2)} • 👥 Limite: ${CONFIG.LIMITE}`;
+    const cotaEl = document.getElementById('prizeCotaValor');
+    const vagasEl = document.getElementById('prizeVagas');
+    const premioEl = document.getElementById('prizePremioValor');
+    const premioSub = document.getElementById('prizePremioSub');
+    const bgEl = document.getElementById('bgMega');
+
+    if (cotaEl) cotaEl.innerText = `R$ ${CONFIG.VALOR.toFixed(2).replace('.', ',')}`;
+    if (premioEl) premioEl.innerText = CONFIG.PREMIO || 'R$ 1 Bilhão';
+    if (premioSub) premioSub.innerHTML = `🏆 Prêmio estimado <strong>${CONFIG.PREMIO || 'R$ 1 Bilhão'}</strong> (Mega da Virada 2026).<br>Dividido <strong>proporcionalmente</strong> pelas cotas pagas.`;
+    if (bgEl && CONFIG.BG_URL) bgEl.style.backgroundImage = `url('${CONFIG.BG_URL}')`;
+
+    if (vagasEl) {
+        const ocupadas = typeof parts !== 'undefined' ? parts.length : 0;
+        const restantes = Math.max(0, CONFIG.LIMITE - ocupadas);
+        vagasEl.innerText = restantes;
+        vagasEl.style.color = restantes <= 5 ? 'var(--partial)' : '#fff';
+    }
 }
 
 window.switchTab = (tab, btn) => {
@@ -1181,12 +1463,19 @@ function checkAdminPass() {
     const pass = document.getElementById('senhaDisplay').innerText;
     if(pass === CONFIG.SENHA) {
         fecharModal('modalSenha');
-        if(acaoAdmin === 'config') abrirConfig();
+        if(acaoAdmin === 'config') {
+            // Long-press na logo → abre configurações e ativa modo admin
+            document.body.classList.add('admin-mode');
+            abrirConfig();
+            showToast("🔓 CONFIGURAÇÕES ABERTAS");
+            renderList();
+        }
         if(acaoAdmin === 'export') exportarCSV();
         if(acaoAdmin === 'edit') abrirBaixaManual();
         if(acaoAdmin === 'unlock') {
             document.body.classList.toggle('admin-mode');
             showToast(document.body.classList.contains('admin-mode') ? "🔓 MODO ADMIN ATIVO" : "🔒 MODO ADMIN DESATIVADO");
+            renderList();
         }
     } else {
         showToast("❌ PIN Incorreto!");
@@ -1425,10 +1714,18 @@ async function updateData() {
         const lpa = document.getElementById('labelPartial');
         const lpen = document.getElementById('labelPending');
         const tr = document.getElementById('totalRaised');
+        const poteEl = document.getElementById('prizePote');
+
         if(lp) lp.innerText = `${paidCount} Pagos`;
         if(lpa) lpa.innerText = `${partialCount} Parciais`;
         if(lpen) lpen.innerText = `${parts.length - paidCount - partialCount} Pendentes`;
-        if(tr) tr.innerText = `ARRECADADO: R$ ${totalRaised.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
+
+        const potFormatted = totalRaised.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        if(tr) tr.innerText = `POTE: R$ ${potFormatted}`;
+        if(poteEl) poteEl.innerText = `R$ ${potFormatted}`;
+
+        // Atualiza vagas restantes no card de prêmio
+        updateUIConfig();
     } catch (e) {
         console.error(e);
         showToast("⚠️ Falha de sincronização de dados do Firebase.");
@@ -1574,7 +1871,10 @@ window.abrirModalPalpite = (context = 'edit') => {
     
     document.getElementById('palpiteDescription').innerText = `Selecione exatamente ${CONFIG.DEZENAS} dezenas para o seu jogo.`;
     document.getElementById('selectedNumbersDisplay').innerText = "NENHUM";
-    document.getElementById('btnSalvarPalpite').disabled = true;
+    
+    const saveBtn = document.getElementById('btnSalvarPalpite');
+    saveBtn.disabled = true;
+    saveBtn.innerHTML = `SELECIONE ${CONFIG.DEZENAS} DEZENAS`;
     
     const grid = document.getElementById('palpiteGrid');
     grid.innerHTML = '';
@@ -1611,12 +1911,21 @@ function toggleDezena(dezena, btn) {
     const saveBtn = document.getElementById('btnSalvarPalpite');
     
     if (chosenDezenas.length > 0) {
-        disp.innerText = chosenDezenas.join(' • ');
+        disp.innerHTML = chosenDezenas.map(n => 
+            `<span class="guess-ball" style="width:28px;height:28px;font-size:0.75rem;display:inline-flex;">${n}</span>`
+        ).join('');
     } else {
         disp.innerText = "NENHUM";
     }
     
     saveBtn.disabled = chosenDezenas.length !== CONFIG.DEZENAS;
+    
+    // Atualiza o texto do botão com contagem
+    if (chosenDezenas.length === CONFIG.DEZENAS) {
+        saveBtn.innerHTML = `✅ CONFIRMAR ${CONFIG.DEZENAS} DEZENAS`;
+    } else {
+        saveBtn.innerHTML = `SELECIONE ${CONFIG.DEZENAS - chosenDezenas.length} AINDA`;
+    }
 }
 
 document.getElementById('btnSalvarPalpite').onclick = async () => {
@@ -1731,9 +2040,13 @@ function abrirConfig() {
     const val = document.getElementById('cfg-valor');
     const lim = document.getElementById('cfg-limite');
     const dez = document.getElementById('cfg-dezenas');
+    const prem = document.getElementById('cfg-premio');
+    const bgUrl = document.getElementById('cfg-bg-url');
     if(val) val.value = CONFIG.VALOR;
     if(lim) lim.value = CONFIG.LIMITE;
     if(dez) dez.value = CONFIG.DEZENAS;
+    if(prem) prem.value = CONFIG.PREMIO || 'R$ 1 Bilhão';
+    if(bgUrl) bgUrl.value = CONFIG.BG_URL || 'mega-virada-bg-final.jpg';
 
     const btnAdmin = document.getElementById('cfgBtnModoAdmin');
     if (btnAdmin) {
@@ -1747,10 +2060,22 @@ window.salvarConfig = async () => {
     const v = parseFloat(document.getElementById('cfg-valor').value);
     const l = parseInt(document.getElementById('cfg-limite').value);
     const d = parseInt(document.getElementById('cfg-dezenas').value) || 6;
+    const premio = (document.getElementById('cfg-premio')?.value || 'R$ 1 Bilhão').trim();
+    const bgUrl = (document.getElementById('cfg-bg-url')?.value || 'mega-virada-bg-final.jpg').trim();
 
     try {
-        await set(configRef, [l, v, CONFIG.PIX, d]);
+        CONFIG.PREMIO = premio;
+        CONFIG.BG_URL = bgUrl;
+        await set(configRef, {
+            limite: l,
+            valorCota: v,
+            pix: CONFIG.PIX,
+            dezenas: d,
+            premio: premio,
+            bgUrl: bgUrl
+        });
         fecharModal('modalConfig');
+        updateUIConfig();
         showToast("✅ CONFIGURAÇÕES SALVAS!");
     } catch(e) {
         console.error(e);
@@ -1925,36 +2250,107 @@ setInterval(()=>{
     if(se) se.innerText = Math.floor((d%6e4)/1e3).toString().padStart(2,'0');
 },1000);
 
-// Validador de Redirecionamento Pós-Pagamento InfinitePay
+// Validador de Redirecionamento Pós-Pagamento InfinitePay + Modal de Sucesso
 const params = new URLSearchParams(window.location.search);
 if(params.get('paid_key')) {
     const pk = params.get('paid_key');
     const paramAmount = params.get('amount');
-    get(ref(db, `bolao/2026/participantes/${pk}`)).then(s => {
-        if(s.exists()){
-            const p = s.val();
-            const qt = p.cotas || 1;
 
-            const amountPaid = paramAmount ? (parseInt(paramAmount) / 100) : (qt * CONFIG.VALOR);
-            const currentPaid = p.valor !== undefined ? p.valor : (p.valorPago || 0);
-            const newTotal = currentPaid + amountPaid;
-            const totalDevido = qt * CONFIG.VALOR;
-            const status = newTotal >= totalDevido ? "PAGO" : (newTotal > 0 ? "PARCIAL" : "PENDENTE");
+    // Remove params imediatamente para evitar reprocessamento
+    window.history.replaceState({}, document.title, window.location.pathname);
 
-            update(ref(db, `bolao/2026/participantes/${pk}`), { 
-                valor: Math.round(newTotal * 100) / 100,
+    get(ref(db, `bolao/2026/participantes/${pk}`)).then(async (s) => {
+        if(!s.exists()) return;
+
+        const p = s.val();
+        const qt = p.cotas || 1;
+        const amountPaid = paramAmount ? (parseInt(paramAmount) / 100) : (qt * CONFIG.VALOR);
+        const currentPaid = p.valor !== undefined ? p.valor : (p.valorPago || 0);
+        const newTotal = Math.round((currentPaid + amountPaid) * 100) / 100;
+        const totalDevido = qt * CONFIG.VALOR;
+        const status = newTotal >= totalDevido ? "PAGO" : (newTotal > 0 ? "PARCIAL" : "PENDENTE");
+        const isFullPaid = status === "PAGO";
+
+        try {
+            await update(ref(db, `bolao/2026/participantes/${pk}`), { 
+                valor: newTotal,
                 status_compra: status
             });
-            window.history.replaceState({}, document.title, window.location.pathname);
-            showToast("✅ PAGAMENTO CONFIRMADO!");
+
+            // Atualiza dados e UI imediatamente
+            await updateData();
+            if (document.getElementById('listaContainer')?.style.display !== 'none') {
+                renderList();
+            }
+
+            // Confetti mais intenso
             confetti({
-                particleCount: 150,
-                spread: 80,
-                origin: { y: 0.6 },
-                colors: ['#00ff88', '#ffffff', '#10b981']
+                particleCount: 180,
+                spread: 90,
+                origin: { y: 0.55 },
+                colors: ['#00ff88', '#ffffff', '#10b981', '#34d399']
             });
+            setTimeout(() => {
+                confetti({
+                    particleCount: 80,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0, y: 0.7 },
+                    colors: ['#00ff88', '#ffffff']
+                });
+                confetti({
+                    particleCount: 80,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1, y: 0.7 },
+                    colors: ['#00ff88', '#ffffff']
+                });
+            }, 250);
+
+            // Modal de sucesso dedicado
+            showPaymentSuccessModal(p.nome || 'Participante', newTotal, status, isFullPaid, amountPaid);
+        } catch (err) {
+            console.error('Erro ao confirmar pagamento:', err);
+            showToast("❌ Erro ao registrar pagamento. Contate o admin.");
         }
     });
+}
+
+function showPaymentSuccessModal(nome, valorTotal, status, isFullPaid, amountPaid) {
+    // Remove modal anterior se existir
+    const old = document.getElementById('modalPagamentoSucesso');
+    if (old) old.remove();
+
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.id = 'modalPagamentoSucesso';
+    modal.style.display = 'flex';
+    modal.innerHTML = `
+        <div class="modal-box" style="text-align:center; max-width:360px;">
+            <div style="font-size:3.2rem; margin-bottom:8px;">${isFullPaid ? '🎉' : '✅'}</div>
+            <h2 style="color:var(--primary); font-weight:800; font-size:1.35rem; margin-bottom:6px;">
+                ${isFullPaid ? 'PAGAMENTO CONFIRMADO!' : 'PAGAMENTO REGISTRADO!'}
+            </h2>
+            <p style="color:var(--text-dim); font-size:0.82rem; margin-bottom:16px; line-height:1.45;">
+                Olá, <b style="color:#fff">${nome}</b>!<br>
+                Recebemos <b style="color:var(--primary)">R$ ${amountPaid.toFixed(2).replace('.', ',')}</b>
+            </p>
+            <div style="background:rgba(0,255,136,0.06); border:1px solid var(--border-active); border-radius:16px; padding:14px; margin-bottom:18px;">
+                <div style="font-size:0.7rem; color:var(--text-dim); margin-bottom:4px;">STATUS ATUAL</div>
+                <div style="font-size:1.05rem; font-weight:800; color:${isFullPaid ? 'var(--paid)' : 'var(--partial)'}">
+                    ${isFullPaid ? '🟢 PAGO TOTAL' : '🟡 PARCIAL'}
+                </div>
+                <div style="font-size:0.78rem; color:var(--text-dim); margin-top:6px;">
+                    Total pago: <b style="color:#fff">R$ ${valorTotal.toFixed(2).replace('.', ',')}</b>
+                </div>
+            </div>
+            <button class="btn-main" onclick="fecharModal('modalPagamentoSucesso'); document.getElementById('modalPagamentoSucesso')?.remove();" style="font-size:0.9rem;">
+                CONTINUAR
+            </button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    showToast(isFullPaid ? "✅ PAGAMENTO TOTAL CONFIRMADO!" : "✅ PAGAMENTO PARCIAL REGISTRADO!");
 }
 
 // Inicializações do Aplicativo com Fluxo de Autenticação Primeiro
