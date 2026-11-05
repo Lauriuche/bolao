@@ -918,15 +918,17 @@
         </div>
 
         <!-- Regulamento resumido -->
-        <div class="rules-card">
-            <h4><i data-lucide="info" style="width: 14px; height: 14px;"></i> Como funciona o prêmio</h4>
-            <p>🍀 <strong>Mega da Virada:</strong> o prêmio principal <strong>NÃO ACUMULA</strong>. Se ninguém acertar as 6 dezenas, vai para quem acertar 5 (Quina).</p>
-            <p>⏱️ <strong>Pagamento até:</strong> <span style="color: var(--partial); font-weight: 800;">10/12/2026</span> — reservas não pagas são liberadas.</p>
-            <ul class="rules-list">
-                <li>Todo o valor arrecadado vira jogos oficiais da Caixa.</li>
-                <li>O prêmio é dividido de acordo com a quantidade de cotas <strong>pagas</strong> de cada um.</li>
-                <li>Comprovantes dos jogos são enviados no grupo antes do sorteio.</li>
-            </ul>
+        <div class="rules-card" id="rulesCard">
+            <h4><i data-lucide="info" style="width: 14px; height: 14px;"></i> Informações &amp; Regulamento</h4>
+            <div id="rulesContent">
+                <p>🍀 <strong>Mega da Virada:</strong> o prêmio principal <strong>NÃO ACUMULA</strong>. Se ninguém acertar as 6 dezenas, vai para quem acertar 5 (Quina).</p>
+                <p>⏱️ <strong>Pagamento até:</strong> <span id="rulesDataPagamento" style="color: var(--partial); font-weight: 800;">10/12/2026</span> — reservas não pagas são liberadas.</p>
+                <ul class="rules-list" id="rulesList">
+                    <li>Todo o valor arrecadado vira jogos oficiais da Caixa.</li>
+                    <li>O prêmio é dividido de acordo com a quantidade de cotas <strong>pagas</strong> de cada um.</li>
+                    <li>Comprovantes dos jogos são enviados no grupo antes do sorteio.</li>
+                </ul>
+            </div>
         </div>
 
         <!-- Tabs -->
@@ -1063,23 +1065,26 @@
 
 <!-- Modal Configurações -->
 <div class="modal-overlay" id="modalConfig">
-    <div class="modal-box" style="max-width: 360px;">
-        <h3 style="margin-bottom:20px; color: var(--primary); font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; font-size:1.2rem;">⚙️ CONFIGURAÇÕES</h3>
+    <div class="modal-box" style="max-width: 380px; max-height: 92vh; overflow-y: auto; text-align: left;">
+        <h3 style="margin-bottom:16px; color: var(--primary); font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; font-size:1.15rem; text-align:center;">⚙️ CONFIGURAÇÕES</h3>
 
-        <div style="text-align: left; margin-bottom: 12px;">
-            <label style="font-size:0.7rem; color:var(--text-dim); font-weight:800; margin-bottom:6px; display: block; text-transform: uppercase;">Valor da Cota (R$)</label>
-            <input type="number" id="cfg-valor" class="form-input" placeholder="Valor da Cota" step="0.01">
+        <!-- Seção: Valores -->
+        <p style="font-size:0.65rem; color:var(--primary); font-weight:800; letter-spacing:1px; margin-bottom:10px; text-transform:uppercase;">💰 Valores &amp; Limites</p>
+
+        <div style="margin-bottom: 12px;">
+            <label style="font-size:0.68rem; color:var(--text-dim); font-weight:800; margin-bottom:5px; display: block; text-transform: uppercase;">Valor da Cota (R$)</label>
+            <input type="number" id="cfg-valor" class="form-input" placeholder="1.00" step="0.01" min="0.01">
         </div>
 
-        <div style="text-align: left; margin-bottom: 12px;">
-            <label style="font-size:0.7rem; color:var(--text-dim); font-weight:800; margin-bottom:6px; display: block; text-transform: uppercase;">Limite de Cotas</label>
-            <input type="number" id="cfg-limite" class="form-input" placeholder="Limite de Pessoas">
+        <div style="margin-bottom: 12px;">
+            <label style="font-size:0.68rem; color:var(--text-dim); font-weight:800; margin-bottom:5px; display: block; text-transform: uppercase;">Limite de Cotas</label>
+            <input type="number" id="cfg-limite" class="form-input" placeholder="60" min="1">
         </div>
 
-        <div style="text-align: left; margin-bottom: 12px;">
-            <label style="font-size:0.7rem; color:var(--text-dim); font-weight:800; margin-bottom:6px; display: block; text-transform: uppercase;">Dezenas por palpite (Mega-Sena)</label>
+        <div style="margin-bottom: 12px;">
+            <label style="font-size:0.68rem; color:var(--text-dim); font-weight:800; margin-bottom:5px; display: block; text-transform: uppercase;">Dezenas por palpite</label>
             <select id="cfg-dezenas" class="form-input">
-                <option value="6">6 Dezenas (Padrão)</option>
+                <option value="6">6 Dezenas (Padrão Mega)</option>
                 <option value="7">7 Dezenas</option>
                 <option value="8">8 Dezenas</option>
                 <option value="9">9 Dezenas</option>
@@ -1092,25 +1097,87 @@
             </select>
         </div>
 
-        <div style="text-align: left; margin-bottom: 12px;">
-            <label style="font-size:0.7rem; color:var(--primary); font-weight:800; margin-bottom:6px; display: block; text-transform: uppercase;">🏆 Prêmio Estimado (texto)</label>
+        <div style="margin-bottom: 14px;">
+            <label style="font-size:0.68rem; color:var(--text-dim); font-weight:800; margin-bottom:5px; display: block; text-transform: uppercase;">🏆 Prêmio Estimado (texto)</label>
             <input type="text" id="cfg-premio" class="form-input" placeholder="Ex: R$ 1 Bilhão">
         </div>
 
-        <div style="text-align: left; margin-bottom: 20px;">
-            <label style="font-size:0.7rem; color:var(--primary); font-weight:800; margin-bottom:6px; display: block; text-transform: uppercase;">🖼️ URL da Imagem de Fundo</label>
-            <input type="url" id="cfg-bg-url" class="form-input" placeholder="https://... ou nome-do-arquivo.jpg" style="font-size:0.75rem; text-align:left;">
-            <p style="font-size:0.62rem; color:var(--text-dim); margin-top:6px; line-height:1.35;">Cole o link da imagem (Google Drive, Imgur, etc.) ou o nome do arquivo na mesma pasta do site.</p>
+        <!-- Seção: Pagamento -->
+        <p style="font-size:0.65rem; color:var(--primary); font-weight:800; letter-spacing:1px; margin:14px 0 10px; text-transform:uppercase; border-top:1px solid var(--border); padding-top:12px;">💳 Pagamento</p>
+
+        <div style="margin-bottom: 12px;">
+            <label style="font-size:0.68rem; color:var(--text-dim); font-weight:800; margin-bottom:5px; display: block; text-transform: uppercase;">Chave PIX / WhatsApp</label>
+            <input type="text" id="cfg-pix" class="form-input" placeholder="(99) 9 9102-6112" style="text-align:left; font-size:0.85rem;">
+        </div>
+
+        <div style="margin-bottom: 14px;">
+            <label style="font-size:0.68rem; color:var(--text-dim); font-weight:800; margin-bottom:5px; display: block; text-transform: uppercase;">InfinitePay Handle (tag)</label>
+            <input type="text" id="cfg-infinite" class="form-input" placeholder="lauriuche" style="text-align:left; font-size:0.85rem;">
+            <p style="font-size:0.6rem; color:var(--text-dim); margin-top:4px;">Sem o @. Usado no checkout automático.</p>
+        </div>
+
+        <!-- Seção: Visual / Datas -->
+        <p style="font-size:0.65rem; color:var(--primary); font-weight:800; letter-spacing:1px; margin:14px 0 10px; text-transform:uppercase; border-top:1px solid var(--border); padding-top:12px;">🎨 Visual &amp; Datas</p>
+
+        <div style="margin-bottom: 12px;">
+            <label style="font-size:0.68rem; color:var(--text-dim); font-weight:800; margin-bottom:5px; display: block; text-transform: uppercase;">🖼️ URL da Imagem de Fundo</label>
+            <input type="url" id="cfg-bg-url" class="form-input" placeholder="https://... ou arquivo.jpg" style="font-size:0.75rem; text-align:left;">
+        </div>
+
+        <div style="margin-bottom: 12px;">
+            <label style="font-size:0.68rem; color:var(--text-dim); font-weight:800; margin-bottom:5px; display: block; text-transform: uppercase;">Data de Encerramento</label>
+            <input type="date" id="cfg-data-fim" class="form-input" style="text-align:left; font-size:0.85rem;">
+            <p style="font-size:0.6rem; color:var(--text-dim); margin-top:4px;">Usada no countdown e no texto de encerramento.</p>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+            <label style="font-size:0.68rem; color:var(--text-dim); font-weight:800; margin-bottom:5px; display: block; text-transform: uppercase;">Limite de Pagamento (reservas)</label>
+            <input type="date" id="cfg-data-pagamento" class="form-input" style="text-align:left; font-size:0.85rem;">
+            <p style="font-size:0.6rem; color:var(--text-dim); margin-top:4px;">Após esta data, reservas não pagas podem ser liberadas.</p>
+        </div>
+
+        <!-- Seção: Regras -->
+        <p style="font-size:0.65rem; color:var(--primary); font-weight:800; letter-spacing:1px; margin:14px 0 10px; text-transform:uppercase; border-top:1px solid var(--border); padding-top:12px;">📋 Regras &amp; Cadastro</p>
+
+        <div style="margin-bottom: 12px; display:flex; align-items:center; justify-content:space-between; gap:10px; background:rgba(0,0,0,0.25); padding:12px 14px; border-radius:12px; border:1px solid var(--border);">
+            <div>
+                <div style="font-size:0.72rem; font-weight:800; color:#fff;">Exigir palpite no cadastro</div>
+                <div style="font-size:0.6rem; color:var(--text-dim); margin-top:2px;">Participante deve escolher dezenas para reservar</div>
+            </div>
+            <label style="position:relative; display:inline-block; width:46px; height:26px; flex-shrink:0;">
+                <input type="checkbox" id="cfg-exigir-palpite" style="opacity:0;width:0;height:0;">
+                <span id="toggleExigirPalpite" style="position:absolute;cursor:pointer;inset:0;background:#333;border-radius:26px;transition:.25s;"></span>
+            </label>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+            <label style="font-size:0.68rem; color:var(--text-dim); font-weight:800; margin-bottom:5px; display: block; text-transform: uppercase;">Texto do regulamento (HTML simples)</label>
+            <textarea id="cfg-regulamento" class="form-input" rows="5" style="text-align:left; font-size:0.72rem; line-height:1.45; resize:vertical; min-height:90px;" placeholder="Deixe vazio para usar o texto padrão..."></textarea>
+            <p style="font-size:0.58rem; color:var(--text-dim); margin-top:4px;">Pode usar &lt;strong&gt;, &lt;br&gt;. A data de pagamento é atualizada automaticamente.</p>
+        </div>
+
+        <!-- Seção: Segurança -->
+        <p style="font-size:0.65rem; color:var(--primary); font-weight:800; letter-spacing:1px; margin:14px 0 10px; text-transform:uppercase; border-top:1px solid var(--border); padding-top:12px;">🔐 Segurança</p>
+
+        <div style="margin-bottom: 16px;">
+            <label style="font-size:0.68rem; color:var(--text-dim); font-weight:800; margin-bottom:5px; display: block; text-transform: uppercase;">Novo PIN Admin (4 dígitos)</label>
+            <input type="password" id="cfg-pin" class="form-input" placeholder="Deixe em branco para manter" maxlength="4" inputmode="numeric" pattern="[0-9]*" style="letter-spacing:6px; font-size:1.1rem;">
+            <p style="font-size:0.6rem; color:var(--text-dim); margin-top:4px;">Só preencha se quiser alterar o PIN atual.</p>
         </div>
 
         <button class="btn-main" onclick="salvarConfig()" style="margin-bottom: 12px; font-size:0.85rem;">💾 SALVAR CONFIGURAÇÕES</button>
 
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:15px; padding-top:15px; border-top:1px solid var(--border);">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:8px; padding-top:12px; border-top:1px solid var(--border);">
             <button class="btn-checkout secondary" id="cfgBtnModoAdmin" style="margin-top: 0; padding: 10px; font-size: 0.7rem; border-radius: 12px;">🔓 MODO ADMIN</button>
             <button class="btn-checkout secondary" id="cfgBtnExportar" style="margin-top: 0; padding: 10px; font-size: 0.7rem; border-radius: 12px;">📥 EXPORTAR CSV</button>
         </div>
 
-        <button class="admin-btn" style="margin-top:20px; width:100%; border: 1px solid var(--border); padding: 10px; border-radius: 12px; font-size:0.75rem;" onclick="fecharModal('modalConfig')">FECHAR</button>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:8px;">
+            <button class="btn-checkout secondary" id="cfgBtnLiberarVencidos" style="margin-top: 0; padding: 10px; font-size: 0.65rem; border-radius: 12px; color:var(--partial); border-color:rgba(245,158,11,0.35);">🧹 LIBERAR VENCIDOS</button>
+            <button class="btn-checkout secondary" id="cfgBtnVerLogs" style="margin-top: 0; padding: 10px; font-size: 0.65rem; border-radius: 12px;">📜 VER LOGS</button>
+        </div>
+
+        <button class="admin-btn" style="margin-top:16px; width:100%; border: 1px solid var(--border); padding: 10px; border-radius: 12px; font-size:0.75rem;" onclick="fecharModal('modalConfig')">FECHAR</button>
     </div>
 </div>
 
@@ -1132,9 +1199,14 @@
 <!-- PIN Admin Keyboard Modal -->
 <div class="modal-overlay" id="modalSenha">
     <div class="modal-box" style="max-width:320px;">
-        <h3 style="margin-bottom:12px; font-size:1.1rem;">PIN ADMIN</h3>
-        <div id="senhaDisplay" style="font-size:1.8rem; letter-spacing:10px; height:45px; color:var(--primary); font-weight:800; display:flex; align-items:center; justify-content:center;"></div>
-        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:15px;">
+        <div style="width:48px;height:48px;border-radius:14px;background:rgba(0,255,136,0.12);border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+            <i data-lucide="lock" style="width:22px;height:22px;color:var(--primary);"></i>
+        </div>
+        <h3 style="margin-bottom:4px; font-size:1.15rem; color:#fff; font-weight:800;">Acesso Administrativo</h3>
+        <p style="font-size:0.72rem; color:var(--text-dim); margin-bottom:14px;">Digite o PIN de 4 dígitos</p>
+        <div id="senhaDisplay" style="font-size:1.9rem; letter-spacing:12px; height:48px; color:var(--primary); font-weight:800; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.35); border-radius:12px; border:1px solid var(--border); margin-bottom:4px;"></div>
+        <p id="senhaHint" style="font-size:0.65rem; color:var(--text-dim); margin-bottom:12px; min-height:16px;"></p>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px;">
             <button class="num-btn" onclick="digitar('1')">1</button><button class="num-btn" onclick="digitar('2')">2</button><button class="num-btn" onclick="digitar('3')">3</button>
             <button class="num-btn" onclick="digitar('4')">4</button><button class="num-btn" onclick="digitar('5')">5</button><button class="num-btn" onclick="digitar('6')">6</button>
             <button class="num-btn" onclick="digitar('7')">7</button><button class="num-btn" onclick="digitar('8')">8</button><button class="num-btn" onclick="digitar('9')">9</button>
@@ -1208,8 +1280,14 @@ const CONFIG = {
     NOME_PRODUTO: "Cota Bolão Camino",
     DEZENAS: 6,
     PREMIO: "R$ 1 Bilhão",
-    BG_URL: "mega-virada-bg-final.jpg"
+    BG_URL: "mega-virada-bg-final.jpg",
+    DATA_FIM: "2026-12-31",
+    DATA_PAGAMENTO: "2026-12-10",
+    EXIGIR_PALPITE: false,
+    REGULAMENTO: ""
 };
+
+const logsRef = ref(db, "bolao/2026/logs");
 
 let parts = [], qty = 1, acaoAdmin = null, sels = [];
 let activeUserForPalpite = null; 
@@ -1303,51 +1381,97 @@ window.addEventListener('appinstalled', () => {
     const logoEl = document.getElementById('logoAdminTrigger');
     if (!logoEl) return;
 
+    // Anel de progresso visual durante a pressão
+    let ring = logoEl.querySelector('.admin-press-ring');
+    if (!ring) {
+        ring = document.createElement('div');
+        ring.className = 'admin-press-ring';
+        ring.style.cssText = 'position:absolute;inset:-6px;border-radius:50%;border:2.5px solid transparent;border-top-color:var(--primary);opacity:0;pointer-events:none;transition:opacity 0.15s;';
+        logoEl.style.position = 'relative';
+        logoEl.appendChild(ring);
+    }
+
     const startPress = (e) => {
-        // Evita seleção de texto / zoom no mobile
         if (e.cancelable) e.preventDefault();
         longPressTriggered = false;
         clearTimeout(longPressTimer);
 
+        // Feedback visual de carregamento
+        ring.style.opacity = '1';
+        ring.style.animation = 'adminSpin 2s linear forwards';
+
         longPressTimer = setTimeout(() => {
             longPressTriggered = true;
-            // Feedback visual sutil
+            ring.style.opacity = '0';
+            ring.style.animation = '';
             logoEl.style.transform = 'scale(0.92)';
             setTimeout(() => { logoEl.style.transform = ''; }, 180);
 
-            // Abre PIN → Configurações
+            // Vibração se disponível (mobile)
+            if (navigator.vibrate) navigator.vibrate(40);
+
             askAdmin('config');
-        }, 2000); // 2 segundos
+        }, 2000);
     };
 
     const endPress = () => {
         clearTimeout(longPressTimer);
         longPressTimer = null;
+        ring.style.opacity = '0';
+        ring.style.animation = '';
     };
 
-    // Touch (mobile)
     logoEl.addEventListener('touchstart', startPress, { passive: false });
     logoEl.addEventListener('touchend', endPress);
     logoEl.addEventListener('touchcancel', endPress);
     logoEl.addEventListener('touchmove', endPress);
-
-    // Mouse (desktop)
     logoEl.addEventListener('mousedown', startPress);
     logoEl.addEventListener('mouseup', endPress);
     logoEl.addEventListener('mouseleave', endPress);
-
-    // Impede o menu de contexto no long-press
     logoEl.addEventListener('contextmenu', (e) => e.preventDefault());
 })();
+
+// CSS keyframes para o anel (injetado uma vez)
+(function() {
+    if (document.getElementById('adminSpinStyle')) return;
+    const s = document.createElement('style');
+    s.id = 'adminSpinStyle';
+    s.textContent = `@keyframes adminSpin { from { transform: rotate(0deg); opacity:1; } to { transform: rotate(360deg); opacity:1; } }`;
+    document.head.appendChild(s);
+})();
+
+// Máscara de telefone BR: (99) 99999-9999
+function maskPhone(value) {
+    const digits = (value || '').replace(/\D/g, '').slice(0, 11);
+    if (digits.length <= 2) return digits.length ? `(${digits}` : '';
+    if (digits.length <= 6) return `(${digits.slice(0,2)}) ${digits.slice(2)}`;
+    if (digits.length <= 10) return `(${digits.slice(0,2)}) ${digits.slice(2,6)}-${digits.slice(6)}`;
+    return `(${digits.slice(0,2)}) ${digits.slice(2,7)}-${digits.slice(7)}`;
+}
+
+function applyPhoneMask(el) {
+    if (!el) return;
+    el.addEventListener('input', () => {
+        const pos = el.selectionStart;
+        const oldLen = el.value.length;
+        el.value = maskPhone(el.value);
+        const newLen = el.value.length;
+        try { el.setSelectionRange(pos + (newLen - oldLen), pos + (newLen - oldLen)); } catch(e) {}
+    });
+}
 
 // Escuta de alteração dos inputs de cadastro para habilitar/desabilitar botão de palpite
 const nomeInput = document.getElementById('nome');
 const telefoneInput = document.getElementById('telefone');
 const prePalpiteBtn = document.getElementById('btnPrePalpite');
+const searchPhoneInput = document.getElementById('search-phone');
+
+applyPhoneMask(telefoneInput);
+applyPhoneMask(searchPhoneInput);
+applyPhoneMask(document.getElementById('edit-telefone'));
 
 function verificarInputsCadastro() {
     const nomePreenchido = nomeInput.value.trim().length > 0;
-    // Normaliza números de contato eliminando formatações
     const telClean = telefoneInput.value.trim().replace(/\D/g, '');
     const telPreenchido = telClean.length >= 10 && telClean.length <= 11;
     prePalpiteBtn.disabled = !(nomePreenchido && telPreenchido);
@@ -1356,12 +1480,28 @@ function verificarInputsCadastro() {
 nomeInput.addEventListener('input', verificarInputsCadastro);
 telefoneInput.addEventListener('input', verificarInputsCadastro);
 
+// Toggle visual do exigir palpite
+function syncToggleExigirUI() {
+    const cb = document.getElementById('cfg-exigir-palpite');
+    const track = document.getElementById('toggleExigirPalpite');
+    if (!cb || !track) return;
+    if (cb.checked) {
+        track.style.background = 'var(--primary)';
+        track.innerHTML = '<span style="position:absolute;height:20px;width:20px;left:24px;bottom:3px;background:#000;border-radius:50%;transition:.25s;"></span>';
+    } else {
+        track.style.background = '#333';
+        track.innerHTML = '<span style="position:absolute;height:20px;width:20px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.25s;"></span>';
+    }
+}
+document.getElementById('cfg-exigir-palpite')?.addEventListener('change', syncToggleExigirUI);
+
 // Sincronização em tempo real das configurações da Nuvem
 function iniciarSincronizacaoConfig() {
     onValue(configRef, (snapshot) => {
         if(snapshot.exists()) {
             const data = snapshot.val();
             if (Array.isArray(data)) {
+                // Compatibilidade com formato antigo em array
                 CONFIG.LIMITE = parseInt(data[0]) || 60;
                 CONFIG.VALOR = parseFloat(data[1]) || 1;
                 if (data[2]) CONFIG.PIX = data[2];
@@ -1374,6 +1514,12 @@ function iniciarSincronizacaoConfig() {
                 if(data.dezenas !== undefined) CONFIG.DEZENAS = parseInt(data.dezenas);
                 if(data.premio !== undefined) CONFIG.PREMIO = data.premio;
                 if(data.bgUrl !== undefined) CONFIG.BG_URL = data.bgUrl;
+                if(data.senha !== undefined && String(data.senha).length === 4) CONFIG.SENHA = String(data.senha);
+                if(data.infiniteTag !== undefined) CONFIG.INFINITE_TAG = data.infiniteTag;
+                if(data.dataFim !== undefined) CONFIG.DATA_FIM = data.dataFim;
+                if(data.dataPagamento !== undefined) CONFIG.DATA_PAGAMENTO = data.dataPagamento;
+                if(data.exigirPalpite !== undefined) CONFIG.EXIGIR_PALPITE = !!data.exigirPalpite;
+                if(data.regulamento !== undefined) CONFIG.REGULAMENTO = data.regulamento || "";
             }
 
             updateUIConfig();
@@ -1385,7 +1531,13 @@ function iniciarSincronizacaoConfig() {
                 pix: CONFIG.PIX,
                 dezenas: CONFIG.DEZENAS,
                 premio: CONFIG.PREMIO,
-                bgUrl: CONFIG.BG_URL
+                bgUrl: CONFIG.BG_URL,
+                senha: CONFIG.SENHA,
+                infiniteTag: CONFIG.INFINITE_TAG,
+                dataFim: CONFIG.DATA_FIM,
+                dataPagamento: CONFIG.DATA_PAGAMENTO,
+                exigirPalpite: CONFIG.EXIGIR_PALPITE,
+                regulamento: CONFIG.REGULAMENTO
             }).catch(() => {});
         }
     });
@@ -1397,6 +1549,7 @@ function updateUIConfig() {
     const premioEl = document.getElementById('prizePremioValor');
     const premioSub = document.getElementById('prizePremioSub');
     const bgEl = document.getElementById('bgMega');
+    const dateHeader = document.querySelector('.date-header');
 
     if (cotaEl) cotaEl.innerText = `R$ ${CONFIG.VALOR.toFixed(2).replace('.', ',')}`;
     if (premioEl) premioEl.innerText = CONFIG.PREMIO || 'R$ 1 Bilhão';
@@ -1408,6 +1561,53 @@ function updateUIConfig() {
         const restantes = Math.max(0, CONFIG.LIMITE - ocupadas);
         vagasEl.innerText = restantes;
         vagasEl.style.color = restantes <= 5 ? 'var(--partial)' : '#fff';
+    }
+
+    // Atualiza texto de encerramento
+    if (dateHeader && CONFIG.DATA_FIM) {
+        try {
+            const d = new Date(CONFIG.DATA_FIM + 'T23:59:59');
+            const txt = d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+            dateHeader.innerText = `Encerramento: ${txt}`;
+        } catch(e) {}
+    }
+
+    // Regulamento dinâmico + data de pagamento
+    const rulesDataPag = document.getElementById('rulesDataPagamento');
+    if (rulesDataPag && CONFIG.DATA_PAGAMENTO) {
+        try {
+            const dp = new Date(CONFIG.DATA_PAGAMENTO + 'T12:00:00');
+            rulesDataPag.innerText = dp.toLocaleDateString('pt-BR');
+        } catch(e) {}
+    }
+    const rulesContent = document.getElementById('rulesContent');
+    if (rulesContent && CONFIG.REGULAMENTO && CONFIG.REGULAMENTO.trim()) {
+        let html = CONFIG.REGULAMENTO;
+        // Injeta data de pagamento se houver placeholder
+        if (CONFIG.DATA_PAGAMENTO) {
+            try {
+                const dp = new Date(CONFIG.DATA_PAGAMENTO + 'T12:00:00').toLocaleDateString('pt-BR');
+                html = html.replace(/\{\{DATA_PAGAMENTO\}\}/g, dp);
+            } catch(e) {}
+        }
+        rulesContent.innerHTML = html;
+    }
+
+    // Botão de palpite obrigatório
+    const btnPre = document.getElementById('btnPrePalpite');
+    if (btnPre) {
+        if (CONFIG.EXIGIR_PALPITE) {
+            btnPre.innerHTML = `<i data-lucide="plus-circle" style="width:16px;height:16px;"></i> ADICIONAR PALPITE (OBRIGATÓRIO)`;
+            btnPre.classList.remove('secondary');
+            btnPre.style.borderColor = 'var(--partial)';
+            btnPre.style.color = 'var(--partial)';
+        } else {
+            btnPre.innerHTML = `<i data-lucide="plus-circle" style="width:16px;height:16px;"></i> ADICIONAR PALPITE (OPCIONAL)`;
+            btnPre.classList.add('secondary');
+            btnPre.style.borderColor = '';
+            btnPre.style.color = '';
+        }
+        lucide.createIcons();
     }
 }
 
@@ -1443,43 +1643,87 @@ window.fecharModal = (id) => {
 };
 
 window.askAdmin = (act) => {
+    // Se já está em modo admin na sessão, pula o PIN para ações de edição/export
+    const sessionAdmin = sessionStorage.getItem('bolao_admin') === '1';
+    if (sessionAdmin && (act === 'edit' || act === 'export' || act === 'unlock')) {
+        document.body.classList.add('admin-mode');
+        if (act === 'edit') return abrirBaixaManual();
+        if (act === 'export') return exportarCSV();
+        if (act === 'unlock') {
+            // Toggle: se já admin, desativa
+            if (document.body.classList.contains('admin-mode') && sessionStorage.getItem('bolao_admin') === '1') {
+                // Já está ativo — permite desativar com PIN ainda
+            }
+        }
+    }
+
     acaoAdmin = act;
     const d = document.getElementById('senhaDisplay');
     if(d) d.innerText = '';
+    const hint = document.getElementById('senhaHint');
+    if (hint) {
+        if (act === 'config') hint.innerText = 'Acesso às configurações do bolão';
+        else if (act === 'edit') hint.innerText = 'Baixa manual de pagamento';
+        else if (act === 'export') hint.innerText = 'Exportar lista de participantes';
+        else hint.innerText = 'Ativar / desativar modo administrador';
+    }
     document.getElementById('modalSenha').style.display = 'flex';
+    lucide.createIcons();
 };
 
 window.digitar = (num) => {
     const d = document.getElementById('senhaDisplay');
     if(!d) return;
-    if(num === 'C') d.innerText = '';
-    else if(d.innerText.length < 4) {
+    if(num === 'C') {
+        d.innerText = '';
+        return;
+    }
+    if(d.innerText.length < 4) {
         d.innerText += num;
-        if(d.innerText.length === 4) setTimeout(checkAdminPass, 300);
+        if(d.innerText.length === 4) setTimeout(checkAdminPass, 280);
     }
 };
+
+function setAdminMode(active) {
+    if (active) {
+        document.body.classList.add('admin-mode');
+        sessionStorage.setItem('bolao_admin', '1');
+    } else {
+        document.body.classList.remove('admin-mode');
+        sessionStorage.removeItem('bolao_admin');
+    }
+    renderList();
+}
 
 function checkAdminPass() {
     const pass = document.getElementById('senhaDisplay').innerText;
     if(pass === CONFIG.SENHA) {
         fecharModal('modalSenha');
         if(acaoAdmin === 'config') {
-            // Long-press na logo → abre configurações e ativa modo admin
-            document.body.classList.add('admin-mode');
+            setAdminMode(true);
             abrirConfig();
             showToast("🔓 CONFIGURAÇÕES ABERTAS");
-            renderList();
-        }
-        if(acaoAdmin === 'export') exportarCSV();
-        if(acaoAdmin === 'edit') abrirBaixaManual();
-        if(acaoAdmin === 'unlock') {
-            document.body.classList.toggle('admin-mode');
-            showToast(document.body.classList.contains('admin-mode') ? "🔓 MODO ADMIN ATIVO" : "🔒 MODO ADMIN DESATIVADO");
-            renderList();
+        } else if(acaoAdmin === 'export') {
+            setAdminMode(true);
+            exportarCSV();
+            showToast("📥 CSV exportado");
+        } else if(acaoAdmin === 'edit') {
+            setAdminMode(true);
+            abrirBaixaManual();
+        } else if(acaoAdmin === 'unlock') {
+            const willActivate = !document.body.classList.contains('admin-mode');
+            setAdminMode(willActivate);
+            showToast(willActivate ? "🔓 MODO ADMIN ATIVO" : "🔒 MODO ADMIN DESATIVADO");
         }
     } else {
         showToast("❌ PIN Incorreto!");
         document.getElementById('senhaDisplay').innerText = '';
+        // Feedback visual de erro
+        const box = document.getElementById('senhaDisplay');
+        if (box) {
+            box.style.borderColor = 'var(--pending)';
+            setTimeout(() => { box.style.borderColor = ''; }, 600);
+        }
     }
 }
 
@@ -1531,9 +1775,10 @@ window.triggerCheckout = async (nome, contato, key, q, valorCobrado, btnElement 
 
     const descTexto = valorCobrado < (qtFinal * CONFIG.VALOR) ? `Bolão Master - Parcial (${qtFinal} Cotas)` : `Bolão Master - Total (${qtFinal} Cotas)`;
 
+    const orderNsu = "B" + Date.now().toString().slice(-10);
     const payload = {
         "handle": CONFIG.INFINITE_TAG.trim(),
-        "order_nsu": "B" + Date.now().toString().slice(-10),
+        "order_nsu": orderNsu,
         "redirect_url": returnUrl,
         "customer": { 
             "name": safeName, 
@@ -1547,6 +1792,18 @@ window.triggerCheckout = async (nome, contato, key, q, valorCobrado, btnElement 
             "image": "https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_" 
         }]
     };
+
+    // Índice order → participante (webhook confirma mesmo sem o usuário voltar)
+    try {
+        await set(ref(db, `bolao/2026/pedidos/${orderNsu}`), {
+            paid_key: key,
+            amount: valorCobrado,
+            nome,
+            created: Date.now()
+        });
+    } catch (e) {
+        console.warn('Não foi possível salvar índice do pedido:', e);
+    }
 
     try {
         // Envio direto para o novo endpoint de checkout da InfinitePay
@@ -1600,6 +1857,20 @@ document.getElementById('btnParticipar').onclick = async () => {
     if(!n || !t) return showToast("⚠️ Insira o seu Nome e Telefone!");
 
     const cleanPhone = t.replace(/\D/g, '');
+    if (cleanPhone.length < 10 || cleanPhone.length > 11) {
+        return showToast("⚠️ WhatsApp inválido. Use DDD + número.");
+    }
+
+    // Bloqueia se atingiu o limite de cotas (conta participantes)
+    if (parts.length >= CONFIG.LIMITE) {
+        const alreadyIn = parts.find(p => (p.contato || "").replace(/\D/g, '') === cleanPhone);
+        if (!alreadyIn) return showToast("⛔ Limite de cotas atingido!");
+    }
+
+    if (CONFIG.EXIGIR_PALPITE && (!tempPalpites || tempPalpites.length === 0)) {
+        return showToast("⚠️ Selecione um palpite antes de reservar!");
+    }
+
     const existing = parts.find(p => (p.contato || "").replace(/\D/g, '') === cleanPhone);
 
     if (existing) {
@@ -2042,11 +2313,27 @@ function abrirConfig() {
     const dez = document.getElementById('cfg-dezenas');
     const prem = document.getElementById('cfg-premio');
     const bgUrl = document.getElementById('cfg-bg-url');
+    const pix = document.getElementById('cfg-pix');
+    const infinite = document.getElementById('cfg-infinite');
+    const dataFim = document.getElementById('cfg-data-fim');
+    const dataPag = document.getElementById('cfg-data-pagamento');
+    const pin = document.getElementById('cfg-pin');
+    const exigir = document.getElementById('cfg-exigir-palpite');
+    const regulamento = document.getElementById('cfg-regulamento');
+
     if(val) val.value = CONFIG.VALOR;
     if(lim) lim.value = CONFIG.LIMITE;
     if(dez) dez.value = CONFIG.DEZENAS;
     if(prem) prem.value = CONFIG.PREMIO || 'R$ 1 Bilhão';
-    if(bgUrl) bgUrl.value = CONFIG.BG_URL || 'mega-virada-bg-final.jpg';
+    if(bgUrl) bgUrl.value = CONFIG.BG_URL || '';
+    if(pix) pix.value = CONFIG.PIX || '';
+    if(infinite) infinite.value = CONFIG.INFINITE_TAG || '';
+    if(dataFim) dataFim.value = CONFIG.DATA_FIM || '2026-12-31';
+    if(dataPag) dataPag.value = CONFIG.DATA_PAGAMENTO || '2026-12-10';
+    if(pin) pin.value = '';
+    if(exigir) exigir.checked = !!CONFIG.EXIGIR_PALPITE;
+    if(regulamento) regulamento.value = CONFIG.REGULAMENTO || '';
+    syncToggleExigirUI();
 
     const btnAdmin = document.getElementById('cfgBtnModoAdmin');
     if (btnAdmin) {
@@ -2061,25 +2348,136 @@ window.salvarConfig = async () => {
     const l = parseInt(document.getElementById('cfg-limite').value);
     const d = parseInt(document.getElementById('cfg-dezenas').value) || 6;
     const premio = (document.getElementById('cfg-premio')?.value || 'R$ 1 Bilhão').trim();
-    const bgUrl = (document.getElementById('cfg-bg-url')?.value || 'mega-virada-bg-final.jpg').trim();
+    const bgUrl = (document.getElementById('cfg-bg-url')?.value || '').trim();
+    const pix = (document.getElementById('cfg-pix')?.value || CONFIG.PIX).trim();
+    const infinite = (document.getElementById('cfg-infinite')?.value || CONFIG.INFINITE_TAG).trim().replace('@','');
+    const dataFim = document.getElementById('cfg-data-fim')?.value || CONFIG.DATA_FIM;
+    const dataPag = document.getElementById('cfg-data-pagamento')?.value || CONFIG.DATA_PAGAMENTO;
+    const novoPin = (document.getElementById('cfg-pin')?.value || '').trim();
+    const exigirPalpite = !!document.getElementById('cfg-exigir-palpite')?.checked;
+    const regulamento = (document.getElementById('cfg-regulamento')?.value || '').trim();
+
+    if (isNaN(v) || v <= 0) return showToast("⚠️ Valor da cota inválido");
+    if (isNaN(l) || l < 1) return showToast("⚠️ Limite de cotas inválido");
+    if (novoPin && !/^\d{4}$/.test(novoPin)) return showToast("⚠️ PIN deve ter exatamente 4 dígitos");
 
     try {
+        CONFIG.VALOR = v;
+        CONFIG.LIMITE = l;
+        CONFIG.DEZENAS = d;
         CONFIG.PREMIO = premio;
         CONFIG.BG_URL = bgUrl;
-        await set(configRef, {
+        CONFIG.PIX = pix;
+        CONFIG.INFINITE_TAG = infinite;
+        CONFIG.DATA_FIM = dataFim;
+        CONFIG.DATA_PAGAMENTO = dataPag;
+        CONFIG.EXIGIR_PALPITE = exigirPalpite;
+        CONFIG.REGULAMENTO = regulamento;
+        if (novoPin) CONFIG.SENHA = novoPin;
+
+        const payload = {
             limite: l,
             valorCota: v,
-            pix: CONFIG.PIX,
+            pix: pix,
             dezenas: d,
             premio: premio,
-            bgUrl: bgUrl
-        });
+            bgUrl: bgUrl,
+            senha: CONFIG.SENHA,
+            infiniteTag: infinite,
+            dataFim: dataFim,
+            dataPagamento: dataPag,
+            exigirPalpite: exigirPalpite,
+            regulamento: regulamento
+        };
+
+        await set(configRef, payload);
+        await logAdminAction('config_salva', { limite: l, valor: v, exigirPalpite });
         fecharModal('modalConfig');
         updateUIConfig();
-        showToast("✅ CONFIGURAÇÕES SALVAS!");
+        showToast(novoPin ? "✅ CONFIG SALVAS + PIN ALTERADO!" : "✅ CONFIGURAÇÕES SALVAS!");
     } catch(e) {
         console.error(e);
         showToast("❌ Erro de permissão para salvar no Firebase.");
+    }
+};
+
+async function logAdminAction(acao, extra = {}) {
+    try {
+        await push(logsRef, {
+            acao,
+            extra,
+            em: Date.now(),
+            iso: new Date().toISOString()
+        });
+    } catch (e) {
+        console.warn('Falha ao gravar log admin:', e);
+    }
+}
+
+window.liberarReservasVencidas = async () => {
+    if (!CONFIG.DATA_PAGAMENTO) return showToast("⚠️ Defina a data limite de pagamento nas configs");
+    const limite = new Date(CONFIG.DATA_PAGAMENTO + 'T23:59:59').getTime();
+    if (Date.now() < limite) {
+        const ok = confirm(`A data limite (${CONFIG.DATA_PAGAMENTO}) ainda não passou.\nDeseja liberar reservas pendentes mesmo assim?`);
+        if (!ok) return;
+    }
+
+    const pendentes = parts.filter(p => {
+        const total = (p.cotas || 1) * CONFIG.VALOR;
+        return (p.valor || 0) <= 0 && (p.status_compra || 'PENDENTE') !== 'PAGO';
+    });
+
+    if (pendentes.length === 0) return showToast("✅ Nenhuma reserva pendente para liberar");
+
+    const ok = confirm(`Serão removidas ${pendentes.length} reserva(s) sem pagamento.\nConfirma?`);
+    if (!ok) return;
+
+    try {
+        const updates = {};
+        pendentes.forEach(p => { updates[`bolao/2026/participantes/${p.key}`] = null; });
+        await update(ref(db), updates);
+        await logAdminAction('liberar_vencidos', { quantidade: pendentes.length, keys: pendentes.map(p => p.key) });
+        await updateData();
+        renderList();
+        showToast(`🧹 ${pendentes.length} reserva(s) liberada(s)!`);
+    } catch (e) {
+        console.error(e);
+        showToast("❌ Erro ao liberar reservas");
+    }
+};
+
+window.verLogsAdmin = async () => {
+    try {
+        const snap = await get(logsRef);
+        const lista = snap.exists()
+            ? Object.entries(snap.val()).map(([k,v]) => ({ key: k, ...v })).sort((a,b) => (b.em||0) - (a.em||0)).slice(0, 40)
+            : [];
+
+        const old = document.getElementById('modalLogsAdmin');
+        if (old) old.remove();
+
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.id = 'modalLogsAdmin';
+        modal.style.display = 'flex';
+        modal.innerHTML = `
+            <div class="modal-box" style="max-width:400px; max-height:85vh; overflow-y:auto; text-align:left;">
+                <h3 style="color:var(--primary); font-weight:800; margin-bottom:12px; text-align:center;">📜 Logs Admin</h3>
+                <div id="logsList" style="display:flex; flex-direction:column; gap:8px;">
+                    ${lista.length === 0 ? '<p style="color:var(--text-dim); font-size:0.8rem; text-align:center;">Nenhum log ainda.</p>' : lista.map(l => `
+                        <div style="background:rgba(0,0,0,0.25); border:1px solid var(--border); border-radius:12px; padding:10px 12px;">
+                            <div style="font-size:0.75rem; font-weight:800; color:#fff;">${l.acao}</div>
+                            <div style="font-size:0.62rem; color:var(--text-dim); margin-top:3px;">${l.iso ? new Date(l.iso).toLocaleString('pt-BR') : ''}</div>
+                            ${l.extra ? `<div style="font-size:0.62rem; color:var(--text-dim); margin-top:4px; word-break:break-all;">${JSON.stringify(l.extra)}</div>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+                <button class="admin-btn" style="width:100%; margin-top:14px; border:1px solid var(--border); padding:10px; border-radius:12px;" onclick="document.getElementById('modalLogsAdmin')?.remove()">FECHAR</button>
+            </div>`;
+        document.body.appendChild(modal);
+    } catch (e) {
+        console.error(e);
+        showToast("❌ Não foi possível carregar os logs");
     }
 };
 
@@ -2137,6 +2535,7 @@ document.getElementById('btnSalvarPgto').onclick = async () => {
 
     try {
         await update(ref(db), u);
+        await logAdminAction('baixa_manual', { valor: v, keys: [...window.sels] });
         fecharModal('modalAdminPagamento'); window.sels=[]; 
         await updateData(); 
         renderList();
@@ -2213,7 +2612,9 @@ window.confirmarExclusao = () => {
 window.excluirParticipanteDefinitivo = async () => {
     const key = document.getElementById('edit-key').value;
     try {
+        const p = parts.find(x => x.key === key);
         await remove(ref(db, `bolao/2026/participantes/${key}`));
+        await logAdminAction('excluir_participante', { key, nome: p?.nome || '' });
         fecharModal('modalEditarParticipante');
         showToast("✅ PARTICIPANTE EXCLUÍDO!");
         await updateData(); 
@@ -2225,21 +2626,34 @@ window.excluirParticipanteDefinitivo = async () => {
 
 // Configura os botões do modal de configurações
 document.getElementById('cfgBtnModoAdmin').onclick = () => {
-    document.body.classList.toggle('admin-mode');
-    const isActive = document.body.classList.contains('admin-mode');
-    document.getElementById('cfgBtnModoAdmin').innerText = isActive ? "🔒 FECHAR ADMIN" : "🔓 MODO ADMIN";
-    showToast(isActive ? "🔓 MODO ADMIN ATIVO" : "🔒 MODO ADMIN DESATIVADO");
-    renderList();
+    const willActivate = !document.body.classList.contains('admin-mode');
+    setAdminMode(willActivate);
+    document.getElementById('cfgBtnModoAdmin').innerText = willActivate ? "🔒 FECHAR ADMIN" : "🔓 MODO ADMIN";
+    showToast(willActivate ? "🔓 MODO ADMIN ATIVO" : "🔒 MODO ADMIN DESATIVADO");
 };
 
 document.getElementById('cfgBtnExportar').onclick = () => {
     exportarCSV();
+    logAdminAction('export_csv', { total: parts.length });
 };
 
-// Temporizador Regressivo corrigido para o final de 2026
+document.getElementById('cfgBtnLiberarVencidos')?.addEventListener('click', () => {
+    liberarReservasVencidas();
+});
+
+document.getElementById('cfgBtnVerLogs')?.addEventListener('click', () => {
+    verLogsAdmin();
+});
+
+// Temporizador Regressivo — usa CONFIG.DATA_FIM (configurável)
 setInterval(()=>{
-    const d = new Date("Dec 31, 2026 23:59:59").getTime() - Date.now();
-    if(d < 0) return;
+    const fimStr = (CONFIG.DATA_FIM || '2026-12-31') + 'T23:59:59';
+    const d = new Date(fimStr).getTime() - Date.now();
+    if(d < 0) {
+        const di = document.getElementById('dias');
+        if (di) di.innerText = '00';
+        return;
+    }
     const di = document.getElementById('dias');
     const ho = document.getElementById('horas');
     const mi = document.getElementById('minutos');
@@ -2360,6 +2774,11 @@ async function inicializarAplicativo() {
         console.log("Firebase Auth: Autenticado anonimamente.");
     } catch (e) {
         console.warn("Firebase Auth: Login anônimo indisponível.", e);
+    }
+
+    // Restaura modo admin da sessão (sem pedir PIN de novo no mesmo navegador)
+    if (sessionStorage.getItem('bolao_admin') === '1') {
+        document.body.classList.add('admin-mode');
     }
     
     iniciarSincronizacaoConfig();
