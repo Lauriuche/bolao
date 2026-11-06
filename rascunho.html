@@ -151,6 +151,11 @@ body.admin-mode .btn-edit-sm{display:flex;align-items:center;justify-content:cen
 </div>
 <p class="prize-sub" id="prizePremioSub">🏆 Prêmio estimado <strong>R$ 1 Bilhão</strong> (Mega da Virada 2026).<br>Dividido <strong>proporcionalmente</strong> pelas cotas pagas.</p>
 </div>
+<div id="planoJogosBanner" style="display:none;width:100%;background:rgba(0,255,136,0.06);border:1px solid var(--border-active);border-radius:16px;padding:12px 14px;margin-bottom:16px;text-align:center">
+  <div style="font-size:.62rem;font-weight:800;color:var(--primary);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">🎯 Plano de jogos (Caixa)</div>
+  <div id="planoJogosTexto" style="font-size:.82rem;font-weight:800;color:#fff"></div>
+  <div id="planoJogosCusto" style="font-size:.68rem;color:var(--text-dim);margin-top:4px"></div>
+</div>
 <div class="countdown-card"><div class="timer-grid">
 <div class="time-box"><span class="time-val" id="dias">00</span><span class="time-unit">DIAS</span></div>
 <div class="time-box"><span class="time-val" id="horas">00</span><span class="time-unit">HRS</span></div>
@@ -361,6 +366,10 @@ body.admin-mode .btn-edit-sm{display:flex;align-items:center;justify-content:cen
   <div style="font-size:.65rem;color:var(--primary);font-weight:800;margin-bottom:6px">🎯 Com o arrecadado, dá para jogar:</div>
   <div id="calcSugestoes" style="display:flex;flex-direction:column;gap:6px;max-height:160px;overflow-y:auto" class="thin-scroll"></div>
   <ul id="calcChecklist" style="list-style:none;padding:0;margin:10px 0 0;display:flex;flex-direction:column;gap:6px"></ul>
+  <button type="button" class="btn-checkout secondary" id="btnSalvarPlanoJogos" onclick="salvarPlanoJogos()" style="margin-top:12px;margin-bottom:0">
+    💾 SALVAR PLANO DE JOGOS NO FIREBASE
+  </button>
+  <p id="calcPlanoSalvoHint" style="font-size:.62rem;color:var(--text-dim);text-align:center;margin-top:8px;line-height:1.35"></p>
 </div>
 <p style="font-size:.65rem;color:var(--primary);font-weight:800;letter-spacing:1px;margin:14px 0 10px;border-top:1px solid var(--border);padding-top:12px">🔐 SEGURANÇA</p>
 <div style="margin-bottom:16px"><label style="font-size:.68rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:5px">Novo PIN Admin (4 dígitos)</label>
@@ -449,7 +458,12 @@ const CONFIG = {
   INFINITE_TAG: "lauriuche", NOME_PRODUTO: "Cota Bolão Camino", DEZENAS: 6,
   PREMIO: "R$ 1 Bilhão", BG_URL: "mega-virada-bg-final.jpg",
   DATA_FIM: "2026-12-31", DATA_PAGAMENTO: "2026-12-10",
-  EXIGIR_PALPITE: false, REGULAMENTO: "", RESULTADO: ""
+  EXIGIR_PALPITE: false, REGULAMENTO: "", RESULTADO: "",
+  // Plano de jogos (calculadora) persistido no Firebase
+  JOGOS_PLANEJADOS: 1,
+  JOGOS_DEZENAS: 6,
+  JOGOS_TAXA_ATIVA: false,
+  JOGOS_TAXA_PCT: 0
 };
 
 let parts = [];
@@ -739,14 +753,21 @@ function iniciarSincronizacaoConfig() {
         if (data.exigirPalpite !== undefined) CONFIG.EXIGIR_PALPITE = !!data.exigirPalpite;
         if (data.regulamento !== undefined) CONFIG.REGULAMENTO = data.regulamento || "";
         if (data.resultado !== undefined) CONFIG.RESULTADO = data.resultado || "";
+        if (data.jogosPlanejados !== undefined) CONFIG.JOGOS_PLANEJADOS = parseInt(data.jogosPlanejados, 10) || 1;
+        if (data.jogosDezenas !== undefined) CONFIG.JOGOS_DEZENAS = parseInt(data.jogosDezenas, 10) || CONFIG.DEZENAS || 6;
+        if (data.jogosTaxaAtiva !== undefined) CONFIG.JOGOS_TAXA_ATIVA = !!data.jogosTaxaAtiva;
+        if (data.jogosTaxaPct !== undefined) CONFIG.JOGOS_TAXA_PCT = Math.min(35, Math.max(0, parseFloat(data.jogosTaxaPct) || 0));
       }
       updateUIConfig();
+      try { atualizarCalculadora(); } catch (_) {}
     } else {
       set(configRef, {
         limite: CONFIG.LIMITE, valorCota: CONFIG.VALOR, pix: CONFIG.PIX, dezenas: CONFIG.DEZENAS,
         premio: CONFIG.PREMIO, bgUrl: CONFIG.BG_URL, senha: CONFIG.SENHA, infiniteTag: CONFIG.INFINITE_TAG,
         dataFim: CONFIG.DATA_FIM, dataPagamento: CONFIG.DATA_PAGAMENTO, exigirPalpite: CONFIG.EXIGIR_PALPITE,
-        regulamento: CONFIG.REGULAMENTO, resultado: CONFIG.RESULTADO
+        regulamento: CONFIG.REGULAMENTO, resultado: CONFIG.RESULTADO,
+        jogosPlanejados: CONFIG.JOGOS_PLANEJADOS, jogosDezenas: CONFIG.JOGOS_DEZENAS,
+        jogosTaxaAtiva: CONFIG.JOGOS_TAXA_ATIVA, jogosTaxaPct: CONFIG.JOGOS_TAXA_PCT
       }).catch(() => {});
     }
   });
@@ -791,6 +812,33 @@ function updateUIConfig() {
       btnPre.innerHTML = `<i data-lucide="plus-circle" style="width:16px;height:16px"></i> ADICIONAR PALPITE (OPCIONAL)`;
     }
     try { lucide.createIcons(); } catch(_){}
+  }
+  // Banner do plano de jogos gravado no Firebase
+  const planoBanner = document.getElementById("planoJogosBanner");
+  const planoTxt = document.getElementById("planoJogosTexto");
+  const planoCusto = document.getElementById("planoJogosCusto");
+  if (planoBanner && planoTxt) {
+    const jd = CONFIG.JOGOS_DEZENAS || CONFIG.DEZENAS || 6;
+    const jq = CONFIG.JOGOS_PLANEJADOS || 0;
+    if (jq > 0) {
+      const item = (typeof getTabelaItem === "function") ? getTabelaItem(jd) : { preco: 6 };
+      let custo = (item.preco || 6) * jq;
+      if (CONFIG.JOGOS_TAXA_ATIVA) custo *= (1 + (CONFIG.JOGOS_TAXA_PCT || 0) / 100);
+      planoBanner.style.display = "block";
+      planoTxt.textContent = `${jq} jogo${jq > 1 ? "s" : ""} de ${jd} dezenas`;
+      planoCusto.textContent = CONFIG.JOGOS_TAXA_ATIVA
+        ? `Custo estimado: ${formatBRL(custo)} (com taxa ${CONFIG.JOGOS_TAXA_PCT}%)`
+        : `Custo estimado na Caixa: ${formatBRL(custo)}`;
+    } else {
+      planoBanner.style.display = "none";
+    }
+  }
+  const hint = document.getElementById("calcPlanoSalvoHint");
+  if (hint) {
+    const jd = CONFIG.JOGOS_DEZENAS || 6;
+    const jq = CONFIG.JOGOS_PLANEJADOS || 1;
+    hint.textContent = `Plano atual no Firebase: ${jq}x jogos de ${jd} dezenas` +
+      (CONFIG.JOGOS_TAXA_ATIVA ? ` · taxa ${CONFIG.JOGOS_TAXA_PCT}%` : "");
   }
   updateQtyUI();
   renderResultadoBanner();
@@ -1615,19 +1663,63 @@ function abrirConfig() {
   document.getElementById("cfg-resultado").value = CONFIG.RESULTADO || "";
   const btnAdmin = document.getElementById("cfgBtnModoAdmin");
   if (btnAdmin) btnAdmin.innerText = document.body.classList.contains("admin-mode") ? "🔒 FECHAR ADMIN" : "🔓 MODO ADMIN";
-  // Sync calculator defaults from live config + data
-  const calcDez = document.getElementById("calcDezenas");
-  if (calcDez) calcDez.value = String(Math.min(15, Math.max(6, CONFIG.DEZENAS || 6)));
-  const calcQ = document.getElementById("calcQtdJogos");
-  if (calcQ && (!calcQ.value || calcQ.value === "1")) {
-    // default: quantos jogos cabem no arrecadado com dezenas atuais
-    const item = getTabelaItem(CONFIG.DEZENAS || 6);
-    const arr = getLiveFinanceiro().arrecadado;
-    calcQ.value = String(Math.max(1, item.preco > 0 ? Math.floor(arr / item.preco) || 1 : 1));
-  }
+  // Carrega plano de jogos gravado no Firebase
+  aplicarPlanoJogosNoForm();
   atualizarCalculadora();
   document.getElementById("modalConfig").style.display = "flex";
 }
+
+function lerPlanoJogosDoForm() {
+  const jogosDezenas = parseInt(document.getElementById("calcDezenas")?.value || CONFIG.JOGOS_DEZENAS || CONFIG.DEZENAS, 10) || 6;
+  const jogosPlanejados = Math.max(1, parseInt(document.getElementById("calcQtdJogos")?.value || CONFIG.JOGOS_PLANEJADOS || 1, 10) || 1);
+  const jogosTaxaAtiva = !!document.getElementById("calcTaxaToggle")?.checked;
+  const jogosTaxaPct = jogosTaxaAtiva
+    ? Math.min(35, Math.max(0, parseFloat(document.getElementById("calcTaxa")?.value) || 0))
+    : 0;
+  return { jogosDezenas, jogosPlanejados, jogosTaxaAtiva, jogosTaxaPct };
+}
+
+function aplicarPlanoJogosNoForm() {
+  const calcDez = document.getElementById("calcDezenas");
+  const calcQ = document.getElementById("calcQtdJogos");
+  const taxaT = document.getElementById("calcTaxaToggle");
+  const taxaI = document.getElementById("calcTaxa");
+  const taxaW = document.getElementById("calcTaxaWrap");
+  if (calcDez) calcDez.value = String(Math.min(20, Math.max(6, CONFIG.JOGOS_DEZENAS || CONFIG.DEZENAS || 6)));
+  if (calcQ) calcQ.value = String(Math.max(1, CONFIG.JOGOS_PLANEJADOS || 1));
+  if (taxaT) taxaT.checked = !!CONFIG.JOGOS_TAXA_ATIVA;
+  if (taxaI) taxaI.value = String(CONFIG.JOGOS_TAXA_PCT || 0);
+  if (taxaW) taxaW.style.display = CONFIG.JOGOS_TAXA_ATIVA ? "flex" : "none";
+}
+
+window.salvarPlanoJogos = async () => {
+  const plano = lerPlanoJogosDoForm();
+  try {
+    CONFIG.JOGOS_DEZENAS = plano.jogosDezenas;
+    CONFIG.JOGOS_PLANEJADOS = plano.jogosPlanejados;
+    CONFIG.JOGOS_TAXA_ATIVA = plano.jogosTaxaAtiva;
+    CONFIG.JOGOS_TAXA_PCT = plano.jogosTaxaPct;
+    // Também alinha dezenas do palpite do app com o plano (opcional mas útil)
+    CONFIG.DEZENAS = plano.jogosDezenas;
+    const cfgDez = document.getElementById("cfg-dezenas");
+    if (cfgDez) cfgDez.value = String(plano.jogosDezenas);
+
+    await update(configRef, {
+      jogosPlanejados: plano.jogosPlanejados,
+      jogosDezenas: plano.jogosDezenas,
+      jogosTaxaAtiva: plano.jogosTaxaAtiva,
+      jogosTaxaPct: plano.jogosTaxaPct,
+      dezenas: plano.jogosDezenas
+    });
+    await logAdminAction("plano_jogos_salvo", plano);
+    atualizarCalculadora();
+    updateUIConfig();
+    showToast(`✅ Plano salvo: ${plano.jogosPlanejados}x jogos de ${plano.jogosDezenas} dezenas`);
+  } catch (e) {
+    console.error(e);
+    showToast("❌ Erro ao gravar plano no Firebase");
+  }
+};
 
 window.salvarConfig = async () => {
   const v = parseFloat(document.getElementById("cfg-valor").value);
@@ -1643,6 +1735,7 @@ window.salvarConfig = async () => {
   const exigirPalpite = !!document.getElementById("cfg-exigir-palpite").checked;
   const regulamento = (document.getElementById("cfg-regulamento").value || "").trim();
   const resultado = (document.getElementById("cfg-resultado").value || "").trim();
+  const plano = lerPlanoJogosDoForm();
   if (isNaN(v) || v <= 0) return showToast("⚠️ Valor inválido");
   if (isNaN(l) || l < 1) return showToast("⚠️ Limite inválido");
   if (novoPin && !/^\d{4}$/.test(novoPin)) return showToast("⚠️ PIN deve ter 4 dígitos");
@@ -1651,15 +1744,26 @@ window.salvarConfig = async () => {
     CONFIG.BG_URL = bgUrl; CONFIG.PIX = pix; CONFIG.INFINITE_TAG = infinite;
     CONFIG.DATA_FIM = dataFim; CONFIG.DATA_PAGAMENTO = dataPag;
     CONFIG.EXIGIR_PALPITE = exigirPalpite; CONFIG.REGULAMENTO = regulamento; CONFIG.RESULTADO = resultado;
+    CONFIG.JOGOS_PLANEJADOS = plano.jogosPlanejados;
+    CONFIG.JOGOS_DEZENAS = plano.jogosDezenas;
+    CONFIG.JOGOS_TAXA_ATIVA = plano.jogosTaxaAtiva;
+    CONFIG.JOGOS_TAXA_PCT = plano.jogosTaxaPct;
     if (novoPin) CONFIG.SENHA = novoPin;
     await set(configRef, {
       limite: l, valorCota: v, pix, dezenas: d, premio, bgUrl, senha: CONFIG.SENHA,
-      infiniteTag: infinite, dataFim, dataPagamento: dataPag, exigirPalpite, regulamento, resultado
+      infiniteTag: infinite, dataFim, dataPagamento: dataPag, exigirPalpite, regulamento, resultado,
+      jogosPlanejados: plano.jogosPlanejados,
+      jogosDezenas: plano.jogosDezenas,
+      jogosTaxaAtiva: plano.jogosTaxaAtiva,
+      jogosTaxaPct: plano.jogosTaxaPct
     });
-    await logAdminAction("config_salva", { limite: l, valor: v, resultado });
+    await logAdminAction("config_salva", {
+      limite: l, valor: v, resultado,
+      jogosPlanejados: plano.jogosPlanejados, jogosDezenas: plano.jogosDezenas
+    });
     fecharModal("modalConfig");
     updateUIConfig();
-    showToast(novoPin ? "✅ CONFIG + PIN salvos!" : "✅ CONFIGURAÇÕES SALVAS!");
+    showToast(novoPin ? "✅ CONFIG + PIN + plano de jogos salvos!" : "✅ CONFIGURAÇÕES E PLANO SALVOS!");
   } catch (e) {
     console.error(e);
     showToast("❌ Erro de permissão Firebase");
