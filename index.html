@@ -226,10 +226,15 @@ body.admin-mode .btn-edit-sm{display:flex;align-items:center;justify-content:cen
 <p id="pag-desc" style="color:var(--text-dim);font-size:.8rem;margin:10px 0 20px">Cota reservada. Escolha a opção de pagamento:</p>
 <div id="pag-buttons-container"></div>
 <div id="pixFallbackContainer" style="display:none;margin-top:15px;background:rgba(255,255,255,.03);padding:15px;border-radius:18px;border:1px solid var(--border)">
-<p style="font-size:.75rem;color:#fff;font-weight:bold;margin-bottom:8px">PIX Copia e Cola:</p>
-<input type="text" id="pixCopiaColaText" readonly class="form-input" style="font-size:.65rem;margin-bottom:10px;padding:10px;text-align:left">
-<button class="btn-checkout" onclick="copyPixCopiaCola()"><i data-lucide="copy" style="width:14px;height:14px"></i> Copiar Chave PIX</button>
+<p style="font-size:.75rem;color:#fff;font-weight:bold;margin-bottom:8px" id="pixFallbackTitle">PIX Copia e Cola:</p>
+<div id="mpQrWrap" style="display:none;text-align:center;margin-bottom:10px">
+  <img id="mpQrImg" alt="QR PIX" style="max-width:180px;width:100%;border-radius:12px;background:#fff;padding:8px">
 </div>
+<input type="text" id="pixCopiaColaText" readonly class="form-input" style="font-size:.65rem;margin-bottom:10px;padding:10px;text-align:left">
+<button class="btn-checkout" onclick="copyPixCopiaCola()"><i data-lucide="copy" style="width:14px;height:14px"></i> Copiar PIX</button>
+<p id="pixStatusPoll" style="font-size:.68rem;color:var(--text-dim);margin-top:10px;display:none">Aguardando confirmação automática…</p>
+</div>
+<p id="pagProvedorBadge" style="font-size:.62rem;color:var(--text-dim);margin-top:8px;text-align:center"></p>
 <div style="margin-top:20px;border-top:1px solid var(--border);padding-top:15px">
 <p style="font-size:.7rem;color:var(--text-dim);margin-bottom:8px">Opção PIX manual:</p>
 <p style="font-weight:800;color:var(--primary);font-size:1.1rem" id="pag-pix-chave"></p>
@@ -275,10 +280,31 @@ body.admin-mode .btn-edit-sm{display:flex;align-items:center;justify-content:cen
 <div style="margin-bottom:14px"><label style="font-size:.68rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:5px">🏆 Prêmio Estimado</label>
 <input type="text" id="cfg-premio" class="form-input"></div>
 <p style="font-size:.65rem;color:var(--primary);font-weight:800;letter-spacing:1px;margin:14px 0 10px;border-top:1px solid var(--border);padding-top:12px">💳 PAGAMENTO</p>
-<div style="margin-bottom:12px"><label style="font-size:.68rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:5px">Chave PIX / WhatsApp</label>
+<div style="margin-bottom:12px"><label style="font-size:.68rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:5px">Provedor de checkout</label>
+<select id="cfg-provedor" class="form-input" onchange="toggleCamposProvedor()">
+  <option value="infinitepay">InfinitePay (link + PIX)</option>
+  <option value="mercadopago">Mercado Pago (checkout transparente PIX)</option>
+</select></div>
+<div style="margin-bottom:12px"><label style="font-size:.68rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:5px">Chave PIX / WhatsApp (fallback manual)</label>
 <input type="text" id="cfg-pix" class="form-input" style="text-align:left;font-size:.85rem"></div>
-<div style="margin-bottom:14px"><label style="font-size:.68rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:5px">InfinitePay Handle</label>
-<input type="text" id="cfg-infinite" class="form-input" style="text-align:left;font-size:.85rem"></div>
+<div id="cfgBoxInfinite">
+  <div style="margin-bottom:12px"><label style="font-size:.68rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:5px">InfinitePay Handle</label>
+  <input type="text" id="cfg-infinite" class="form-input" style="text-align:left;font-size:.85rem" placeholder="seu-handle"></div>
+</div>
+<div id="cfgBoxMercadoPago" style="display:none">
+  <div style="margin-bottom:12px"><label style="font-size:.68rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:5px">MP Public Key</label>
+  <input type="text" id="cfg-mp-public" class="form-input" style="text-align:left;font-size:.75rem" placeholder="APP_USR-..."></div>
+  <p style="font-size:.62rem;color:var(--text-dim);margin:-4px 0 10px;line-height:1.35">O <strong>Access Token</strong> fica só no Render (variável de ambiente). Não salve token no Firebase.</p>
+</div>
+<div style="margin-bottom:12px"><label style="font-size:.68rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:5px">URL backend Render (webhooks + MP)</label>
+<input type="url" id="cfg-backend-url" class="form-input" style="text-align:left;font-size:.72rem" placeholder="https://seu-app.onrender.com"></div>
+<div style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(0,0,0,.25);padding:12px 14px;border-radius:12px;border:1px solid var(--border)">
+  <div>
+    <div style="font-size:.72rem;font-weight:800;color:#fff">Permitir pagamento parcial (50%)</div>
+    <div style="font-size:.6rem;color:var(--text-dim)">Se desligado, só aparece Pagar Total / Restante</div>
+  </div>
+  <input type="checkbox" id="cfg-permitir-parcial" checked>
+</div>
 <p style="font-size:.65rem;color:var(--primary);font-weight:800;letter-spacing:1px;margin:14px 0 10px;border-top:1px solid var(--border);padding-top:12px">🎨 VISUAL &amp; DATAS</p>
 <div style="margin-bottom:12px"><label style="font-size:.68rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:5px">URL Imagem de Fundo</label>
 <input type="url" id="cfg-bg-url" class="form-input" style="text-align:left;font-size:.75rem"></div>
@@ -463,8 +489,14 @@ const CONFIG = {
   JOGOS_PLANEJADOS: 1,
   JOGOS_DEZENAS: 6,
   JOGOS_TAXA_ATIVA: false,
-  JOGOS_TAXA_PCT: 0
+  JOGOS_TAXA_PCT: 0,
+  // Pagamentos
+  PROVEDOR: "infinitepay", // infinitepay | mercadopago
+  MP_PUBLIC_KEY: "",
+  BACKEND_URL: "", // https://seu-app.onrender.com
+  PERMITIR_PARCIAL: true
 };
+let paymentPollTimer = null;
 
 let parts = [];
 let acaoAdmin = null;
@@ -757,6 +789,10 @@ function iniciarSincronizacaoConfig() {
         if (data.jogosDezenas !== undefined) CONFIG.JOGOS_DEZENAS = parseInt(data.jogosDezenas, 10) || CONFIG.DEZENAS || 6;
         if (data.jogosTaxaAtiva !== undefined) CONFIG.JOGOS_TAXA_ATIVA = !!data.jogosTaxaAtiva;
         if (data.jogosTaxaPct !== undefined) CONFIG.JOGOS_TAXA_PCT = Math.min(35, Math.max(0, parseFloat(data.jogosTaxaPct) || 0));
+        if (data.provedor !== undefined) CONFIG.PROVEDOR = data.provedor === "mercadopago" ? "mercadopago" : "infinitepay";
+        if (data.mpPublicKey !== undefined) CONFIG.MP_PUBLIC_KEY = data.mpPublicKey || "";
+        if (data.backendUrl !== undefined) CONFIG.BACKEND_URL = data.backendUrl || "";
+        if (data.permitirParcial !== undefined) CONFIG.PERMITIR_PARCIAL = !!data.permitirParcial;
       }
       updateUIConfig();
       try { atualizarCalculadora(); } catch (_) {}
@@ -767,7 +803,9 @@ function iniciarSincronizacaoConfig() {
         dataFim: CONFIG.DATA_FIM, dataPagamento: CONFIG.DATA_PAGAMENTO, exigirPalpite: CONFIG.EXIGIR_PALPITE,
         regulamento: CONFIG.REGULAMENTO, resultado: CONFIG.RESULTADO,
         jogosPlanejados: CONFIG.JOGOS_PLANEJADOS, jogosDezenas: CONFIG.JOGOS_DEZENAS,
-        jogosTaxaAtiva: CONFIG.JOGOS_TAXA_ATIVA, jogosTaxaPct: CONFIG.JOGOS_TAXA_PCT
+        jogosTaxaAtiva: CONFIG.JOGOS_TAXA_ATIVA, jogosTaxaPct: CONFIG.JOGOS_TAXA_PCT,
+        provedor: CONFIG.PROVEDOR, mpPublicKey: CONFIG.MP_PUBLIC_KEY, backendUrl: CONFIG.BACKEND_URL,
+        permitirParcial: CONFIG.PERMITIR_PARCIAL
       }).catch(() => {});
     }
   });
@@ -901,6 +939,14 @@ window.abrirPagamentoPorKey = (key, isNovo = false) => {
   abrirPagamento(p.nome, p.contato, p.key, cotasDoParticipante(p), p.valor || 0, isNovo);
 };
 
+window.toggleCamposProvedor = () => {
+  const p = document.getElementById("cfg-provedor")?.value || "infinitepay";
+  const inf = document.getElementById("cfgBoxInfinite");
+  const mp = document.getElementById("cfgBoxMercadoPago");
+  if (inf) inf.style.display = p === "infinitepay" ? "block" : "none";
+  if (mp) mp.style.display = p === "mercadopago" ? "block" : "none";
+};
+
 window.abrirPagamento = (nome, contato, key, qt, valorJaPago = 0, isNovo = false) => {
   const total = qt * CONFIG.VALOR;
   const restante = total - valorJaPago;
@@ -908,17 +954,31 @@ window.abrirPagamento = (nome, contato, key, qt, valorJaPago = 0, isNovo = false
   document.getElementById("pag-title").innerText = isNovo ? "CADASTRO OK!" : "PAGAMENTO PENDENTE";
   document.getElementById("pag-desc").innerText = isNovo ? "Cota reservada. Escolha a opção de pagamento:" : "Escolha o valor para liquidar a cota:";
   document.getElementById("pag-pix-chave").innerText = CONFIG.PIX;
+  const badge = document.getElementById("pagProvedorBadge");
+  if (badge) {
+    badge.textContent = CONFIG.PROVEDOR === "mercadopago"
+      ? "Checkout: Mercado Pago (PIX transparente)"
+      : "Checkout: InfinitePay";
+  }
+  document.getElementById("pixFallbackContainer").style.display = "none";
+  document.getElementById("mpQrWrap").style.display = "none";
+  document.getElementById("pixStatusPoll").style.display = "none";
+  if (paymentPollTimer) { clearInterval(paymentPollTimer); paymentPollTimer = null; }
+
   const container = document.getElementById("pag-buttons-container");
   container.innerHTML = "";
+  const allowPartial = CONFIG.PERMITIR_PARCIAL !== false;
   if (valorJaPago === 0) {
-    container.innerHTML += `<button class="btn-checkout" data-v="${total}" data-k="${escapeHTML(key)}" data-n="${escapeHTML(nome)}" data-c="${escapeHTML(contato)}" data-q="${qt}"><i data-lucide="credit-card" style="width:16px;height:16px"></i> PAGAR TOTAL (R$ ${total.toFixed(2).replace(".",",")})</button>`;
-    container.innerHTML += `<button class="btn-checkout secondary" data-v="${metade}" data-k="${escapeHTML(key)}" data-n="${escapeHTML(nome)}" data-c="${escapeHTML(contato)}" data-q="${qt}"><i data-lucide="credit-card" style="width:16px;height:16px"></i> PAGAR PARCIAL 50% (R$ ${metade.toFixed(2).replace(".",",")})</button>`;
+    container.innerHTML += `<button class="btn-checkout" data-v="${total}" data-tipo="TOTAL" data-k="${escapeHTML(key)}" data-n="${escapeHTML(nome)}" data-c="${escapeHTML(contato)}" data-q="${qt}"><i data-lucide="credit-card" style="width:16px;height:16px"></i> PAGAR TOTAL (R$ ${total.toFixed(2).replace(".",",")})</button>`;
+    if (allowPartial) {
+      container.innerHTML += `<button class="btn-checkout secondary" data-v="${metade}" data-tipo="PARCIAL" data-k="${escapeHTML(key)}" data-n="${escapeHTML(nome)}" data-c="${escapeHTML(contato)}" data-q="${qt}"><i data-lucide="credit-card" style="width:16px;height:16px"></i> PAGAR PARCIAL 50% (R$ ${metade.toFixed(2).replace(".",",")})</button>`;
+    }
   } else if (restante > 0) {
-    container.innerHTML += `<button class="btn-checkout" data-v="${restante}" data-k="${escapeHTML(key)}" data-n="${escapeHTML(nome)}" data-c="${escapeHTML(contato)}" data-q="${qt}"><i data-lucide="credit-card" style="width:16px;height:16px"></i> PAGAR RESTANTE (R$ ${restante.toFixed(2).replace(".",",")})</button>`;
+    container.innerHTML += `<button class="btn-checkout" data-v="${restante}" data-tipo="RESTANTE" data-k="${escapeHTML(key)}" data-n="${escapeHTML(nome)}" data-c="${escapeHTML(contato)}" data-q="${qt}"><i data-lucide="credit-card" style="width:16px;height:16px"></i> PAGAR RESTANTE (R$ ${restante.toFixed(2).replace(".",",")})</button>`;
   }
   container.querySelectorAll("button[data-v]").forEach(b => {
     b.addEventListener("click", function() {
-      triggerCheckout(this.dataset.n, this.dataset.c, this.dataset.k, parseInt(this.dataset.q,10), parseFloat(this.dataset.v), this);
+      triggerCheckout(this.dataset.n, this.dataset.c, this.dataset.k, parseInt(this.dataset.q,10), parseFloat(this.dataset.v), this, this.dataset.tipo || "TOTAL");
     });
   });
   document.getElementById("btnZapConfPag").onclick = () =>
@@ -927,7 +987,80 @@ window.abrirPagamento = (nome, contato, key, qt, valorJaPago = 0, isNovo = false
   document.getElementById("modalOpcoesPagamento").style.display = "flex";
 };
 
-window.triggerCheckout = async (nome, contato, key, q, valorCobrado, btnElement = null) => {
+function mostrarPixUI({ copiaCola, qrBase64, titulo }) {
+  const fallbackContainer = document.getElementById("pixFallbackContainer");
+  const copiaColaInput = document.getElementById("pixCopiaColaText");
+  const title = document.getElementById("pixFallbackTitle");
+  const qrWrap = document.getElementById("mpQrWrap");
+  const qrImg = document.getElementById("mpQrImg");
+  if (title) title.textContent = titulo || "PIX Copia e Cola:";
+  if (copiaColaInput) copiaColaInput.value = copiaCola || "";
+  if (qrBase64 && qrImg && qrWrap) {
+    qrImg.src = qrBase64.startsWith("data:") ? qrBase64 : `data:image/png;base64,${qrBase64}`;
+    qrWrap.style.display = "block";
+  } else if (qrWrap) qrWrap.style.display = "none";
+  if (fallbackContainer) fallbackContainer.style.display = "block";
+}
+
+function iniciarPollingPedido(orderNsu) {
+  const statusEl = document.getElementById("pixStatusPoll");
+  if (statusEl) {
+    statusEl.style.display = "block";
+    statusEl.textContent = "Aguardando confirmação automática do pagamento…";
+  }
+  if (paymentPollTimer) clearInterval(paymentPollTimer);
+  let tentativas = 0;
+  paymentPollTimer = setInterval(async () => {
+    tentativas++;
+    if (tentativas > 90) {
+      clearInterval(paymentPollTimer);
+      paymentPollTimer = null;
+      if (statusEl) statusEl.textContent = "Ainda não confirmado. O webhook do Render pode confirmar em instantes.";
+      return;
+    }
+    try {
+      const snap = await get(ref(db, `bolao/2026/pedidos/${orderNsu}`));
+      if (!snap.exists()) return;
+      const ped = snap.val();
+      if (ped.status === "CONFIRMED") {
+        clearInterval(paymentPollTimer);
+        paymentPollTimer = null;
+        if (statusEl) statusEl.textContent = "Pagamento confirmado!";
+        confetti({ particleCount: 140, spread: 80, origin: { y: 0.55 }, colors: ["#00ff88", "#fff", "#10b981"] });
+        showToast(ped.tipo === "PARCIAL" ? "✅ PARCIAL CONFIRMADO!" : "✅ PAGAMENTO CONFIRMADO!");
+        setTimeout(() => fecharModal("modalOpcoesPagamento"), 1200);
+      }
+    } catch (_) {}
+  }, 2500);
+}
+
+async function confirmarPedidoLocal(orderNsu, { force = false } = {}) {
+  const pedidoSnap = await get(ref(db, `bolao/2026/pedidos/${orderNsu}`));
+  if (!pedidoSnap.exists()) throw new Error("pedido_nao_encontrado");
+  const pedido = pedidoSnap.val();
+  if (pedido.status === "CONFIRMED" && !force) return { already: true, pedido };
+  if (pedido.status !== "PENDING" && pedido.status !== "CONFIRMED") throw new Error("status_invalido");
+  if (pedido.status === "PENDING") {
+    const pk = pedido.paid_key;
+    const amountPaid = Number(pedido.amount) || 0;
+    const partSnap = await get(ref(db, `bolao/2026/participantes/${pk}`));
+    if (!partSnap.exists()) throw new Error("participante_nao_encontrado");
+    const p = partSnap.val();
+    const qt = p.cotas || 1;
+    const currentPaid = p.valor || 0;
+    const newTotal = Math.round((currentPaid + amountPaid) * 100) / 100;
+    const totalDevido = qt * CONFIG.VALOR;
+    const status = newTotal >= totalDevido - 0.009 ? "PAGO" : (newTotal > 0 ? "PARCIAL" : "PENDENTE");
+    await update(ref(db, `bolao/2026/participantes/${pk}`), { valor: newTotal, status_compra: status });
+    await update(ref(db, `bolao/2026/pedidos/${orderNsu}`), {
+      status: "CONFIRMED", confirmedAt: Date.now(), confirmedVia: "client_return"
+    });
+    return { already: false, status, newTotal, tipo: pedido.tipo || "TOTAL" };
+  }
+  return { already: true, pedido };
+}
+
+window.triggerCheckout = async (nome, contato, key, q, valorCobrado, btnElement = null, tipoPagamento = "TOTAL") => {
   const originalContent = btnElement ? btnElement.innerHTML : "";
   if (btnElement) { btnElement.disabled = true; btnElement.innerHTML = `<div class="spinner"></div> Processando...`; }
   const qtFinal = q || 1;
@@ -940,47 +1073,95 @@ window.triggerCheckout = async (nome, contato, key, q, valorCobrado, btnElement 
   if (!cleanPhone.startsWith("55")) cleanPhone = "55" + cleanPhone;
   let safeName = String(nome).replace(/[^\w\sÀ-ÿ]/gi, "").trim().substring(0, 40);
   if (!safeName.includes(" ")) safeName += " Silva";
-  const descTexto = valorCobrado < (qtFinal * CONFIG.VALOR)
-    ? `Bolão Master - Parcial (${qtFinal} Cotas)` : `Bolão Master - Total (${qtFinal} Cotas)`;
+  const tipo = tipoPagamento || (valorCobrado + 0.001 < qtFinal * CONFIG.VALOR ? "PARCIAL" : "TOTAL");
+  const descTexto = tipo === "PARCIAL"
+    ? `Bolão Master - Parcial (${qtFinal} cotas)`
+    : (tipo === "RESTANTE" ? `Bolão Master - Restante (${qtFinal} cotas)` : `Bolão Master - Total (${qtFinal} cotas)`);
 
   try {
     await set(ref(db, `bolao/2026/pedidos/${orderNsu}`), {
-      paid_key: key, amount: valorCobrado, status: "PENDING", nome, created: Date.now()
+      paid_key: key,
+      amount: valorCobrado,
+      status: "PENDING",
+      nome,
+      contato: cleanPhone,
+      cotas: qtFinal,
+      tipo,
+      provider: CONFIG.PROVEDOR || "infinitepay",
+      created: Date.now()
     });
   } catch (e) { console.warn("pedido index", e); }
 
-  const payload = {
-    handle: CONFIG.INFINITE_TAG.trim(),
-    order_nsu: orderNsu,
-    redirect_url: returnUrl,
-    customer: {
-      name: safeName,
-      email: `bolao${Date.now().toString().slice(-5)}@vagnermagazine.com.br`,
-      phone_number: cleanPhone
-    },
-    items: [{
-      quantity: 1, price: valorCentavos, description: descTexto,
-      image: "https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_"
-    }]
-  };
+  const backend = (CONFIG.BACKEND_URL || "").replace(/\/$/, "");
 
   try {
+    if ((CONFIG.PROVEDOR || "infinitepay") === "mercadopago") {
+      if (!backend) throw new Error("Configure a URL do backend Render para Mercado Pago");
+      const response = await fetch(`${backend}/mp/pix`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          order_nsu: orderNsu,
+          paid_key: key,
+          amount: valorCobrado,
+          description: descTexto,
+          payer_name: safeName,
+          payer_email: `bolao${Date.now().toString().slice(-5)}@vagnermagazine.com.br`,
+          payer_phone: cleanPhone,
+          notification_url: `${backend}/webhook/mercadopago`,
+          external_reference: orderNsu
+        })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || "Falha ao criar PIX Mercado Pago");
+      // Atualiza pedido com id MP
+      try {
+        await update(ref(db, `bolao/2026/pedidos/${orderNsu}`), {
+          mp_payment_id: data.payment_id || null,
+          provider: "mercadopago"
+        });
+      } catch (_) {}
+      mostrarPixUI({
+        copiaCola: data.qr_code || data.copia_cola || "",
+        qrBase64: data.qr_code_base64 || "",
+        titulo: `PIX Mercado Pago (${tipo})`
+      });
+      iniciarPollingPedido(orderNsu);
+      showToast("PIX gerado — pague e a confirmação é automática");
+      if (btnElement) { btnElement.disabled = false; btnElement.innerHTML = originalContent; }
+      return;
+    }
+
+    // InfinitePay (padrão)
+    const payload = {
+      handle: (CONFIG.INFINITE_TAG || "").trim(),
+      order_nsu: orderNsu,
+      redirect_url: returnUrl,
+      customer: {
+        name: safeName,
+        email: `bolao${Date.now().toString().slice(-5)}@vagnermagazine.com.br`,
+        phone_number: cleanPhone
+      },
+      items: [{
+        quantity: 1, price: valorCentavos, description: descTexto,
+        image: "https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_"
+      }]
+    };
     const response = await fetch("https://api.checkout.infinitepay.io/links", {
       method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload)
     });
     const data = await response.json();
     if (!response.ok) throw new Error("checkout error");
-    if (data.url) window.location.href = data.url;
-  } catch (error) {
-    console.warn("InfinitePay fallback PIX", error);
-    const fallbackContainer = document.getElementById("pixFallbackContainer");
-    const copiaColaInput = document.getElementById("pixCopiaColaText");
-    if (fallbackContainer && copiaColaInput) {
-      const pix = gerarPayloadPix(CONFIG.PIX, "Bolao Master", "SAO PAULO", valorCobrado, orderNsu.slice(0, 25));
-      copiaColaInput.value = pix;
-      fallbackContainer.style.display = "block";
-      showToast("⚠️ Checkout instável. Use o PIX Copia e Cola!");
+    if (data.url) {
+      window.location.href = data.url;
+      return;
     }
+    throw new Error("URL InfinitePay ausente");
+  } catch (error) {
+    console.warn("Checkout fallback PIX", error);
+    const pix = gerarPayloadPix(CONFIG.PIX, "Bolao Master", "SAO PAULO", valorCobrado, orderNsu.slice(0, 25));
+    mostrarPixUI({ copiaCola: pix, titulo: "PIX fallback (manual)" });
+    showToast("⚠️ Checkout instável. Use o PIX Copia e Cola!");
     if (btnElement) { btnElement.disabled = false; btnElement.innerHTML = originalContent; }
   }
 };
@@ -1655,6 +1836,15 @@ function abrirConfig() {
   document.getElementById("cfg-bg-url").value = CONFIG.BG_URL || "";
   document.getElementById("cfg-pix").value = CONFIG.PIX || "";
   document.getElementById("cfg-infinite").value = CONFIG.INFINITE_TAG || "";
+  const cfgProv = document.getElementById("cfg-provedor");
+  if (cfgProv) cfgProv.value = CONFIG.PROVEDOR === "mercadopago" ? "mercadopago" : "infinitepay";
+  const cfgMp = document.getElementById("cfg-mp-public");
+  if (cfgMp) cfgMp.value = CONFIG.MP_PUBLIC_KEY || "";
+  const cfgBe = document.getElementById("cfg-backend-url");
+  if (cfgBe) cfgBe.value = CONFIG.BACKEND_URL || "";
+  const cfgPar = document.getElementById("cfg-permitir-parcial");
+  if (cfgPar) cfgPar.checked = CONFIG.PERMITIR_PARCIAL !== false;
+  try { toggleCamposProvedor(); } catch (_) {}
   document.getElementById("cfg-data-fim").value = CONFIG.DATA_FIM || "2026-12-31";
   document.getElementById("cfg-data-pagamento").value = CONFIG.DATA_PAGAMENTO || "2026-12-10";
   document.getElementById("cfg-pin").value = "";
@@ -1729,6 +1919,10 @@ window.salvarConfig = async () => {
   const bgUrl = (document.getElementById("cfg-bg-url").value || "").trim();
   const pix = (document.getElementById("cfg-pix").value || CONFIG.PIX).trim();
   const infinite = (document.getElementById("cfg-infinite").value || CONFIG.INFINITE_TAG).trim().replace("@", "");
+  const provedor = (document.getElementById("cfg-provedor")?.value || "infinitepay") === "mercadopago" ? "mercadopago" : "infinitepay";
+  const mpPublicKey = (document.getElementById("cfg-mp-public")?.value || "").trim();
+  const backendUrl = (document.getElementById("cfg-backend-url")?.value || "").trim().replace(/\/$/, "");
+  const permitirParcial = !!document.getElementById("cfg-permitir-parcial")?.checked;
   const dataFim = document.getElementById("cfg-data-fim").value || CONFIG.DATA_FIM;
   const dataPag = document.getElementById("cfg-data-pagamento").value || CONFIG.DATA_PAGAMENTO;
   const novoPin = (document.getElementById("cfg-pin").value || "").trim();
@@ -1739,9 +1933,12 @@ window.salvarConfig = async () => {
   if (isNaN(v) || v <= 0) return showToast("⚠️ Valor inválido");
   if (isNaN(l) || l < 1) return showToast("⚠️ Limite inválido");
   if (novoPin && !/^\d{4}$/.test(novoPin)) return showToast("⚠️ PIN deve ter 4 dígitos");
+  if (provedor === "mercadopago" && !backendUrl) return showToast("⚠️ Informe a URL do backend Render para Mercado Pago");
   try {
     CONFIG.VALOR = v; CONFIG.LIMITE = l; CONFIG.DEZENAS = d; CONFIG.PREMIO = premio;
     CONFIG.BG_URL = bgUrl; CONFIG.PIX = pix; CONFIG.INFINITE_TAG = infinite;
+    CONFIG.PROVEDOR = provedor; CONFIG.MP_PUBLIC_KEY = mpPublicKey; CONFIG.BACKEND_URL = backendUrl;
+    CONFIG.PERMITIR_PARCIAL = permitirParcial;
     CONFIG.DATA_FIM = dataFim; CONFIG.DATA_PAGAMENTO = dataPag;
     CONFIG.EXIGIR_PALPITE = exigirPalpite; CONFIG.REGULAMENTO = regulamento; CONFIG.RESULTADO = resultado;
     CONFIG.JOGOS_PLANEJADOS = plano.jogosPlanejados;
@@ -1755,15 +1952,16 @@ window.salvarConfig = async () => {
       jogosPlanejados: plano.jogosPlanejados,
       jogosDezenas: plano.jogosDezenas,
       jogosTaxaAtiva: plano.jogosTaxaAtiva,
-      jogosTaxaPct: plano.jogosTaxaPct
+      jogosTaxaPct: plano.jogosTaxaPct,
+      provedor, mpPublicKey, backendUrl, permitirParcial
     });
     await logAdminAction("config_salva", {
-      limite: l, valor: v, resultado,
+      limite: l, valor: v, resultado, provedor,
       jogosPlanejados: plano.jogosPlanejados, jogosDezenas: plano.jogosDezenas
     });
     fecharModal("modalConfig");
     updateUIConfig();
-    showToast(novoPin ? "✅ CONFIG + PIN + plano de jogos salvos!" : "✅ CONFIGURAÇÕES E PLANO SALVOS!");
+    showToast("✅ CONFIGURAÇÕES SALVAS!");
   } catch (e) {
     console.error(e);
     showToast("❌ Erro de permissão Firebase");
@@ -1937,31 +2135,21 @@ setInterval(() => {
   if (se) se.innerText = Math.floor((d % 6e4) / 1e3).toString().padStart(2, "0");
 }, 1000);
 
-// Retorno seguro de pagamento via ?order=
+// Retorno seguro de pagamento via ?order= (InfinitePay redirect)
+// Preferência: se webhook já confirmou, só exibe sucesso; se ainda PENDING, confirma 1x.
 (async function handlePaymentReturn() {
   const params = new URLSearchParams(window.location.search);
   const orderNsu = params.get("order");
   if (!orderNsu) return;
   window.history.replaceState({}, document.title, window.location.pathname);
   try {
-    const pedidoSnap = await get(ref(db, `bolao/2026/pedidos/${orderNsu}`));
-    if (!pedidoSnap.exists()) return showToast("⚠️ Pedido não encontrado");
-    const pedido = pedidoSnap.val();
-    if (pedido.status !== "PENDING") return showToast("ℹ️ Pagamento já processado");
-    const pk = pedido.paid_key;
-    const amountPaid = Number(pedido.amount) || 0;
-    const partSnap = await get(ref(db, `bolao/2026/participantes/${pk}`));
-    if (!partSnap.exists()) return;
-    const p = partSnap.val();
-    const qt = p.cotas || 1;
-    const currentPaid = p.valor || 0;
-    const newTotal = Math.round((currentPaid + amountPaid) * 100) / 100;
-    const totalDevido = qt * CONFIG.VALOR;
-    const status = newTotal >= totalDevido ? "PAGO" : (newTotal > 0 ? "PARCIAL" : "PENDENTE");
-    await update(ref(db, `bolao/2026/participantes/${pk}`), { valor: newTotal, status_compra: status });
-    await update(ref(db, `bolao/2026/pedidos/${orderNsu}`), { status: "CONFIRMED", confirmedAt: Date.now() });
+    const result = await confirmarPedidoLocal(orderNsu);
+    if (result.already) {
+      showToast("ℹ️ Pagamento já processado");
+      return;
+    }
     confetti({ particleCount: 160, spread: 90, origin: { y: 0.55 }, colors: ["#00ff88", "#fff", "#10b981"] });
-    showToast(status === "PAGO" ? "✅ PAGAMENTO TOTAL CONFIRMADO!" : "✅ PAGAMENTO REGISTRADO!");
+    showToast(result.status === "PAGO" ? "✅ PAGAMENTO TOTAL CONFIRMADO!" : "✅ PAGAMENTO PARCIAL CONFIRMADO!");
   } catch (e) {
     console.error(e);
     showToast("❌ Erro ao confirmar pagamento");
