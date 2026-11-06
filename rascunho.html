@@ -1,0 +1,1939 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Bolão Master</title>
+<link rel="shortcut icon" href="https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_" type="image/png">
+<link rel="icon" href="https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_" type="image/png">
+<meta name="theme-color" content="#030a06">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bolão Master">
+<link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_">
+<link rel="manifest" href="manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root{--primary:#00ff88;--primary-glow:rgba(0,255,136,.2);--bg:#030a06;--surface:rgba(10,18,14,.85);--surface-accent:rgba(20,32,26,.9);--border:rgba(255,255,255,.06);--border-active:rgba(0,255,136,.3);--text-main:#f3f4f6;--text-dim:#9ca3af;--paid:#10b981;--partial:#f59e0b;--pending:#ef4444;--gold:#fbbf24}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Plus Jakarta Sans',sans-serif;-webkit-tap-highlight-color:transparent}
+html,body,.scrollable-content{scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar,.scrollable-content::-webkit-scrollbar{display:none;width:0;height:0}
+.thin-scroll{scrollbar-width:thin;scrollbar-color:rgba(0,255,136,.35) transparent}
+.thin-scroll::-webkit-scrollbar{width:4px;height:4px}
+.thin-scroll::-webkit-scrollbar-track{background:transparent}
+.thin-scroll::-webkit-scrollbar-thumb{background:rgba(0,255,136,.35);border-radius:4px}
+body{background:#010502;color:var(--text-main);min-height:100vh;display:flex;justify-content:center;align-items:center;padding:12px;overflow-x:hidden;position:relative}
+.bg-mega{position:fixed;inset:0;z-index:0;pointer-events:none;background-color:#010502;background-image:url('mega-virada-bg-final.jpg');background-size:cover;background-position:center;background-repeat:no-repeat}
+.bg-mega::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(1,5,2,.72) 0%,rgba(0,20,10,.78) 45%,rgba(1,5,2,.88) 100%)}
+.ambient-glow{position:fixed;width:70vw;height:70vw;background:var(--primary-glow);filter:blur(140px);border-radius:50%;top:40%;left:50%;transform:translate(-50%,-50%);z-index:0;pointer-events:none;opacity:.4}
+.container{width:100%;max-width:480px;height:94vh;height:94dvh;border-radius:32px;padding:24px 20px;background:var(--surface);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);border:1px solid var(--border);box-shadow:0 30px 60px -15px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.1);display:flex;flex-direction:column;position:relative;z-index:1}
+.scrollable-content{overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
+.text-center{text-align:center;display:flex;flex-direction:column;align-items:center}
+.hero-badge{background:rgba(0,255,136,.08);color:var(--primary);padding:8px 16px;border-radius:100px;font-size:.7rem;font-weight:800;border:1px solid rgba(0,255,136,.25);margin-bottom:20px;display:inline-flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:1.5px}
+.update-banner{display:none;background:rgba(0,255,136,.1);border:1px solid var(--primary);padding:10px 14px;border-radius:16px;font-size:.75rem;color:#fff;align-items:center;justify-content:space-between;margin-bottom:15px;gap:10px}
+.pwa-badge{display:none;background:rgba(255,255,255,.03);color:var(--primary);border:1px solid var(--border-active);padding:8px 18px;border-radius:100px;font-size:.72rem;font-weight:700;align-items:center;justify-content:center;gap:8px;cursor:pointer;margin-bottom:20px}
+.logo-container{position:relative;margin-bottom:18px;display:flex;justify-content:center;align-items:center;cursor:pointer;user-select:none}
+.logo-img{display:block;width:130px;height:130px;object-fit:contain;filter:drop-shadow(0 6px 10px rgba(0,0,0,.6)) drop-shadow(0 0 12px rgba(0,255,136,.45));transition:transform .2s;pointer-events:none}
+.date-header{font-size:.75rem;color:var(--text-dim);opacity:.8;margin-bottom:24px;text-align:center}
+.prize-card{width:100%;background:rgba(0,255,136,.04);border-radius:20px;padding:18px;margin-bottom:16px;border:1px solid rgba(0,255,136,.15)}
+.prize-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.prize-item{background:rgba(0,0,0,.25);border-radius:14px;padding:10px 6px;text-align:center;border:1px solid var(--border)}
+.prize-item.highlight{border-color:var(--border-active);background:rgba(0,255,136,.06)}
+.prize-label{font-size:.6rem;color:var(--text-dim);font-weight:700;text-transform:uppercase;display:block;margin-bottom:4px}
+.prize-value{font-size:.95rem;font-weight:800;color:#fff}
+.prize-value.primary{color:var(--primary)}
+.prize-sub{font-size:.68rem;color:var(--text-dim);text-align:center;margin-top:12px;line-height:1.45}
+.rules-card{width:100%;background:rgba(0,255,136,.02);border-radius:20px;padding:18px;margin-bottom:16px;border:1px solid rgba(0,255,136,.12);text-align:left}
+.rules-card h4{color:var(--primary);font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.rules-card p{font-size:.72rem;color:var(--text-dim);line-height:1.5;margin-bottom:8px}
+.rules-card p strong{color:#fff}
+.rules-list{list-style:none;padding:0;margin-top:8px}
+.rules-list li{font-size:.7rem;color:var(--text-dim);line-height:1.4;margin-bottom:6px;padding-left:12px;position:relative}
+.rules-list li::before{content:"•";color:var(--primary);position:absolute;left:0;font-weight:bold}
+.countdown-card{width:100%;background:rgba(255,255,255,.02);border-radius:20px;padding:16px;margin-bottom:20px;border:1px solid var(--border)}
+.timer-grid{display:flex;justify-content:center;gap:12px}
+.time-box{display:flex;flex-direction:column;align-items:center;flex:1;max-width:68px;background:rgba(0,0,0,.3);border-radius:12px;padding:8px 4px;border:1px solid rgba(255,255,255,.03)}
+.time-val{font-size:1.6rem;font-weight:800;color:#fff;line-height:1.1}
+.time-unit{font-size:.55rem;color:var(--primary);font-weight:700;text-transform:uppercase;margin-top:4px;letter-spacing:.5px}
+.progress-area{margin-bottom:20px;padding:16px;border-radius:20px;background:rgba(255,255,255,.01);border:1px solid var(--border)}
+.progress-capsule{height:10px;background:rgba(255,255,255,.04);border-radius:100px;overflow:hidden;position:relative;margin-bottom:12px}
+.bar{position:absolute;height:100%;transition:1s cubic-bezier(.4,0,.2,1);border-radius:100px}
+.bar-paid{background:var(--paid);z-index:3;box-shadow:0 0 10px rgba(16,185,129,.5)}
+.bar-partial{background:var(--partial);z-index:2}
+.bar-total{background:#2a2a2a;z-index:1}
+.progress-legend{display:flex;justify-content:space-between;font-size:.65rem;font-weight:700;color:var(--text-dim);padding:0 4px}
+.legend-item{display:flex;align-items:center;gap:4px}
+.legend-dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+.progress-money{font-size:.9rem;color:var(--primary);margin-top:12px;font-weight:800;text-align:center;text-shadow:0 0 8px rgba(0,255,136,.2)}
+.tabs{display:flex;gap:4px;margin-bottom:20px;background:rgba(0,0,0,.4);padding:4px;border-radius:14px;border:1px solid var(--border);overflow-x:auto;white-space:nowrap;scrollbar-width:none}
+.tab-btn{flex:1;min-width:72px;padding:10px 4px;border-radius:10px;border:none;background:transparent;color:var(--text-dim);font-size:.65rem;font-weight:700;cursor:pointer;text-align:center}
+.tab-btn.active{background:var(--surface-accent);color:var(--primary);border:1px solid var(--border);box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.form-group{position:relative;margin-bottom:14px;width:100%}
+.form-group label{display:block;font-size:.68rem;font-weight:800;color:var(--primary);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
+.form-input{width:100%;padding:15px 16px;border-radius:14px;border:1.5px solid rgba(0,255,136,.18);background:rgba(0,0,0,.35);color:#fff;text-align:center;font-size:.9rem;font-weight:600;outline:none;transition:all .25s}
+.form-input:focus{border-color:var(--primary);background:rgba(0,20,12,.7);box-shadow:0 0 0 3px rgba(0,255,136,.18)}
+.form-input:not(:placeholder-shown){border-color:rgba(0,255,136,.45)}
+.form-input::placeholder{color:rgba(255,255,255,.32);font-size:.82rem}
+select.form-input{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2300ff88' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 14px center;background-size:16px;padding-right:40px;text-align-last:center}
+.qty-label{font-size:.65rem;color:var(--text-dim);font-weight:700;text-align:center;margin-bottom:8px;text-transform:uppercase;letter-spacing:.8px}
+.qty-selector{display:flex;align-items:center;justify-content:center;gap:16px;background:rgba(0,0,0,.3);border:1px solid var(--border-active);border-radius:16px;padding:12px 16px;margin-bottom:14px}
+.qty-btn{width:44px;height:44px;border-radius:12px;border:1px solid var(--border-active);background:rgba(0,255,136,.1);color:var(--primary);font-size:1.4rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.qty-btn:active{transform:scale(.94);background:var(--primary);color:#000}
+.qty-value{font-size:1.5rem;font-weight:800;color:#fff;min-width:40px;text-align:center}
+.btn-main{width:100%;padding:16px;border-radius:16px;background:var(--primary);color:#010502;font-weight:800;border:none;cursor:pointer;box-shadow:0 8px 24px var(--primary-glow);font-size:.95rem;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-main:disabled{background:#222;color:#555;box-shadow:none;cursor:not-allowed}
+.btn-main:active{transform:scale(.98)}
+.list-item{display:flex;align-items:center;padding:12px 8px;border-bottom:1px solid var(--border)}
+.item-name{font-size:.78rem;font-weight:700;color:#fff;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px}
+.item-info{font-size:.68rem;color:var(--text-dim);margin-top:2px}
+.pay-btn-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.btn-pay-sm{background:var(--primary);color:#000;padding:6px 12px;border-radius:8px;font-size:.65rem;font-weight:800;border:none;cursor:pointer}
+.btn-edit-sm{background:var(--surface-accent);color:var(--text-dim);padding:6px;border-radius:8px;font-size:.75rem;border:1px solid var(--border);cursor:pointer;display:none}
+body.admin-mode .btn-edit-sm{display:flex;align-items:center;justify-content:center}
+.status-indicator{width:10px;height:10px;border-radius:50%;margin-left:5px;cursor:pointer}
+.admin-btn{background:transparent;border:none;color:var(--text-dim);font-size:.65rem;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:1px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:5000;display:none;justify-content:center;align-items:center;backdrop-filter:blur(8px);padding:16px}
+#modalSelecionarPalpite.modal-overlay{align-items:flex-end;padding:0;background:rgba(0,0,0,.92)}
+.modal-box{width:100%;max-width:380px;border-radius:28px;padding:24px;text-align:center;border:1px solid var(--border);background:var(--surface-accent);box-shadow:0 20px 50px rgba(0,0,0,.9);animation:scaleIn .3s cubic-bezier(.34,1.56,.64,1)}
+@keyframes scaleIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.num-btn{background:rgba(255,255,255,.02);color:#fff;padding:14px;font-size:1.1rem;border-radius:12px;border:1px solid var(--border);font-weight:700;cursor:pointer}
+.num-btn:active{background:var(--primary);color:#000}
+.btn-checkout{background:var(--primary);color:#010502;width:100%;margin-top:10px;padding:14px;border-radius:14px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;border:none;box-shadow:0 4px 15px var(--primary-glow);font-size:.85rem}
+.btn-checkout.secondary{background:rgba(255,255,255,.03);color:var(--primary);border:1px solid var(--border-active);box-shadow:none}
+.btn-checkout.secondary:disabled{opacity:.4;cursor:not-allowed}
+.btn-danger{background:rgba(239,68,68,.1);color:var(--pending);border:1px solid rgba(239,68,68,.25);box-shadow:none}
+.btn-danger[data-confirming="true"]{background:var(--partial);color:#000;border-color:var(--partial)}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--primary);color:#000;padding:12px 24px;border-radius:100px;font-weight:800;z-index:9999;display:none;box-shadow:0 8px 24px var(--primary-glow);font-size:.75rem;white-space:nowrap}
+.spinner{width:18px;height:18px;border:2px solid rgba(0,0,0,.1);border-top:2px solid #000;border-radius:50%;animation:spin .8s linear infinite;display:inline-block}
+.guess-ball{background:rgba(0,255,136,.1);color:var(--primary);border:1px solid rgba(0,255,136,.25);font-weight:800;font-size:.72rem;width:25px;height:25px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center}
+.guess-ball.hit{background:var(--gold);color:#000;border-color:var(--gold);box-shadow:0 0 10px rgba(251,191,36,.55)}
+.guess-ball-row{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.02);border:1px solid var(--border);padding:10px 12px;border-radius:14px;margin-bottom:8px}
+.guess-ball-group{display:flex;flex-wrap:wrap;gap:5px}
+.num-picker-btn{background:rgba(255,255,255,.04);color:var(--text-main);border:1.5px solid rgba(255,255,255,.08);border-radius:14px;aspect-ratio:1;font-size:.95rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;min-height:48px;user-select:none}
+.num-picker-btn.selected{background:var(--primary);color:#000;border-color:var(--primary);box-shadow:0 0 16px var(--primary-glow);transform:scale(1.06)}
+#modalSelecionarPalpite .modal-box{max-width:100%;width:100%;height:96vh;max-height:96vh;border-radius:24px 24px 0 0;padding:18px 14px 20px;display:flex;flex-direction:column;margin:0;position:absolute;bottom:0;left:0;right:0;animation:slideUp .35s cubic-bezier(.34,1.2,.64,1)}
+#palpiteGrid{display:grid!important;grid-template-columns:repeat(6,1fr)!important;gap:8px!important;flex:1;overflow-y:auto;padding:4px 2px 12px!important;-webkit-overflow-scrolling:touch}
+.palpite-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px;flex-wrap:wrap}
+.palpite-selected-bar{display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,.4);padding:12px 14px;border-radius:14px;margin:10px 0 14px;border:1px solid var(--border-active);min-height:52px}
+.resultado-banner{background:linear-gradient(135deg,rgba(251,191,36,.15),rgba(0,255,136,.1));border:1px solid rgba(251,191,36,.4);border-radius:16px;padding:14px;margin-bottom:14px;text-align:center}
+.acertos-badge{display:inline-block;font-size:.62rem;font-weight:800;padding:3px 8px;border-radius:100px;margin-left:6px}
+.acertos-6{background:var(--gold);color:#000}
+.acertos-5{background:var(--primary);color:#000}
+.acertos-4{background:rgba(0,255,136,.2);color:var(--primary);border:1px solid var(--border-active)}
+.acertos-3{background:rgba(255,255,255,.08);color:var(--text-dim)}
+.hit-row{border-color:rgba(251,191,36,.35)!important;box-shadow:0 0 12px rgba(251,191,36,.12)}
+</style>
+</head>
+<body>
+<div class="bg-mega" id="bgMega" aria-hidden="true"></div>
+<div class="ambient-glow"></div>
+<div class="container" id="mainContainer">
+<div class="scrollable-content">
+<div class="update-banner" id="updateBanner"><span>Nova atualização disponível!</span><button class="btn-pay-sm" onclick="applyAppUpdate()">Atualizar</button></div>
+<div class="text-center">
+<button id="pwaInstallBtn" class="pwa-badge"><i data-lucide="download" style="width:14px;height:14px"></i> Instalar Aplicativo 📲</button>
+<div class="hero-badge"><i data-lucide="award" style="width:14px;height:14px"></i> BOLÃO EXCLUSIVO 2026</div>
+<div class="logo-container" id="logoAdminTrigger"><img src="https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_" class="logo-img" alt="Logo Bolão"></div>
+<div class="date-header" id="dateHeader">Encerramento: 31 de Dezembro de 2026</div>
+</div>
+<div class="prize-card">
+<div style="text-align:center;margin-bottom:12px"><div class="prize-label" style="margin-bottom:4px">🏆 Prêmio Estimado · Mega da Virada 2026</div>
+<div id="prizePremioValor" style="font-size:1.55rem;font-weight:800;color:var(--primary);text-shadow:0 0 18px rgba(0,255,136,.45)">R$ 1 Bilhão</div></div>
+<div class="prize-grid">
+<div class="prize-item highlight"><span class="prize-label">Valor da Cota</span><span class="prize-value primary" id="prizeCotaValor">R$ 1,00</span></div>
+<div class="prize-item"><span class="prize-label">Pote Atual</span><span class="prize-value" id="prizePote">R$ 0,00</span></div>
+<div class="prize-item"><span class="prize-label">Vagas</span><span class="prize-value" id="prizeVagas">60</span></div>
+</div>
+<p class="prize-sub" id="prizePremioSub">🏆 Prêmio estimado <strong>R$ 1 Bilhão</strong> (Mega da Virada 2026).<br>Dividido <strong>proporcionalmente</strong> pelas cotas pagas.</p>
+</div>
+<div class="countdown-card"><div class="timer-grid">
+<div class="time-box"><span class="time-val" id="dias">00</span><span class="time-unit">DIAS</span></div>
+<div class="time-box"><span class="time-val" id="horas">00</span><span class="time-unit">HRS</span></div>
+<div class="time-box"><span class="time-val" id="minutos">00</span><span class="time-unit">MIN</span></div>
+<div class="time-box"><span class="time-val" id="segundos">00</span><span class="time-unit">SEG</span></div>
+</div></div>
+<div class="progress-area">
+<div class="progress-capsule"><div class="bar bar-total" id="barTotal"></div><div class="bar bar-partial" id="barPartial"></div><div class="bar bar-paid" id="barPaid"></div></div>
+<div class="progress-legend">
+<span class="legend-item"><span class="legend-dot" style="background:var(--paid)"></span> <span id="labelPaid">0 Pagos</span></span>
+<span class="legend-item"><span class="legend-dot" style="background:var(--partial)"></span> <span id="labelPartial">0 Parciais</span></span>
+<span class="legend-item"><span class="legend-dot" style="background:var(--pending)"></span> <span id="labelPending">0 Pendentes</span></span>
+</div>
+<div class="progress-money" id="totalRaised">ARRECADADO: R$ 0,00</div>
+</div>
+<div class="rules-card"><h4><i data-lucide="info" style="width:14px;height:14px"></i> Informações &amp; Regulamento</h4>
+<div id="rulesContent">
+<p>🍀 <strong>Mega da Virada:</strong> o prêmio principal <strong>NÃO ACUMULA</strong>. Se ninguém acertar as 6 dezenas, vai para quem acertar 5 (Quina).</p>
+<p>⏱️ <strong>Pagamento até:</strong> <span id="rulesDataPagamento" style="color:var(--partial);font-weight:800">10/12/2026</span> — reservas não pagas são liberadas.</p>
+<ul class="rules-list"><li>Todo o valor arrecadado vira jogos oficiais da Caixa.</li><li>O prêmio é dividido de acordo com a quantidade de cotas <strong>pagas</strong> de cada um.</li><li>Comprovantes dos jogos são enviados no grupo antes do sorteio.</li></ul>
+</div></div>
+<div class="tabs">
+<button class="tab-btn active" onclick="switchTab('cadastro',this)">CADASTRO</button>
+<button class="tab-btn" onclick="switchTab('consulta',this)">MINHA COTA</button>
+<button class="tab-btn" onclick="switchTab('palpites',this)">🍀 PALPITES</button>
+<button class="tab-btn" onclick="switchTab('ranking',this)">🏆 RANKING</button>
+</div>
+
+<div id="view-cadastro" style="animation:fadeIn .4s ease">
+<div class="form-group"><label for="nome">👤 Nome completo</label>
+<input type="text" id="nome" class="form-input" placeholder="Digite seu nome completo" autocomplete="name"></div>
+<div class="form-group"><label for="telefone">📱 WhatsApp (com DDD)</label>
+<input type="tel" id="telefone" class="form-input" placeholder="Ex: (99) 99102-6112" inputmode="numeric" autocomplete="tel"></div>
+<div class="qty-label">Quantidade de cotas</div>
+<div class="qty-selector">
+<button type="button" class="qty-btn" id="qtyMinus">−</button>
+<span class="qty-value" id="qtyValue">1</span>
+<button type="button" class="qty-btn" id="qtyPlus">+</button>
+</div>
+<button id="btnPrePalpite" class="btn-checkout secondary" style="margin-bottom:12px" onclick="abrirModalPalpite('register')" disabled>
+<i data-lucide="plus-circle" style="width:16px;height:16px"></i> ADICIONAR PALPITE (OPCIONAL)
+</button>
+<div id="prePalpiteDisplay" style="display:none;text-align:center;margin-bottom:12px;padding:12px;border-radius:14px;border:1px solid var(--border-active);background:rgba(0,255,136,.05)"></div>
+<button class="btn-main" id="btnParticipar"><i data-lucide="ticket"></i> <span id="btnParticiparText">RESERVAR 1 COTA (R$ 1,00)</span></button>
+</div>
+<div id="view-consulta" style="display:none;animation:fadeIn .4s ease">
+<div class="form-group"><label for="search-phone">📱 Digite seu WhatsApp</label>
+<input type="tel" id="search-phone" class="form-input" placeholder="Ex: (99) 99102-6112" inputmode="numeric"></div>
+<button class="btn-main" onclick="consultarParticipante()"><i data-lucide="search"></i> VERIFICAR STATUS</button>
+<div id="result-consulta" style="margin-top:20px"></div>
+</div>
+<div id="view-palpites" style="display:none;animation:fadeIn .4s ease">
+<div id="resultadoBanner" style="display:none"></div>
+<input type="text" id="buscar-palpite" class="form-input" placeholder="🔍 Filtrar por nome ou dezenas..." style="margin-bottom:12px" oninput="renderPalpitesPublicos()">
+<div id="palpitesPublicosDiv" class="thin-scroll" style="display:flex;flex-direction:column;gap:10px;max-height:400px;overflow-y:auto"></div>
+</div>
+<div id="view-ranking" style="display:none;animation:fadeIn .4s ease"><div id="rankingDiv"></div></div>
+<div style="margin-top:20px">
+<button class="admin-btn" style="width:100%;padding:14px;border:1px dashed var(--border);border-radius:16px" onclick="toggleLista()" id="btnToggleLista">VER PARTICIPANTES ⌄</button>
+<div id="listaContainer" style="display:none;margin-top:20px">
+<input type="text" id="buscar" class="form-input" placeholder="🔍 Filtrar por nome..." oninput="renderList()" style="margin-bottom:12px">
+<div id="listaDiv" class="thin-scroll"></div>
+</div></div>
+</div></div>
+
+<div class="modal-overlay" id="modalOpcoesPagamento"><div class="modal-box">
+<h2 id="pag-title" style="color:var(--primary);font-weight:800;font-size:1.4rem">CADASTRO OK!</h2>
+<p id="pag-desc" style="color:var(--text-dim);font-size:.8rem;margin:10px 0 20px">Cota reservada. Escolha a opção de pagamento:</p>
+<div id="pag-buttons-container"></div>
+<div id="pixFallbackContainer" style="display:none;margin-top:15px;background:rgba(255,255,255,.03);padding:15px;border-radius:18px;border:1px solid var(--border)">
+<p style="font-size:.75rem;color:#fff;font-weight:bold;margin-bottom:8px">PIX Copia e Cola:</p>
+<input type="text" id="pixCopiaColaText" readonly class="form-input" style="font-size:.65rem;margin-bottom:10px;padding:10px;text-align:left">
+<button class="btn-checkout" onclick="copyPixCopiaCola()"><i data-lucide="copy" style="width:14px;height:14px"></i> Copiar Chave PIX</button>
+</div>
+<div style="margin-top:20px;border-top:1px solid var(--border);padding-top:15px">
+<p style="font-size:.7rem;color:var(--text-dim);margin-bottom:8px">Opção PIX manual:</p>
+<p style="font-weight:800;color:var(--primary);font-size:1.1rem" id="pag-pix-chave"></p>
+<button class="admin-btn" style="width:100%;margin-top:12px;padding:10px;border:1px solid var(--border);border-radius:10px" id="btnZapConfPag">ENVIAR COMPROVANTE</button>
+</div>
+<button class="admin-btn" style="width:100%;margin-top:15px" onclick="fecharModal('modalOpcoesPagamento')">FECHAR</button>
+</div></div>
+
+<div class="modal-overlay" id="modalConfirmacaoCompra"><div class="modal-box">
+<h2 style="color:var(--primary);font-weight:800;font-size:1.4rem;margin-bottom:12px">COMPRA REPETIDA</h2>
+<p id="confirmacao-texto" style="color:var(--text-main);font-size:.85rem;line-height:1.5;margin-bottom:20px"></p>
+<button class="btn-main" id="btnConfirmarCompraRepetida">🚀 SIM, COMPRAR NOVAMENTE</button>
+<button class="btn-checkout secondary" style="margin-top:10px" onclick="fecharModal('modalConfirmacaoCompra')">CANCELAR</button>
+</div></div>
+
+<div class="modal-overlay" id="modalSelecionarPalpite"><div class="modal-box">
+<div class="palpite-header">
+<div><h3 style="color:var(--primary);font-weight:800;font-size:1.15rem;margin:0">🍀 Palpite Interativo</h3>
+<p id="palpiteDescription" style="font-size:.72rem;color:var(--text-dim);margin:2px 0 0">Selecione as dezenas</p></div>
+<div style="display:flex;gap:6px;align-items:center">
+<button class="btn-pay-sm" type="button" onclick="surpresinha()" style="padding:8px 10px">🎲 SURPRESINHA</button>
+<button class="admin-btn" style="padding:8px 12px;border:1px solid var(--border);border-radius:10px" onclick="fecharModal('modalSelecionarPalpite')">✕</button>
+</div></div>
+<div class="palpite-selected-bar"><span style="font-size:.7rem;color:var(--text-dim);font-weight:700">Escolhidos:</span>
+<span id="selectedNumbersDisplay" style="color:var(--primary);font-weight:800;font-size:.9rem">NENHUM</span></div>
+<div id="palpiteGrid" class="thin-scroll"></div>
+<button class="btn-main" id="btnSalvarPalpite" disabled style="margin-top:8px;flex-shrink:0">CONFIRMAR PALPITE</button>
+</div></div>
+
+<div class="modal-overlay" id="modalConfig"><div class="modal-box thin-scroll" style="max-width:420px;max-height:92vh;overflow-y:auto;text-align:left">
+<h3 style="margin-bottom:16px;color:var(--primary);font-weight:800;text-align:center">⚙️ CONFIGURAÇÕES</h3>
+<p style="font-size:.65rem;color:var(--primary);font-weight:800;letter-spacing:1px;margin-bottom:10px">💰 VALORES &amp; LIMITES</p>
+<div style="margin-bottom:12px"><label style="font-size:.68rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:5px">Valor da Cota (R$)</label>
+<input type="number" id="cfg-valor" class="form-input" step="0.01" min="0.01"></div>
+<div style="margin-bottom:12px"><label style="font-size:.68rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:5px">Limite de Cotas</label>
+<input type="number" id="cfg-limite" class="form-input" min="1"></div>
+<div style="margin-bottom:12px"><label style="font-size:.68rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:5px">Dezenas por palpite</label>
+<select id="cfg-dezenas" class="form-input">
+<option value="6">6 Dezenas</option><option value="7">7</option><option value="8">8</option><option value="9">9</option>
+<option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option>
+<option value="14">14</option><option value="15">15</option>
+</select></div>
+<div style="margin-bottom:14px"><label style="font-size:.68rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:5px">🏆 Prêmio Estimado</label>
+<input type="text" id="cfg-premio" class="form-input"></div>
+<p style="font-size:.65rem;color:var(--primary);font-weight:800;letter-spacing:1px;margin:14px 0 10px;border-top:1px solid var(--border);padding-top:12px">💳 PAGAMENTO</p>
+<div style="margin-bottom:12px"><label style="font-size:.68rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:5px">Chave PIX / WhatsApp</label>
+<input type="text" id="cfg-pix" class="form-input" style="text-align:left;font-size:.85rem"></div>
+<div style="margin-bottom:14px"><label style="font-size:.68rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:5px">InfinitePay Handle</label>
+<input type="text" id="cfg-infinite" class="form-input" style="text-align:left;font-size:.85rem"></div>
+<p style="font-size:.65rem;color:var(--primary);font-weight:800;letter-spacing:1px;margin:14px 0 10px;border-top:1px solid var(--border);padding-top:12px">🎨 VISUAL &amp; DATAS</p>
+<div style="margin-bottom:12px"><label style="font-size:.68rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:5px">URL Imagem de Fundo</label>
+<input type="url" id="cfg-bg-url" class="form-input" style="text-align:left;font-size:.75rem"></div>
+<div style="margin-bottom:12px"><label style="font-size:.68rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:5px">Data de Encerramento</label>
+<input type="date" id="cfg-data-fim" class="form-input" style="text-align:left"></div>
+<div style="margin-bottom:14px"><label style="font-size:.68rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:5px">Limite de Pagamento</label>
+<input type="date" id="cfg-data-pagamento" class="form-input" style="text-align:left"></div>
+<p style="font-size:.65rem;color:var(--primary);font-weight:800;letter-spacing:1px;margin:14px 0 10px;border-top:1px solid var(--border);padding-top:12px">📋 REGRAS &amp; RESULTADO</p>
+<div style="margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(0,0,0,.25);padding:12px 14px;border-radius:12px;border:1px solid var(--border)">
+<div><div style="font-size:.72rem;font-weight:800;color:#fff">Exigir palpite no cadastro</div></div>
+<input type="checkbox" id="cfg-exigir-palpite"></div>
+<div style="margin-bottom:12px"><label style="font-size:.68rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:5px">Texto do regulamento</label>
+<textarea id="cfg-regulamento" class="form-input" rows="4" style="text-align:left;font-size:.72rem;resize:vertical"></textarea></div>
+<div style="margin-bottom:14px"><label style="font-size:.68rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:5px">🎯 Dezenas Sorteadas (ex: 04-12-23-38-45-59)</label>
+<input type="text" id="cfg-resultado" class="form-input" placeholder="04-12-23-38-45-59" style="letter-spacing:1px"></div>
+<p style="font-size:.65rem;color:var(--primary);font-weight:800;letter-spacing:1px;margin:14px 0 10px;border-top:1px solid var(--border);padding-top:12px">🧮 CALCULADORA MEGA-SENA (AO VIVO)</p>
+<div id="calcPanel" style="background:rgba(0,255,136,0.04);border:1px solid var(--border-active);border-radius:16px;padding:14px;margin-bottom:16px">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+    <div style="background:rgba(0,0,0,.3);border-radius:12px;padding:10px;text-align:center;border:1px solid var(--border)">
+      <div style="font-size:.55rem;color:var(--text-dim);font-weight:700;text-transform:uppercase">Cotas reservadas</div>
+      <div id="calcCotasReservadas" style="font-size:1.2rem;font-weight:800;color:#fff">0</div>
+    </div>
+    <div style="background:rgba(0,0,0,.3);border-radius:12px;padding:10px;text-align:center;border:1px solid var(--border)">
+      <div style="font-size:.55rem;color:var(--text-dim);font-weight:700;text-transform:uppercase">Cotas pagas</div>
+      <div id="calcCotasPagas" style="font-size:1.2rem;font-weight:800;color:var(--paid)">0</div>
+    </div>
+    <div style="background:rgba(0,0,0,.3);border-radius:12px;padding:10px;text-align:center;border:1px solid var(--border)">
+      <div style="font-size:.55rem;color:var(--text-dim);font-weight:700;text-transform:uppercase">Arrecadado</div>
+      <div id="calcArrecadado" style="font-size:1.05rem;font-weight:800;color:var(--primary)">R$ 0,00</div>
+    </div>
+    <div style="background:rgba(0,0,0,.3);border-radius:12px;padding:10px;text-align:center;border:1px solid var(--border)">
+      <div style="font-size:.55rem;color:var(--text-dim);font-weight:700;text-transform:uppercase">Valor / cota</div>
+      <div id="calcValorCota" style="font-size:1.05rem;font-weight:800;color:#fff">R$ 0,00</div>
+    </div>
+  </div>
+  <div style="margin-bottom:10px">
+    <label style="font-size:.65rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:4px">Dezenas por jogo (Caixa)</label>
+    <select id="calcDezenas" class="form-input" style="margin-bottom:0">
+      <option value="6">6 dezenas — R$ 6,00</option>
+      <option value="7">7 dezenas — R$ 42,00</option>
+      <option value="8">8 dezenas — R$ 168,00</option>
+      <option value="9">9 dezenas — R$ 504,00</option>
+      <option value="10">10 dezenas — R$ 1.260,00</option>
+      <option value="11">11 dezenas — R$ 2.772,00</option>
+      <option value="12">12 dezenas — R$ 5.544,00</option>
+      <option value="13">13 dezenas — R$ 10.296,00</option>
+      <option value="14">14 dezenas — R$ 18.018,00</option>
+      <option value="15">15 dezenas — R$ 30.030,00</option>
+    </select>
+  </div>
+  <div style="margin-bottom:10px">
+    <label style="font-size:.65rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:4px">Qtd. de jogos desejados</label>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button type="button" class="qty-btn" id="calcJogosMinus" style="width:40px;height:40px">−</button>
+      <input type="number" id="calcQtdJogos" class="form-input" value="1" min="1" max="500" style="margin:0;flex:1">
+      <button type="button" class="qty-btn" id="calcJogosPlus" style="width:40px;height:40px">+</button>
+    </div>
+  </div>
+  <div style="margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(0,0,0,.25);padding:10px 12px;border-radius:12px;border:1px solid var(--border)">
+    <label style="font-size:.7rem;color:#fff;font-weight:700;display:flex;align-items:center;gap:8px;cursor:pointer">
+      <input type="checkbox" id="calcTaxaToggle"> Taxa lotérica
+    </label>
+    <span id="calcTaxaWrap" style="display:none;align-items:center;gap:4px">
+      <input type="number" id="calcTaxa" value="35" min="0" max="35" class="form-input" style="width:64px;padding:8px;margin:0;font-size:.8rem">
+      <span style="font-size:.7rem;color:var(--text-dim)">%</span>
+    </span>
+  </div>
+  <div id="calcVerdict" style="border-radius:14px;padding:12px;margin-bottom:10px;border:1px solid var(--border);background:rgba(0,0,0,.25)">
+    <div id="calcVerdictTitle" style="font-weight:800;font-size:.85rem;color:var(--primary)">Calculando…</div>
+    <div id="calcVerdictSub" style="font-size:.68rem;color:var(--text-dim);margin-top:4px;line-height:1.4"></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+    <div style="background:rgba(0,0,0,.25);border-radius:12px;padding:10px;border:1px solid var(--border)">
+      <div style="font-size:.55rem;color:var(--text-dim);font-weight:700">CUSTO UNITÁRIO</div>
+      <div id="calcCustoUnit" style="font-weight:800;color:#fff">R$ 6,00</div>
+      <div id="calcCombinacoes" style="font-size:.6rem;color:var(--text-dim)">1 combinação</div>
+    </div>
+    <div style="background:rgba(0,0,0,.25);border-radius:12px;padding:10px;border:1px solid var(--border)">
+      <div style="font-size:.55rem;color:var(--text-dim);font-weight:700">CUSTO TOTAL</div>
+      <div id="calcCustoTotal" style="font-weight:800;color:var(--primary)">R$ 6,00</div>
+      <div id="calcCotaExata" style="font-size:.6rem;color:var(--text-dim)">Cota exata: —</div>
+    </div>
+  </div>
+  <div id="calcBalanco" style="font-size:.72rem;font-weight:800;text-align:center;padding:8px;border-radius:10px;background:rgba(0,0,0,.2);border:1px solid var(--border);margin-bottom:10px">Diferença: R$ 0,00</div>
+  <div style="font-size:.65rem;color:var(--primary);font-weight:800;margin-bottom:6px">🎯 Com o arrecadado, dá para jogar:</div>
+  <div id="calcSugestoes" style="display:flex;flex-direction:column;gap:6px;max-height:160px;overflow-y:auto" class="thin-scroll"></div>
+  <ul id="calcChecklist" style="list-style:none;padding:0;margin:10px 0 0;display:flex;flex-direction:column;gap:6px"></ul>
+</div>
+<p style="font-size:.65rem;color:var(--primary);font-weight:800;letter-spacing:1px;margin:14px 0 10px;border-top:1px solid var(--border);padding-top:12px">🔐 SEGURANÇA</p>
+<div style="margin-bottom:16px"><label style="font-size:.68rem;color:var(--text-dim);font-weight:800;display:block;margin-bottom:5px">Novo PIN Admin (4 dígitos)</label>
+<input type="password" id="cfg-pin" class="form-input" maxlength="4" inputmode="numeric" placeholder="Deixe em branco para manter"></div>
+<button class="btn-main" onclick="salvarConfig()" style="margin-bottom:12px">💾 SALVAR CONFIGURAÇÕES</button>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<button class="btn-checkout secondary" id="cfgBtnModoAdmin" style="margin:0;padding:10px;font-size:.7rem">🔓 MODO ADMIN</button>
+<button class="btn-checkout secondary" id="cfgBtnExportar" style="margin:0;padding:10px;font-size:.7rem">📥 EXPORTAR CSV</button>
+<button class="btn-checkout secondary" id="cfgBtnLiberarVencidos" style="margin:0;padding:10px;font-size:.65rem;color:var(--partial)">🧹 LIBERAR VENCIDOS</button>
+<button class="btn-checkout secondary" id="cfgBtnVerLogs" style="margin:0;padding:10px;font-size:.65rem">📜 VER LOGS</button>
+</div>
+<button class="admin-btn" style="margin-top:16px;width:100%;border:1px solid var(--border);padding:10px;border-radius:12px" onclick="fecharModal('modalConfig')">FECHAR</button>
+</div></div>
+
+<div class="modal-overlay" id="modalEditarParticipante"><div class="modal-box">
+<h3 style="margin-bottom:16px;font-size:1.15rem;color:var(--primary)">EDITAR PARTICIPANTE</h3>
+<input type="hidden" id="edit-key">
+<input type="text" id="edit-nome" class="form-input" placeholder="NOME COMPLETO">
+<input type="tel" id="edit-telefone" class="form-input" placeholder="WHATSAPP (DDD)">
+<input type="number" id="edit-cotas" class="form-input" placeholder="QUANTIDADE DE COTAS">
+<button class="btn-main" style="margin-top:8px;font-size:.85rem" onclick="salvarEdicaoParticipante()">SALVAR ALTERAÇÕES</button>
+<button class="btn-checkout btn-danger" id="btn-excluir-part" data-confirming="false" onclick="confirmarExclusao()">🗑️ EXCLUIR PARTICIPANTE</button>
+<button class="admin-btn" style="margin-top:15px;width:100%" onclick="fecharModal('modalEditarParticipante')">CANCELAR</button>
+</div></div>
+
+<div class="modal-overlay" id="modalSenha"><div class="modal-box" style="max-width:320px">
+<div style="width:48px;height:48px;border-radius:14px;background:rgba(0,255,136,.12);border:1px solid var(--border-active);display:flex;align-items:center;justify-content:center;margin:0 auto 12px">
+<i data-lucide="lock" style="width:22px;height:22px;color:var(--primary)"></i></div>
+<h3 style="margin-bottom:4px;font-size:1.15rem;color:#fff;font-weight:800">Acesso Administrativo</h3>
+<p style="font-size:.72rem;color:var(--text-dim);margin-bottom:14px">Digite o PIN de 4 dígitos</p>
+<div id="senhaDisplay" style="font-size:1.9rem;letter-spacing:12px;height:48px;color:var(--primary);font-weight:800;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.35);border-radius:12px;border:1px solid var(--border);margin-bottom:4px"></div>
+<p id="senhaHint" style="font-size:.65rem;color:var(--text-dim);margin-bottom:12px;min-height:16px"></p>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px">
+<button class="num-btn" onclick="digitar('1')">1</button><button class="num-btn" onclick="digitar('2')">2</button><button class="num-btn" onclick="digitar('3')">3</button>
+<button class="num-btn" onclick="digitar('4')">4</button><button class="num-btn" onclick="digitar('5')">5</button><button class="num-btn" onclick="digitar('6')">6</button>
+<button class="num-btn" onclick="digitar('7')">7</button><button class="num-btn" onclick="digitar('8')">8</button><button class="num-btn" onclick="digitar('9')">9</button>
+<button class="num-btn" style="color:var(--pending)" onclick="digitar('C')">C</button>
+<button class="num-btn" onclick="digitar('0')">0</button>
+<button class="num-btn" onclick="fecharModal('modalSenha')">✕</button>
+</div></div></div>
+
+<div class="modal-overlay" id="modalAdminPagamento"><div class="modal-box">
+<h3 style="font-weight:800;font-size:1.2rem;color:var(--primary)">BAIXA MANUAL</h3>
+<p id="pgtoNome" style="color:var(--text-dim);font-size:.8rem;margin:8px 0"></p>
+<input type="number" id="pgtoValor" placeholder="0.00" style="font-size:1.6rem;margin:12px 0;width:100%;text-align:center;padding:10px;background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:14px;color:#fff;outline:none;font-weight:700">
+<div style="display:flex;gap:8px;margin-bottom:12px">
+<button class="admin-btn" style="flex:1;border:1px solid var(--border);padding:12px;border-radius:12px" onclick="setVal(0)">ZERAR</button>
+<button class="btn-main" style="flex:1;padding:12px;border-radius:12px;font-size:.7rem;box-shadow:none;background:rgba(0,255,136,.15);color:var(--primary);border:1px solid var(--border-active)" onclick="setVal(1)">TOTAL</button>
+</div>
+<button class="btn-main" style="width:100%" id="btnSalvarPgto">CONFIRMAR</button>
+<button class="admin-btn" style="width:100%;margin-top:15px" onclick="fecharModal('modalAdminPagamento')">CANCELAR</button>
+</div></div>
+
+<div id="toast" class="toast">SUCESSO!</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getDatabase, ref, push, get, update, remove, set, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCOfFNEYG0UYCxkZsJ2BCxrbgl5EVsfhvw",
+  authDomain: "cadastros-bolao-rifas.firebaseapp.com",
+  databaseURL: "https://cadastros-bolao-rifas-default-rtdb.firebaseio.com",
+  projectId: "cadastros-bolao-rifas",
+  storageBucket: "cadastros-bolao-rifas.firebasestorage.app",
+  messagingSenderId: "770452455634",
+  appId: "1:770452455634:web:f3976be9eab63d725aed0b",
+  measurementId: "G-FF03XJB4YN"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const auth = getAuth(app);
+const dbRef = ref(db, "bolao/2026/participantes");
+const configRef = ref(db, "bolao/2026/configuracoes");
+const logsRef = ref(db, "bolao/2026/logs");
+const pedidosRef = ref(db, "bolao/2026/pedidos");
+
+try { getAnalytics(app); } catch (_) {}
+
+const CONFIG = {
+  LIMITE: 60, VALOR: 1, PIX: "(99) 9 9102-6112", SENHA: "6261",
+  INFINITE_TAG: "lauriuche", NOME_PRODUTO: "Cota Bolão Camino", DEZENAS: 6,
+  PREMIO: "R$ 1 Bilhão", BG_URL: "mega-virada-bg-final.jpg",
+  DATA_FIM: "2026-12-31", DATA_PAGAMENTO: "2026-12-10",
+  EXIGIR_PALPITE: false, REGULAMENTO: "", RESULTADO: ""
+};
+
+let parts = [];
+let acaoAdmin = null;
+let sels = [];
+let activeUserForPalpite = null;
+let chosenDezenas = [];
+let tempPalpites = [];
+let currentPalpiteContext = "edit";
+let deferredPrompt = null;
+let activeWorker = null;
+let qtySelecionada = 1;
+let partsListenerAttached = false;
+
+window.sels = sels;
+
+function escapeHTML(str) {
+  return String(str ?? "")
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
+function totalCotasReservadas() {
+  return parts.reduce((acc, p) => acc + (parseInt(p.cotas, 10) || 1), 0);
+}
+function vagasRestantes() {
+  return Math.max(0, CONFIG.LIMITE - totalCotasReservadas());
+}
+function cotasDoParticipante(p) {
+  return parseInt(p?.cotas, 10) || 1;
+}
+function isPago(p) {
+  return (p.valor || 0) >= cotasDoParticipante(p) * CONFIG.VALOR;
+}
+function isParcial(p) {
+  const v = p.valor || 0;
+  return v > 0 && v < cotasDoParticipante(p) * CONFIG.VALOR;
+}
+
+function emv(id, value) {
+  const v = String(value);
+  return id + String(v.length).padStart(2, "0") + v;
+}
+function crc16(payload) {
+  let crc = 0xFFFF;
+  for (let i = 0; i < payload.length; i++) {
+    crc ^= payload.charCodeAt(i) << 8;
+    for (let b = 0; b < 8; b++) {
+      crc = (crc & 0x8000) ? ((crc << 1) ^ 0x1021) : (crc << 1);
+      crc &= 0xFFFF;
+    }
+  }
+  return crc.toString(16).toUpperCase().padStart(4, "0");
+}
+function formatarChavePix(chave) {
+  let k = String(chave || "").trim();
+  if (k.includes("@") || /^\d{11}$/.test(k.replace(/\D/g, "")) && k.replace(/\D/g, "").length === 11 && !k.startsWith("(")) {
+    // email or cpf-like left as is if has non-digit or is 11 digit cpf
+  }
+  const digits = k.replace(/\D/g, "");
+  if (!k.includes("@") && !/^\d{14}$/.test(digits) && (digits.length === 10 || digits.length === 11)) {
+    return "+55" + digits;
+  }
+  if (/^\d{14}$/.test(digits)) return digits; // CNPJ
+  if (/^\d{11}$/.test(digits) && !k.startsWith("+")) {
+    // could be CPF
+    return digits;
+  }
+  return k.replace(/\s/g, "");
+}
+function gerarPayloadPix(chave, nomeRecebedor, cidade, valor, txid) {
+  const chaveFmt = formatarChavePix(chave);
+  const nome = String(nomeRecebedor || "Bolao Master").substring(0, 25);
+  const city = String(cidade || "SAO PAULO").substring(0, 15).toUpperCase();
+  const tx = String(txid || "***").replace(/[^a-zA-Z0-9]/g, "").substring(0, 25) || "***";
+  const valorStr = Number(valor).toFixed(2);
+  const mai = emv("00", "br.gov.bcb.pix") + emv("01", chaveFmt);
+  let payload = "";
+  payload += emv("00", "01");
+  payload += emv("01", "11");
+  payload += emv("26", mai);
+  payload += emv("52", "0000");
+  payload += emv("53", "986");
+  payload += emv("54", valorStr);
+  payload += emv("58", "BR");
+  payload += emv("59", nome);
+  payload += emv("60", city);
+  payload += emv("62", emv("05", tx));
+  payload += "6304";
+  payload += crc16(payload);
+  return payload;
+}
+
+function maskPhone(value) {
+  const d = (value || "").replace(/\D/g, "").slice(0, 11);
+  if (d.length <= 2) return d.length ? `(${d}` : "";
+  if (d.length <= 7) return `(${d.slice(0,2)}) ${d.slice(2)}`;
+  return `(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`;
+}
+function applyPhoneMask(el) {
+  if (!el) return;
+  el.addEventListener("input", () => { el.value = maskPhone(el.value); });
+}
+
+function contarAcertos(palpiteStr, resultadoStr) {
+  if (!resultadoStr) return 0;
+  const res = new Set(String(resultadoStr).split("-").map(s => s.trim().padStart(2, "0")));
+  const nums = String(palpiteStr).split("-").map(s => s.trim().padStart(2, "0"));
+  return nums.filter(n => res.has(n)).length;
+}
+function labelAcertos(n) {
+  if (n >= 6) return { text: "🏆 6 ACERTOS - SENA!", cls: "acertos-6" };
+  if (n === 5) return { text: "⭐ 5 ACERTOS - QUINA!", cls: "acertos-5" };
+  if (n === 4) return { text: "✨ 4 ACERTOS - QUADRA!", cls: "acertos-4" };
+  if (n === 3) return { text: "3 acertos", cls: "acertos-3" };
+  return null;
+}
+function renderBalls(palpiteStr, resultadoStr) {
+  const res = resultadoStr ? new Set(String(resultadoStr).split("-").map(s => s.trim().padStart(2, "0"))) : null;
+  return String(palpiteStr).split("-").map(n => {
+    const nn = n.trim().padStart(2, "0");
+    const hit = res && res.has(nn);
+    return `<span class="guess-ball${hit ? " hit" : ""}">${escapeHTML(nn)}</span>`;
+  }).join("");
+}
+
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  if (!t) return;
+  t.innerText = msg;
+  t.style.display = "block";
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => { t.style.display = "none"; }, 3200);
+}
+window.showToast = showToast;
+
+function fecharModal(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = "none";
+  if (id === "modalOpcoesPagamento") {
+    const fb = document.getElementById("pixFallbackContainer");
+    if (fb) fb.style.display = "none";
+  }
+}
+window.fecharModal = fecharModal;
+
+lucide.createIcons();
+
+window.switchTab = (tab, btn) => {
+  ["cadastro","consulta","palpites","ranking"].forEach(t => {
+    const el = document.getElementById("view-"+t);
+    if (el) el.style.display = "none";
+  });
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  const target = document.getElementById("view-"+tab);
+  if (target) target.style.display = "block";
+  if (btn) btn.classList.add("active");
+  if (tab === "ranking") renderRanking();
+  if (tab === "palpites") renderPalpitesPublicos();
+  if (tab === "cadastro") updateQtyUI();
+};
+
+window.toggleLista = () => {
+  const c = document.getElementById("listaContainer");
+  const btn = document.getElementById("btnToggleLista");
+  const hide = c.style.display === "none";
+  c.style.display = hide ? "block" : "none";
+  btn.innerText = hide ? "OCULTAR LISTA ⌃" : "VER PARTICIPANTES ⌄";
+  if (hide) renderList();
+};
+
+function updateQtyUI() {
+  const max = Math.max(1, vagasRestantes() || CONFIG.LIMITE);
+  if (qtySelecionada > max) qtySelecionada = max;
+  if (qtySelecionada < 1) qtySelecionada = 1;
+  const qv = document.getElementById("qtyValue");
+  if (qv) qv.innerText = String(qtySelecionada);
+  const total = qtySelecionada * CONFIG.VALOR;
+  const txt = document.getElementById("btnParticiparText");
+  if (txt) txt.innerText = `RESERVAR ${qtySelecionada} COTA${qtySelecionada>1?"S":""} (R$ ${total.toFixed(2).replace(".",",")})`;
+  const btnPre = document.getElementById("btnPrePalpite");
+  if (btnPre && CONFIG.EXIGIR_PALPITE) {
+    btnPre.innerHTML = `<i data-lucide="plus-circle" style="width:16px;height:16px"></i> ADICIONAR PALPITE (OBRIGATÓRIO)`;
+  }
+  try { lucide.createIcons(); } catch(_){}
+}
+document.getElementById("qtyMinus")?.addEventListener("click", () => { qtySelecionada = Math.max(1, qtySelecionada - 1); updateQtyUI(); });
+document.getElementById("qtyPlus")?.addEventListener("click", () => {
+  const max = Math.max(1, vagasRestantes());
+  qtySelecionada = Math.min(max, qtySelecionada + 1);
+  updateQtyUI();
+});
+
+function processPartsSnapshot(snap) {
+  parts = snap.exists() ? Object.entries(snap.val()).map(([k,v]) => ({
+    ...v, key: k,
+    nome: v.nome || "",
+    contato: v.contato || v.telefone || "",
+    valor: v.valor !== undefined ? v.valor : (v.valorPago || 0),
+    cotas: v.cotas || 1,
+    status_compra: v.status_compra || "PENDENTE",
+    palpites: v.palpites || []
+  })) : [];
+
+  const paidCount = parts.filter(isPago).length;
+  const partialCount = parts.filter(isParcial).length;
+  const totalRaised = parts.reduce((a,b) => a + (b.valor || 0), 0);
+  const totalCotas = totalCotasReservadas();
+  const cotasPagas = parts.filter(isPago).reduce((a,p) => a + cotasDoParticipante(p), 0);
+  const cotasParciais = parts.filter(isParcial).reduce((a,p) => a + cotasDoParticipante(p), 0);
+
+  const bp = document.getElementById("barPaid");
+  const bpar = document.getElementById("barPartial");
+  const bt = document.getElementById("barTotal");
+  if (bp) bp.style.width = `${Math.min(100, (cotasPagas / CONFIG.LIMITE) * 100)}%`;
+  if (bpar) bpar.style.width = `${Math.min(100, ((cotasPagas + cotasParciais) / CONFIG.LIMITE) * 100)}%`;
+  if (bt) bt.style.width = `${Math.min(100, (totalCotas / CONFIG.LIMITE) * 100)}%`;
+
+  const lp = document.getElementById("labelPaid");
+  const lpa = document.getElementById("labelPartial");
+  const lpen = document.getElementById("labelPending");
+  const tr = document.getElementById("totalRaised");
+  if (lp) lp.innerText = `${paidCount} Pagos`;
+  if (lpa) lpa.innerText = `${partialCount} Parciais`;
+  if (lpen) lpen.innerText = `${parts.length - paidCount - partialCount} Pendentes`;
+  if (tr) tr.innerText = `ARRECADADO: R$ ${totalRaised.toLocaleString("pt-BR", {minimumFractionDigits:2})}`;
+
+  const pote = document.getElementById("prizePote");
+  if (pote) pote.innerText = `R$ ${totalRaised.toLocaleString("pt-BR", {minimumFractionDigits:2})}`;
+  const vagas = document.getElementById("prizeVagas");
+  if (vagas) {
+    const rest = vagasRestantes();
+    vagas.innerText = String(rest);
+    vagas.style.color = rest <= 5 ? "var(--partial)" : "#fff";
+  }
+  updateQtyUI();
+  if (document.getElementById("listaContainer")?.style.display !== "none") renderList();
+  const activeTab = document.querySelector(".tab-btn.active");
+  if (activeTab && activeTab.textContent.includes("PALPITES")) renderPalpitesPublicos();
+  if (activeTab && activeTab.textContent.includes("RANKING")) renderRanking();
+  // Calculadora ao vivo no modal de config
+  if (document.getElementById("modalConfig")?.style.display === "flex") {
+    try { atualizarCalculadora(); } catch (_) {}
+  }
+}
+
+function iniciarSincronizacaoParticipantes() {
+  if (partsListenerAttached) return;
+  partsListenerAttached = true;
+  onValue(dbRef, (snap) => { processPartsSnapshot(snap); }, (err) => {
+    console.error(err);
+    showToast("⚠️ Falha de sincronização Firebase");
+  });
+}
+
+async function updateData() {
+  try {
+    const snap = await get(dbRef);
+    processPartsSnapshot(snap);
+  } catch (e) {
+    console.error(e);
+    showToast("⚠️ Falha de sincronização Firebase");
+  }
+}
+
+function iniciarSincronizacaoConfig() {
+  onValue(configRef, (snapshot) => {
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      if (Array.isArray(data)) {
+        CONFIG.LIMITE = parseInt(data[0]) || 60;
+        CONFIG.VALOR = parseFloat(data[1]) || 1;
+        if (data[2]) CONFIG.PIX = data[2];
+        CONFIG.DEZENAS = parseInt(data[3]) || 6;
+        if (data[4]) CONFIG.PREMIO = data[4];
+      } else if (typeof data === "object") {
+        if (data.limite !== undefined) CONFIG.LIMITE = parseInt(data.limite);
+        if (data.valorCota !== undefined) CONFIG.VALOR = parseFloat(data.valorCota);
+        if (data.pix !== undefined) CONFIG.PIX = data.pix;
+        if (data.dezenas !== undefined) CONFIG.DEZENAS = parseInt(data.dezenas);
+        if (data.premio !== undefined) CONFIG.PREMIO = data.premio;
+        if (data.bgUrl !== undefined) CONFIG.BG_URL = data.bgUrl;
+        if (data.senha !== undefined && String(data.senha).length === 4) CONFIG.SENHA = String(data.senha);
+        if (data.infiniteTag !== undefined) CONFIG.INFINITE_TAG = data.infiniteTag;
+        if (data.dataFim !== undefined) CONFIG.DATA_FIM = data.dataFim;
+        if (data.dataPagamento !== undefined) CONFIG.DATA_PAGAMENTO = data.dataPagamento;
+        if (data.exigirPalpite !== undefined) CONFIG.EXIGIR_PALPITE = !!data.exigirPalpite;
+        if (data.regulamento !== undefined) CONFIG.REGULAMENTO = data.regulamento || "";
+        if (data.resultado !== undefined) CONFIG.RESULTADO = data.resultado || "";
+      }
+      updateUIConfig();
+    } else {
+      set(configRef, {
+        limite: CONFIG.LIMITE, valorCota: CONFIG.VALOR, pix: CONFIG.PIX, dezenas: CONFIG.DEZENAS,
+        premio: CONFIG.PREMIO, bgUrl: CONFIG.BG_URL, senha: CONFIG.SENHA, infiniteTag: CONFIG.INFINITE_TAG,
+        dataFim: CONFIG.DATA_FIM, dataPagamento: CONFIG.DATA_PAGAMENTO, exigirPalpite: CONFIG.EXIGIR_PALPITE,
+        regulamento: CONFIG.REGULAMENTO, resultado: CONFIG.RESULTADO
+      }).catch(() => {});
+    }
+  });
+}
+
+function updateUIConfig() {
+  const cotaEl = document.getElementById("prizeCotaValor");
+  const premioEl = document.getElementById("prizePremioValor");
+  const premioSub = document.getElementById("prizePremioSub");
+  const bgEl = document.getElementById("bgMega");
+  const dateHeader = document.getElementById("dateHeader");
+  if (cotaEl) cotaEl.innerText = `R$ ${CONFIG.VALOR.toFixed(2).replace(".", ",")}`;
+  if (premioEl) premioEl.innerText = CONFIG.PREMIO || "R$ 1 Bilhão";
+  if (premioSub) premioSub.innerHTML = `🏆 Prêmio estimado <strong>${escapeHTML(CONFIG.PREMIO || "R$ 1 Bilhão")}</strong> (Mega da Virada 2026).<br>Dividido <strong>proporcionalmente</strong> pelas cotas pagas.`;
+  if (bgEl && CONFIG.BG_URL) bgEl.style.backgroundImage = `url('${CONFIG.BG_URL.replace(/'/g, "%27")}')`;
+  if (dateHeader && CONFIG.DATA_FIM) {
+    try {
+      const d = new Date(CONFIG.DATA_FIM + "T23:59:59");
+      dateHeader.innerText = `Encerramento: ${d.toLocaleDateString("pt-BR", {day:"2-digit", month:"long", year:"numeric"})}`;
+    } catch(_){}
+  }
+  const rulesDataPag = document.getElementById("rulesDataPagamento");
+  if (rulesDataPag && CONFIG.DATA_PAGAMENTO) {
+    try { rulesDataPag.innerText = new Date(CONFIG.DATA_PAGAMENTO + "T12:00:00").toLocaleDateString("pt-BR"); } catch(_){}
+  }
+  const rulesContent = document.getElementById("rulesContent");
+  if (rulesContent && CONFIG.REGULAMENTO && CONFIG.REGULAMENTO.trim()) {
+    let html = CONFIG.REGULAMENTO;
+    if (CONFIG.DATA_PAGAMENTO) {
+      try {
+        const dp = new Date(CONFIG.DATA_PAGAMENTO + "T12:00:00").toLocaleDateString("pt-BR");
+        html = html.replace(/\{\{DATA_PAGAMENTO\}\}/g, dp);
+      } catch(_){}
+    }
+    rulesContent.innerHTML = html;
+  }
+  const btnPre = document.getElementById("btnPrePalpite");
+  if (btnPre) {
+    if (CONFIG.EXIGIR_PALPITE) {
+      btnPre.innerHTML = `<i data-lucide="plus-circle" style="width:16px;height:16px"></i> ADICIONAR PALPITE (OBRIGATÓRIO)`;
+    } else {
+      btnPre.innerHTML = `<i data-lucide="plus-circle" style="width:16px;height:16px"></i> ADICIONAR PALPITE (OPCIONAL)`;
+    }
+    try { lucide.createIcons(); } catch(_){}
+  }
+  updateQtyUI();
+  renderResultadoBanner();
+}
+
+function renderResultadoBanner() {
+  const el = document.getElementById("resultadoBanner");
+  if (!el) return;
+  if (!CONFIG.RESULTADO || !CONFIG.RESULTADO.trim()) {
+    el.style.display = "none";
+    el.innerHTML = "";
+    return;
+  }
+  const balls = CONFIG.RESULTADO.split("-").map(n =>
+    `<span class="guess-ball hit" style="width:28px;height:28px;font-size:.8rem">${escapeHTML(n.trim().padStart(2,"0"))}</span>`
+  ).join("");
+  el.className = "resultado-banner";
+  el.style.display = "block";
+  el.innerHTML = `<div style="font-size:.7rem;font-weight:800;color:var(--gold)">🎯 RESULTADO OFICIAL</div><div class="balls" style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px">${balls}</div>`;
+}
+
+window.renderList = () => {
+  const div = document.getElementById("listaDiv");
+  if (!div) return;
+  div.innerHTML = "";
+  const term = (document.getElementById("buscar")?.value || "").toUpperCase();
+  parts.forEach((p, idx) => {
+    if (term && !(p.nome || "").includes(term)) return;
+    const qt = cotasDoParticipante(p);
+    const pago = isPago(p);
+    const color = pago ? "var(--paid)" : (isParcial(p) ? "var(--partial)" : "var(--pending)");
+    const el = document.createElement("div");
+    el.className = "list-item";
+    el.innerHTML = `
+      <div style="flex:1;min-width:0;text-align:left">
+        <div class="item-name">${idx+1}. ${escapeHTML(p.nome)}</div>
+        <div class="item-info">${qt} ${qt>1?"cotas":"cota"} • Pago: R$ ${(p.valor||0).toFixed(2)}</div>
+      </div>
+      <div class="pay-btn-right">
+        ${!pago ? `<button class="btn-pay-sm" data-key="${escapeHTML(p.key)}" data-action="pay">PAGAR</button>` : ""}
+        <button class="btn-edit-sm" data-key="${escapeHTML(p.key)}" data-action="edit">✏️</button>
+        <div class="status-indicator" style="background:${color}" data-key="${escapeHTML(p.key)}" data-action="baixa"></div>
+      </div>`;
+    div.appendChild(el);
+  });
+  div.querySelectorAll("[data-action]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const key = btn.getAttribute("data-key");
+      const action = btn.getAttribute("data-action");
+      if (action === "pay") abrirPagamentoPorKey(key);
+      if (action === "edit") abrirEdicao(key);
+      if (action === "baixa") { window.sels = [key]; askAdmin("edit"); }
+    });
+  });
+};
+
+window.abrirPagamentoPorKey = (key, isNovo = false) => {
+  const p = parts.find(x => x.key === key);
+  if (!p) return showToast("Participante não encontrado");
+  abrirPagamento(p.nome, p.contato, p.key, cotasDoParticipante(p), p.valor || 0, isNovo);
+};
+
+window.abrirPagamento = (nome, contato, key, qt, valorJaPago = 0, isNovo = false) => {
+  const total = qt * CONFIG.VALOR;
+  const restante = total - valorJaPago;
+  const metade = total / 2;
+  document.getElementById("pag-title").innerText = isNovo ? "CADASTRO OK!" : "PAGAMENTO PENDENTE";
+  document.getElementById("pag-desc").innerText = isNovo ? "Cota reservada. Escolha a opção de pagamento:" : "Escolha o valor para liquidar a cota:";
+  document.getElementById("pag-pix-chave").innerText = CONFIG.PIX;
+  const container = document.getElementById("pag-buttons-container");
+  container.innerHTML = "";
+  if (valorJaPago === 0) {
+    container.innerHTML += `<button class="btn-checkout" data-v="${total}" data-k="${escapeHTML(key)}" data-n="${escapeHTML(nome)}" data-c="${escapeHTML(contato)}" data-q="${qt}"><i data-lucide="credit-card" style="width:16px;height:16px"></i> PAGAR TOTAL (R$ ${total.toFixed(2).replace(".",",")})</button>`;
+    container.innerHTML += `<button class="btn-checkout secondary" data-v="${metade}" data-k="${escapeHTML(key)}" data-n="${escapeHTML(nome)}" data-c="${escapeHTML(contato)}" data-q="${qt}"><i data-lucide="credit-card" style="width:16px;height:16px"></i> PAGAR PARCIAL 50% (R$ ${metade.toFixed(2).replace(".",",")})</button>`;
+  } else if (restante > 0) {
+    container.innerHTML += `<button class="btn-checkout" data-v="${restante}" data-k="${escapeHTML(key)}" data-n="${escapeHTML(nome)}" data-c="${escapeHTML(contato)}" data-q="${qt}"><i data-lucide="credit-card" style="width:16px;height:16px"></i> PAGAR RESTANTE (R$ ${restante.toFixed(2).replace(".",",")})</button>`;
+  }
+  container.querySelectorAll("button[data-v]").forEach(b => {
+    b.addEventListener("click", function() {
+      triggerCheckout(this.dataset.n, this.dataset.c, this.dataset.k, parseInt(this.dataset.q,10), parseFloat(this.dataset.v), this);
+    });
+  });
+  document.getElementById("btnZapConfPag").onclick = () =>
+    window.open(`https://wa.me/55${CONFIG.PIX.replace(/\D/g,"")}?text=${encodeURIComponent("Comprovante do bolão: "+nome)}`);
+  try { lucide.createIcons(); } catch(_){}
+  document.getElementById("modalOpcoesPagamento").style.display = "flex";
+};
+
+window.triggerCheckout = async (nome, contato, key, q, valorCobrado, btnElement = null) => {
+  const originalContent = btnElement ? btnElement.innerHTML : "";
+  if (btnElement) { btnElement.disabled = true; btnElement.innerHTML = `<div class="spinner"></div> Processando...`; }
+  const qtFinal = q || 1;
+  const valorCentavos = Math.round(valorCobrado * 100);
+  let baseUrl = window.location.origin + window.location.pathname;
+  if (!baseUrl.startsWith("http") || baseUrl.includes("127.0.0.1")) baseUrl = window.location.href.split("?")[0];
+  const orderNsu = "B" + Date.now().toString().slice(-10) + Math.random().toString(36).slice(2, 6).toUpperCase();
+  const returnUrl = `${baseUrl}?order=${encodeURIComponent(orderNsu)}`;
+  let cleanPhone = String(contato).replace(/\D/g, "");
+  if (!cleanPhone.startsWith("55")) cleanPhone = "55" + cleanPhone;
+  let safeName = String(nome).replace(/[^\w\sÀ-ÿ]/gi, "").trim().substring(0, 40);
+  if (!safeName.includes(" ")) safeName += " Silva";
+  const descTexto = valorCobrado < (qtFinal * CONFIG.VALOR)
+    ? `Bolão Master - Parcial (${qtFinal} Cotas)` : `Bolão Master - Total (${qtFinal} Cotas)`;
+
+  try {
+    await set(ref(db, `bolao/2026/pedidos/${orderNsu}`), {
+      paid_key: key, amount: valorCobrado, status: "PENDING", nome, created: Date.now()
+    });
+  } catch (e) { console.warn("pedido index", e); }
+
+  const payload = {
+    handle: CONFIG.INFINITE_TAG.trim(),
+    order_nsu: orderNsu,
+    redirect_url: returnUrl,
+    customer: {
+      name: safeName,
+      email: `bolao${Date.now().toString().slice(-5)}@vagnermagazine.com.br`,
+      phone_number: cleanPhone
+    },
+    items: [{
+      quantity: 1, price: valorCentavos, description: descTexto,
+      image: "https://lh3.googleusercontent.com/d/1MYSiE8wo26ewwtet3bxkbo02XIEp5kw_"
+    }]
+  };
+
+  try {
+    const response = await fetch("https://api.checkout.infinitepay.io/links", {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload)
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error("checkout error");
+    if (data.url) window.location.href = data.url;
+  } catch (error) {
+    console.warn("InfinitePay fallback PIX", error);
+    const fallbackContainer = document.getElementById("pixFallbackContainer");
+    const copiaColaInput = document.getElementById("pixCopiaColaText");
+    if (fallbackContainer && copiaColaInput) {
+      const pix = gerarPayloadPix(CONFIG.PIX, "Bolao Master", "SAO PAULO", valorCobrado, orderNsu.slice(0, 25));
+      copiaColaInput.value = pix;
+      fallbackContainer.style.display = "block";
+      showToast("⚠️ Checkout instável. Use o PIX Copia e Cola!");
+    }
+    if (btnElement) { btnElement.disabled = false; btnElement.innerHTML = originalContent; }
+  }
+};
+
+window.copyPixCopiaCola = async () => {
+  const input = document.getElementById("pixCopiaColaText");
+  if (!input || !input.value) return;
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(input.value);
+    } else {
+      input.select();
+      document.execCommand("copy");
+    }
+    showToast("✅ PIX Copia e Cola copiado!");
+  } catch (_) {
+    input.select();
+    document.execCommand("copy");
+    showToast("✅ PIX copiado!");
+  }
+};
+
+const nomeInput = document.getElementById("nome");
+const telefoneInput = document.getElementById("telefone");
+const prePalpiteBtn = document.getElementById("btnPrePalpite");
+applyPhoneMask(telefoneInput);
+applyPhoneMask(document.getElementById("search-phone"));
+applyPhoneMask(document.getElementById("edit-telefone"));
+
+function verificarInputsCadastro() {
+  const nomeOk = nomeInput.value.trim().length > 0;
+  const tel = telefoneInput.value.replace(/\D/g, "");
+  const telOk = tel.length >= 10 && tel.length <= 11;
+  if (prePalpiteBtn) prePalpiteBtn.disabled = !(nomeOk && telOk);
+}
+nomeInput?.addEventListener("input", verificarInputsCadastro);
+telefoneInput?.addEventListener("input", verificarInputsCadastro);
+
+document.getElementById("btnParticipar").onclick = async () => {
+  const n = nomeInput.value.toUpperCase().trim();
+  const t = telefoneInput.value.trim();
+  if (!n || !t) return showToast("⚠️ Informe Nome e WhatsApp!");
+  const cleanPhone = t.replace(/\D/g, "");
+  if (cleanPhone.length < 10 || cleanPhone.length > 11) return showToast("⚠️ WhatsApp inválido");
+
+  const qtd = qtySelecionada || 1;
+  if (totalCotasReservadas() + qtd > CONFIG.LIMITE) {
+    const existing = parts.find(p => (p.contato || "").replace(/\D/g, "") === cleanPhone);
+    if (!existing) return showToast("⛔ Limite de cotas atingido!");
+    if (totalCotasReservadas() + 1 > CONFIG.LIMITE) return showToast("⛔ Sem vagas para mais cotas!");
+  }
+  if (CONFIG.EXIGIR_PALPITE && (!tempPalpites || tempPalpites.length === 0)) {
+    return showToast("⚠️ Selecione um palpite antes de reservar!");
+  }
+
+  const existing = parts.find(p => (p.contato || "").replace(/\D/g, "") === cleanPhone);
+  if (existing) {
+    const currentCotas = cotasDoParticipante(existing);
+    document.getElementById("confirmacao-texto").innerHTML =
+      `Olá, <b>${escapeHTML(existing.nome)}</b>!<br>Você já possui <b>${currentCotas}</b> cota(s).<br><br>Deseja adicionar mais <b>${qtd}</b>?`;
+    document.getElementById("modalConfirmacaoCompra").style.display = "flex";
+    document.getElementById("btnConfirmarCompraRepetida").onclick = async () => {
+      fecharModal("modalConfirmacaoCompra");
+      if (totalCotasReservadas() + qtd > CONFIG.LIMITE) return showToast("⛔ Limite de cotas atingido!");
+      const btn = document.getElementById("btnParticipar");
+      btn.disabled = true;
+      const original = btn.innerHTML;
+      btn.innerHTML = `<div class="spinner"></div> PROCESSANDO...`;
+      try {
+        const novasCotas = currentCotas + qtd;
+        const totalDevido = novasCotas * CONFIG.VALOR;
+        const valorAtual = existing.valor || 0;
+        const status = valorAtual >= totalDevido ? "PAGO" : (valorAtual > 0 ? "PARCIAL" : "PENDENTE");
+        const currentPalpites = [...(existing.palpites || [])];
+        tempPalpites.forEach(tp => { if (currentPalpites.length < novasCotas) currentPalpites.push(tp); });
+        await update(ref(db, `bolao/2026/participantes/${existing.key}`), {
+          cotas: novasCotas, status_compra: status, palpites: currentPalpites
+        });
+        showToast("✅ COTAS ADICIONADAS!");
+        nomeInput.value = ""; telefoneInput.value = "";
+        qtySelecionada = 1; updateQtyUI();
+        limparPrePalpiteSilencioso();
+        abrirPagamentoPorKey(existing.key, true);
+      } catch (e) {
+        console.error(e); showToast("❌ Erro ao gravar");
+      } finally {
+        btn.disabled = false; btn.innerHTML = original;
+      }
+    };
+    return;
+  }
+
+  const btn = document.getElementById("btnParticipar");
+  btn.disabled = true;
+  const original = btn.innerHTML;
+  btn.innerHTML = `<div class="spinner"></div> AGUARDE...`;
+  try {
+    const novoRef = await push(dbRef, {
+      nome: n, contato: t, valor: 0, cotas: qtd, status_compra: "PENDENTE",
+      data: Date.now(), palpites: tempPalpites.slice(0, qtd)
+    });
+    showToast("✅ RESERVA REALIZADA!");
+    nomeInput.value = ""; telefoneInput.value = "";
+    qtySelecionada = 1; updateQtyUI();
+    limparPrePalpiteSilencioso();
+    abrirPagamento(n, t, novoRef.key, qtd, 0, true);
+  } catch (e) {
+    console.error(e); showToast("❌ Erro ao registrar");
+  } finally {
+    btn.disabled = false; btn.innerHTML = original;
+  }
+};
+
+window.consultarParticipante = () => {
+  const tel = (document.getElementById("search-phone")?.value || "").replace(/\D/g, "");
+  if (!tel) return showToast("⚠️ Digite o número!");
+  const found = parts.find(p => (p.contato || "").replace(/\D/g, "").includes(tel));
+  const res = document.getElementById("result-consulta");
+  if (!found) {
+    res.innerHTML = `<p style="color:var(--pending);text-align:center;font-size:.85rem">❌ Participante não encontrado.</p>`;
+    return;
+  }
+  activeUserForPalpite = found;
+  const qt = cotasDoParticipante(found);
+  const total = qt * CONFIG.VALOR;
+  const currentPalpites = found.palpites || [];
+  let palpitesHtml = "";
+  if (currentPalpites.length) {
+    currentPalpites.forEach((palp, idx) => {
+      const ac = contarAcertos(palp, CONFIG.RESULTADO);
+      const badge = labelAcertos(ac);
+      palpitesHtml += `<div class="guess-ball-row${ac>=4?" hit-row":""}">
+        <div class="guess-ball-group">${renderBalls(palp, CONFIG.RESULTADO)}${badge?`<span class="acertos-badge ${badge.cls}">${badge.text}</span>`:""}</div>
+        <button class="admin-btn" style="color:var(--pending);padding:4px" data-idx="${idx}">🗑</button>
+      </div>`;
+    });
+  } else {
+    palpitesHtml = `<p style="color:var(--text-dim);font-size:.72rem;margin:10px 0">Nenhum palpite registrado.</p>`;
+  }
+  const statusHtml = found.valor >= total
+    ? `<span style="color:var(--paid);font-weight:800">🟢 PAGO</span>`
+    : (found.valor > 0 ? `<span style="color:var(--partial);font-weight:800">🟡 PARCIAL</span>` : `<span style="color:var(--pending);font-weight:800">🔴 PENDENTE</span>`);
+  res.innerHTML = `
+    <div style="background:rgba(255,255,255,.03);padding:20px;border-radius:20px;border:1px solid var(--border);text-align:center;margin-bottom:15px">
+      <p style="font-size:.95rem;margin-bottom:8px">👤 <b>${escapeHTML(found.nome)}</b></p>
+      <p style="font-size:.85rem;color:var(--text-dim);margin-bottom:8px">🎟️ ${qt} cota(s)</p>
+      <p style="font-size:.85rem;margin-bottom:12px">💰 Status: ${statusHtml}</p>
+      ${found.valor < total ? `<button class="btn-main" style="margin-top:10px;font-size:.8rem;padding:12px" id="btnPagarConsulta">PAGAR VALOR PENDENTE</button>` : ""}
+    </div>
+    <div style="background:rgba(255,255,255,.01);padding:18px;border-radius:20px;border:1px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;margin-bottom:12px">
+        <h4 style="font-size:.8rem;color:var(--primary);font-weight:800">🍀 MEUS PALPITES</h4>
+        <span style="font-size:.7rem;color:var(--text-dim)">${currentPalpites.length} de ${qt}</span>
+      </div>
+      <div id="meusPalpitesList">${palpitesHtml}</div>
+      ${currentPalpites.length < qt
+        ? `<button class="btn-main" style="font-size:.8rem;padding:12px;background:transparent;color:var(--primary);border:1px solid var(--border-active);box-shadow:none" onclick="abrirModalPalpite('edit')">ADICIONAR PALPITE</button>`
+        : `<p style="font-size:.68rem;color:var(--paid);text-align:center">🎉 Limite de palpites atingido!</p>`}
+    </div>`;
+  document.getElementById("btnPagarConsulta")?.addEventListener("click", () => abrirPagamentoPorKey(found.key));
+  res.querySelectorAll("button[data-idx]").forEach(b => {
+    b.addEventListener("click", () => removerPalpite(parseInt(b.dataset.idx, 10)));
+  });
+};
+
+window.renderPalpitesPublicos = function renderPalpitesPublicos() {
+  const div = document.getElementById("palpitesPublicosDiv");
+  if (!div) return;
+  div.innerHTML = "";
+  renderResultadoBanner();
+  const term = (document.getElementById("buscar-palpite")?.value || "").toUpperCase();
+  const rows = [];
+  parts.forEach(p => {
+    (p.palpites || []).forEach(palp => {
+      if (term && !(p.nome || "").includes(term) && !palp.includes(term)) return;
+      const ac = contarAcertos(palp, CONFIG.RESULTADO);
+      rows.push({ p, palp, ac });
+    });
+  });
+  rows.sort((a, b) => b.ac - a.ac);
+  if (!rows.length) {
+    div.innerHTML = `<p style="text-align:center;color:var(--text-dim);font-size:.8rem;padding:20px">Nenhum palpite registrado.</p>`;
+    return;
+  }
+  rows.forEach(({ p, palp, ac }) => {
+    const badge = labelAcertos(ac);
+    const row = document.createElement("div");
+    row.style.cssText = "background:rgba(255,255,255,.02);border:1px solid var(--border);padding:12px;border-radius:16px;display:flex;flex-direction:column;gap:8px";
+    if (ac >= 4) row.classList.add("hit-row");
+    row.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.75rem;font-weight:800;text-transform:uppercase">👤 ${escapeHTML(p.nome)}</span>
+        <span style="font-size:.6rem;color:var(--text-dim);background:rgba(255,255,255,.05);padding:3px 8px;border-radius:100px">${escapeHTML(p.status_compra || "")}</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;align-items:center">${renderBalls(palp, CONFIG.RESULTADO)}${badge?`<span class="acertos-badge ${badge.cls}">${badge.text}</span>`:""}</div>`;
+    div.appendChild(row);
+  });
+};
+
+function renderRanking() {
+  const div = document.getElementById("rankingDiv");
+  if (!div) return;
+  const sorted = [...parts].sort((a,b) => cotasDoParticipante(b) - cotasDoParticipante(a)).slice(0, 10);
+  if (!sorted.length) {
+    div.innerHTML = `<p style="text-align:center;color:var(--text-dim);padding:20px">Nenhum participante ainda.</p>`;
+    return;
+  }
+  div.innerHTML = sorted.map((p, i) => {
+    const qt = cotasDoParticipante(p);
+    const icon = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `${i+1}º`;
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 10px;border-bottom:1px solid var(--border)">
+      <span style="font-size:.8rem;font-weight:600"><span style="margin-right:10px">${icon}</span>${escapeHTML(p.nome)}</span>
+      <span style="color:var(--primary);font-weight:800">${qt} cota${qt>1?"s":""}</span></div>`;
+  }).join("");
+}
+
+window.abrirModalPalpite = (context = "edit") => {
+  currentPalpiteContext = context;
+  chosenDezenas = [];
+  document.getElementById("palpiteDescription").innerText = `Selecione exatamente ${CONFIG.DEZENAS} dezenas`;
+  document.getElementById("selectedNumbersDisplay").innerText = "NENHUM";
+  const saveBtn = document.getElementById("btnSalvarPalpite");
+  saveBtn.disabled = true;
+  saveBtn.innerHTML = `SELECIONE ${CONFIG.DEZENAS} DEZENAS`;
+  const grid = document.getElementById("palpiteGrid");
+  grid.innerHTML = "";
+  for (let i = 1; i <= 60; i++) {
+    const val = String(i).padStart(2, "0");
+    const btn = document.createElement("button");
+    btn.className = "num-picker-btn";
+    btn.type = "button";
+    btn.innerText = val;
+    btn.onclick = () => toggleDezena(val, btn);
+    grid.appendChild(btn);
+  }
+  document.getElementById("modalSelecionarPalpite").style.display = "flex";
+};
+
+function toggleDezena(dezena, btn) {
+  const idx = chosenDezenas.indexOf(dezena);
+  if (idx > -1) {
+    chosenDezenas.splice(idx, 1);
+    btn.classList.remove("selected");
+  } else {
+    if (chosenDezenas.length >= CONFIG.DEZENAS) return showToast(`⚠️ Máximo ${CONFIG.DEZENAS} dezenas`);
+    chosenDezenas.push(dezena);
+    btn.classList.add("selected");
+  }
+  chosenDezenas.sort((a,b) => parseInt(a,10) - parseInt(b,10));
+  const disp = document.getElementById("selectedNumbersDisplay");
+  const saveBtn = document.getElementById("btnSalvarPalpite");
+  if (chosenDezenas.length) {
+    disp.innerHTML = chosenDezenas.map(n => `<span class="guess-ball" style="width:28px;height:28px;display:inline-flex">${n}</span>`).join("");
+  } else disp.innerText = "NENHUM";
+  saveBtn.disabled = chosenDezenas.length !== CONFIG.DEZENAS;
+  saveBtn.innerHTML = chosenDezenas.length === CONFIG.DEZENAS
+    ? `✅ CONFIRMAR ${CONFIG.DEZENAS} DEZENAS`
+    : `SELECIONE ${CONFIG.DEZENAS - chosenDezenas.length} AINDA`;
+}
+
+window.surpresinha = () => {
+  const pool = Array.from({length: 60}, (_, i) => String(i+1).padStart(2, "0"));
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  chosenDezenas = pool.slice(0, CONFIG.DEZENAS).sort((a,b) => parseInt(a,10)-parseInt(b,10));
+  document.querySelectorAll("#palpiteGrid .num-picker-btn").forEach(btn => {
+    if (chosenDezenas.includes(btn.innerText)) btn.classList.add("selected");
+    else btn.classList.remove("selected");
+  });
+  const disp = document.getElementById("selectedNumbersDisplay");
+  disp.innerHTML = chosenDezenas.map(n => `<span class="guess-ball" style="width:28px;height:28px;display:inline-flex">${n}</span>`).join("");
+  const saveBtn = document.getElementById("btnSalvarPalpite");
+  saveBtn.disabled = false;
+  saveBtn.innerHTML = `✅ CONFIRMAR ${CONFIG.DEZENAS} DEZENAS`;
+};
+
+document.getElementById("btnSalvarPalpite").onclick = async () => {
+  if (chosenDezenas.length !== CONFIG.DEZENAS) return;
+  const stringPalpite = chosenDezenas.join("-");
+  if (currentPalpiteContext === "register") {
+    if (tempPalpites.length >= qtySelecionada) tempPalpites = tempPalpites.slice(0, qtySelecionada - 1);
+    tempPalpites.push(stringPalpite);
+    fecharModal("modalSelecionarPalpite");
+    showToast("🎉 PALPITE ADICIONADO!");
+    const display = document.getElementById("prePalpiteDisplay");
+    display.style.display = "block";
+    display.innerHTML = tempPalpites.map(tp => `<div style="margin:6px 0">${renderBalls(tp, null)}</div>`).join("") +
+      `<button type="button" class="admin-btn" style="color:var(--pending);margin-top:6px" onclick="limparPrePalpite()">🗑 Remover</button>`;
+    document.getElementById("btnPrePalpite").innerHTML = `<i data-lucide="refresh-cw" style="width:16px;height:16px"></i> ALTERAR / ADD PALPITE`;
+    try { lucide.createIcons(); } catch(_){}
+  } else {
+    if (!activeUserForPalpite) return;
+    const currentPalpites = [...(activeUserForPalpite.palpites || [])];
+    if (currentPalpites.length >= cotasDoParticipante(activeUserForPalpite)) return showToast("⚠️ Limite de palpites");
+    currentPalpites.push(stringPalpite);
+    try {
+      await update(ref(db, `bolao/2026/participantes/${activeUserForPalpite.key}`), { palpites: currentPalpites });
+      fecharModal("modalSelecionarPalpite");
+      showToast("🎉 PALPITE REGISTRADO!");
+      consultarParticipante();
+    } catch (e) { showToast("❌ Erro ao salvar palpite"); }
+  }
+};
+
+window.limparPrePalpite = () => {
+  tempPalpites = [];
+  document.getElementById("prePalpiteDisplay").style.display = "none";
+  updateUIConfig();
+  showToast("🗑 Palpite removido");
+};
+window.limparPrePalpiteSilencioso = () => {
+  tempPalpites = [];
+  const d = document.getElementById("prePalpiteDisplay");
+  if (d) d.style.display = "none";
+  if (prePalpiteBtn) prePalpiteBtn.disabled = true;
+  updateUIConfig();
+};
+
+window.removerPalpite = async (index) => {
+  if (!activeUserForPalpite) return;
+  const currentPalpites = [...(activeUserForPalpite.palpites || [])];
+  currentPalpites.splice(index, 1);
+  try {
+    await update(ref(db, `bolao/2026/participantes/${activeUserForPalpite.key}`), { palpites: currentPalpites });
+    showToast("🗑 Palpite removido");
+    consultarParticipante();
+  } catch (_) { showToast("❌ Falha ao remover"); }
+};
+
+window.askAdmin = (act) => {
+  try {
+    const sessionAdmin = sessionStorage.getItem("bolao_admin") === "1";
+    if (sessionAdmin && (act === "edit" || act === "export")) {
+      document.body.classList.add("admin-mode");
+      if (act === "edit") return abrirBaixaManual();
+      if (act === "export") return exportarCSV();
+    }
+    window.acaoAdmin = act;
+    acaoAdmin = act;
+    const d = document.getElementById("senhaDisplay");
+    if (d) d.innerText = "";
+    const hint = document.getElementById("senhaHint");
+    if (hint) {
+      hint.innerText = act === "config" ? "Acesso às configurações"
+        : act === "edit" ? "Baixa manual" : act === "export" ? "Exportar CSV" : "Modo administrador";
+    }
+    const modal = document.getElementById("modalSenha");
+    if (!modal) return showToast("❌ Modal PIN não encontrado");
+    modal.style.display = "flex";
+    modal.style.zIndex = "9999";
+    try { lucide.createIcons(); } catch(_){}
+  } catch (e) {
+    console.error(e);
+    showToast("❌ Erro ao abrir PIN");
+  }
+};
+
+window.digitar = (num) => {
+  const d = document.getElementById("senhaDisplay");
+  if (!d) return;
+  if (num === "C") { d.innerText = ""; return; }
+  if (d.innerText.length < 4) {
+    d.innerText += num;
+    if (d.innerText.length === 4) setTimeout(checkAdminPass, 280);
+  }
+};
+
+function setAdminMode(active) {
+  if (active) {
+    document.body.classList.add("admin-mode");
+    sessionStorage.setItem("bolao_admin", "1");
+  } else {
+    document.body.classList.remove("admin-mode");
+    sessionStorage.removeItem("bolao_admin");
+  }
+  renderList();
+}
+
+function checkAdminPass() {
+  const pass = document.getElementById("senhaDisplay").innerText;
+  if (pass === CONFIG.SENHA) {
+    fecharModal("modalSenha");
+    if (acaoAdmin === "config") { setAdminMode(true); abrirConfig(); showToast("🔓 CONFIGURAÇÕES"); }
+    else if (acaoAdmin === "export") { setAdminMode(true); exportarCSV(); }
+    else if (acaoAdmin === "edit") { setAdminMode(true); abrirBaixaManual(); }
+    else if (acaoAdmin === "unlock") {
+      const on = !document.body.classList.contains("admin-mode");
+      setAdminMode(on);
+      showToast(on ? "🔓 MODO ADMIN ATIVO" : "🔒 MODO ADMIN DESATIVADO");
+    }
+  } else {
+    showToast("❌ PIN Incorreto!");
+    document.getElementById("senhaDisplay").innerText = "";
+  }
+}
+
+(function initLogoAdminAccess() {
+  const logoEl = document.getElementById("logoAdminTrigger");
+  if (!logoEl) return;
+  let ring = logoEl.querySelector(".admin-press-ring");
+  if (!ring) {
+    ring = document.createElement("div");
+    ring.className = "admin-press-ring";
+    ring.style.cssText = "position:absolute;inset:-8px;border-radius:50%;border:2.5px solid transparent;border-top-color:var(--primary);opacity:0;pointer-events:none;z-index:2";
+    logoEl.style.position = "relative";
+    logoEl.appendChild(ring);
+  }
+  let longPressTimer = null, longPressTriggered = false, startX = 0, startY = 0, tapCount = 0, tapTimer = null;
+  const HOLD_MS = 1500, MOVE_TOL = 18;
+  const openAdminPin = () => {
+    try {
+      if (navigator.vibrate) navigator.vibrate([30, 40, 30]);
+      window.askAdmin("config");
+    } catch (e) { console.error(e); }
+  };
+  const startPress = (e) => {
+    longPressTriggered = false;
+    clearTimeout(longPressTimer);
+    const pt = e.touches ? e.touches[0] : e;
+    startX = pt.clientX; startY = pt.clientY;
+    ring.style.opacity = "1";
+    ring.style.animation = `adminSpin ${HOLD_MS}ms linear forwards`;
+    longPressTimer = setTimeout(() => {
+      longPressTriggered = true;
+      ring.style.opacity = "0"; ring.style.animation = "";
+      openAdminPin();
+    }, HOLD_MS);
+  };
+  const movePress = (e) => {
+    if (!longPressTimer) return;
+    const pt = e.touches ? e.touches[0] : e;
+    if (Math.abs(pt.clientX - startX) > MOVE_TOL || Math.abs(pt.clientY - startY) > MOVE_TOL) {
+      clearTimeout(longPressTimer); longPressTimer = null;
+      ring.style.opacity = "0"; ring.style.animation = "";
+    }
+  };
+  const endPress = () => {
+    if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
+    ring.style.opacity = "0"; ring.style.animation = "";
+    if (!longPressTriggered) {
+      tapCount++;
+      clearTimeout(tapTimer);
+      tapTimer = setTimeout(() => { tapCount = 0; }, 900);
+      if (tapCount >= 5) { tapCount = 0; openAdminPin(); }
+    }
+  };
+  logoEl.addEventListener("touchstart", startPress, { passive: true });
+  logoEl.addEventListener("touchmove", movePress, { passive: true });
+  logoEl.addEventListener("touchend", endPress);
+  logoEl.addEventListener("touchcancel", endPress);
+  logoEl.addEventListener("mousedown", startPress);
+  logoEl.addEventListener("mousemove", movePress);
+  logoEl.addEventListener("mouseup", endPress);
+  logoEl.addEventListener("mouseleave", endPress);
+  logoEl.addEventListener("contextmenu", e => e.preventDefault());
+})();
+if (!document.getElementById("adminSpinStyle")) {
+  const s = document.createElement("style");
+  s.id = "adminSpinStyle";
+  s.textContent = `@keyframes adminSpin{from{transform:rotate(0);opacity:1}to{transform:rotate(360deg);opacity:1}}`;
+  document.head.appendChild(s);
+}
+
+const TABELA_MEGA = [
+  { dezenas: 6, preco: 6.00, combinacoes: 1, chance: "50.063.860" },
+  { dezenas: 7, preco: 42.00, combinacoes: 7, chance: "7.151.980" },
+  { dezenas: 8, preco: 168.00, combinacoes: 28, chance: "1.787.995" },
+  { dezenas: 9, preco: 504.00, combinacoes: 84, chance: "595.998" },
+  { dezenas: 10, preco: 1260.00, combinacoes: 210, chance: "238.399" },
+  { dezenas: 11, preco: 2772.00, combinacoes: 462, chance: "108.363" },
+  { dezenas: 12, preco: 5544.00, combinacoes: 924, chance: "54.182" },
+  { dezenas: 13, preco: 10296.00, combinacoes: 1716, chance: "29.175" },
+  { dezenas: 14, preco: 18018.00, combinacoes: 3003, chance: "16.671" },
+  { dezenas: 15, preco: 30030.00, combinacoes: 5005, chance: "10.003" },
+  { dezenas: 16, preco: 48048.00, combinacoes: 8008, chance: "6.252" },
+  { dezenas: 17, preco: 74256.00, combinacoes: 12376, chance: "4.045" },
+  { dezenas: 18, preco: 111384.00, combinacoes: 18564, chance: "2.697" },
+  { dezenas: 19, preco: 162792.00, combinacoes: 27132, chance: "1.845" },
+  { dezenas: 20, preco: 232560.00, combinacoes: 38760, chance: "1.292" }
+];
+const REGRAS_CAIXA = {
+  VALOR_MINIMO_BOLAO: 18.00,
+  VALOR_MINIMO_COTA: 7.00,
+  MIN_COTAS: 2,
+  MAX_COTAS: 100,
+  MAX_JOGOS_POR_RECIBO: 10
+};
+
+function formatBRL(v) {
+  return "R$ " + Number(v || 0).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function getTabelaItem(dezenas) {
+  return TABELA_MEGA.find(t => t.dezenas === dezenas) || TABELA_MEGA[0];
+}
+function getLiveFinanceiro() {
+  const cotasRes = totalCotasReservadas();
+  const cotasPagas = parts.filter(isPago).reduce((a, p) => a + cotasDoParticipante(p), 0);
+  const arrecadado = parts.reduce((a, p) => a + (p.valor || 0), 0);
+  return { cotasRes, cotasPagas, arrecadado, valorCota: CONFIG.VALOR };
+}
+function atualizarCalculadora() {
+  if (!document.getElementById("calcPanel")) return;
+  const live = getLiveFinanceiro();
+  const elRes = document.getElementById("calcCotasReservadas");
+  const elPag = document.getElementById("calcCotasPagas");
+  const elArr = document.getElementById("calcArrecadado");
+  const elVc = document.getElementById("calcValorCota");
+  if (elRes) elRes.textContent = String(live.cotasRes);
+  if (elPag) elPag.textContent = String(live.cotasPagas);
+  if (elArr) elArr.textContent = formatBRL(live.arrecadado);
+  if (elVc) elVc.textContent = formatBRL(live.valorCota);
+
+  const dezenas = parseInt(document.getElementById("calcDezenas")?.value || CONFIG.DEZENAS, 10) || 6;
+  let qtdJogos = parseInt(document.getElementById("calcQtdJogos")?.value || "1", 10) || 1;
+  if (qtdJogos < 1) qtdJogos = 1;
+  const taxaOn = !!document.getElementById("calcTaxaToggle")?.checked;
+  const taxaPct = Math.min(35, Math.max(0, parseFloat(document.getElementById("calcTaxa")?.value) || 0));
+  const item = getTabelaItem(dezenas);
+  const custoUnit = item.preco;
+  let custoJogos = custoUnit * qtdJogos;
+  if (taxaOn) custoJogos = custoJogos * (1 + taxaPct / 100);
+  const participantes = Math.max(1, live.cotasRes || live.cotasPagas || 1);
+  // Preferir cotas pagas para validação de arrecadação real; cotas reservadas para capacidade
+  const cotasRef = Math.max(live.cotasPagas, live.cotasRes, 1);
+  const totalArrecadado = live.arrecadado;
+  const valorPagoPorPessoa = live.valorCota;
+  const valorCotaExata = custoJogos / Math.max(cotasRef, 1);
+  const maxCotasPeloValor = Math.min(REGRAS_CAIXA.MAX_COTAS, Math.floor(custoJogos / REGRAS_CAIXA.VALOR_MINIMO_COTA));
+  const diferenca = totalArrecadado - custoJogos;
+  const arrecadacaoSuficiente = totalArrecadado + 0.04 >= custoJogos;
+  const arrecadacaoExata = Math.abs(diferenca) <= 0.04;
+  const cotaMinOk = valorCotaExata + 0.001 >= REGRAS_CAIXA.VALOR_MINIMO_COTA || custoJogos < REGRAS_CAIXA.VALOR_MINIMO_BOLAO;
+  const bolaoMinOk = custoJogos >= REGRAS_CAIXA.VALOR_MINIMO_BOLAO || qtdJogos * custoUnit >= REGRAS_CAIXA.VALOR_MINIMO_BOLAO;
+  const cotasRangeOk = cotasRef >= REGRAS_CAIXA.MIN_COTAS && cotasRef <= REGRAS_CAIXA.MAX_COTAS;
+  const cotaIndividualOk = (custoJogos / Math.max(cotasRef, 1)) >= REGRAS_CAIXA.VALOR_MINIMO_COTA - 0.01;
+  // Para 6 dezenas, mínimo 3 jogos (R$18) no bolão oficial
+  const regra6Ok = dezenas !== 6 || (qtdJogos >= 3 && custoJogos >= 18);
+  const bolaoOficialValido = bolaoMinOk && cotasRangeOk && cotaIndividualOk && regra6Ok && maxCotasPeloValor >= cotasRef;
+
+  document.getElementById("calcCustoUnit").textContent = formatBRL(custoUnit);
+  document.getElementById("calcCombinacoes").textContent = `${item.combinacoes.toLocaleString("pt-BR")} combinação(ões) · 1 em ${item.chance}`;
+  document.getElementById("calcCustoTotal").textContent = formatBRL(custoJogos);
+  document.getElementById("calcCotaExata").textContent = `Cota exata: ${formatBRL(valorCotaExata)} (${cotasRef} cotas)`;
+
+  const title = document.getElementById("calcVerdictTitle");
+  const sub = document.getElementById("calcVerdictSub");
+  const card = document.getElementById("calcVerdict");
+  const bal = document.getElementById("calcBalanco");
+
+  if (bolaoOficialValido && arrecadacaoSuficiente) {
+    card.style.borderColor = "rgba(16,185,129,0.45)";
+    card.style.background = "rgba(16,185,129,0.12)";
+    title.style.color = "var(--paid)";
+    title.textContent = arrecadacaoExata ? "✅ Bolão Oficial Válido (exato)" : "✅ Válido (com sobra de caixa)";
+    sub.textContent = arrecadacaoExata
+      ? "Participantes, dezenas e arrecadação fecham com as regras da Caixa."
+      : `Arrecadação cobre o custo. Sobra ${formatBRL(diferenca)}.`;
+  } else if (!arrecadacaoSuficiente) {
+    card.style.borderColor = "rgba(239,68,68,0.45)";
+    card.style.background = "rgba(239,68,68,0.1)";
+    title.style.color = "var(--pending)";
+    title.textContent = "❌ Valor insuficiente";
+    sub.textContent = `Arrecadado ${formatBRL(totalArrecadado)} vs custo ${formatBRL(custoJogos)}. Faltam ${formatBRL(Math.abs(diferenca))}.`;
+  } else {
+    card.style.borderColor = "rgba(245,158,11,0.45)";
+    card.style.background = "rgba(245,158,11,0.1)";
+    title.style.color = "var(--partial)";
+    title.textContent = "⚠️ Apenas bolão informal";
+    sub.textContent = "O dinheiro paga o jogo, mas a configuração não atende cotas oficiais da Caixa (mín. R$ 7/cota, bolão mín. R$ 18).";
+  }
+
+  if (Math.abs(diferenca) <= 0.04) {
+    bal.textContent = "Fechamento: EXATO (R$ 0,00)";
+    bal.style.color = "var(--paid)";
+  } else if (diferenca > 0) {
+    bal.textContent = `Sobra na arrecadação: + ${formatBRL(diferenca)}`;
+    bal.style.color = "var(--paid)";
+  } else {
+    bal.textContent = `Falta arrecadar: − ${formatBRL(Math.abs(diferenca))}`;
+    bal.style.color = "var(--pending)";
+  }
+
+  // Checklist
+  const checks = [
+    { ok: regra6Ok, title: dezenas === 6 ? "Mín. 3 jogos de 6 dezenas (R$ 18)" : "Dezenas válidas (6–20)", desc: dezenas === 6 ? `${qtdJogos} jogo(s) de 6 dezenas` : `${dezenas} dezenas` },
+    { ok: bolaoMinOk, title: "Bolão mínimo R$ 18,00", desc: formatBRL(custoJogos) },
+    { ok: cotasRangeOk, title: "Cotas entre 2 e 100", desc: `${cotasRef} cotas no bolão` },
+    { ok: cotaIndividualOk, title: "Cota mínima R$ 7,00", desc: `Cota calculada: ${formatBRL(valorCotaExata)}` },
+    { ok: maxCotasPeloValor >= cotasRef, title: "Máx. cotas pelo valor do bilhete", desc: `Até ${maxCotasPeloValor} cotas oficiais neste custo` },
+    { ok: arrecadacaoSuficiente, title: "Arrecadação cobre o custo", desc: `${formatBRL(totalArrecadado)} ≥ ${formatBRL(custoJogos)}` }
+  ];
+  const ul = document.getElementById("calcChecklist");
+  if (ul) {
+    ul.innerHTML = checks.map(c => `
+      <li style="display:flex;gap:8px;align-items:flex-start;background:rgba(0,0,0,.22);border:1px solid ${c.ok ? "rgba(16,185,129,.25)" : "rgba(239,68,68,.25)"};border-radius:10px;padding:8px 10px">
+        <span style="color:${c.ok ? "var(--paid)" : "var(--pending)"};font-weight:800">${c.ok ? "✓" : "✕"}</span>
+        <div><div style="font-size:.72rem;font-weight:800;color:#fff">${c.title}</div>
+        <div style="font-size:.62rem;color:var(--text-dim)">${c.desc}</div></div>
+      </li>`).join("");
+  }
+
+  // Sugestões com o arrecadado
+  const sug = document.getElementById("calcSugestoes");
+  if (sug) {
+    if (totalArrecadado < 6) {
+      sug.innerHTML = `<div style="font-size:.68rem;color:var(--text-dim);text-align:center;padding:8px">Arrecadação menor que 1 aposta simples (R$ 6,00).</div>`;
+    } else {
+      const opcoes = [];
+      for (let i = TABELA_MEGA.length - 1; i >= 0; i--) {
+        const it = TABELA_MEGA[i];
+        if (totalArrecadado >= it.preco) {
+          const q = Math.floor(totalArrecadado / it.preco);
+          const custo = q * it.preco;
+          const troco = totalArrecadado - custo;
+          const oficial = (custo >= 18) && (cotasRef >= 2 && cotasRef <= 100) && ((custo / cotasRef) >= 7 - 0.01);
+          opcoes.push({ dezenas: it.dezenas, qtd: q, custo, troco, oficial });
+        }
+      }
+      sug.innerHTML = opcoes.slice(0, 5).map(op => `
+        <button type="button" class="calc-sugestao" data-dez="${op.dezenas}" data-q="${op.qtd}"
+          style="text-align:left;width:100%;background:rgba(0,0,0,.28);border:1px solid var(--border);border-radius:12px;padding:10px 12px;cursor:pointer;color:#fff">
+          <div style="display:flex;justify-content:space-between;gap:6px;align-items:center">
+            <span style="font-size:.75rem;font-weight:800">${op.qtd}x jogo(s) de ${op.dezenas} dezenas</span>
+            <span style="font-size:.58rem;font-weight:800;padding:2px 8px;border-radius:100px;background:${op.oficial ? "rgba(16,185,129,.2)" : "rgba(245,158,11,.15)"};color:${op.oficial ? "var(--paid)" : "var(--partial)"}">${op.oficial ? "Oficial OK" : "Informal"}</span>
+          </div>
+          <div style="font-size:.65rem;color:var(--text-dim);margin-top:3px">Custo ${formatBRL(op.custo)}${op.troco > 0 ? ` · sobra ${formatBRL(op.troco)}` : " · valor exato"}</div>
+        </button>`).join("");
+      sug.querySelectorAll(".calc-sugestao").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.getElementById("calcDezenas").value = btn.dataset.dez;
+          document.getElementById("calcQtdJogos").value = btn.dataset.q;
+          atualizarCalculadora();
+        });
+      });
+    }
+  }
+}
+
+function wireCalculadora() {
+  const dez = document.getElementById("calcDezenas");
+  const qtd = document.getElementById("calcQtdJogos");
+  const minus = document.getElementById("calcJogosMinus");
+  const plus = document.getElementById("calcJogosPlus");
+  const taxaT = document.getElementById("calcTaxaToggle");
+  const taxaW = document.getElementById("calcTaxaWrap");
+  const taxaI = document.getElementById("calcTaxa");
+  if (!dez) return;
+  dez.addEventListener("change", atualizarCalculadora);
+  qtd?.addEventListener("input", atualizarCalculadora);
+  minus?.addEventListener("click", () => {
+    qtd.value = Math.max(1, (parseInt(qtd.value, 10) || 1) - 1);
+    atualizarCalculadora();
+  });
+  plus?.addEventListener("click", () => {
+    qtd.value = Math.min(500, (parseInt(qtd.value, 10) || 1) + 1);
+    atualizarCalculadora();
+  });
+  taxaT?.addEventListener("change", () => {
+    if (taxaW) taxaW.style.display = taxaT.checked ? "flex" : "none";
+    atualizarCalculadora();
+  });
+  taxaI?.addEventListener("input", atualizarCalculadora);
+}
+
+function abrirConfig() {
+  document.getElementById("cfg-valor").value = CONFIG.VALOR;
+  document.getElementById("cfg-limite").value = CONFIG.LIMITE;
+  document.getElementById("cfg-dezenas").value = CONFIG.DEZENAS;
+  document.getElementById("cfg-premio").value = CONFIG.PREMIO || "";
+  document.getElementById("cfg-bg-url").value = CONFIG.BG_URL || "";
+  document.getElementById("cfg-pix").value = CONFIG.PIX || "";
+  document.getElementById("cfg-infinite").value = CONFIG.INFINITE_TAG || "";
+  document.getElementById("cfg-data-fim").value = CONFIG.DATA_FIM || "2026-12-31";
+  document.getElementById("cfg-data-pagamento").value = CONFIG.DATA_PAGAMENTO || "2026-12-10";
+  document.getElementById("cfg-pin").value = "";
+  document.getElementById("cfg-exigir-palpite").checked = !!CONFIG.EXIGIR_PALPITE;
+  document.getElementById("cfg-regulamento").value = CONFIG.REGULAMENTO || "";
+  document.getElementById("cfg-resultado").value = CONFIG.RESULTADO || "";
+  const btnAdmin = document.getElementById("cfgBtnModoAdmin");
+  if (btnAdmin) btnAdmin.innerText = document.body.classList.contains("admin-mode") ? "🔒 FECHAR ADMIN" : "🔓 MODO ADMIN";
+  // Sync calculator defaults from live config + data
+  const calcDez = document.getElementById("calcDezenas");
+  if (calcDez) calcDez.value = String(Math.min(15, Math.max(6, CONFIG.DEZENAS || 6)));
+  const calcQ = document.getElementById("calcQtdJogos");
+  if (calcQ && (!calcQ.value || calcQ.value === "1")) {
+    // default: quantos jogos cabem no arrecadado com dezenas atuais
+    const item = getTabelaItem(CONFIG.DEZENAS || 6);
+    const arr = getLiveFinanceiro().arrecadado;
+    calcQ.value = String(Math.max(1, item.preco > 0 ? Math.floor(arr / item.preco) || 1 : 1));
+  }
+  atualizarCalculadora();
+  document.getElementById("modalConfig").style.display = "flex";
+}
+
+window.salvarConfig = async () => {
+  const v = parseFloat(document.getElementById("cfg-valor").value);
+  const l = parseInt(document.getElementById("cfg-limite").value, 10);
+  const d = parseInt(document.getElementById("cfg-dezenas").value, 10) || 6;
+  const premio = (document.getElementById("cfg-premio").value || "R$ 1 Bilhão").trim();
+  const bgUrl = (document.getElementById("cfg-bg-url").value || "").trim();
+  const pix = (document.getElementById("cfg-pix").value || CONFIG.PIX).trim();
+  const infinite = (document.getElementById("cfg-infinite").value || CONFIG.INFINITE_TAG).trim().replace("@", "");
+  const dataFim = document.getElementById("cfg-data-fim").value || CONFIG.DATA_FIM;
+  const dataPag = document.getElementById("cfg-data-pagamento").value || CONFIG.DATA_PAGAMENTO;
+  const novoPin = (document.getElementById("cfg-pin").value || "").trim();
+  const exigirPalpite = !!document.getElementById("cfg-exigir-palpite").checked;
+  const regulamento = (document.getElementById("cfg-regulamento").value || "").trim();
+  const resultado = (document.getElementById("cfg-resultado").value || "").trim();
+  if (isNaN(v) || v <= 0) return showToast("⚠️ Valor inválido");
+  if (isNaN(l) || l < 1) return showToast("⚠️ Limite inválido");
+  if (novoPin && !/^\d{4}$/.test(novoPin)) return showToast("⚠️ PIN deve ter 4 dígitos");
+  try {
+    CONFIG.VALOR = v; CONFIG.LIMITE = l; CONFIG.DEZENAS = d; CONFIG.PREMIO = premio;
+    CONFIG.BG_URL = bgUrl; CONFIG.PIX = pix; CONFIG.INFINITE_TAG = infinite;
+    CONFIG.DATA_FIM = dataFim; CONFIG.DATA_PAGAMENTO = dataPag;
+    CONFIG.EXIGIR_PALPITE = exigirPalpite; CONFIG.REGULAMENTO = regulamento; CONFIG.RESULTADO = resultado;
+    if (novoPin) CONFIG.SENHA = novoPin;
+    await set(configRef, {
+      limite: l, valorCota: v, pix, dezenas: d, premio, bgUrl, senha: CONFIG.SENHA,
+      infiniteTag: infinite, dataFim, dataPagamento: dataPag, exigirPalpite, regulamento, resultado
+    });
+    await logAdminAction("config_salva", { limite: l, valor: v, resultado });
+    fecharModal("modalConfig");
+    updateUIConfig();
+    showToast(novoPin ? "✅ CONFIG + PIN salvos!" : "✅ CONFIGURAÇÕES SALVAS!");
+  } catch (e) {
+    console.error(e);
+    showToast("❌ Erro de permissão Firebase");
+  }
+};
+
+async function logAdminAction(acao, extra = {}) {
+  try {
+    await push(logsRef, { acao, extra, em: Date.now(), iso: new Date().toISOString() });
+  } catch (_) {}
+}
+
+function exportarCSV() {
+  let csv = "\uFEFFNome;Contato;Cotas;ValorPago;Status;Palpites\n";
+  parts.forEach(p => {
+    const palp = (p.palpites || []).join(" | ");
+    csv += `${p.nome};${p.contato || ""};${cotasDoParticipante(p)};${p.valor || 0};${p.status_compra || ""};${palp}\n`;
+  });
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "lista_bolao.csv"; a.click();
+  URL.revokeObjectURL(url);
+  logAdminAction("export_csv", { total: parts.length });
+}
+
+window.liberarReservasVencidas = async () => {
+  const pendentes = parts.filter(p => (p.valor || 0) <= 0);
+  if (!pendentes.length) return showToast("✅ Nenhuma reserva pendente");
+  if (!confirm(`Remover ${pendentes.length} reserva(s) sem pagamento?`)) return;
+  try {
+    const updates = {};
+    pendentes.forEach(p => { updates[`bolao/2026/participantes/${p.key}`] = null; });
+    await update(ref(db), updates);
+    await logAdminAction("liberar_vencidos", { quantidade: pendentes.length });
+    showToast(`🧹 ${pendentes.length} liberada(s)!`);
+  } catch (e) { showToast("❌ Erro ao liberar"); }
+};
+
+window.verLogsAdmin = async () => {
+  try {
+    const snap = await get(logsRef);
+    const lista = snap.exists()
+      ? Object.entries(snap.val()).map(([k,v]) => ({ key: k, ...v })).sort((a,b)=>(b.em||0)-(a.em||0)).slice(0,40)
+      : [];
+    document.getElementById("modalLogsAdmin")?.remove();
+    const modal = document.createElement("div");
+    modal.className = "modal-overlay";
+    modal.id = "modalLogsAdmin";
+    modal.style.display = "flex";
+    modal.innerHTML = `<div class="modal-box thin-scroll" style="max-width:400px;max-height:85vh;overflow-y:auto;text-align:left">
+      <h3 style="color:var(--primary);font-weight:800;margin-bottom:12px;text-align:center">📜 Logs Admin</h3>
+      ${lista.length ? lista.map(l => `<div style="background:rgba(0,0,0,.25);border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:8px">
+        <div style="font-size:.75rem;font-weight:800">${escapeHTML(l.acao)}</div>
+        <div style="font-size:.62rem;color:var(--text-dim)">${l.iso ? new Date(l.iso).toLocaleString("pt-BR") : ""}</div>
+        ${l.extra ? `<div style="font-size:.62rem;color:var(--text-dim);word-break:break-all">${escapeHTML(JSON.stringify(l.extra))}</div>` : ""}
+      </div>`).join("") : `<p style="color:var(--text-dim);text-align:center">Nenhum log.</p>`}
+      <button class="admin-btn" style="width:100%;margin-top:14px;border:1px solid var(--border);padding:10px;border-radius:12px" onclick="document.getElementById('modalLogsAdmin')?.remove()">FECHAR</button>
+    </div>`;
+    document.body.appendChild(modal);
+  } catch (_) { showToast("❌ Falha ao carregar logs"); }
+};
+
+window.setVal = (v) => {
+  const id = window.sels[0];
+  const p = parts.find(x => x.key === id);
+  if (p) document.getElementById("pgtoValor").value = v === 1 ? cotasDoParticipante(p) * CONFIG.VALOR : 0;
+};
+window.abrirBaixaManual = () => {
+  const p = parts.find(x => x.key === window.sels[0]);
+  if (!p) return;
+  document.getElementById("pgtoNome").innerText = p.nome;
+  document.getElementById("pgtoValor").value = p.valor || "";
+  document.getElementById("modalAdminPagamento").style.display = "flex";
+};
+document.getElementById("btnSalvarPgto").onclick = async () => {
+  const v = parseFloat(document.getElementById("pgtoValor").value) || 0;
+  const u = {};
+  window.sels.forEach(pid => {
+    const p = parts.find(x => x.key === pid);
+    const q = p ? cotasDoParticipante(p) : 1;
+    const total = q * CONFIG.VALOR;
+    const status = v >= total ? "PAGO" : (v > 0 ? "PARCIAL" : "PENDENTE");
+    u[`bolao/2026/participantes/${pid}/valor`] = v;
+    u[`bolao/2026/participantes/${pid}/status_compra`] = status;
+  });
+  try {
+    await update(ref(db), u);
+    await logAdminAction("baixa_manual", { valor: v, keys: [...window.sels] });
+    fecharModal("modalAdminPagamento");
+    window.sels = [];
+    showToast("✅ PAGAMENTO ATUALIZADO!");
+  } catch (_) { showToast("❌ Falha na baixa"); }
+};
+
+window.abrirEdicao = (key) => {
+  const p = parts.find(x => x.key === key);
+  if (!p) return;
+  document.getElementById("edit-key").value = key;
+  document.getElementById("edit-nome").value = p.nome;
+  document.getElementById("edit-telefone").value = p.contato || "";
+  document.getElementById("edit-cotas").value = cotasDoParticipante(p);
+  const btnEx = document.getElementById("btn-excluir-part");
+  btnEx.dataset.confirming = "false";
+  btnEx.innerHTML = "🗑️ EXCLUIR PARTICIPANTE";
+  document.getElementById("modalEditarParticipante").style.display = "flex";
+};
+window.salvarEdicaoParticipante = async () => {
+  const key = document.getElementById("edit-key").value;
+  const nome = document.getElementById("edit-nome").value.toUpperCase().trim();
+  const contato = document.getElementById("edit-telefone").value.trim();
+  const cotas = parseInt(document.getElementById("edit-cotas").value, 10) || 1;
+  if (!nome || !contato) return showToast("⚠️ Preencha nome e telefone");
+  try {
+    const p = parts.find(x => x.key === key);
+    const valorAtual = p ? p.valor || 0 : 0;
+    const status = valorAtual >= cotas * CONFIG.VALOR ? "PAGO" : (valorAtual > 0 ? "PARCIAL" : "PENDENTE");
+    await update(ref(db, `bolao/2026/participantes/${key}`), { nome, contato, cotas, status_compra: status });
+    fecharModal("modalEditarParticipante");
+    showToast("✅ PARTICIPANTE ATUALIZADO!");
+  } catch (_) { showToast("❌ Erro ao editar"); }
+};
+let exclusaoTimeout;
+window.confirmarExclusao = () => {
+  const btn = document.getElementById("btn-excluir-part");
+  if (btn.dataset.confirming === "true") {
+    clearTimeout(exclusaoTimeout);
+    btn.dataset.confirming = "false";
+    excluirParticipanteDefinitivo();
+  } else {
+    btn.dataset.confirming = "true";
+    btn.innerHTML = "⚠️ CLIQUE NOVAMENTE PARA CONFIRMAR";
+    exclusaoTimeout = setTimeout(() => {
+      btn.dataset.confirming = "false";
+      btn.innerHTML = "🗑️ EXCLUIR PARTICIPANTE";
+    }, 3000);
+  }
+};
+window.excluirParticipanteDefinitivo = async () => {
+  const key = document.getElementById("edit-key").value;
+  try {
+    const p = parts.find(x => x.key === key);
+    await remove(ref(db, `bolao/2026/participantes/${key}`));
+    await logAdminAction("excluir_participante", { key, nome: p?.nome || "" });
+    fecharModal("modalEditarParticipante");
+    showToast("✅ PARTICIPANTE EXCLUÍDO!");
+  } catch (_) { showToast("❌ Erro ao excluir"); }
+};
+
+document.getElementById("cfgBtnModoAdmin").onclick = () => {
+  const on = !document.body.classList.contains("admin-mode");
+  setAdminMode(on);
+  document.getElementById("cfgBtnModoAdmin").innerText = on ? "🔒 FECHAR ADMIN" : "🔓 MODO ADMIN";
+  showToast(on ? "🔓 MODO ADMIN ATIVO" : "🔒 MODO ADMIN DESATIVADO");
+};
+document.getElementById("cfgBtnExportar").onclick = () => exportarCSV();
+document.getElementById("cfgBtnLiberarVencidos")?.addEventListener("click", () => liberarReservasVencidas());
+document.getElementById("cfgBtnVerLogs")?.addEventListener("click", () => verLogsAdmin());
+
+setInterval(() => {
+  const fim = (CONFIG.DATA_FIM || "2026-12-31") + "T23:59:59";
+  const d = new Date(fim).getTime() - Date.now();
+  if (d < 0) return;
+  const di = document.getElementById("dias");
+  const ho = document.getElementById("horas");
+  const mi = document.getElementById("minutos");
+  const se = document.getElementById("segundos");
+  if (di) di.innerText = Math.floor(d / 864e5).toString().padStart(2, "0");
+  if (ho) ho.innerText = Math.floor((d % 864e5) / 36e5).toString().padStart(2, "0");
+  if (mi) mi.innerText = Math.floor((d % 36e5) / 6e4).toString().padStart(2, "0");
+  if (se) se.innerText = Math.floor((d % 6e4) / 1e3).toString().padStart(2, "0");
+}, 1000);
+
+// Retorno seguro de pagamento via ?order=
+(async function handlePaymentReturn() {
+  const params = new URLSearchParams(window.location.search);
+  const orderNsu = params.get("order");
+  if (!orderNsu) return;
+  window.history.replaceState({}, document.title, window.location.pathname);
+  try {
+    const pedidoSnap = await get(ref(db, `bolao/2026/pedidos/${orderNsu}`));
+    if (!pedidoSnap.exists()) return showToast("⚠️ Pedido não encontrado");
+    const pedido = pedidoSnap.val();
+    if (pedido.status !== "PENDING") return showToast("ℹ️ Pagamento já processado");
+    const pk = pedido.paid_key;
+    const amountPaid = Number(pedido.amount) || 0;
+    const partSnap = await get(ref(db, `bolao/2026/participantes/${pk}`));
+    if (!partSnap.exists()) return;
+    const p = partSnap.val();
+    const qt = p.cotas || 1;
+    const currentPaid = p.valor || 0;
+    const newTotal = Math.round((currentPaid + amountPaid) * 100) / 100;
+    const totalDevido = qt * CONFIG.VALOR;
+    const status = newTotal >= totalDevido ? "PAGO" : (newTotal > 0 ? "PARCIAL" : "PENDENTE");
+    await update(ref(db, `bolao/2026/participantes/${pk}`), { valor: newTotal, status_compra: status });
+    await update(ref(db, `bolao/2026/pedidos/${orderNsu}`), { status: "CONFIRMED", confirmedAt: Date.now() });
+    confetti({ particleCount: 160, spread: 90, origin: { y: 0.55 }, colors: ["#00ff88", "#fff", "#10b981"] });
+    showToast(status === "PAGO" ? "✅ PAGAMENTO TOTAL CONFIRMADO!" : "✅ PAGAMENTO REGISTRADO!");
+  } catch (e) {
+    console.error(e);
+    showToast("❌ Erro ao confirmar pagamento");
+  }
+})();
+
+// PWA
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    const ok = location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1";
+    if (!ok) return;
+    navigator.serviceWorker.register("./sw.js", { scope: "./" })
+      .then(reg => {
+        reg.addEventListener("updatefound", () => {
+          const nw = reg.installing;
+          if (!nw) return;
+          nw.addEventListener("statechange", () => {
+            if (nw.state === "installed" && navigator.serviceWorker.controller) {
+              const b = document.getElementById("updateBanner");
+              if (b) b.style.display = "flex";
+              activeWorker = nw;
+            }
+          });
+        });
+      })
+      .catch(err => console.info("SW não registrado", err?.message || err));
+  });
+}
+window.applyAppUpdate = () => {
+  if (activeWorker) activeWorker.postMessage({ action: "skipWaiting" });
+  location.reload();
+};
+const pwaInstallBtn = document.getElementById("pwaInstallBtn");
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+const isStandalone = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (pwaInstallBtn && !isStandalone()) pwaInstallBtn.style.display = "inline-flex";
+});
+if (isIOS && !isStandalone() && pwaInstallBtn) pwaInstallBtn.style.display = "inline-flex";
+pwaInstallBtn?.addEventListener("click", async () => {
+  if (isStandalone()) { showToast("✅ Já instalado"); return; }
+  if (isIOS) {
+    alert("iPhone: Compartilhar → Adicionar à Tela de Início");
+    return;
+  }
+  if (!deferredPrompt) {
+    alert("Instalação automática indisponível.\\nChrome: menu ⋮ → Instalar app\\nConfirme manifest.json + sw.js + HTTPS");
+    return;
+  }
+  try {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === "accepted") pwaInstallBtn.style.display = "none";
+  } catch (_) {}
+  deferredPrompt = null;
+});
+window.addEventListener("appinstalled", () => {
+  showToast("🎉 App instalado!");
+  if (pwaInstallBtn) pwaInstallBtn.style.display = "none";
+});
+
+async function inicializarAplicativo() {
+  try {
+    await signInAnonymously(auth);
+  } catch (e) {
+    console.info("Auth anônimo indisponível — app continua.", e?.code || e?.message);
+  }
+  if (sessionStorage.getItem("bolao_admin") === "1") document.body.classList.add("admin-mode");
+  iniciarSincronizacaoConfig();
+  iniciarSincronizacaoParticipantes();
+  updateUIConfig();
+  try { wireCalculadora(); } catch (_) {}
+}
+inicializarAplicativo();
+</script>
+</body>
+</html>
